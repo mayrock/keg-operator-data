@@ -1,28 +1,33 @@
 package edu.thu.keg.mobiledata.trafficip;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
+//import java.util.Iterator;
+import java.util.Scanner;
 
 public class DataReader {
 
 	/**
 	 * @param args
 	 */
-	public static HashMap<String,Integer> map=new HashMap<String,Integer>();
-	private static String sep = "";
-	private static String sett = "";
-	private static String[] typeArr;
-	private static String[] nameArr;
+	public static HashMap<String,String> map=new HashMap<String,String>();
+	private static String interval = "";
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		//
-		String addr = "D://GB_Traffic_IP";
+		String[] addr = new String[2];
+		addr[0] = "D://GB_Traffic_IP";
+		addr[1] = "E://GB2";
+		readFile(addr[0]);
+		readFile(addr[1]);
+//		Iterator iterator = map.keySet().iterator();
+//		while(iterator.hasNext()) {
+//			Object key = iterator.next();
+//			System.out.println(key+" : "+map.get(key));
+//		}
+	}
+
+	public static void readFile(String addr) {
 		File[] files = new File(addr).listFiles(new FileFilter() {
 			public boolean accept(File arg0) {
 				return arg0.isDirectory();
@@ -34,18 +39,17 @@ public class DataReader {
 					return arg0.isDirectory();
 				}
 			});
-			for (File subFile : subFiles) {
+			for(File subFile : subFiles) {
 				File[] subF = subFile.listFiles(new FilenameFilter() {
-					public boolean accept(File arg0, String arg1) {
+					public boolean accept(File arg0,String arg1) {
 						return !arg1.contains("finished");
 					}
 				});
-				for (File f : subF) {
+				for(File f : subF) {
 					singleFileReader(f);
 				}
 			}
 		}
-		//
 	}
 
 	public static void singleFileReader(File file) {
@@ -56,21 +60,64 @@ public class DataReader {
 			while((strLine = reader.readLine()) != null)   {
 				if(strLine.startsWith("Column")) {
 					String[] arr = strLine.split("[: ]");
-					sett = arr[2];
-					sep = arr[3];
+					interval = arr[3];
 					break;
 				}
 			}
 			strLine = reader.readLine();
-			typeArr = strLine.split(sep);
 			strLine = reader.readLine();
-			nameArr = strLine.split(sep);
-			for (int i = 0; i < 27; ++i) {
-				System.out.println(nameArr[i] + " " + typeArr[i] + "," + System.lineSeparator());
+			while((strLine = reader.readLine()) != null) {
+				try {
+					dealSingleLine(strLine);
+				}catch (Exception ex){
+					continue;
+				}
 			}
 			reader.close();
 		}catch(Exception e) {
 			System.out.println("Error reading file:" + file.getAbsolutePath());
 		}
 	}
+
+	public static void dealSingleLine(String line) {
+		String[] arr = line.split(interval);
+		double Traffic;
+		int count = 1;
+		StringBuffer mainKey = new StringBuffer();
+		StringBuffer mainValue = new StringBuffer();
+		StringBuffer shortTime = new StringBuffer();
+		if(hasValue(arr[1])&&hasValue(arr[3])&&hasValue(arr[4])&&hasValue(arr[6])) {
+			Scanner in = stringToScanner(arr[21]);
+			Traffic = in.nextDouble();
+			in.close();
+			in = stringToScanner(arr[22]);
+			Traffic += in.nextDouble();
+			shortTime.append(arr[3]);
+			shortTime.delete(16,23);
+			mainKey.append(arr[1]+" "+shortTime.toString()+" "+arr[4]+" "+arr[6]);
+			String mKey = mainKey.toString();
+			if(map.containsKey(mKey)) {
+				in = stringToScanner(map.get(mKey));
+				Traffic += in.nextDouble();
+				count += in.nextInt();
+			}
+			mainValue.append(Traffic+" "+count);
+			String mValue = mainValue.toString();
+//			System.out.println(mKey+" : "+mValue);
+			map.put(mKey,mValue);
+		}
+//arr[1]:Imsi<<arr[3]:Period<<arr[4]:LAC<<arr[6]:Ci<<arr[7]:ServiceType<<arr[12]:AppType<<arr[21]:IPULTraffic<<arr[22]:IPDLTraffic
+	}
+
+	public static boolean hasValue(String str) {
+		if("".equals(str) || "[EMPTY]".equals(str)) return false;
+		else return true;
+	}
+
+	public static Scanner stringToScanner(String str) {
+		byte[] bytes = str.getBytes();
+		Scanner reader = new Scanner(new InputStreamReader(new ByteArrayInputStream(bytes)));
+		return reader;
+	}
+
 }
