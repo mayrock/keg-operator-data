@@ -5,6 +5,7 @@ package edu.thu.keg.mobiledata.trafficip;
  * 
  */
 import java.io.*;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -20,11 +21,11 @@ public class DataReader {
 		// TODO Auto-generated method stub
 
 		String[] addr = new String[3];
-		addr[0] = "D://GB_Traffic_IP-Test";
-//		addr[1] = "E://GB2";
-		addr[2] = "D://GB_Traffic_IP-Test//test";
+		addr[0] = "D://GB_Traffic_IP";
+		addr[1] = "E://GB2";
+		addr[2] = "E://GB_Traffic_IP";
 		readFile(addr[0]);
-//		readFile(addr[1]);
+		readFile(addr[1]);
 		outPut(addr[2]);
 	}
 
@@ -128,7 +129,7 @@ public class DataReader {
 
 	private static boolean matchValue(String str) {
 		//判断字符串是否有意义
-		if("".equals(str) || "[EMPTY]".equals(str)) return false;
+		if("".equals(str) || "[EMPTY]".equals(str) || "0".equals(str)) return false;
 		else return true;
 	}
 
@@ -148,7 +149,12 @@ public class DataReader {
 			while(iterator.hasNext()) {
 				String key = iterator.next();
 				ipValue mValue = map.get(key);
-				out.print(key+"\t"+mValue.getTraffic()+"\t"+mValue.getCount()+"\t");
+				double traffic = mValue.getTraffic();
+				NumberFormat format = NumberFormat.getNumberInstance();
+				format.setMaximumFractionDigits(3);
+				String result = format.format(traffic);
+//				traffic = Double.parseDouble(result);
+				out.print(key+"\t"+result+"\t"+mValue.getCount()+"\t");
 				HashMap<Integer,Integer> mapSer = mValue.getMapSer();
 				Iterator<Integer> iterSer = mapSer.keySet().iterator();
 				int maxKey = 0;
@@ -161,7 +167,7 @@ public class DataReader {
 						maxCount = serCount;
 					}
 				}
-				out.print(maxKey+"\t"+maxCount);
+				out.print(maxKey+"\t"+maxCount+"\t");
 				maxKey = 0;
 				maxCount = 0;
 				HashMap<Integer,Integer> mapApp = mValue.getMapApp();
