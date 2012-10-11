@@ -21,11 +21,11 @@ public class DataReader {
 		// TODO Auto-generated method stub
 
 		String[] addr = new String[3];
-		addr[0] = "D://GB_Traffic_IP";
-		addr[1] = "E://GB2";
-		addr[2] = "E://GB_Traffic_IP";
+		addr[0] = "D://GB_Traffic_IP-Test";
+//		addr[1] = "E://GB2";
+		addr[2] = "D://GB_Traffic_IP-Test2//temp";
 		readFile(addr[0]);
-		readFile(addr[1]);
+//		readFile(addr[1]);
 		outPut(addr[2]);
 	}
 
@@ -96,7 +96,6 @@ public class DataReader {
 				shortTime.append(arr[3]);
 				shortTime.delete(16,23);
 				//时间以分钟归类
-				int SerType = Integer.parseInt(arr[7]);
 				int AppType = Integer.parseInt(arr[12]);
 				double traffic = Double.parseDouble(arr[21]);
 				traffic += Double.parseDouble(arr[22]);
@@ -108,23 +107,20 @@ public class DataReader {
 					mValue = map.get(mKey);
 					traffic += mValue.getTraffic();
 					count += mValue.getCount();
-					if(SerType!=0) mValue.setSer(SerType);
-					if(AppType!=0) mValue.setApp(AppType);
+					if(AppType != 0) mValue.setApp(AppType);
 					mValue.setTraffic(traffic);
 					mValue.setCount(count);
 				}
 				else {
-					HashMap<Integer,Integer> mSer = new HashMap<Integer,Integer>();
 					HashMap<Integer,Integer> mApp = new HashMap<Integer,Integer>();
-					mValue = new ipValue(traffic,count,mSer,mApp);
-					if(SerType!=0) mValue.setSer(SerType);
-					if(AppType!=0) mValue.setApp(AppType);
+					mValue = new ipValue(traffic,count,mApp);
+					if(AppType != 0) mValue.setApp(AppType);
 				}
 				//通过Key更新Value
 				map.put(mKey,mValue);
 //			}
 		}
-//arr[1]:Imsi<<arr[3]:Period<<arr[4]:LAC<<arr[6]:Ci<<arr[7]:ServiceType<<arr[12]:AppType<<arr[21]:IPULTraffic<<arr[22]:IPDLTraffic
+//arr[1]:Imsi<<arr[3]:Period<<arr[4]:LAC<<arr[6]:Ci<<arr[12]:AppType<<arr[21]:IPULTraffic<<arr[22]:IPDLTraffic
 	}
 
 	private static boolean matchValue(String str) {
@@ -144,7 +140,7 @@ public class DataReader {
 		//把哈希表中的内容输出到指定文件中并整理出最大计数的SerType和AppType
 		try {
 			PrintWriter out = new PrintWriter(addr);
-			out.println("Imsi Period(Year-Month-Day Hour:Minute) LAC Ci\tTraffic\tCount\tServiceType\tSerTypeCount\tAppType\tAppTypeCount");
+			out.println("Imsi Period(Year-Month-Day Hour:Minute) LAC Ci\tTraffic\tCount\tAppType\tAppTypeCount");
 			Iterator<String> iterator = map.keySet().iterator();
 			while(iterator.hasNext()) {
 				String key = iterator.next();
@@ -155,21 +151,8 @@ public class DataReader {
 				String result = format.format(traffic);
 //				traffic = Double.parseDouble(result);
 				out.print(key+"\t"+result+"\t"+mValue.getCount()+"\t");
-				HashMap<Integer,Integer> mapSer = mValue.getMapSer();
-				Iterator<Integer> iterSer = mapSer.keySet().iterator();
 				int maxKey = 0;
 				int maxCount = 0;
-				while(iterSer.hasNext()) {
-					Integer keySer = iterSer.next();
-					Integer serCount = mapSer.get(keySer);
-					if(serCount > maxCount) {
-						maxKey = keySer;
-						maxCount = serCount;
-					}
-				}
-				out.print(maxKey+"\t"+maxCount+"\t");
-				maxKey = 0;
-				maxCount = 0;
 				HashMap<Integer,Integer> mapApp = mValue.getMapApp();
 				Iterator<Integer> iterApp = mapApp.keySet().iterator();
 				while(iterApp.hasNext()) {
