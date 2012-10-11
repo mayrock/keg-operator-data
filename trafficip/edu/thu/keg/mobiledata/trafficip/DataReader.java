@@ -100,7 +100,7 @@ public class DataReader {
 				double traffic = Double.parseDouble(arr[21]);
 				traffic += Double.parseDouble(arr[22]);
 				//计算流量
-				mainKey.append(arr[1]+" "+shortTime.toString()+" "+arr[4]+" "+arr[6]);
+				mainKey.append(arr[1]+"\t"+shortTime.toString()+"\t"+arr[4]+"\t"+arr[6]);
 				String mKey = mainKey.toString();
 				//生成Key
 				if(map.containsKey(mKey)) {
