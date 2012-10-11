@@ -1,30 +1,35 @@
 package edu.thu.keg.mobiledata.trafficip;
+/**
+ * 
+ * @author WuChao
+ * 
+ */
 import java.util.HashMap;
 
 public class ipValue {
 	private double traffic;
 	private int count;
-	private HashMap<String, Integer> mapSer;
-	private HashMap<String, Integer> mapApp;
+	private HashMap<Integer,Integer> mapSer;
+	private HashMap<Integer,Integer> mapApp;
 
 	public ipValue() {
 		
 	}
 
-	public ipValue(double d,int i,HashMap<String,Integer> mSer,HashMap<String,Integer> mApp) {
+	public ipValue(double d,int i,HashMap<Integer,Integer> mSer,HashMap<Integer,Integer> mApp) {
 		this.traffic = d;
 		this.count = i;
 		this.mapSer = mSer;
 		this.mapApp = mApp;
 	}
 
-	public void setSer(String strSer) {
+	public void setSer(int strSer) {
 		int c = 1;
 		if(mapSer.containsKey(strSer)) c += mapSer.get(strSer);
 		mapSer.put(strSer,c);
 	}
 
-	public void setApp(String strApp) {
+	public void setApp(int strApp) {
 		int c = 1;
 		if(mapApp.containsKey(strApp)) c += mapApp.get(strApp);
 		mapApp.put(strApp,c);
@@ -38,11 +43,11 @@ public class ipValue {
 		count = c;
 	}
 
-	public HashMap<String,Integer> getMapSer() {
+	public HashMap<Integer,Integer> getMapSer() {
 		return mapSer;
 	}
 
-	public HashMap<String,Integer> getMapApp() {
+	public HashMap<Integer,Integer> getMapApp() {
 		return mapApp;
 	}
 
