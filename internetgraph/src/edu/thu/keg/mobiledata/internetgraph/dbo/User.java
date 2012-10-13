@@ -15,6 +15,7 @@ public class User {
 	{
 		IMEI=imei;
 		TotalCount=0;
+		ConnectedHost=new Hashtable<String, UserHost>();
 	}
 	public void addConnectedHost(String chID,UserHost uh)
 	{

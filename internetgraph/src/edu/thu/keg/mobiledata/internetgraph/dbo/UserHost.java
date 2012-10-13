@@ -43,7 +43,7 @@ class ConnectionDetail{
 	String Location;//the location info of the user connected the host
 	int TimeSegment;//the timeSegment of the user connected the host
 	int ConnectionCount;//the number of the user connected the host in particular location & timeSegment
-	int UrlCount;//the number of host's branches 
+//	int UrlCount;//the number of host's branches 
 	String UserAgent;//UserAgent
 	ConnectionDetail(String location,int timeSegment,String userAgent)
 	{

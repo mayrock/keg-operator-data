@@ -14,6 +14,7 @@ public class Host {
 	{
 		ADDR=addr;
 		UrlCount=0;
+		ConnectedUser=new Hashtable<String, UserHost>();
 	}
 	public void addConnectedUser(String cu, UserHost uh)
 	{

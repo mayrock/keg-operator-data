@@ -167,5 +167,23 @@ public class ConnectionGraph {
 	{
 		
 	}
+public static void main(String args[])
+{
+	ConnectionGraph app= new ConnectionGraph("test");
+	app.initialGraph();
+	app.insertEdge("0001", "baidu.com", "home", 1, "@0001");
+	app.insertEdge("0001", "baidu.com", "home", 1, "@0002");
+	app.insertEdge("0001", "baidu.com", "home", 2, "@0003");
+	app.insertEdge("0002", "baidu.com", "home", 3, "@0004");
+	app.insertEdge("0001", "baidu.com", "outside", 1, "@0005");
+	app.insertEdge("0002", "baidu.com", "outside", 1, "@0006");
+	app.insertEdge("0002", "baidu.com", "outside", 1, "@0007");
+	app.insertEdge("0001", "sina.com", "home", 1, "@0008");
+	app.insertEdge("0001", "sina.com", "home", 2, "@0009");
+	app.insertEdge("0002", "sina.com", "home", 3, "@0010");
+	app.insertEdge("0002", "baidu.com", "home", 2, "@0011");
+	app.insertEdge("0002", "baidu.com", "home", 1, "@0012");
+	int a=0;
 
+}
 }
