@@ -14,48 +14,63 @@ public class DataReader {
 	/**
 	 * @param args
 	 */
-	public static HashMap<String,ipValue> map = new HashMap<String,ipValue>();
 	private static String interval = "";
+//	private static HashMap<String,ipValue> map;
+	private static int count = 0;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String[] addr = new String[3];
-		addr[0] = "D://GB_Traffic_IP-Test";
-//		addr[1] = "E://GB2";
-		addr[2] = "D://GB_Traffic_IP-Test2//temp";
-		readFile(addr[0]);
-//		readFile(addr[1]);
-		outPut(addr[2]);
+		String[] addr = new String[2];
+		addr[0] = "D://GB_Traffic_IP";
+		addr[1] = "E://GB2";
+		String outPutAddr = "D://GB_Traffic_IP-File//GB_Traffic_IP.txt";
+		readFile(addr,outPutAddr);
+		
 	}
 
-	private static void readFile(String addr) {
+	private static void readFile(String[] addr,String outPutAddr) {
 		//读取一个目录下的所有文件
-		File[] files = new File(addr).listFiles(new FileFilter() {
-			public boolean accept(File arg0) {
-				return arg0.isDirectory();
-			}
-		});
-		for(File file : files) {
-			File[] subFiles = file.listFiles(new FileFilter() {
-				public boolean accept(File arg0) {
-					return arg0.isDirectory();
-				}
-			});
-			for(File subFile : subFiles) {
-				File[] subF = subFile.listFiles(new FilenameFilter() {
-					public boolean accept(File arg0,String arg1) {
-						return !arg1.contains("finished");
+		try {
+			FileWriter outPut = new FileWriter(outPutAddr,false);
+			BufferedWriter out = new BufferedWriter(outPut);
+			out.write("Imsi Period(Year-Month-Day Hour:Minute) LAC Ci\tTraffic\tCount\tAppType\tAppTypeCount\r\n");
+			out.close();
+			outPut.close();
+		}catch(Exception e) {
+			System.out.println("Error writing file!");
+		}
+		for(int i = 0;i < 7;i++) {
+			HashMap<String,ipValue> map = new HashMap<String,ipValue>();
+			for(int j = 0;j < 2;j++) {
+				File[] files = new File(addr[j]).listFiles(new FileFilter() {
+					public boolean accept(File arg0) {
+						return arg0.isDirectory();
 					}
 				});
-				for(File f : subF) {
-					singleFileReader(f);
+				for(File file : files) {
+					File[] subFiles = file.listFiles(new FileFilter() {
+						public boolean accept(File arg0) {
+							return arg0.isDirectory();
+						}
+					});
+//					System.out.println(subFiles[i].getName());
+					File[] subF = subFiles[i].listFiles(new FilenameFilter() {
+						public boolean accept(File arg0,String arg1) {
+							return !arg1.contains("finished");
+						}
+					});
+					for(File f : subF) {
+						singleFileReader(f,map);
+					}
 				}
 			}
+			outPut(map,outPutAddr);
 		}
 	}
+	
 
-	private static void singleFileReader(File file) {
+	private static void singleFileReader(File file,HashMap<String,ipValue> map) {
 		//读取一个文件
 		BufferedReader reader = null;
 		try {
@@ -73,18 +88,20 @@ public class DataReader {
 			strLine = reader.readLine();
 			while((strLine = reader.readLine()) != null) {
 				try {
-					dealSingleLine(strLine);
+					dealSingleLine(strLine,map);
 				}catch (Exception ex){
 					continue;
 				}
 			}
 			reader.close();
+			System.out.println("Reading file " + ++count + " : " + file.getAbsolutePath());
 		}catch(Exception e) {
 			System.out.println("Error reading file:" + file.getAbsolutePath());
 		}
 	}
 
-	private static void dealSingleLine(String line) {
+
+	private static void dealSingleLine(String line,HashMap<String,ipValue> map) {
 		//读取一行信息并做处理
 		String[] arr = line.split(interval);
 		int count = 1;
@@ -92,36 +109,35 @@ public class DataReader {
 		StringBuffer mainKey = new StringBuffer();
 		StringBuffer shortTime = new StringBuffer();
 		if(matchValue(arr[1])&&matchValue(arr[3])&&matchValue(arr[4])&&matchValue(arr[6])) {
-//			if(matchClock(arr[3])) {
-				shortTime.append(arr[3]);
-				shortTime.delete(16,23);
-				//时间以分钟归类
-				int AppType = Integer.parseInt(arr[12]);
-				double traffic = Double.parseDouble(arr[21]);
-				traffic += Double.parseDouble(arr[22]);
-				//计算流量
-				mainKey.append(arr[1]+"\t"+shortTime.toString()+"\t"+arr[4]+"\t"+arr[6]);
-				String mKey = mainKey.toString();
-				//生成Key
-				if(map.containsKey(mKey)) {
-					mValue = map.get(mKey);
-					traffic += mValue.getTraffic();
-					count += mValue.getCount();
-					if(AppType != 0) mValue.setApp(AppType);
-					mValue.setTraffic(traffic);
-					mValue.setCount(count);
-				}
-				else {
-					HashMap<Integer,Integer> mApp = new HashMap<Integer,Integer>();
-					mValue = new ipValue(traffic,count,mApp);
-					if(AppType != 0) mValue.setApp(AppType);
-				}
-				//通过Key更新Value
-				map.put(mKey,mValue);
-//			}
+			shortTime.append(arr[3]);
+			shortTime.delete(16,23);
+			//时间以分钟归类
+			int AppType = Integer.parseInt(arr[12]);
+			double traffic = Double.parseDouble(arr[21]);
+			traffic += Double.parseDouble(arr[22]);
+			//计算流量
+			mainKey.append(arr[1]+"\t"+shortTime.toString()+"\t"+arr[4]+"\t"+arr[6]);
+			String mKey = mainKey.toString();
+			//生成Key
+			if(map.containsKey(mKey)) {
+				mValue = map.get(mKey);
+				traffic += mValue.getTraffic();
+				count += mValue.getCount();
+				if(AppType != 0) mValue.setApp(AppType);
+				mValue.setTraffic(traffic);
+				mValue.setCount(count);
+			}
+			else {
+				HashMap<Integer,Integer> mApp = new HashMap<Integer,Integer>();
+				mValue = new ipValue(traffic,count,mApp);
+				if(AppType != 0) mValue.setApp(AppType);
+			}
+			//通过Key更新Value
+			map.put(mKey,mValue);
 		}
 //arr[1]:Imsi<<arr[3]:Period<<arr[4]:LAC<<arr[6]:Ci<<arr[12]:AppType<<arr[21]:IPULTraffic<<arr[22]:IPDLTraffic
 	}
+
 
 	private static boolean matchValue(String str) {
 		//判断字符串是否有意义
@@ -129,18 +145,11 @@ public class DataReader {
 		else return true;
 	}
 
-	private static boolean matchClock(String str) {
-		//选择需要的时间段
-		str = str.substring(11,13);
-		if("07".equals(str) ||"08".equals(str) || "09".equals(str) || "10".equals(str) || "17".equals(str) || "18".equals(str) || "19".equals(str) || "20".equals(str)) return true;
-		else return false;
-	}
-
-	private static void outPut(String addr) {
+	private static void outPut(HashMap<String,ipValue> map,String outPutAddr) {
 		//把哈希表中的内容输出到指定文件中并整理出最大计数的SerType和AppType
 		try {
-			PrintWriter out = new PrintWriter(addr);
-			out.println("Imsi Period(Year-Month-Day Hour:Minute) LAC Ci\tTraffic\tCount\tAppType\tAppTypeCount");
+			FileWriter outPut = new FileWriter(outPutAddr,true);
+			BufferedWriter out = new BufferedWriter(outPut);
 			Iterator<String> iterator = map.keySet().iterator();
 			while(iterator.hasNext()) {
 				String key = iterator.next();
@@ -150,7 +159,7 @@ public class DataReader {
 				format.setMaximumFractionDigits(3);
 				String result = format.format(traffic);
 //				traffic = Double.parseDouble(result);
-				out.print(key+"\t"+result+"\t"+mValue.getCount()+"\t");
+				out.write(key+"\t"+result+"\t"+mValue.getCount()+"\t");
 				int maxKey = 0;
 				int maxCount = 0;
 				HashMap<Integer,Integer> mapApp = mValue.getMapApp();
@@ -163,11 +172,12 @@ public class DataReader {
 						maxCount = appCount;
 					}
 				}
-				out.println(maxKey+"\t"+maxCount);
+				out.write(maxKey+"\t"+maxCount+"\r\n");
 			}
 			out.close();
+			outPut.close();
 		}catch(Exception e) {
-			System.out.println("Error writing file:" + addr);
+			System.out.println("Error writing file!");
 		}
 	}
 
