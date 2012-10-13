@@ -15,60 +15,47 @@ public class DataReader {
 	 * @param args
 	 */
 	private static String interval = "";
-//	private static HashMap<String,ipValue> map;
 	private static int count = 0;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String[] addr = new String[2];
+		String[] addr = new String[3];
 		addr[0] = "D://GB_Traffic_IP";
 		addr[1] = "E://GB2";
-		String outPutAddr = "D://GB_Traffic_IP-File//GB_Traffic_IP.txt";
-		readFile(addr,outPutAddr);
-		
+		readFile(addr[0]);
+		readFile(addr[1]);
 	}
 
-	private static void readFile(String[] addr,String outPutAddr) {
+	private static void readFile(String addr) {
 		//读取一个目录下的所有文件
-		try {
-			FileWriter outPut = new FileWriter(outPutAddr,false);
-			BufferedWriter out = new BufferedWriter(outPut);
-			out.write("Imsi Period(Year-Month-Day Hour:Minute) LAC Ci\tTraffic\tCount\tAppType\tAppTypeCount\r\n");
-			out.close();
-			outPut.close();
-		}catch(Exception e) {
-			System.out.println("Error writing file!");
-		}
-		for(int i = 0;i < 7;i++) {
-			HashMap<String,ipValue> map = new HashMap<String,ipValue>();
-			for(int j = 0;j < 2;j++) {
-				File[] files = new File(addr[j]).listFiles(new FileFilter() {
-					public boolean accept(File arg0) {
-						return arg0.isDirectory();
+		File[] files = new File(addr).listFiles(new FileFilter() {
+			public boolean accept(File arg0) {
+				return arg0.isDirectory();
+			}
+		});
+		for(File file : files) {
+			File[] subFiles = file.listFiles(new FileFilter() {
+				public boolean accept(File arg0) {
+					return arg0.isDirectory();
+				}
+			});
+			for(File subFile : subFiles) {
+				File[] subF = subFile.listFiles(new FilenameFilter() {
+					public boolean accept(File arg0,String arg1) {
+						return !arg1.contains("finished");
 					}
 				});
-				for(File file : files) {
-					File[] subFiles = file.listFiles(new FileFilter() {
-						public boolean accept(File arg0) {
-							return arg0.isDirectory();
-						}
-					});
-//					System.out.println(subFiles[i].getName());
-					File[] subF = subFiles[i].listFiles(new FilenameFilter() {
-						public boolean accept(File arg0,String arg1) {
-							return !arg1.contains("finished");
-						}
-					});
-					for(File f : subF) {
-						singleFileReader(f,map);
-					}
+				String outPutAddr = "D://GB_Traffic_IP-File//" + file.getName() + "_" + subFile.getName() + ".txt";
+//				System.out.println(outPutAddr);
+				HashMap<String,ipValue> map = new HashMap<String,ipValue>();
+				for(File f : subF) {
+					singleFileReader(f,map);
 				}
+				outPut(map,outPutAddr);
 			}
-			outPut(map,outPutAddr);
 		}
 	}
-	
 
 	private static void singleFileReader(File file,HashMap<String,ipValue> map) {
 		//读取一个文件
@@ -99,7 +86,6 @@ public class DataReader {
 			System.out.println("Error reading file:" + file.getAbsolutePath());
 		}
 	}
-
 
 	private static void dealSingleLine(String line,HashMap<String,ipValue> map) {
 		//读取一行信息并做处理
@@ -137,7 +123,6 @@ public class DataReader {
 		}
 //arr[1]:Imsi<<arr[3]:Period<<arr[4]:LAC<<arr[6]:Ci<<arr[12]:AppType<<arr[21]:IPULTraffic<<arr[22]:IPDLTraffic
 	}
-
 
 	private static boolean matchValue(String str) {
 		//判断字符串是否有意义
