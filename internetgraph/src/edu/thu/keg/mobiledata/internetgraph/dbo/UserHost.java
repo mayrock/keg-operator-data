@@ -28,6 +28,7 @@ public class UserHost {
 		else
 		{
 			ConnectionTable.put(LTs, new ConnectionDetail(location, timeSegment, userAgent));
+			ConnectionTable.get(LTs).ConnectionCount++;
 		}
 		this.TotalCount++;
 		return false;
