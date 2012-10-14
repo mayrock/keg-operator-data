@@ -23,34 +23,33 @@ public class DataAnalyse {
 	public static void main(String args[]) throws Exception
 	{
 		ConnectionGraph app= new ConnectionGraph("test");
-		app.initialGraph();
-		app.insertEdge("0001", "baidu.com", "home", 1, "@0001");
-		app.insertEdge("0001", "baidu.com", "home", 2, "@0003");
-		app.insertEdge("0001", "baidu.com", "outside", 1, "@0005");
-		
-		app.insertEdge("0002", "baidu.com", "home", 3, "@0004");
-		app.insertEdge("0002", "baidu.com", "home", 2, "@0011");
-		app.insertEdge("0002", "baidu.com", "outside", 1, "@0006");
-		app.insertEdge("0002", "baidu.com", "outside", 1, "@0007");
-		app.insertEdge("0002", "baidu.com", "home", 1, "@0012");
-		
-		app.insertEdge("0002", "sina.com", "home", 3, "@0010");
-		
-		app.insertEdge("0001", "sina.com", "home", 1, "@0008");
-		app.insertEdge("0001", "sina.com", "home", 2, "@0009");
-		app.insertEdge("0001", "sina.com", "home", 1, "@0002");
+//		app.initialGraph();
+//		app.insertEdge("0001", "baidu.com", "home", 1, "@0001");
+//		app.insertEdge("0001", "baidu.com", "home", 2, "@0003");
+//		app.insertEdge("0001", "baidu.com", "outside", 1, "@0005");
+//		
+//		app.insertEdge("0002", "baidu.com", "home", 3, "@0004");
+//		app.insertEdge("0002", "baidu.com", "home", 2, "@0011");
+//		app.insertEdge("0002", "baidu.com", "outside", 1, "@0006");
+//		app.insertEdge("0002", "baidu.com", "outside", 1, "@0007");
+//		app.insertEdge("0002", "baidu.com", "home", 1, "@0012");
+//		
+//		app.insertEdge("0002", "sina.com", "home", 3, "@0010");
+//		
+//		app.insertEdge("0001", "sina.com", "home", 1, "@0008");
+//		app.insertEdge("0001", "sina.com", "home", 2, "@0009");
+//		app.insertEdge("0001", "sina.com", "home", 1, "@0002");
 		
 
-		
-		int a=0;
+		DataAnalyse bpp= new DataAnalyse();			
+		Connection conn=getConnection();
+		bpp.viewTable(conn,app);
+		disConnection(conn);
 		app.printAllSystem();
 		DataAnalyse.outputBinary(app);
+		
 		app=DataAnalyse.inputBinary("graphMap.dat");
 		app.printAllSystem();
-		
-		Connection conn=getConnection();
-		viewTable(conn);
-		disConnection(conn);
 	}
 	public static void outputBinary(ConnectionGraph cg)
 	{
@@ -100,44 +99,52 @@ public class DataAnalyse {
 		System.out.println("Connected to database");
 	    return conn;
 	}
-	public static void viewTable(Connection conn)throws Exception{
+	public  void viewTable(Connection conn,ConnectionGraph CGraph)throws Exception{
 		//¶ÁÈ¡Êý¾Ý
 		Statement stmt = null;
 		int t;
-		PrintWriter out=new PrintWriter("temp");
-		String query="select Imsi,Ci,CONVERT(smalldatetime,Connecttime)as ConnTime,"+
-				"SUM(case when LastPkgTime>RequestTime then cast(datediff(s,RequestTime,LastPkgTime)as decimal(18,2)) end)as ConnLength"+
-				" into NewTable"+
-				" from dbo.GN"+
-				" group by Imsi,Ci,CONVERT(smalldatetime,Connecttime)";
+		CGraph.initialGraph();
+//		PrintWriter out=new PrintWriter("temp");
+		String query="select Imsi,Lac,Ci,ConnectTime,Host,UserAgent"+
+				" from dbo.GN";
 		try {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
-			while(rs.next()) {
-				String ID=rs.getString("Imsi");
-				int CI=rs.getInt("Ci");
+			int i=0;
+			while(rs.next()&&i<10) {
+				String uID=rs.getString("Imsi");
+				String Addr=rs.getString("Host");
+				String Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
 				Calendar CT=null;
 				CT.setTime(rs.getDate("ConnectTime"));
-				Date FRT=rs.getDate("RequestTime");
-				Date LPT=rs.getDate("LastPkgTime");
+//				Date FRT=rs.getDate("RequestTime");
+//				Date LPT=rs.getDate("LastPkgTime");
 				int hour=CT.get(CT.HOUR_OF_DAY);
-				long FRT_ms=FRT.getTime();
-				long LPT_ms=LPT.getTime();
-				if((hour==8||hour==9||hour==10||hour==18||hour==19||hour==20)&&LPT_ms>FRT_ms) 
-				{
-					t=(int)(LPT_ms-FRT_ms);
-					totalTime_ms+=t;
-					count++;
-					perTime_ms=totalTime_ms/count;
-					if(t>2*perTime_ms) out.println(ID+" "+CI+" "+t);
-				}
+//				long FRT_ms=FRT.getTime();
+//				long LPT_ms=LPT.getTime();
+				String UserAgent=rs.getString("UserAgent");
+				int timeSegment=0;
+				if(hour>=0&&hour<4)
+					timeSegment=1;
+				else if(hour>=4&&hour<8)
+					timeSegment=2;
+				else if(hour>=8&&hour<12)
+					timeSegment=3;
+				else if(hour>=12&&hour<16)
+					timeSegment=4;
+				else if(hour>=16&&hour<20)
+					timeSegment=5;
+				else if(hour>=20&&hour<24)
+					timeSegment=6;
+				CGraph.insertEdge(uID, Addr, Location, timeSegment, UserAgent);
+				i++;
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}finally {
 			if(stmt!=null) stmt.close();
 		}
-		out.close();
+//		out.close();
 	}
 	//
 /*	public static void dealData() {
