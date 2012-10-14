@@ -1,4 +1,5 @@
 package edu.thu.keg.mobiledata.internetgraph.dbo;
+import java.io.Serializable;
 /**
 *
 * @author Yuan Bozhi
@@ -6,7 +7,8 @@ package edu.thu.keg.mobiledata.internetgraph.dbo;
 */
 import java.util.Hashtable;
 
-public class User {
+public class User implements Serializable{
+	static final long serialVersionUID=200002L;
 	final String IMEI;
 	int TotalCount;
 	String PhoneBrand;//phone's brand

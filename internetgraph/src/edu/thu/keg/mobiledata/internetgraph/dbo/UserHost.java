@@ -1,4 +1,6 @@
 package edu.thu.keg.mobiledata.internetgraph.dbo;
+import java.io.Serializable;
+import java.util.ArrayList;
 /**
 *
 * @author Yuan Bozhi
@@ -6,13 +8,16 @@ package edu.thu.keg.mobiledata.internetgraph.dbo;
 */
 import java.util.Hashtable;
 
-public class UserHost {
+public class UserHost implements Serializable{
+	static final long serialVersionUID=200001L;
 	public User user;
 	public Host host;
+	final String ID;
 	public int TotalCount;
 	public Hashtable<String, ConnectionDetail> ConnectionTable;//connection details
 	public UserHost(User u,Host h)
 	{
+		ID=u.IMEI+h.ADDR;
 		user=u;
 		host=h;
 		TotalCount=0;
@@ -24,6 +29,7 @@ public class UserHost {
 		if(ConnectionTable.containsKey(LTs))
 		{
 			ConnectionTable.get(LTs).ConnectionCount++;
+			ConnectionTable.get(LTs).UserAgent.add(userAgent);
 		}
 		else
 		{
@@ -40,18 +46,20 @@ public class UserHost {
 		return s;
 	}
 }
-class ConnectionDetail{
+class ConnectionDetail implements Serializable{
+	static final long serialVersionUID=300001L;
 	String Location;//the location info of the user connected the host
 	int TimeSegment;//the timeSegment of the user connected the host
 	int ConnectionCount;//the number of the user connected the host in particular location & timeSegment
 //	int UrlCount;//the number of host's branches 
-	String UserAgent;//UserAgent
+	ArrayList<String> UserAgent;//UserAgent
 	ConnectionDetail(String location,int timeSegment,String userAgent)
 	{
 		Location=location;
 		TimeSegment=timeSegment;
 		ConnectionCount=0;
-		UserAgent=userAgent;
+		UserAgent=new ArrayList<String>();
+		UserAgent.add(userAgent);
 	}
 	@Override
 	public String toString()

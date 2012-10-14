@@ -1,4 +1,5 @@
 package edu.thu.keg.mobiledata.internetgraph.dbo;
+import java.io.Serializable;
 /**
 *
 * @author Yuan Bozhi
@@ -6,7 +7,8 @@ package edu.thu.keg.mobiledata.internetgraph.dbo;
 */
 import java.util.Hashtable;
 
-public class Host {
+public class Host implements Serializable{
+	static final long serialVersionUID=200003L;
 	final String ADDR;
 	int UrlCount;
 	Hashtable<String, UserHost> ConnectedUser;//all connected users
