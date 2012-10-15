@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mobiledata.dataloader;
+package edu.thu.keg.mobiledata.dataloader.singlefileloader;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author mayrock
  *
  */
-public class SingleFileLoader {
+public class SingleFileLoader extends AbstractSingleFileReader {
 	
 	private File file;
 	private int fileId;
