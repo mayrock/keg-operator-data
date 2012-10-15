@@ -46,11 +46,11 @@ public class DataAnalyse {
 		Connection conn=getConnection();
 		bpp.viewTable(conn,app);
 		disConnection(conn);
-		app.printAllSystem();
+//		app.printAllSystem();
 		DataAnalyse.outputBinary(app);
 		
-		app=DataAnalyse.inputBinary("graphMap.dat");
-		app.printAllSystem();
+//		app=DataAnalyse.inputBinary("graphMap.dat");
+//		app.printAllSystem();
 	}
 	public static void outputBinary(ConnectionGraph cg)
 	{
@@ -112,7 +112,7 @@ public class DataAnalyse {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			int i=0;
-			while(rs.next()&&i<10) {
+			while(rs.next()) {
 				String uID=String.valueOf(rs.getBigDecimal("Imsi"));
 				String Addr=rs.getString("Host");
 				String Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
@@ -141,14 +141,15 @@ public class DataAnalyse {
 				else if(hour>=20&&hour<24)
 					timeSegment=6;
 				CGraph.insertEdge(uID, Addr, Location, timeSegment, UserAgent);
-				i++;
+//				i++;
+				
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
-		}finally {
-			if(stmt!=null) 
-				stmt.close();
 		}
+//			if(stmt!=null) 
+//				stmt.close();
+		
 //		out.close();
 	}
 	//
