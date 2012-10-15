@@ -1,11 +1,12 @@
 package edu.thu.keg.mobiledata.trafficip;
+
+import java.util.HashMap;
+
 /**
  * 
  * @author WuChao
  * 
  */
-import java.util.HashMap;
-
 public class ipValue {
 	private double traffic;
 	private int count;
@@ -25,6 +26,12 @@ public class ipValue {
 		int c = 1;
 		if(mapApp.containsKey(strApp)) c += mapApp.get(strApp);
 		mapApp.put(strApp,c);
+	}
+
+	public void setApp(int strApp,int appTypeCount) {
+		// TODO Auto-generated method stub
+		if(mapApp.containsKey(strApp)) appTypeCount += mapApp.get(strApp);
+		mapApp.put(strApp,appTypeCount);
 	}
 
 	public void setTraffic(double t) {

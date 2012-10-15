@@ -1,14 +1,12 @@
 package edu.thu.keg.mobiledata.trafficip;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Iterator;
 /**
  * 
  * @author WuChao
  * 
  */
-import java.io.*;
-import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-
 public class DataReader {
 
 	/**
@@ -20,7 +18,7 @@ public class DataReader {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String[] addr = new String[3];
+		String[] addr = new String[2];
 		addr[0] = "D://GB_Traffic_IP";
 		addr[1] = "E://GB2";
 		readFile(addr[0]);
@@ -46,7 +44,7 @@ public class DataReader {
 						return !arg1.contains("finished");
 					}
 				});
-				String outPutAddr = "D://GB_Traffic_IP-File//" + file.getName() + "_" + subFile.getName() + ".txt";
+				String outPutAddr = "D://GB_Traffic_IP-File2//" + file.getName() + "_" + subFile.getName() + ".txt";
 //				System.out.println(outPutAddr);
 				HashMap<String,ipValue> map = new HashMap<String,ipValue>();
 				for(File f : subF) {
@@ -96,8 +94,8 @@ public class DataReader {
 		StringBuffer shortTime = new StringBuffer();
 		if(matchValue(arr[1])&&matchValue(arr[3])&&matchValue(arr[4])&&matchValue(arr[6])) {
 			shortTime.append(arr[3]);
-			shortTime.delete(16,23);
-			//时间以分钟归类
+			shortTime.delete(13,23);
+			//时间以小时归类
 			int AppType = Integer.parseInt(arr[12]);
 			double traffic = Double.parseDouble(arr[21]);
 			traffic += Double.parseDouble(arr[22]);
@@ -133,18 +131,13 @@ public class DataReader {
 	private static void outPut(HashMap<String,ipValue> map,String outPutAddr) {
 		//把哈希表中的内容输出到指定文件中并整理出最大计数的SerType和AppType
 		try {
-			FileWriter outPut = new FileWriter(outPutAddr,true);
-			BufferedWriter out = new BufferedWriter(outPut);
+			PrintWriter out = new PrintWriter(outPutAddr);
 			Iterator<String> iterator = map.keySet().iterator();
 			while(iterator.hasNext()) {
 				String key = iterator.next();
 				ipValue mValue = map.get(key);
 				double traffic = mValue.getTraffic();
-				NumberFormat format = NumberFormat.getNumberInstance();
-				format.setMaximumFractionDigits(3);
-				String result = format.format(traffic);
-//				traffic = Double.parseDouble(result);
-				out.write(key+"\t"+result+"\t"+mValue.getCount()+"\t");
+				out.printf("%s\t%.3f\t%d\t",key,traffic,mValue.getCount());
 				int maxKey = 0;
 				int maxCount = 0;
 				HashMap<Integer,Integer> mapApp = mValue.getMapApp();
@@ -157,10 +150,9 @@ public class DataReader {
 						maxCount = appCount;
 					}
 				}
-				out.write(maxKey+"\t"+maxCount+"\r\n");
+				out.println(maxKey+"\t"+maxCount);
 			}
 			out.close();
-			outPut.close();
 		}catch(Exception e) {
 			System.out.println("Error writing file!");
 		}
