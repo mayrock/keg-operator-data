@@ -92,7 +92,7 @@ public class DataAnalyse {
 		//建立连接
 		Connection conn=null;
 		try {
-			conn=DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;integratedSecurity=true;");
+			conn=DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=OperatorData;integratedSecurity=true;");
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -106,13 +106,13 @@ public class DataAnalyse {
 		CGraph.initialGraph();
 //		PrintWriter out=new PrintWriter("temp");
 		String query="select Imsi,Lac,Ci,ConnectTime,Host,UserAgent"+
-				" from dbo.GN";
+				" from dbo.GNComplete";
 		try {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			int i=0;
 			while(rs.next()&&i<10) {
-				String uID=rs.getString("Imsi");
+				String uID=String.valueOf(rs.getInt("Imsi"));
 				String Addr=rs.getString("Host");
 				String Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
 				Calendar CT=null;
