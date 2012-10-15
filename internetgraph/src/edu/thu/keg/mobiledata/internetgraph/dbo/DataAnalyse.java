@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DataAnalyse {
@@ -112,11 +113,14 @@ public class DataAnalyse {
 			ResultSet rs = stmt.executeQuery(query);
 			int i=0;
 			while(rs.next()&&i<10) {
-				String uID=String.valueOf(rs.getInt("Imsi"));
+				String uID=String.valueOf(rs.getBigDecimal("Imsi"));
 				String Addr=rs.getString("Host");
 				String Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
-				Calendar CT=null;
-				CT.setTime(rs.getDate("ConnectTime"));
+				Calendar CT=Calendar.getInstance();
+				String d_f=rs.getString("ConnectTime");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				java.util.Date dt = sdf.parse(d_f);
+				CT.setTime(dt);
 //				Date FRT=rs.getDate("RequestTime");
 //				Date LPT=rs.getDate("LastPkgTime");
 				int hour=CT.get(CT.HOUR_OF_DAY);
@@ -142,7 +146,8 @@ public class DataAnalyse {
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}finally {
-			if(stmt!=null) stmt.close();
+			if(stmt!=null) 
+				stmt.close();
 		}
 //		out.close();
 	}
