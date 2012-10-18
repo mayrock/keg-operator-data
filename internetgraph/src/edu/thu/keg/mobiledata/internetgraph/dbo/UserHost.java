@@ -25,7 +25,7 @@ public class UserHost implements Serializable{
 	}
 	public boolean insertConnnection(String location,int timeSegment,String userAgent)
 	{
-		String LTs=location+timeSegment;
+		String LTs=location+","+timeSegment;
 		if(ConnectionTable.containsKey(LTs))
 		{
 			ConnectionTable.get(LTs).ConnectionCount++;

@@ -46,6 +46,7 @@ public class DataAnalyse {
 		Connection conn=getConnection();
 		bpp.viewTable(conn,app);
 		disConnection(conn);
+		System.out.println("内存建立完毕!");
 //		app.printAllSystem();
 		DataAnalyse.outputBinary(app);
 		
@@ -112,7 +113,7 @@ public class DataAnalyse {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			int i=0;
-			while(rs.next()) {
+			while(rs.next()&&i<=20) {
 				String uID=String.valueOf(rs.getBigDecimal("Imsi"));
 				String Addr=rs.getString("Host");
 				String Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
@@ -141,7 +142,8 @@ public class DataAnalyse {
 				else if(hour>=20&&hour<24)
 					timeSegment=6;
 				CGraph.insertEdge(uID, Addr, Location, timeSegment, UserAgent);
-//				i++;
+				i++;
+				System.out.println(i+":已经快了...");
 				
 			}
 		}catch(SQLException e) {
