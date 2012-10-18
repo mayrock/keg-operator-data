@@ -15,8 +15,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Vector;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Set;
@@ -53,8 +56,9 @@ public class DataAnalyse {
 		disConnection(conn);
 		System.out.println("内存建立完毕!");
 //		app.printAllSystem();
-		DataAnalyse.outputBinary(app);
+//		DataAnalyse.outputBinary(app);
 		bpp.getHostRelation(app);
+		System.out.println("搞定!");
 //		app=DataAnalyse.inputBinary("graphMap.dat");
 //		app.printAllSystem();
 	}
@@ -130,7 +134,7 @@ public class DataAnalyse {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			int i=0;
-			while(rs.next()&&i<=20) {
+			while(rs.next()) {
 				String uID=String.valueOf(rs.getBigDecimal("Imsi"));
 				String Addr=rs.getString("Host");
 				String Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
@@ -184,33 +188,58 @@ public class DataAnalyse {
 		System.out.println("Edged:"+EdgeNum);
 		Enumeration<Host> h_en=CG.graphHosts.elements();
 		Set<String> ukey_co=CG.graphUsers.keySet();
-		String [] u_Imes=(String[])ukey_co.toArray();
+		Object [] u_Imes=(ukey_co.toArray());
 		String output="";
+		double sum=0;
 		for(int i=0;i<HostNum;i++)
 		{
 			Host  h= h_en.nextElement();
 			h.Eigenvector.setSize(UserNum);
+//			System.out.println(i);
 			for(int j=0;j<u_Imes.length;j++)
 			{
-				if(h.ConnectedUser.containsKey(u_Imes[j]))
+//				System.out.println(u_Imes[j]);
+				if(h.ConnectedUser.containsKey((String)u_Imes[j]+h.ADDR))
 				{
-					Double v=(double)(h.ConnectedUser.get(u_Imes[j]).TotalCount)/(double)CG.AllConnectionTimes;
+					Double v=(double)(h.ConnectedUser.get((String)u_Imes[j]+h.ADDR).TotalCount);
 					h.Eigenvector.setElementAt(v,j);
 				}
 				else
 					h.Eigenvector.setElementAt(0.0, j);
 			}
-			for(int k=0;k<h.Eigenvector.size();k++)
-				output=output+String.valueOf(h.Eigenvector.get(k))+" ";
-			output=output+"\n";
-		}	        
-       DataAnalyse.writeFile("HostVectors.txt", output);
+//			double op=0;
+//			for(int k=0;k<h.Eigenvector.size();k++)
+//			{
+//				op=op+h.Eigenvector.get(k);
+//				output=output+String.valueOf(h.Eigenvector.get(k))+" ";
+//			}sum=sum+op;
+//			output=String.valueOf(op)+": "+output+"\n";
+//			DataAnalyse.writeFile("HostVectors.txt", output);
+//			output="";
+		}
+		Enumeration<Host> h_en2=CG.graphHosts.elements();
+	    DecimalFormat df = new DecimalFormat("#.00");
+	    NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+		for(int i=0;i<HostNum;i++)
+		{	
+			Host  h2= h_en2.nextElement();
+			Enumeration<Host> h_en3=CG.graphHosts.elements();
+			String str="";
+			for(int j=0;j<HostNum;j++)
+			{
+				Host  h3= h_en3.nextElement();
+				str=str+String.valueOf(String.format("%.4f",getDistance(h2.Eigenvector,h3.Eigenvector))+" ");
+			}
+			DataAnalyse.writeFile("HostVectors.txt", str+h2.ADDR+"\n");
+		}
+		System.out.println("ok!");
 	}
 	public static void writeFile(String Filename,String Content)
 	{
 		 try {
 	        	File outfile=new File(Filename);
-	        	FileOutputStream  f= new FileOutputStream(outfile,false);
+	        	FileOutputStream  f= new FileOutputStream(outfile,true);
 	            BufferedOutputStream f_b=new BufferedOutputStream(f);
 	            byte [] b;
 	            b=Content.getBytes();
@@ -220,6 +249,15 @@ public class DataAnalyse {
 	        } catch (IOException ex) {
 	           System.out.println(ex);
 	        }// TODO add your handling code here:
+	}
+	public double getDistance(Vector<Double> a,Vector<Double> b)
+	{
+	
+		double re=0;
+		for(int i=0;i<a.size();i++)
+			re=re+a.get(i)*b.get(i);
+		return Math.sqrt(re);
+		
 	}
 	public static void disConnection(Connection conn) {
 		//中断连接

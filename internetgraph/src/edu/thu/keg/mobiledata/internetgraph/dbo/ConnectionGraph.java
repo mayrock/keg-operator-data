@@ -73,10 +73,9 @@ public class ConnectionGraph implements Serializable{
 			System.out.println("imei or addr is null");
 			return false;
 		}
-		else
-		{
-			this.AllConnectionTimes++;
-		}
+	
+		this.AllConnectionTimes++;
+		
 		UserHost tempUH=null;
 		if(graphUsers.containsKey(imei) && graphHosts.containsKey(addr))//exist the UserNode & HostNode
 		{
