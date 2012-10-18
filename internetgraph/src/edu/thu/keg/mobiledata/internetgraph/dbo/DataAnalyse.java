@@ -1,5 +1,7 @@
 package edu.thu.keg.mobiledata.internetgraph.dbo;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,6 +17,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Set;
 
 public class DataAnalyse {
 	private static int totalTime_ms=0;
@@ -49,10 +54,13 @@ public class DataAnalyse {
 		System.out.println("内存建立完毕!");
 //		app.printAllSystem();
 		DataAnalyse.outputBinary(app);
-		
+		bpp.getHostRelation(app);
 //		app=DataAnalyse.inputBinary("graphMap.dat");
 //		app.printAllSystem();
 	}
+	/*
+	 * 序列化输出
+	 */
 	public static void outputBinary(ConnectionGraph cg)
 	{
 		try {
@@ -69,6 +77,9 @@ public class DataAnalyse {
 			System.out.println(e);
 		}
 	}
+	/*
+	 *读取序列化文件
+	 */
 	public static ConnectionGraph inputBinary(String filename)
 	{
 		ConnectionGraph re=null;
@@ -90,6 +101,9 @@ public class DataAnalyse {
 		}
 		return re;
 	}
+	/*
+	 * 数据库连接
+	 */
 	public static Connection getConnection() {
 		//建立连接
 		Connection conn=null;
@@ -101,6 +115,9 @@ public class DataAnalyse {
 		System.out.println("Connected to database");
 	    return conn;
 	}
+	 /*
+	  * 数据库表的读取
+	  */
 	public  void viewTable(Connection conn,ConnectionGraph CGraph)throws Exception{
 		//读取数据
 		Statement stmt = null;
@@ -154,24 +171,56 @@ public class DataAnalyse {
 		
 //		out.close();
 	}
-	//
-/*	public static void dealData() {
-		//
-		Scanner in=new Scanner("temp");
-		while(in.hasNextLine()) {
-			long ID=in.nextLong();
-			short CI=in.nextShort();
-			int t=in.nextInt();
-			if(t>2*perTime_ms&&needRemove(CI)) {
-				System.out.println(ID+"*"+CI);
+	/*
+	 * 得到Host的相似度矩阵
+	 */
+	public void getHostRelation(ConnectionGraph CG)
+	{
+		int UserNum=CG.graphUsers.size();
+		int HostNum=CG.graphHosts.size();
+		int EdgeNum=CG.graphEdges.size();
+		System.out.println("Users:"+UserNum);
+		System.out.println("Hosts:"+HostNum);
+		System.out.println("Edged:"+EdgeNum);
+		Enumeration<Host> h_en=CG.graphHosts.elements();
+		Set<String> ukey_co=CG.graphUsers.keySet();
+		String [] u_Imes=(String[])ukey_co.toArray();
+		String output="";
+		for(int i=0;i<HostNum;i++)
+		{
+			Host  h= h_en.nextElement();
+			h.Eigenvector.setSize(UserNum);
+			for(int j=0;j<u_Imes.length;j++)
+			{
+				if(h.ConnectedUser.containsKey(u_Imes[j]))
+				{
+					Double v=(double)(h.ConnectedUser.get(u_Imes[j]).TotalCount)/(double)CG.AllConnectionTimes;
+					h.Eigenvector.setElementAt(v,j);
+				}
+				else
+					h.Eigenvector.setElementAt(0.0, j);
 			}
-		}
-		in.close();
+			for(int k=0;k<h.Eigenvector.size();k++)
+				output=output+String.valueOf(h.Eigenvector.get(k))+" ";
+			output=output+"\n";
+		}	        
+       DataAnalyse.writeFile("HostVectors.txt", output);
 	}
-	public static boolean isSteady(int CI) {
-		
-	}*/
-	//
+	public static void writeFile(String Filename,String Content)
+	{
+		 try {
+	        	File outfile=new File(Filename);
+	        	FileOutputStream  f= new FileOutputStream(outfile,false);
+	            BufferedOutputStream f_b=new BufferedOutputStream(f);
+	            byte [] b;
+	            b=Content.getBytes();
+	            f_b.write(b);
+	            f_b.flush();
+	            f_b.close();
+	        } catch (IOException ex) {
+	           System.out.println(ex);
+	        }// TODO add your handling code here:
+	}
 	public static void disConnection(Connection conn) {
 		//中断连接
 		try {

@@ -18,6 +18,7 @@ public class ConnectionGraph implements Serializable{
 	Hashtable<String, User> graphUsers;//user's hash
 	Hashtable<String, Host> graphHosts;//host's hash
 	Hashtable<String, UserHost> graphEdges;//edge's hash
+	int AllConnectionTimes;
 	public ConnectionGraph(String id)
 	{
 		graphID=id;
@@ -30,6 +31,7 @@ public class ConnectionGraph implements Serializable{
 		graphUsers= new Hashtable<String, User>();
 		graphHosts= new Hashtable<String, Host>();
 		graphEdges= new Hashtable<String, UserHost>();
+		AllConnectionTimes=0;
 	}
 	//clear the graph
 	public void clear()
@@ -70,6 +72,10 @@ public class ConnectionGraph implements Serializable{
 //			log.log(Level.INFO,"imei or addr is null");
 			System.out.println("imei or addr is null");
 			return false;
+		}
+		else
+		{
+			this.AllConnectionTimes++;
 		}
 		UserHost tempUH=null;
 		if(graphUsers.containsKey(imei) && graphHosts.containsKey(addr))//exist the UserNode & HostNode
