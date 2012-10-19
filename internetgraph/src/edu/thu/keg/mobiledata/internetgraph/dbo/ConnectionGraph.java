@@ -47,7 +47,7 @@ public class ConnectionGraph implements Serializable{
 		{
 			graphUsers.put(u.IMEI, u);
 //			log.log(Level.INFO, "added a User Node: "+u.IMEI);
-			System.out.println("added a User Node: "+u.IMEI);
+//			System.out.println("added a User Node: "+u.IMEI);
 			return true;
 		}
 		return false;
@@ -59,7 +59,7 @@ public class ConnectionGraph implements Serializable{
 		{
 			graphHosts.put(h.ADDR, h);
 //			log.log(Level.INFO, "added a Host Node: "+h.ADDR);
-			System.out.println("added a Host Node: "+h.ADDR);
+//			System.out.println("added a Host Node: "+h.ADDR);
 			return true;
 		}
 		return false;

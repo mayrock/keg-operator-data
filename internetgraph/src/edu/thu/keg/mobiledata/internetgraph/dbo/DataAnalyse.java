@@ -167,7 +167,7 @@ public class DataAnalyse {
 					timeSegment=6;
 				CGraph.insertEdge(uID, Addr, Location, timeSegment, UserAgent);
 				i++;
-//				System.out.println(i+":已经快了...");
+				System.out.println(i+":已经快了...");
 				
 			}
 		}catch(SQLException e) {
@@ -194,21 +194,34 @@ public class DataAnalyse {
 		Object [] u_Imes=(ukey_co.toArray());
 		String output="";
 		double sum=0;
-		for(int i=0;i<HostNum;i++)
+		//get first 5000Hosts
+		Host[] h_all= new Host[HostNum];
+		Host[] h_5000= new Host[1000];
+		for(int i=0;i<h_all.length;i++)
+			h_all[i]=h_en.nextElement();
+		//Host排序
+		DataAnalyse.fastLine(h_all, 0, h_all.length-1);
+		for(int i=0;i<h_all.length;i++)
+			System.out.println(i+":"+h_all[i].TotalConnectNum);
+		for(int i=0;i<h_5000.length;i++)
+			h_5000[i]=h_all[i];
+		
+		for(int i=0;i<h_5000.length;i++)
 		{
-			Host  h= h_en.nextElement();
-			h.Eigenvector.setSize(UserNum);
+			System.out.println(i);
+			Host  h= h_5000[i];
+			h.Eigenvector= new double[UserNum];
 //			System.out.println(i);
 			for(int j=0;j<u_Imes.length;j++)
 			{
-//				System.out.println(u_Imes[j]);
+//				System.out.println(j);
 				if(h.ConnectedUser.containsKey((String)u_Imes[j]+h.ADDR))
 				{
 					Double v=(double)(h.ConnectedUser.get((String)u_Imes[j]+h.ADDR).TotalCount);
-					h.Eigenvector.setElementAt(v,j);
+					h.Eigenvector[j]=v;
 				}
 				else
-					h.Eigenvector.setElementAt(0.0, j);
+					h.Eigenvector[j]=0.0;
 			}
 //			double op=0;
 //			for(int k=0;k<h.Eigenvector.size();k++)
@@ -220,18 +233,14 @@ public class DataAnalyse {
 //			DataAnalyse.writeFile("HostVectors.txt", output);
 //			output="";
 		}
-		Enumeration<Host> h_en2=CG.graphHosts.elements();
-	    DecimalFormat df = new DecimalFormat("#.00");
-	    NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMaximumFractionDigits(2);
-		for(int i=0;i<HostNum;i++)
+
+		for(int i=0;i<h_5000.length;i++)
 		{	
-			Host  h2= h_en2.nextElement();
-			Enumeration<Host> h_en3=CG.graphHosts.elements();
+			Host  h2= h_5000[i];
 			String str="";
-			for(int j=0;j<HostNum;j++)
+			for(int j=0;j<h_5000.length;j++)
 			{
-				Host  h3= h_en3.nextElement();
+				Host  h3= h_5000[j];
 				str=str+String.valueOf(String.format("%.4f",getDistance(h2.Eigenvector,h3.Eigenvector))+" ");
 			}
 			DataAnalyse.writeFile("HostVectors.txt", str+h2.ADDR+"\n");
@@ -262,6 +271,37 @@ public class DataAnalyse {
 		return Math.sqrt(re);
 		
 	}
+	public double getDistance(double[] a,double[]  b)
+	{
+	
+		double re=0;
+		for(int i=0;i<a.length;i++)
+			re=re+a[i]*b[i];
+		return Math.sqrt(re);
+		
+	}
+    public static void fastLine(Host [] a,int zuo,int you){
+        int i,j;
+        int key;
+        Host temp;
+        if(zuo>you)return;
+        key=a[you].TotalConnectNum;
+        i=zuo-1;
+        for(j=zuo;j<you;j++){
+            if(a[j].TotalConnectNum>key){
+                i++;
+                temp=a[j];
+                a[j]=a[i];
+                a[i]=temp;
+            }
+        }
+        i++;
+        temp=a[j];
+        a[j]=a[i];
+        a[i]=temp;
+        fastLine(a, zuo, i-1);
+        fastLine(a, i+1, you);
+    }
 	public static void disConnection(Connection conn) {
 		//中断连接
 		try {

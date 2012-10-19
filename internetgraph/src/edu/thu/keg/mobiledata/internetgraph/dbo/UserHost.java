@@ -37,6 +37,7 @@ public class UserHost implements Serializable{
 			ConnectionTable.get(LTs).ConnectionCount++;
 		}
 		this.TotalCount++;
+		this.host.TotalConnectNum++;
 		return false;
 	}
 	@Override

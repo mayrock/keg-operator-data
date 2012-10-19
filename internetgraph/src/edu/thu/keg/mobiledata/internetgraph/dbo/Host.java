@@ -12,12 +12,15 @@ public class Host implements Serializable{
 	static final long serialVersionUID=200003L;
 	final String ADDR;
 	int UrlCount;
+	int TotalConnectNum;
 	Hashtable<String, UserHost> ConnectedUser;//all connected users
-	Vector<Double> Eigenvector=new Vector<Double>();//record User's connection vector
+//	Vector<Double> Eigenvector=new Vector<Double>();//record User's connection vector
+	double [] Eigenvector;
 	public Host(String addr)
 	{
 		ADDR=addr;
 		UrlCount=0;
+		TotalConnectNum=0;
 		ConnectedUser=new Hashtable<String, UserHost>();
 		
 	}
