@@ -49,16 +49,19 @@ public class DataAnalyse {
 //		app.insertEdge("0001", "sina.com", "home", 2, "@0009");
 //		app.insertEdge("0001", "sina.com", "home", 1, "@0002");
 		
-
+		long t1=System.currentTimeMillis();
 		DataAnalyse bpp= new DataAnalyse();			
 		Connection conn=getConnection();
 		bpp.viewTable(conn,app);
 		disConnection(conn);
 		System.out.println("内存建立完毕!");
+		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
+		long t2=System.currentTimeMillis();
 //		app.printAllSystem();
 //		DataAnalyse.outputBinary(app);
 		bpp.getHostRelation(app);
 		System.out.println("搞定!");
+		System.out.println("关系矩阵生成时间："+(System.currentTimeMillis()-t2)/(double)1000+"秒");
 //		app=DataAnalyse.inputBinary("graphMap.dat");
 //		app.printAllSystem();
 	}
@@ -164,7 +167,7 @@ public class DataAnalyse {
 					timeSegment=6;
 				CGraph.insertEdge(uID, Addr, Location, timeSegment, UserAgent);
 				i++;
-				System.out.println(i+":已经快了...");
+//				System.out.println(i+":已经快了...");
 				
 			}
 		}catch(SQLException e) {

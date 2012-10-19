@@ -86,7 +86,7 @@ public class ConnectionGraph implements Serializable{
 				tempUH=graphEdges.get(imei+addr);
 				tempUH.insertConnnection(location, timeSegment, userAgent);
 //				log.log(Level.INFO, "在已有双节点添加边-已经存在一条边");
-				System.out.println("在已有双节点添加边-已经存在一条边");
+//				System.out.println("在已有双节点添加边-已经存在一条边");
 				return true;
 			}
 			else//not exit any edges
@@ -99,7 +99,7 @@ public class ConnectionGraph implements Serializable{
 				h.addConnectedUser(tempUH.toString(), tempUH);
 				graphEdges.put(tempUH.toString(), tempUH);//add to the graphEdges
 //				log.log(Level.INFO, "在已有双节点添加边-不存在任何一条边");
-				System.out.println("在已有双节点添加边-不存在任何一条边");
+//				System.out.println("在已有双节点添加边-不存在任何一条边");
 				return true;
 			}
 		}
@@ -114,7 +114,7 @@ public class ConnectionGraph implements Serializable{
 			h.addConnectedUser(tempUH.toString(), tempUH);
 			graphEdges.put(tempUH.toString(), tempUH);//add to the graphEdges
 //			log.log(Level.INFO, "有User，无Host-添加Host节点，添加一条边");
-			System.out.println("有User，无Host-添加Host节点，添加一条边");
+//			System.out.println("有User，无Host-添加Host节点，添加一条边");
 			return true;
 			
 		}
@@ -129,7 +129,7 @@ public class ConnectionGraph implements Serializable{
 			h.addConnectedUser(tempUH.toString(), tempUH);
 			graphEdges.put(tempUH.toString(), tempUH);//add to the graphEdges
 //			log.log(Level.INFO, "无User，有Host-添加User节点，添加一条边");
-			System.out.println("无User，有Host-添加User节点，添加一条边");
+//			System.out.println("无User，有Host-添加User节点，添加一条边");
 			return true;
 		}
 		else if(!graphUsers.containsKey(imei) &&!graphHosts.containsKey(addr))
@@ -144,7 +144,7 @@ public class ConnectionGraph implements Serializable{
 			h.addConnectedUser(tempUH.toString(), tempUH);
 			graphEdges.put(tempUH.toString(), tempUH);//add to the graphEdges
 //			log.log(Level.INFO, "无User，无Host-添加User，Host节点，添加一条边");
-			System.out.println("无User，无Host-添加User，Host节点，添加一条边");
+//			System.out.println("无User，无Host-添加User，Host节点，添加一条边");
 			return true;
 		}
 //		log.log(Level.INFO, "没有添加成功任何一条边");
