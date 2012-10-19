@@ -41,7 +41,8 @@ public class TrafficIntermediateFileReader extends AbstractSingleFileReader {
 		insertSQL = new ArrayList<String>();
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+			FileInputStream is = new FileInputStream(file);
+			reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 			String strLine = null;
 			while ((strLine = reader.readLine()) != null)   {
 				try{
@@ -56,6 +57,8 @@ public class TrafficIntermediateFileReader extends AbstractSingleFileReader {
 					continue;
 				}
 			}
+			is.close();
+			reader.close();
 		} catch (Exception ex) {
 			
 		}
@@ -67,21 +70,24 @@ public class TrafficIntermediateFileReader extends AbstractSingleFileReader {
 		StringBuffer sb = new StringBuffer(getInsertPrefix() + " VALUES (");
 		for (int i = 0; i < fields.length - 1; ++i) {
 			
-			String value;
-			if (!isNumericType(arrType[i])) {
-				value = "'" + fields[i].replaceAll("\'", "\'\'") + "'";
-			} else {
-				value = fields[i];
+			String value = fields[i];
+			if (arrName[i] == "ConnectTime") {
+				value = value + ":00";
 			}
+			if (!isNumericType(arrType[i])) {
+				value = "'" + value.replaceAll("\'", "\'\'") + "'";
+			} 
+			
 			value = value.replace(",","");
 			sb.append(value + ", " );
 		}
-		String value;
-		if (!isNumericType(arrType[fields.length - 1])) {
-			value = "'" + fields[fields.length - 1].replaceAll("\'", "\'\'") + "'";
-		} else {
-			value = fields[fields.length - 1];
+		String value = fields[fields.length - 1];
+		if (arrName[fields.length - 1] == "ConnectTime") {
+			value = value + ":00";
 		}
+		if (!isNumericType(arrType[fields.length - 1])) {
+			value = "'" + value.replaceAll("\'", "\'\'") + "'";
+		} 
 		value = value.replace(",","");
 		sb.append(value);
 		sb.append(")" + System.lineSeparator());

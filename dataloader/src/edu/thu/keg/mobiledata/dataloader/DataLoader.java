@@ -97,7 +97,7 @@ public class DataLoader {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-				if (i == 100000) {
+				if (i == 10000) {
 					try {
 						ret += stmt.executeBatch().length;
 						stmt.clearBatch();
@@ -114,14 +114,14 @@ public class DataLoader {
 			try {
 				ret += stmt.executeBatch().length;
 				stmt.clearBatch();
-				System.out.println("Insert " + ret+"complete!");
+				System.out.println("Insert " + ret+" complete!");
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				continue;
 			}
 			if (ret != 0 & insert != null)
 				System.out.println("Lines inserted: " + ret + "; Error: " + (insert.size() - ret));
-			System.out.println();			
+			System.out.println();
 		}
 		try {
 			conn.close();
@@ -161,7 +161,17 @@ public class DataLoader {
 	}
 	public static void main(String[] args) {
 		String addr = args[0];
-		loadTrafficIpData(new File(addr));
+		File[] files = new File(addr).listFiles(new FileFilter(){
+
+			@Override
+			public boolean accept(File arg0) {
+				return arg0.isDirectory();
+			}
+			
+		});
+		for (File f : files) {
+			loadTrafficIpData(f);
+		}
 	}
 
 }
