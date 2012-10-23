@@ -21,21 +21,21 @@ public class UserHost implements Serializable{
 		user=u;
 		host=h;
 		TotalCount=0;
-		ConnectionTable= new Hashtable<String, ConnectionDetail>();
+//		ConnectionTable= new Hashtable<String, ConnectionDetail>();
 	}
 	public boolean insertConnnection(String location,int timeSegment,String userAgent)
 	{
 		String LTs=location+","+timeSegment;
-		if(ConnectionTable.containsKey(LTs))
-		{
-			ConnectionTable.get(LTs).ConnectionCount++;
-			ConnectionTable.get(LTs).UserAgent.add(userAgent);
-		}
-		else
-		{
-			ConnectionTable.put(LTs, new ConnectionDetail(location, timeSegment, userAgent));
-			ConnectionTable.get(LTs).ConnectionCount++;
-		}
+//**ÔÝÊ±×¢ÊÍ		if(ConnectionTable.containsKey(LTs))
+//		{
+//			ConnectionTable.get(LTs).ConnectionCount++;
+//			ConnectionTable.get(LTs).UserAgent.add(userAgent);
+//		}
+//		else
+//		{
+//			ConnectionTable.put(LTs, new ConnectionDetail(location, timeSegment, userAgent));
+//			ConnectionTable.get(LTs).ConnectionCount++;
+//**		}
 		this.TotalCount++;
 		this.host.TotalConnectNum++;
 		return false;

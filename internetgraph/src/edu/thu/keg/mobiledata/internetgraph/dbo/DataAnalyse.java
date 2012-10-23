@@ -28,41 +28,33 @@ public class DataAnalyse {
 	private static int totalTime_ms=0;
 	private static int count=0;
 	private static int perTime_ms;
-	
-	public static void main(String args[]) throws Exception
+	private static int HostMatrixSize=5000;
+	public static void main(String args[]) 
 	{
 		ConnectionGraph app= new ConnectionGraph("test");
-//		app.initialGraph();
-//		app.insertEdge("0001", "baidu.com", "home", 1, "@0001");
-//		app.insertEdge("0001", "baidu.com", "home", 2, "@0003");
-//		app.insertEdge("0001", "baidu.com", "outside", 1, "@0005");
-//		
-//		app.insertEdge("0002", "baidu.com", "home", 3, "@0004");
-//		app.insertEdge("0002", "baidu.com", "home", 2, "@0011");
-//		app.insertEdge("0002", "baidu.com", "outside", 1, "@0006");
-//		app.insertEdge("0002", "baidu.com", "outside", 1, "@0007");
-//		app.insertEdge("0002", "baidu.com", "home", 1, "@0012");
-//		
-//		app.insertEdge("0002", "sina.com", "home", 3, "@0010");
-//		
-//		app.insertEdge("0001", "sina.com", "home", 1, "@0008");
-//		app.insertEdge("0001", "sina.com", "home", 2, "@0009");
-//		app.insertEdge("0001", "sina.com", "home", 1, "@0002");
 		
 		long t1=System.currentTimeMillis();
 		DataAnalyse bpp= new DataAnalyse();			
-		Connection conn=getConnection();
-		bpp.viewTable(conn,app);
-		disConnection(conn);
+		
+		try {
+//			Connection conn=getConnection();
+//			bpp.viewTable(conn,app);
+//			disConnection(conn);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		app=DataAnalyse.inputBinary("graphMapAll.dat");
+		
 		System.out.println("内存建立完毕!");
 		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
 		long t2=System.currentTimeMillis();
 //		app.printAllSystem();
 //		DataAnalyse.outputBinary(app);
-		bpp.getHostRelation(app);
+		
+		bpp.getHostRelation(bpp,app);
 		System.out.println("搞定!");
 		System.out.println("关系矩阵生成时间："+(System.currentTimeMillis()-t2)/(double)1000+"秒");
-//		app=DataAnalyse.inputBinary("graphMap.dat");
+		
 //		app.printAllSystem();
 	}
 	/*
@@ -137,7 +129,7 @@ public class DataAnalyse {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			int i=0;
-			while(rs.next()) {
+			while(rs.next()&& i<2000) {
 				String uID=String.valueOf(rs.getBigDecimal("Imsi"));
 				String Addr=rs.getString("Host");
 				String Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
@@ -167,7 +159,7 @@ public class DataAnalyse {
 					timeSegment=6;
 				CGraph.insertEdge(uID, Addr, Location, timeSegment, UserAgent);
 				i++;
-				System.out.println(i+":已经快了...");
+//				System.out.println(i+":已经快了...");
 				
 			}
 		}catch(SQLException e) {
@@ -181,7 +173,7 @@ public class DataAnalyse {
 	/*
 	 * 得到Host的相似度矩阵
 	 */
-	public void getHostRelation(ConnectionGraph CG)
+	public void getHostRelation(DataAnalyse da,ConnectionGraph CG)
 	{
 		int UserNum=CG.graphUsers.size();
 		int HostNum=CG.graphHosts.size();
@@ -196,22 +188,23 @@ public class DataAnalyse {
 		double sum=0;
 		//get first 5000Hosts
 		Host[] h_all= new Host[HostNum];
-		Host[] h_5000= new Host[1000];
+		Host[] h_5000= new Host[HostMatrixSize];
 		for(int i=0;i<h_all.length;i++)
+		{
 			h_all[i]=h_en.nextElement();
+		}
 		//Host排序
-		DataAnalyse.fastLine(h_all, 0, h_all.length-1);
-		for(int i=0;i<h_all.length;i++)
-			System.out.println(i+":"+h_all[i].TotalConnectNum);
+		da.fastLine(h_all, 0, h_all.length-1);
+		
 		for(int i=0;i<h_5000.length;i++)
 			h_5000[i]=h_all[i];
 		
 		for(int i=0;i<h_5000.length;i++)
 		{
-			System.out.println(i);
+//			
 			Host  h= h_5000[i];
 			h.Eigenvector= new double[UserNum];
-//			System.out.println(i);
+			System.out.println(i);
 			for(int j=0;j<u_Imes.length;j++)
 			{
 //				System.out.println(j);
@@ -233,15 +226,20 @@ public class DataAnalyse {
 //			DataAnalyse.writeFile("HostVectors.txt", output);
 //			output="";
 		}
-
+		double [][]RelationMatrix= new double[HostMatrixSize][HostMatrixSize];
 		for(int i=0;i<h_5000.length;i++)
 		{	
+			System.out.println(i);
 			Host  h2= h_5000[i];
 			String str="";
 			for(int j=0;j<h_5000.length;j++)
 			{
 				Host  h3= h_5000[j];
-				str=str+String.valueOf(String.format("%.4f",getDistance(h2.Eigenvector,h3.Eigenvector))+" ");
+				if(i<=j)
+					RelationMatrix[i][j]=getDistance(h2.Eigenvector,h3.Eigenvector);
+				else
+					RelationMatrix[i][j]=RelationMatrix[j][i];
+				str=str+String.valueOf(String.format("%.4f",RelationMatrix[i][j])+" ");
 			}
 			DataAnalyse.writeFile("HostVectors.txt", str+h2.ADDR+"\n");
 		}
@@ -280,7 +278,7 @@ public class DataAnalyse {
 		return Math.sqrt(re);
 		
 	}
-    public static void fastLine(Host [] a,int zuo,int you){
+    public  void fastLine (Host [] a,int zuo,int you){
         int i,j;
         int key;
         Host temp;
@@ -289,6 +287,28 @@ public class DataAnalyse {
         i=zuo-1;
         for(j=zuo;j<you;j++){
             if(a[j].TotalConnectNum>key){
+                i++;
+                temp=a[j];
+                a[j]=a[i];
+                a[i]=temp;
+            }
+        }
+        i++;
+        temp=a[j];
+        a[j]=a[i];
+        a[i]=temp;
+        fastLine(a, zuo, i-1);
+        fastLine(a, i+1, you);
+    }
+    public  void fastLine (int [] a,int zuo,int you){
+        int i,j;
+        int key;
+        int temp;
+        if(zuo>you)return;
+        key=a[you];
+        i=zuo-1;
+        for(j=zuo;j<you;j++){
+            if(a[j]>key){
                 i++;
                 temp=a[j];
                 a[j]=a[i];
