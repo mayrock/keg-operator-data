@@ -2,15 +2,13 @@ var track_loc_data = new Object;
 track_loc_data.locinfo = new Array();
 
 function getLocData() {
-	var lat = new Array();
-	var lng = new Array();
 	$.ajax({
 		type : "get",
 		url : "GetLoc.action",
 		success : function(msg) {
 		var result = eval("(" + msg + ")");
 		var loc_list = result.locinfo;
-		for(i = 0;i < loc_list.length;i++) {
+		for(var i = 0;i < loc_list.length;i++) {
 			track_loc_data.locinfo[i] = loc_list[i];
 		}
 		showMarks();
@@ -20,8 +18,8 @@ function getLocData() {
 
 function showMarks() {
 	var mapOptions = {
-			center: new google.maps.LatLng(40.003834809598516,116.3263213634491),
-			zoom: 16,
+			center: new google.maps.LatLng(40.8274,111.703003),
+			zoom: 15,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	var map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
@@ -30,7 +28,7 @@ function showMarks() {
 			position : new google.maps.LatLng(
 					track_loc_data.locinfo[i].lat,track_loc_data.locinfo[i].lng),
 			map : map,
-			title : track_loc_data.locinfo[i].time.toString()
+			title : track_loc_data.locinfo[i].msg
 		});
 	}
 	var path = [new google.maps.LatLng(
