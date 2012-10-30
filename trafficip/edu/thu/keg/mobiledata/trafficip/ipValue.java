@@ -10,8 +10,7 @@ public class ipValue {
 	private int count;
 	private HashMap<Integer,Integer> mapApp;
 
-	public ipValue() {
-		
+	public ipValue() {	
 	}
 
 	public ipValue(double d,int i,HashMap<Integer,Integer> mApp) {
