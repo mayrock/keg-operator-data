@@ -2,13 +2,15 @@ var track_loc_data = new Object;
 track_loc_data.locinfo = new Array();
 
 function getLocData() {
+	var lat = new Array();
+	var lng = new Array();
 	$.ajax({
 		type : "get",
 		url : "GetLoc.action",
 		success : function(msg) {
 		var result = eval("(" + msg + ")");
 		var loc_list = result.locinfo;
-		for(var i = 0;i < loc_list.length;i++) {
+		for(i = 0;i < loc_list.length;i++) {
 			track_loc_data.locinfo[i] = loc_list[i];
 		}
 		showMarks();

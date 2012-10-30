@@ -19,10 +19,7 @@ public class GetLoc2 {
 		Statement stmt = null;
 		String query = "select Loc,Ci " + "from ZhuData.dbo.GN " + "where Imsi = " + "460028333886413";
 		try{
-			Properties connectionProps = new Properties();
-			connectionProps.put("user","remote");
-			connectionProps.put("password","nopassword");
-			conn = DriverManager.getConnection("jdbc:sqlserver://10.1.1.225:1433/;connectionProps");
+			conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;integratedSecurity=true;");
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
