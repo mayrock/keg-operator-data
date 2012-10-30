@@ -1,12 +1,11 @@
 package edu.thu.keg.mobiledata.trafficip;
-
 import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
-
 /**
  * 
  * @author WuChao
+ * Unused
  * 
  */
 public class DataSort {
@@ -30,13 +29,14 @@ public class DataSort {
 				return arg0.isDirectory();
 			}
 		});
-		for(File file : files) {
-			File[] subFiles = file.listFiles(new FilenameFilter() {
+//		for(File file : files) {
+		for(int i = 4;i < 7;i++) {
+			File[] subFiles = files[i].listFiles(new FilenameFilter() {
 				public boolean accept(File arg0,String arg1) {
 					return !arg1.contains("finished");
 				}
 			});
-			String outPutAddr = "D://GB_Traffic_IP-File3//" + file.getName() + ".txt";
+			String outPutAddr = "D://GB_Traffic_IP-File3//" + files[i].getName() + ".txt";
 //			System.out.println(outPutAddr);
 			HashMap<String,ipValue> map = new HashMap<String,ipValue>();
 			for(File subFile : subFiles) {

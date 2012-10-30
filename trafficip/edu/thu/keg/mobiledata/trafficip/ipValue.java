@@ -1,7 +1,5 @@
 package edu.thu.keg.mobiledata.trafficip;
-
 import java.util.HashMap;
-
 /**
  * 
  * @author WuChao
