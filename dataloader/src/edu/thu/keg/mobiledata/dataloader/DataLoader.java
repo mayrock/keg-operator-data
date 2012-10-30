@@ -11,21 +11,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import edu.thu.keg.mobiledata.dataloader.singlefileloader.SingleFileLoader;
+import edu.thu.keg.mobiledata.dataloader.singlefileloader.TrafficIntermediateFileReader;
+
 /**
  * @author mayrock
  *
  */
 public class DataLoader {
 
-	public static void loadData(String dir){
-		File[] files = new File(dir).listFiles(new FilenameFilter(){
-
-			@Override
-			public boolean accept(File arg0, String arg1) {
-				return !arg1.contains("finished");
-			}
-			
-		});
+	public static void loadGNData(String dir){
+		File[] files = new File(dir).listFiles();
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -43,18 +39,7 @@ public class DataLoader {
 			lineErr = 0;
 			System.out.println("Loading file " + f.getAbsolutePath() + "... id: " + fileId++);
 			SingleFileLoader loader = new SingleFileLoader(f.getAbsolutePath(), 1, fileId);
-//			String create = loader.getCreateSQL();
-//			try {
-//				stmt.execute(create);
-//				conn.commit();
-//				System.out.println("Create succeed!");
-//				tableC++;
-//			} catch (SQLException e) {
-//				tableErr ++;
-//				System.out.println(e.getMessage());
-//				System.out.println(create);
-//			}
-//			System.out.println();
+
 			int[] ret = null;
 			ArrayList<String> insert = loader.getInsertSQL();
 			try {
@@ -67,15 +52,7 @@ public class DataLoader {
 			System.out.println("Insert complete!");
 			if (ret != null & insert != null)
 				System.out.println("Lines inserted: " + ret.length + "; Error: " + (insert.size() - ret.length));
-			System.out.println();
-//			String bulk = loader.getBulkLoad();
-//			try {
-//				bw.write(bulk);
-//			} catch (IOException e) {
-//				System.out.println(e.getMessage());
-//				System.out.println(bulk);
-//			}
-			
+			System.out.println();			
 		}
 		try {
 			conn.close();
@@ -84,18 +61,81 @@ public class DataLoader {
 			e.printStackTrace();
 		}
 		System.out.println("Tables inserted: " + tableC + "; Error: " + tableErr);
-//		try {
-//			bw.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	}
+
+	public static void loadTrafficIpData(File dir){
+		File[] files = dir.listFiles();
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			conn = DriverManager.getConnection
+					("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;integratedSecurity=true;");
+			stmt = conn.createStatement();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		int tableErr = 0, lineErr= 0, tableC = 0, lineC = 0;
+		int fileId = 0;
+		for (File f : files) {
+			lineErr = 0;
+			System.out.println("Loading file " + f.getAbsolutePath() + "... id: " + fileId++);
+			TrafficIntermediateFileReader loader = new TrafficIntermediateFileReader();
+			loader.setFile(f);
+
+			int ret = 0;
+			ArrayList<String> insert = loader.getInsertSQL();
+			System.out.println("Total count:" + insert.size() + 
+					". Writing DB... id: " + fileId);
+			
+			int i = 0;
+			for (String sql : insert) {
+				try {
+					stmt.addBatch(sql);
+					++i;
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				if (i == 10000) {
+					try {
+						ret += stmt.executeBatch().length;
+						stmt.clearBatch();
+						System.out.println("Insert " + ret+"complete!");
+						i = 0;
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						System.out.println(sql);
+						
+						continue;
+					}
+				}
+			}
+			try {
+				ret += stmt.executeBatch().length;
+				stmt.clearBatch();
+				System.out.println("Insert " + ret+" complete!");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				continue;
+			}
+			if (ret != 0 & insert != null)
+				System.out.println("Lines inserted: " + ret + "; Error: " + (insert.size() - ret));
+			System.out.println();
+		}
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Tables inserted: " + tableC + "; Error: " + tableErr);
 	}
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main2(String[] args) {
 		String addr = args[0];
 		File[] files = new File(addr).listFiles(new FileFilter(){
 
@@ -115,10 +155,23 @@ public class DataLoader {
 				
 			});
 			for (File subF : subFs) {
-				loadData(subF.getAbsolutePath());
+				loadGNData(subF.getAbsolutePath());
 			}
 		}
-		
+	}
+	public static void main(String[] args) {
+		String addr = args[0];
+		File[] files = new File(addr).listFiles(new FileFilter(){
+
+			@Override
+			public boolean accept(File arg0) {
+				return arg0.isDirectory();
+			}
+			
+		});
+		for (File f : files) {
+			loadTrafficIpData(f);
+		}
 	}
 
 }

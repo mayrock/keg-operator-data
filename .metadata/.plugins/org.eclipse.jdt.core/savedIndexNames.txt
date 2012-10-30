@@ -1,0 +1,1 @@
+INDEX VERSION 1.126+D:\GitHub\keg-operator-data\.metadata\.plugins\org.eclipse.jdt.core
