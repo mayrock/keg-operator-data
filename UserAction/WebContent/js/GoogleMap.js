@@ -1,10 +1,11 @@
 var track_loc_data = new Object;
 track_loc_data.locinfo = new Array();
 
-function getLocData() {
+function getLocData(imsi,year,month,date) {
 	$.ajax({
 		type : "get",
 		url : "GetLoc.action",
+		data : "imsi = " + imsi + "&year = " + year + "&month = " + month + "&date = " + date,
 		success : function(msg) {
 		var result = eval("(" + msg + ")");
 		var loc_list = result.locinfo;
@@ -18,11 +19,12 @@ function getLocData() {
 
 function showMarks() {
 	var mapOptions = {
-			center: new google.maps.LatLng(40.8274,111.703003),
-			zoom: 15,
+			center: new google.maps.LatLng(
+					track_loc_data.locinfo[0].lat,track_loc_data.locinfo[0].lng),
+			zoom: 10,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	var map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
+	var map = new google.maps.Map(document.getElementById("map"),mapOptions);
 	for (var i = 0; i < track_loc_data.locinfo.length; i++) {
 		var mark = new google.maps.Marker({
 			position : new google.maps.LatLng(

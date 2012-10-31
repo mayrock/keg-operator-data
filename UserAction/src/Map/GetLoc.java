@@ -5,11 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.ServletActionContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.opensymphony.xwork2.ActionContext;
 /**
  * 
  * @author WuChao
@@ -23,12 +25,50 @@ public class GetLoc {
 	public static double[] lat = new double[2000];
 	public static double[] lng = new double[2000];
 	public static String[] msg = new String[2000];
+	private String imsi;
+	private String year;
+	private String month;
+	private String date;
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getImsi() {
+		return imsi;
+	}
+
+	public void setImsi(String imsi) {
+		this.imsi = imsi;
+	}
 
 	public String execute()throws IOException{
 		// TODO Auto-generated method stub
 
 		int n = getLatLng();
+		ActionContext ac = ActionContext.getContext();
 		HttpServletResponse response = ServletActionContext.getResponse();
+		HttpServletRequest request = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
 		String result = getJsonData(n);
 		System.out.println(result);
 		response.setContentType("text/html;charset=UTF-8");
@@ -39,7 +79,7 @@ public class GetLoc {
 		return null;
 	}
 
-	private static String getJsonData(int n) {
+	private String getJsonData(int n) {
 		JSONObject json_result = new JSONObject();
 		JSONArray loc_list =new JSONArray();
 		JSONObject pim = null;
@@ -63,7 +103,13 @@ public class GetLoc {
 		return json_result.toString();
 	}
 	
-	private static int getLatLng() {
+	private int getLatLng() {
+		String imsi_new = this.imsi.trim();
+		String year_new = this.year.trim();
+		String month_new = this.month.trim();
+		String date_new = this.date.trim();
+		String time = year_new + "-" + month_new + "-" + date_new;
+		System.out.println(imsi_new + "\t" + time);
 		Connection conn = null;
 		Statement stmt = null;
 		int i = 0;
@@ -76,7 +122,7 @@ public class GetLoc {
 				"from ZhuData.dbo.GN " +
 				"inner join ZhuData.dbo.LocationInfo " +
 				"on GN.LAC = LocationInfo.LAC and GN.CI = LocationInfo.CI " +
-				"where Imsi = 460028333886413 " +
+				"where Imsi = " + imsi_new +
 				"order by connectTime asc";
 		try{
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -90,25 +136,31 @@ public class GetLoc {
 				latitude = rs.getDouble("Latitude");
 				longitude = rs.getDouble("Longitude");
 				message = rs.getString("ConnectTime");
-				if(i == 0) {
-					lat[i] = latitude;
-					lng[i] = longitude;
-					msg[i] = "BeginTime : " + message;
-					i++;
-				}
-				else {
-					if((lat[i-1] != latitude) || (lng[i-1] != longitude)) {
+				StringBuffer shortTime = new StringBuffer();
+				shortTime.append(message);
+				shortTime.delete(10,23);
+				if(shortTime.toString().equals(time)) {
+					System.out.println(shortTime.toString());
+					if(i == 0) {
 						lat[i] = latitude;
 						lng[i] = longitude;
-						msg[i-1] += "\nEndTime : " + connTime + "\ncount = " + count;
-						connTime = null;
-						count = 1;
 						msg[i] = "BeginTime : " + message;
 						i++;
 					}
 					else {
-						connTime = message;
-						count++;
+						if((lat[i-1] != latitude) || (lng[i-1] != longitude)) {
+							lat[i] = latitude;
+							lng[i] = longitude;
+							msg[i-1] += "\nEndTime : " + connTime + "\ncount = " + count;
+							connTime = null;
+							count = 1;
+							msg[i] = "BeginTime : " + message;
+							i++;
+						}
+						else {
+							connTime = message;
+							count++;
+						}
 					}
 				}
 			}
