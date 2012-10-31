@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.ServletActionContext;
@@ -25,6 +27,7 @@ public class GetLoc {
 	public static double[] lat = new double[2000];
 	public static double[] lng = new double[2000];
 	public static String[] msg = new String[2000];
+	public static HashMap<String,String> map = new HashMap<String,String>();
 	private String imsi;
 	private String begin;
 	private String end;
@@ -57,17 +60,36 @@ public class GetLoc {
 		// TODO Auto-generated method stub
 
 		int n = getLatLng();
+		getMsg(n);
 		ActionContext ac = ActionContext.getContext();
 		HttpServletResponse response = ServletActionContext.getResponse();
 		HttpServletRequest request = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
 		String result = getJsonData(n);
-		System.out.println(result+ "*");
+		System.out.println(result);
 		response.setContentType("text/html;charset=UTF-8");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Expires", "0");
 		response.setHeader("Pragma", "No-cache");
 		response.getWriter().print(result);
 		return null;
+	}
+
+	public void getMsg(int n) {
+		// TODO Auto-generated method stub
+		for(int i = 0;i < n;i++) {
+			String latlng = String.valueOf(lat[i]) + String.valueOf(lng[i]);
+			System.out.println(latlng);
+			if(map.containsKey(latlng)) {
+				String message = map.get(latlng);
+				String[] arr = message.split("*");
+				int k = Integer.parseInt(arr[1]);
+				msg[k] = null;
+				msg[i] = arr[0] + "\n" + msg[i];
+				System.out.println(arr[1] + arr[0]);
+				map.put(latlng,msg[i] + "*" + i);
+			}
+			else map.put(latlng,msg[i] + "*" + i);
+		}
 	}
 
 	private String getJsonData(int n) {
@@ -112,7 +134,7 @@ public class GetLoc {
 				"inner join ZhuData.dbo.LocationInfo " +
 				"on GN.LAC = LocationInfo.LAC and GN.CI = LocationInfo.CI " +
 				"where Imsi = " + imsi_new +
-				" and ConnectTime between " + "'" + begin_new + "'" + " and " + "'" + end_new + "' " +
+				" and ConnectTime between " + "'" + begin_new + "'" + " and " + "dateadd(day,1,'" + end_new + "') " +
 				"order by connectTime asc";
 		System.out.println(query);
 		try{
