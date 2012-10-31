@@ -1,14 +1,18 @@
 var track_loc_data = new Object;
 track_loc_data.locinfo = new Array();
 
-function getLocData(imsi,year,month,date) {
+function getLocData(imsi,begin,end) {
 	$.ajax({
 		type : "get",
 		url : "GetLoc.action",
-		data : "imsi = " + imsi + "&year = " + year + "&month = " + month + "&date = " + date,
+		data : "imsi = " + imsi + "&begin = " + begin + "&end = " + end,
 		success : function(msg) {
 		var result = eval("(" + msg + ")");
 		var loc_list = result.locinfo;
+		if(loc_list.length == 0) {
+			alert("No trace or your input is wrong");
+			cleanInfo();
+		}
 		for(var i = 0;i < loc_list.length;i++) {
 			track_loc_data.locinfo[i] = loc_list[i];
 		}
@@ -21,7 +25,7 @@ function showMarks() {
 	var mapOptions = {
 			center: new google.maps.LatLng(
 					track_loc_data.locinfo[0].lat,track_loc_data.locinfo[0].lng),
-			zoom: 10,
+			zoom: 12,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	var map = new google.maps.Map(document.getElementById("map"),mapOptions);
@@ -48,4 +52,15 @@ function showMarks() {
 				track_loc_data.locinfo[i].lat,track_loc_data.locinfo[i].lng));
 		userPath.setMap(map);
 	}
+}
+
+function cleanInfo() {
+	var mapOptions = {
+			center: new google.maps.LatLng(40.003834809598516,116.3263213634491),
+			zoom: 16,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	var map = new google.maps.Map(document.getElementById("map"),mapOptions);
+	track_loc_data = new Object;
+	track_loc_data.locinfo = new Array();
 }

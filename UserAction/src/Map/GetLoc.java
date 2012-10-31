@@ -26,32 +26,23 @@ public class GetLoc {
 	public static double[] lng = new double[2000];
 	public static String[] msg = new String[2000];
 	private String imsi;
-	private String year;
-	private String month;
-	private String date;
+	private String begin;
+	private String end;
 
-	public String getYear() {
-		return year;
+	public String getBegin() {
+		return begin;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setBegin(String begin) {
+		this.begin = begin;
 	}
 
-	public String getMonth() {
-		return month;
+	public String getEnd() {
+		return end;
 	}
 
-	public void setMonth(String month) {
-		this.month = month;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
+	public void setEnd(String end) {
+		this.end = end;
 	}
 
 	public String getImsi() {
@@ -70,7 +61,7 @@ public class GetLoc {
 		HttpServletResponse response = ServletActionContext.getResponse();
 		HttpServletRequest request = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
 		String result = getJsonData(n);
-		System.out.println(result);
+		System.out.println(result+ "*");
 		response.setContentType("text/html;charset=UTF-8");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Expires", "0");
@@ -81,7 +72,7 @@ public class GetLoc {
 
 	private String getJsonData(int n) {
 		JSONObject json_result = new JSONObject();
-		JSONArray loc_list =new JSONArray();
+		JSONArray loc_list = new JSONArray();
 		JSONObject pim = null;
 		try {
 			for(int i = 0;i < n;i++) {
@@ -105,11 +96,9 @@ public class GetLoc {
 	
 	private int getLatLng() {
 		String imsi_new = this.imsi.trim();
-		String year_new = this.year.trim();
-		String month_new = this.month.trim();
-		String date_new = this.date.trim();
-		String time = year_new + "-" + month_new + "-" + date_new;
-		System.out.println(imsi_new + "\t" + time);
+		String begin_new = this.begin.trim();
+		String end_new = this.end.trim();
+		System.out.println(imsi_new + "\t" + begin_new + "\t" + end_new);
 		Connection conn = null;
 		Statement stmt = null;
 		int i = 0;
@@ -123,7 +112,9 @@ public class GetLoc {
 				"inner join ZhuData.dbo.LocationInfo " +
 				"on GN.LAC = LocationInfo.LAC and GN.CI = LocationInfo.CI " +
 				"where Imsi = " + imsi_new +
+				" and ConnectTime between " + "'" + begin_new + "'" + " and " + "'" + end_new + "' " +
 				"order by connectTime asc";
+		System.out.println(query);
 		try{
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			conn = DriverManager.getConnection(
@@ -136,35 +127,29 @@ public class GetLoc {
 				latitude = rs.getDouble("Latitude");
 				longitude = rs.getDouble("Longitude");
 				message = rs.getString("ConnectTime");
-				StringBuffer shortTime = new StringBuffer();
-				shortTime.append(message);
-				shortTime.delete(10,23);
-				if(shortTime.toString().equals(time)) {
-					System.out.println(shortTime.toString());
-					if(i == 0) {
+				if(i == 0) {
+					lat[i] = latitude;
+					lng[i] = longitude;
+					msg[i] = "BeginTime : " + message;
+					i++;
+				}
+				else {
+					if((lat[i-1] != latitude) || (lng[i-1] != longitude)) {
 						lat[i] = latitude;
 						lng[i] = longitude;
+						msg[i-1] += "\nEndTime : " + connTime + "\ncount = " + count;
+						connTime = null;
+						count = 1;
 						msg[i] = "BeginTime : " + message;
 						i++;
 					}
 					else {
-						if((lat[i-1] != latitude) || (lng[i-1] != longitude)) {
-							lat[i] = latitude;
-							lng[i] = longitude;
-							msg[i-1] += "\nEndTime : " + connTime + "\ncount = " + count;
-							connTime = null;
-							count = 1;
-							msg[i] = "BeginTime : " + message;
-							i++;
-						}
-						else {
-							connTime = message;
-							count++;
-						}
+						connTime = message;
+						count++;
 					}
 				}
 			}
-			msg[i-1] += "\nEndTime : " + connTime + "\ncount = " + count;
+			if(i > 0) msg[i-1] += "\nEndTime : " + connTime + "\ncount = " + count;
 			stmt.close();
 			conn.close();
 		}catch (SQLException | ClassNotFoundException e) {

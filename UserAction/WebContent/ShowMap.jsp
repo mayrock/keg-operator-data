@@ -34,22 +34,20 @@
     	  var map = new google.maps.Map(document.getElementById("map"),mapOptions);
       }
       function getLocFromDate() {
-    	  var imsi=document.getElementById("datepicker1").value;
-    	  var year=document.getElementById("datepicker2").value;
-    	  var month=document.getElementById("datepicker3").value;
-    	  var date=document.getElementById("datepicker4").value;
-    	  getLocData(imsi,year,month,date);
+    	  cleanInfo();
+    	  var imsi = document.getElementById("datepicker1").value;
+    	  var begin = document.getElementById("datepicker2").value;
+    	  var end = document.getElementById("datepicker3").value;
+    	  getLocData(imsi,begin,end);
       }
     </script>
   </head>
   <h2>track</h2>
     imsi:<input type="text" id="datepicker1" name="imsi">
     </input>
-    year:<input type="text" id="datepicker2" name="year">
+    begin(yyyy-mm-dd):<input type="text" id="datepicker2" name="begin">
     </input>
-    month:<input type="text" id="datepicker3" name="month">
-    </input>
-    date:<input type="text" id="datepicker4" name="date">
+    end(yyyy-mm-dd):<input type="text" id="datepicker3" name="end">
     </input>
     <input type='button' value='search' onClick='return getLocFromDate();' class="btn1_mouseout"
     onmouseover="this.className='btn1_mouseover'" onmouseout="this.className='btn1_mouseout'"/>
