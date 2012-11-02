@@ -30,46 +30,69 @@ function getLocFromDate() {
 		return;
 	}
 	getDateMsg(begin,end);
-	/*document.orderForm.day1.click();
-	document.orderForm.day2.click();
-	document.orderForm.day3.click();
-	document.orderForm.day4.click();
-	document.orderForm.day5.click();
-	document.orderForm.day6.click();
-	document.orderForm.day7.click();*/
 }
 
 function getLocByData1() {
 	if(document.orderForm.day1.checked == true)
 		getLocData(map,imsi,date[0],0);
+	else refresh();
 }
 
 function getLocByData2() {
 	if(document.orderForm.day2.checked == true)
 		getLocData(map,imsi,date[1],1);
+	else refresh();
 }
 
 function getLocByData3() {
 	if(document.orderForm.day3.checked == true)
 		getLocData(map,imsi,date[2],2);
+	else refresh();
 }
 
 function getLocByData4() {
 	if(document.orderForm.day4.checked == true)
 		getLocData(map,imsi,date[3],3);
+	else refresh();
 }
 
 function getLocByData5() {
 	if(document.orderForm.day5.checked == true)
 		getLocData(map,imsi,date[4],4);
+	else refresh();
 }
 
 function getLocByData6() {
 	if(document.orderForm.day6.checked == true)
 		getLocData(map,imsi,date[5],5);
+	else refresh();
 }
 
 function getLocByData7() {
+	if(document.orderForm.day7.checked == true)
+		getLocData(map,imsi,date[6],6);
+	else refresh();
+}
+
+function refresh() {
+	var mapOptions = {
+			center: new google.maps.LatLng(40.841692,111.649827),
+			zoom: 16,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(document.getElementById("map"),mapOptions);
+	if(document.orderForm.day1.checked == true)
+		getLocData(map,imsi,date[0],0);
+	if(document.orderForm.day2.checked == true)
+		getLocData(map,imsi,date[1],1);
+	if(document.orderForm.day3.checked == true)
+		getLocData(map,imsi,date[2],2);
+	if(document.orderForm.day4.checked == true)
+		getLocData(map,imsi,date[3],3);
+	if(document.orderForm.day5.checked == true)
+		getLocData(map,imsi,date[4],4);
+	if(document.orderForm.day6.checked == true)
+		getLocData(map,imsi,date[5],5);
 	if(document.orderForm.day7.checked == true)
 		getLocData(map,imsi,date[6],6);
 }
