@@ -27,25 +27,15 @@ public class GetLoc {
 	public static double[] lat = new double[2000];
 	public static double[] lng = new double[2000];
 	public static String[] msg = new String[2000];
-	public static HashMap<String,String> map = new HashMap<String,String>();
 	private String imsi;
-	private String begin;
-	private String end;
+	private String date;
 
-	public String getBegin() {
-		return begin;
+	public String getDate() {
+		return date;
 	}
 
-	public void setBegin(String begin) {
-		this.begin = begin;
-	}
-
-	public String getEnd() {
-		return end;
-	}
-
-	public void setEnd(String end) {
-		this.end = end;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	public String getImsi() {
@@ -60,7 +50,7 @@ public class GetLoc {
 		// TODO Auto-generated method stub
 
 		int n = getLatLng();
-		getMsg(n);
+//		arrangeMsg(n);
 		ActionContext ac = ActionContext.getContext();
 		HttpServletResponse response = ServletActionContext.getResponse();
 		HttpServletRequest request = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
@@ -74,8 +64,9 @@ public class GetLoc {
 		return null;
 	}
 
-	public void getMsg(int n) {
+	public void arrangeMsg(int n) {
 		// TODO Auto-generated method stub
+		HashMap<String,String> map = new HashMap<String,String>();
 		for(int i = 0;i < n;i++) {
 			String latlng = String.valueOf(lat[i]) + String.valueOf(lng[i]);
 			System.out.println(latlng);
@@ -118,9 +109,8 @@ public class GetLoc {
 	
 	private int getLatLng() {
 		String imsi_new = this.imsi.trim();
-		String begin_new = this.begin.trim();
-		String end_new = this.end.trim();
-		System.out.println(imsi_new + "\t" + begin_new + "\t" + end_new);
+		String date_new = this.date.trim();
+		System.out.println(imsi_new + "\t" + date_new);
 		Connection conn = null;
 		Statement stmt = null;
 		int i = 0;
@@ -134,7 +124,7 @@ public class GetLoc {
 				"inner join ZhuData.dbo.LocationInfo " +
 				"on GN.LAC = LocationInfo.LAC and GN.CI = LocationInfo.CI " +
 				"where Imsi = " + imsi_new +
-				" and ConnectTime between " + "'" + begin_new + "'" + " and " + "dateadd(day,1,'" + end_new + "') " +
+				" and ConnectTime between " + "'" + date_new + "'" + " and " + "dateadd(day,1,'" + date_new + "') " +
 				"order by connectTime asc";
 		System.out.println(query);
 		try{
