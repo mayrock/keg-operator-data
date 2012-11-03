@@ -28,15 +28,8 @@ public class GetLoc {
 	public static double[] lng = new double[2000];
 	public static String[] msg = new String[2000];
 	private String imsi;
-	private String date;
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
+	private String begin;
+	private String end;
 
 	public String getImsi() {
 		return imsi;
@@ -44,6 +37,22 @@ public class GetLoc {
 
 	public void setImsi(String imsi) {
 		this.imsi = imsi;
+	}
+
+	public String getBegin() {
+		return begin;
+	}
+
+	public void setBegin(String begin) {
+		this.begin = begin;
+	}
+
+	public String getEnd() {
+		return end;
+	}
+
+	public void setEnd(String end) {
+		this.end = end;
 	}
 
 	public String execute()throws IOException{
@@ -84,6 +93,7 @@ public class GetLoc {
 	}
 
 	private String getJsonData(int n) {
+		//打包经纬度数据
 		JSONObject json_result = new JSONObject();
 		JSONArray loc_list = new JSONArray();
 		JSONObject pim = null;
@@ -108,9 +118,12 @@ public class GetLoc {
 	}
 	
 	private int getLatLng() {
+		//得到经纬度数据
 		String imsi_new = this.imsi.trim();
-		String date_new = this.date.trim();
-		System.out.println(imsi_new + "\t" + date_new);
+		String begin_new = this.begin.trim();
+		String end_new = this.end.trim();
+		//去除不必要的空格
+		System.out.println(imsi_new + "\t" + begin_new + "\t" + end_new);
 		Connection conn = null;
 		Statement stmt = null;
 		int i = 0;
@@ -124,7 +137,7 @@ public class GetLoc {
 				"inner join ZhuData.dbo.LocationInfo " +
 				"on GN.LAC = LocationInfo.LAC and GN.CI = LocationInfo.CI " +
 				"where Imsi = " + imsi_new +
-				" and ConnectTime between " + "'" + date_new + "'" + " and " + "dateadd(day,1,'" + date_new + "') " +
+				" and ConnectTime between " + "'" + begin_new + "'" + " and " + "dateadd(day,1,'" + end_new + "') " +
 				"order by connectTime asc";
 		System.out.println(query);
 		try{

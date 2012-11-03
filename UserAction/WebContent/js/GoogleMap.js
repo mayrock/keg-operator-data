@@ -1,23 +1,31 @@
 var track_loc_data = new Object;
 track_loc_data.locinfo = new Array();
+var location = new Object;
 var imsi = new Object;
 var date = new Array();
 var map = new Object;
-var color = new Array("#000000",//黑色
-		"#FF0000",//红色
-		"#000079",//蓝色
-		"#00EC00",//绿色
-		"#FFD306",//黄色
-		"#D94600",//棕色
-		"#9F4D95");//青色
+var noTrace = new Array();
+var days = new Object;
 
-function getLocFromDate() {
+var color = new Array(
+		"#000000",//黑
+		"#FF0000",//红
+		"#000079",//蓝
+		"#00EC00",//绿
+		"#FFD306",//黄
+		"#D94600",//棕
+		"#9F4D95"//青
+		);//轨迹可选用的颜色
+
+function getLocFromDates() {
+	//处理输入信息并作错误处理
 	var mapOptions = {
 			center: new google.maps.LatLng(40.841692,111.649827),
 			zoom: 16,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	map = new google.maps.Map(document.getElementById("map"),mapOptions);
+	//初始化地图
 	imsi = document.getElementById("datepicker1").value;
 	var begin = document.getElementById("datepicker2").value;
 	var end = document.getElementById("datepicker3").value;
@@ -29,75 +37,47 @@ function getLocFromDate() {
 		alert("Input end date!");
 		return;
 	}
+	getInitializeLoc(begin,end);
 	getDateMsg(begin,end);
+	document.dateForm.innerHTML = "";
+	for(var i = 1;i <= days;i++) {
+		noTrace[i-1] = 0;
+		//默认所有的天都存在轨迹
+		document.dateForm.innerHTML +=
+			"<input type='checkbox' name='day" + i + "' onClick='getLocByDate(" + i + ")'/>day" + i;
+	}
 }
 
-function getLocByData1() {
-	if(document.orderForm.day1.checked == true)
-		getLocData(map,imsi,date[0],0);
-	else refresh();
-}
-
-function getLocByData2() {
-	if(document.orderForm.day2.checked == true)
-		getLocData(map,imsi,date[1],1);
-	else refresh();
-}
-
-function getLocByData3() {
-	if(document.orderForm.day3.checked == true)
-		getLocData(map,imsi,date[2],2);
-	else refresh();
-}
-
-function getLocByData4() {
-	if(document.orderForm.day4.checked == true)
-		getLocData(map,imsi,date[3],3);
-	else refresh();
-}
-
-function getLocByData5() {
-	if(document.orderForm.day5.checked == true)
-		getLocData(map,imsi,date[4],4);
-	else refresh();
-}
-
-function getLocByData6() {
-	if(document.orderForm.day6.checked == true)
-		getLocData(map,imsi,date[5],5);
-	else refresh();
-}
-
-function getLocByData7() {
-	if(document.orderForm.day7.checked == true)
-		getLocData(map,imsi,date[6],6);
+function getLocByDate(i) {
+	//根据复选框的状态添加或是删除轨迹
+	if(document.dateForm.elements[i-1].checked == true)
+		getLocData(i-1);
 	else refresh();
 }
 
 function refresh() {
+	/**
+	 * 不完美版本
+	 * 这个函数的功能本应是删除轨迹
+	 * 实际实现的功能是刷新地图
+	 * 破坏了删除轨迹时应有的美感
+	 */
 	var mapOptions = {
-			center: new google.maps.LatLng(40.841692,111.649827),
-			zoom: 16,
+			center: new google.maps.LatLng(location.lat,location.lng),
+			zoom: 15,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	map = new google.maps.Map(document.getElementById("map"),mapOptions);
-	if(document.orderForm.day1.checked == true)
-		getLocData(map,imsi,date[0],0);
-	if(document.orderForm.day2.checked == true)
-		getLocData(map,imsi,date[1],1);
-	if(document.orderForm.day3.checked == true)
-		getLocData(map,imsi,date[2],2);
-	if(document.orderForm.day4.checked == true)
-		getLocData(map,imsi,date[3],3);
-	if(document.orderForm.day5.checked == true)
-		getLocData(map,imsi,date[4],4);
-	if(document.orderForm.day6.checked == true)
-		getLocData(map,imsi,date[5],5);
-	if(document.orderForm.day7.checked == true)
-		getLocData(map,imsi,date[6],6);
+	for(var i = 0;i < document.dateForm.length;i++)
+		if(document.dateForm.elements[i].checked == true && noTrace[i] != 1)
+			getLocData(i);
 }
 
 function getDateMsg(begin,end) {
+	/**
+	 * 处理指定的时间区间
+	 * 使用的是预设值
+	 */
 	date[0] = "2012-09-18";
 	date[1] = "2012-09-19";
 	date[2] = "2012-09-20";
@@ -105,28 +85,57 @@ function getDateMsg(begin,end) {
 	date[4] = "2012-09-22";
 	date[5] = "2012-09-23";
 	date[6] = "2012-09-24";
+	days = 7;
 }
 
-function getLocData(map,imsi,date,n) {
+function getLocData(n) {
+	//在指定地图上显示指定用户在指定天的指定颜色的轨迹
 	$.ajax({
 		type : "get",
 		url : "GetLoc.action",
-		data : "imsi = " + imsi + "&date = " + date,
+		data : "imsi = " + imsi + "&begin = " + date[n] + "&end = " + date[n],
 		success : function(msg) {
 			var result = eval("(" + msg + ")");
 			var loc_list = result.locinfo;
 			if(loc_list.length == 0) {
-				alert("No trace in " + date);
+				noTrace[n] = 1;
+				//为不存在轨迹的天添加标记
+				alert("No trace in " + date[n]);
 			}
 			for(var i = 0;i < loc_list.length;i++) {
 				track_loc_data.locinfo[i] = loc_list[i];
 			}
-			showMarks(map,n);
+			showMarks(n);
 		}
 	});
 }
 
-function showMarks(map,n) {
+function getInitializeLoc(begin,end) {
+	//在谷歌地图上预定位
+	$.ajax({
+		type : "get",
+		url : "GetLoc.action",
+		data : "imsi = " + imsi + "&begin = " + begin + "&end = " + end,
+		success : function(msg) {
+			var result = eval("(" + msg + ")");
+			var loc_list = result.locinfo;
+			if(loc_list.length == 0)
+				alert("No trace in these days, maybe your input is wrong.");
+			location = loc_list[0];
+			//获得第一个点的信息并保存
+			var mapOptions = {
+					center: new google.maps.LatLng(location.lat,location.lng),
+					zoom: 15,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			//以第一个点为中心初始化地图
+			map = new google.maps.Map(document.getElementById("map"),mapOptions);
+		}
+	});
+}
+
+function showMarks(n) {
+	//在指定地图上显示指定颜色的轨迹
 	for(var i = 0;i < track_loc_data.locinfo.length;i++) {
 		var mark = new google.maps.Marker({
 			position : new google.maps.LatLng(
@@ -150,11 +159,4 @@ function showMarks(map,n) {
 				track_loc_data.locinfo[i].lat,track_loc_data.locinfo[i].lng));
 		userPath.setMap(map);
 	}
-}
-
-function cleanInfo() {
-	track_loc_data = new Object;
-	track_loc_data.locinfo = new Array();
-	imsi = new Object;
-	date = new Array();
 }
