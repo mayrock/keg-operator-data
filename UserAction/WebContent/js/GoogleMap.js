@@ -19,6 +19,7 @@ var color = new Array(
 
 function getLocFromDates() {
 	//处理输入信息并作错误处理
+	cleanInfo();
 	var mapOptions = {
 			center: new google.maps.LatLng(40.841692,111.649827),
 			zoom: 16,
@@ -102,6 +103,9 @@ function getLocData(n) {
 				//为不存在轨迹的天添加标记
 				alert("No trace in " + date[n]);
 			}
+			track_loc_data = new Object;
+			track_loc_data.locinfo = new Array();
+			//初始化记录经纬度信息的数组
 			for(var i = 0;i < loc_list.length;i++) {
 				track_loc_data.locinfo[i] = loc_list[i];
 			}
@@ -159,4 +163,16 @@ function showMarks(n) {
 				track_loc_data.locinfo[i].lat,track_loc_data.locinfo[i].lng));
 		userPath.setMap(map);
 	}
+}
+
+function cleanInfo() {
+	//初始化
+	track_loc_data = new Object;
+	track_loc_data.locinfo = new Array();
+	location = new Object;
+	imsi = new Object;
+	date = new Array();
+	map = new Object;
+	noTrace = new Array();
+	days = new Object;
 }
