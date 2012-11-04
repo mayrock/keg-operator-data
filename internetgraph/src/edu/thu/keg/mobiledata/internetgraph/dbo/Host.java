@@ -14,6 +14,7 @@ public class Host implements Serializable{
 	int UrlCount;
 	int TotalConnectNum;
 	Hashtable<String, UserHost> ConnectedUser;//all connected users
+	String Tag="";
 //	Vector<Double> Eigenvector=new Vector<Double>();//record User's connection vector
 	double [] Eigenvector;
 	public Host(String addr)
