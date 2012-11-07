@@ -1,11 +1,11 @@
 var track_loc_data = new Object;
 track_loc_data.locinfo = new Array();
-var location = new Object;
-var imsi = new Object;
+var middleLocation;
+var imsi;
 var date = new Array();
-var map = new Object;
+var map;
 var noTrace = new Array();
-var days = new Object;
+var days;
 
 var color = new Array(
 		"#000000",//黑
@@ -40,18 +40,18 @@ function getLocFromDates() {
 	}
 	getInitializeLoc(begin,end);
 	getDateMsg(begin,end);
-	document.dateForm.innerHTML = "";
+	document.getElementById("dateDiv").innerHTML = "";
 	for(var i = 1;i <= days;i++) {
 		noTrace[i-1] = 0;
 		//默认所有的天都存在轨迹
-		document.dateForm.innerHTML +=
+		document.getElementById("dateDiv").innerHTML +=
 			"<input type='checkbox' name='day" + i + "' onClick='getLocByDate(" + i + ")'/>day" + i;
 	}
 }
 
 function getLocByDate(i) {
 	//根据复选框的状态添加或是删除轨迹
-	if(document.dateForm.elements[i-1].checked == true)
+	if(document.getElementById("dateDiv").elements[i-1].checked == true)
 		getLocData(i-1);
 	else refresh();
 }
@@ -64,13 +64,13 @@ function refresh() {
 	 * 破坏了删除轨迹时应有的美感
 	 */
 	var mapOptions = {
-			center: new google.maps.LatLng(location.lat,location.lng),
+			center: new google.maps.LatLng(middleLocation.lat,middleLocation.lng),
 			zoom: 15,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	map = new google.maps.Map(document.getElementById("map"),mapOptions);
-	for(var i = 0;i < document.dateForm.length;i++)
-		if(document.dateForm.elements[i].checked == true && noTrace[i] != 1)
+	for(var i = 0;i < document.dateDiv.length;i++)
+		if(document.dateDiv.elements[i].checked == true && noTrace[i] != 1)
 			getLocData(i);
 }
 
@@ -125,10 +125,10 @@ function getInitializeLoc(begin,end) {
 			var loc_list = result.locinfo;
 			if(loc_list.length == 0)
 				alert("No trace in these days, maybe your input is wrong.");
-			location = loc_list[0];
+			middleLocation = loc_list[0];
 			//获得第一个点的信息并保存
 			var mapOptions = {
-					center: new google.maps.LatLng(location.lat,location.lng),
+					center: new google.maps.LatLng(middleLocation.lat,middleLocation.lng),
 					zoom: 15,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 			};
@@ -169,10 +169,8 @@ function cleanInfo() {
 	//初始化
 	track_loc_data = new Object;
 	track_loc_data.locinfo = new Array();
-	location = new Object;
-	imsi = new Object;
+	middleLocation = 0;
 	date = new Array();
-	map = new Object;
 	noTrace = new Array();
-	days = new Object;
+	days = null;
 }

@@ -20,7 +20,7 @@
     <script type="text/javascript"
       src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
-    <script type="text/javascript" src="js/GoogleMap.js">
+    <script src="js/main.js" type="text/javascript">
     </script>
     <script src="js/jquery.min.js" type="text/javascript">
     </script>
@@ -35,17 +35,20 @@
       }
     </script>
   </head>
-  <h2>User's track</h2>
+  <body onload="initialize()">
+  <form id="form1">
+   <h2>User's track</h2>
     imsi:<input type="text" size="20" maxlength="15" value="460028498058743" id="datepicker1"/>
     begin date:<input type="text" size="12" maxlength="10" value="2012-09-18" id="datepicker2"/>
     end date:<input type="text" size="12" maxlength="10" value="2012-09-24" id="datepicker3"/>
     <input type="button" value="search" onClick="getLocFromDates()"/>
     <br/>
     date input as yyyy-mm-dd<br/>
-    <form name="dateForm">
+    <div id="dateDiv">
+    </div>
+    <div id="mapcontainer">
+    <div id="map"></div>
+    </div>
     </form>
-    <div id="mapcontainer"/>
-    <div id="map"/>
-  <body onload="initialize()">
   </body>
 </html>
