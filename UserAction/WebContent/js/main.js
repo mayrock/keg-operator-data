@@ -45,13 +45,13 @@ function getLocFromDates() {
 		noTrace[i-1] = 0;
 		//默认所有的天都存在轨迹
 		document.getElementById("dateDiv").innerHTML +=
-			"<input type='checkbox' name='day" + i + "' onClick='getLocByDate(" + i + ")'/>day" + i;
+			"<input type='checkbox' name='day" + i + "' onClick='getLocByDate(this," + i + ")'/>day" + i;
 	}
 }
 
-function getLocByDate(i) {
+function getLocByDate(ele, i) {
 	//根据复选框的状态添加或是删除轨迹
-	if(document.getElementById("dateDiv").elements[i-1].checked == true)
+	if(ele.checked == true)
 		getLocData(i-1);
 	else refresh();
 }
