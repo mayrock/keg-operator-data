@@ -127,7 +127,7 @@ function getLocData(n) {
 		type : "get",
 		async: false,
 		//请求与回应同步
-		url : "GetLoc.action",
+		url : "GetLocByImsi.action",
 		data : "imsi = " + imsi + "&begin = " + date[n] + "&end = " + date[n],
 		success : function(msg) {
 			var result = eval("(" + msg + ")");

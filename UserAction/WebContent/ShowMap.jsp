@@ -20,7 +20,9 @@
     <script type="text/javascript"
       src="http://maps.google.com/maps/api/js?sensor=false">
     </script>
-    <script src="js/main.js" type="text/javascript">
+    <script src="js/showTraceByImsi.js" type="text/javascript">
+    </script>
+    <script src="js/showTraceByLoc.js" type="text/javascript">
     </script>
     <script src="js/jquery.min.js" type="text/javascript">
     </script>
@@ -36,7 +38,7 @@
     </script>
   </head>
   <body onload="initialize()">
-    <form name="title">
+    <form name="getImsi">
       <h2>User's track</h2>
       imsi:<input type="text" size="20" maxlength="15" value="460028498058743" id="datepicker1"/>
       begin date:<input type="text" size="12" maxlength="10" value="2012-09-18" id="datepicker2"/>
@@ -45,6 +47,15 @@
       date input as yyyy-mm-dd<br/>
     </form>
     <form name="dateForm">
+    </form>
+    <form name="getLoc">
+      location a:<input type="text" size="15" maxlength="11" id="datepicker4"/>
+      location b:<input type="text" size="15" maxlength="11" id="datepicker5"/>
+      hour:<input type="text" size="5" maxlength="2" id="datepicker6"/>
+      user count:<input type="text" size="5" id="datepicker7"/>
+      <input type="button" value="search" onClick="getMsgFromLoc()"/><br/>
+      <select name="adjacent">
+      </select>
     </form>
     <form name="googleMap">
       <div id="mapcontainer">

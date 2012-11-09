@@ -1,4 +1,10 @@
+/**
+ * 
+ * @author WuChao
+ *
+ */
 package Map;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,16 +15,14 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts2.ServletActionContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.opensymphony.xwork2.ActionContext;
-/**
- * 
- * @author WuChao
- *
- */
+
 public class GetLoc {
 
 	/**
@@ -74,7 +78,7 @@ public class GetLoc {
 	}
 
 	public void arrangeMsg(int n) {
-		// TODO Auto-generated method stub
+		//整理经纬度数据对应的信息
 		HashMap<String,String> map = new HashMap<String,String>();
 		for(int i = 0;i < n;i++) {
 			String latlng = String.valueOf(lat[i]) + String.valueOf(lng[i]);
