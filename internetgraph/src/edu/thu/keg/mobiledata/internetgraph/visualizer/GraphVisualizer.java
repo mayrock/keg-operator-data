@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import edu.thu.keg.mobiledata.internetgraph.dbprocesser.URIMerger;
+
 /**
  * @author myc
  *
@@ -28,10 +30,14 @@ public class GraphVisualizer {
 			int i = 0;
 			while ((line = reader.readLine()) != null && i <= 300) {
 				String[] arr = line.split("\t");
-				if (Double.parseDouble(arr[2]) > 0.1)
+				String uri1 = URIMerger.processUri(arr[0]);
+				String uri2 = URIMerger.processUri(arr[1]);
+				if (uri1.equals(uri2))
 					continue;
-				sb.append("\"" + arr[0] + "\" -- \""
-				   + arr[1] + "\"");
+//				if (Double.parseDouble(arr[2]) > 0.1)
+//					continue;
+				sb.append("\"" + uri1 + "\" -- \""
+				   + uri2 + "\"");
 				sb.append(" [label=" + arr[2] + "];");
 				sb.append(System.getProperty("line.separator"));
 				++i;
@@ -39,7 +45,7 @@ public class GraphVisualizer {
 			reader.close();
 			BufferedWriter writer = new BufferedWriter(new 
 					FileWriter("C:\\Users\\myc\\Desktop\\" +
-							"dot.txt"));
+							"dot_top_merge.txt"));
 			writer.write(toDOTFile(sb.toString()));
 			writer.close();
 		} catch (IOException e) {
