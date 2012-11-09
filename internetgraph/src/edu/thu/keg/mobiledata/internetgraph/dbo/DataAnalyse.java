@@ -204,7 +204,8 @@ public class DataAnalyse {
 		}
 //		计算以上生成的Host的数组的夹角值,生成新的相似矩阵
 		double [][]RelationMatrix= new double[h_5000.length][h_5000.length];
-		BufferedOutputStream f_b=getBOS("HostVectors_New.txt");
+//		BufferedOutputStream f_b=getBOS("HostVectors_New.txt");
+		BufferedOutputStream f_b2=getBOS("HostVectors_New_Column.txt");
 		for(int i=0;i<h_5000.length;i++)
 		{	
 			System.out.println(i);
@@ -213,17 +214,23 @@ public class DataAnalyse {
 			for(int j=0;j<h_5000.length;j++)
 			{
 				Host  h3= h_5000[j];
-				if(i<=j)
+				if(i<=j){
 					RelationMatrix[i][j]=getCosRec(h2.Eigenvector,h3.Eigenvector);
+					if(i<j)
+					{
+						writeString(f_b2,h2.ADDR+" "+h3.ADDR+
+								" "+String.format("%.4f",RelationMatrix[i][j])+"\n");
+					}
+				}
 				else
 					RelationMatrix[i][j]=RelationMatrix[j][i];
-				writeString(f_b, String.format("%.4f",RelationMatrix[i][j])+" ");
+//				writeString(f_b, String.format("%.4f",RelationMatrix[i][j])+" ");
 //				str=str+String.valueOf(String.format("%.4f",RelationMatrix[i][j])+" ");
 			}
-//			DataAnalyse.writeFile("HostVectors.txt", str+h2.ADDR+"\n");
-			writeString(f_b, h2.ADDR+"\n");
+//			writeString(f_b, h2.ADDR+"\n");
 		}
-		closeBOS(f_b);
+//		closeBOS(f_b);
+		closeBOS(f_b2);
 		System.out.println("计算完成夹角ok!");
 	}
 	public Hashtable<String, String> getHostTagHashTable(Connection conn,String tableName)
@@ -282,21 +289,6 @@ public class DataAnalyse {
 		for(int i=0;i<h_result.length;i++)
 			h_result[i]=h_all[i];
 		return h_result;
-	}
-	public static void writeFile(String Filename,String Content)
-	{
-		 try {
-	        	File outfile=new File(Filename);
-	        	FileOutputStream  f= new FileOutputStream(outfile,true);
-	            BufferedOutputStream f_b=new BufferedOutputStream(f);
-	            byte [] b;
-	            b=Content.getBytes();
-	            f_b.write(b);
-	            f_b.flush();
-	            f_b.close();
-	        } catch (IOException ex) {
-	           System.out.println(ex);
-	        }// TODO add your handling code here:
 	}
 	public void writeString(BufferedOutputStream f_b,String Content)
 	{
@@ -427,14 +419,14 @@ public class DataAnalyse {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		app=DataAnalyse.inputBinary("graphMap_MengoAll.dat");
+//		app=DataAnalyse.inputBinary("graphMap_MengoAll.dat");
 		
 		System.out.println("内存建立完毕!");
 		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
 		long t2=System.currentTimeMillis();
 //		app.printAllSystem();
-//		DataAnalyse.outputBinary(app);
-//		System.out.println("序列化生成完毕!");
+		DataAnalyse.outputBinary(app);
+		System.out.println("序列化生成完毕!");
 		bpp.getHostRelation(bpp,app);
 		System.out.println("搞定!");
 		System.out.println("关系矩阵生成时间："+(System.currentTimeMillis()-t2)/(double)1000+"秒");

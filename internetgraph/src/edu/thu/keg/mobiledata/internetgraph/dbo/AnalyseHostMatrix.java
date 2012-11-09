@@ -1,5 +1,7 @@
 package edu.thu.keg.mobiledata.internetgraph.dbo;
-
+/***
+ * 计算每个用用户访问次数特征向量算出来的相似度和真实相似度的对比
+ */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -70,7 +72,10 @@ public class AnalyseHostMatrix {
 			}
 			if(pos>=neg)
 				rightNum++;
-			
+//			if(pos==RateNum)
+//				rightNum++;
+//			if(neg==RateNum)
+//				rightNum--;
 		}
 		return re=(double)rightNum/(double)Hi_array.size();
 	}
