@@ -15,18 +15,20 @@ var color = new Array(
 		"#D94600",//棕
 		"#9F4D95"//青
 		);//轨迹可选用的颜色
+var colorInfo = new Array(
+		"black","red","blue","green","yellow","brown","cyan-blue");
 
 function getLocFromDates() {
 	//处理输入信息
 	cleanInfo();
 	var mapOptions = {
-			center: new google.maps.LatLng(40.841692,111.649827),
+			center: new google.maps.LatLng(40.003834809598516,116.3263213634491),
 			zoom: 16,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	map = new google.maps.Map(document.getElementById("map"),mapOptions);
 	//初始化地图
-	imsi = document.getElementById("datepicker1").value;
+	imsi = document.getElementById("datepicker1").value;alert(imsi);
 	var begin = document.getElementById("datepicker2").value;
 	var end = document.getElementById("datepicker3").value;
 	if(imsi == "") {
@@ -46,7 +48,9 @@ function getLocFromDates() {
 	document.dateForm.innerHTML = "";
 	for(var i = 1;i <= date.length;i++) {
 		document.dateForm.innerHTML +=
-			"<input type='checkbox' name='day" + i + "' onClick='getLocByDate(" + i + ")' checked/>day" + i;
+			"<input type='checkbox' name='day" + i +
+			"' onClick='getLocByDate(" + i +
+			")' checked/>day" + i + "(" + colorInfo[i-1] + ")";
 		mrkrArr[i-1] = new Array();
 	}
 	getInitLoc();

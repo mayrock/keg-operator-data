@@ -3,16 +3,33 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
-      #mapcontainer {
+      #mapContainer {
         margin: 10px;
         width: 720px;
         height: 480px;
       }
-      #map {
-        border-bottom: red 1px solid;
-        border-left: green 1px solid;
+       #inputContainer{
+        position: absolute;
+        top: 60px;
+        left: 800px;
+      }
+      #locContainer {
+        position: absolute;
+        top: 120px;
+        left: 800px;
+        margin: 10px;
+        width: 300px;
+        height: 480px;
+        border-bottom: black 1px solid;
+        border-left: black 1px solid;
         border-top: black 1px solid;
-        border-right: blue 1px solid;
+        border-right: black 1px solid;
+      }
+      #map {
+        border-bottom: black 1px solid;
+        border-left: black 1px solid;
+        border-top: black 1px solid;
+        border-right: black 1px solid;
         width: 100%;
         height: 100%;
       }
@@ -28,12 +45,7 @@
     </script>
     <script type="text/javascript">
       function initialize() {
-    	  var mapOptions = {
-    			  center: new google.maps.LatLng(40.003834809598516,116.3263213634491),
-    			  zoom: 16,
-    			  mapTypeId: google.maps.MapTypeId.ROADMAP
-    	  };
-    	  var map = new google.maps.Map(document.getElementById("map"),mapOptions);
+    	 Init();
       }
     </script>
   </head>
@@ -48,17 +60,18 @@
     </form>
     <form name="dateForm">
     </form>
+   <div id="inputContainer">
     <form name="getLoc">
-      location a:<input type="text" size="15" maxlength="11" id="datepicker4"/>
-      location b:<input type="text" size="15" maxlength="11" id="datepicker5"/>
-      hour:<input type="text" size="5" maxlength="2" id="datepicker6"/>
+      location a:<input type="text" size="15" maxlength="11" value="18421_18943" id="datepicker4"/>
+      location b:<input type="text" size="15" maxlength="11" value="18421_44683" id="datepicker5"/><br/>
+      hour:<input type="text" size="5" maxlength="2" value="8" id="datepicker6"/>
       user count:<input type="text" size="5" id="datepicker7"/>
-      <input type="button" value="search" onClick="getMsgFromLoc()"/><br/>
-      <select name="adjacent">
-      </select>
-    </form>
+      <input type="button" value="search" onClick="getMsgFromLoc()"/><br/></div>
+    </form><div id="locContainer">
+    <form name="adjLoc">
+    </form></div>
     <form name="googleMap">
-      <div id="mapcontainer">
+      <div id="mapContainer">
         <div id="map">
         </div>
       </div>

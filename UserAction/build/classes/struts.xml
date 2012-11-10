@@ -6,9 +6,9 @@
 	<!--<constant name="struts.configuration.xml.reload" value="false" /> -->
 	<package name="struts2" extends="struts-default">
 
-		<action name="GetLocByImsi" class="Map.GetLoc">
+		<action name="GetLocByImsi" class="Map.LocGetter">
 		</action>
-		<action name="GetMsgByLoc" class="Map.GetMsg">
+		<action name="GetMsgByLoc" class="Map.MsgGetter">
 		</action>
 
 	</package>
