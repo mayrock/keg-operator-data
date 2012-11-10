@@ -1,7 +1,9 @@
-package edu.thu.keg.mobiledata.internetgraph.dbo;
-/***
- * 计算每个用用户访问次数特征向量算出来的相似度和真实相似度的对比
+/**
+ * author ybz
+ * 判断标签正确率
  */
+package edu.thu.keg.mobiledata.internetgraph.dbo;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,7 +20,7 @@ public class AnalyseHostMatrix {
 	ArrayList<HostInfo> Hi_array;
 	public AnalyseHostMatrix()
 	{
-		hosttag=getHostTagTable("ZhuData", "HostTag");
+		hosttag=getHostTagTable("ZhuData", "HostTag_New");
 		Hi_array=getHostInfo();
 		System.out.println("ok");
 		System.out.println(getRightRate());
@@ -72,10 +74,7 @@ public class AnalyseHostMatrix {
 			}
 			if(pos>=neg)
 				rightNum++;
-//			if(pos==RateNum)
-//				rightNum++;
-//			if(neg==RateNum)
-//				rightNum--;
+			
 		}
 		return re=(double)rightNum/(double)Hi_array.size();
 	}

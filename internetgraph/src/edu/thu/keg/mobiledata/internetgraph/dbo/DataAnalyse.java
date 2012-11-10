@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Set;
 
+import edu.thu.keg.mobiledata.internetgraph.dbprocesser.URIMerger;
+
 public class DataAnalyse {
 	private static int totalTime_ms=0;
 	private static int count=0;
@@ -38,7 +40,7 @@ public class DataAnalyse {
 	{
 		try {
 			ObjectOutputStream f = new ObjectOutputStream(
-					new FileOutputStream("graphMap.dat"));
+					new FileOutputStream("graphMap_Mengo_Merged.dat"));
 			f.writeObject(cg);
 			f.close();
 		} catch (FileNotFoundException e) {
@@ -114,6 +116,8 @@ public class DataAnalyse {
 				
 				uID=String.valueOf(rs.getBigDecimal("Imsi"));
 				Addr=rs.getString("URI").replace(" ", "");
+				//保留域名
+				Addr=URIMerger.processUri(Addr);
 //				Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
 //				Calendar CT=Calendar.getInstance();
 //				ConnectionTime=rs.getString("ConnectTime");
@@ -168,7 +172,8 @@ public class DataAnalyse {
 
 //		生成Host的数组h_5000,数组的每一个纬度代表着每个Host的这个维度用户的访问次数,构成特征向量
 		//得到标签数据库的所有数据到一个哈希表中
-		Hashtable<String, String> HostTagHashTable=getHostTagHashTable(getConnection("ZhuData"),"HostTag");
+		Hashtable<String, String> HostTagHashTable
+					=getHostTagHashTable(getConnection("ZhuData"),"HostTag_New");
 		System.out.println("读取标签表完毕!"+HostTagHashTable.size());
 		Host[] h_5000=getHostTop(CG ,HostTagHashTable);//得到所有HostTagHashTable里有的Host
 //		getHostTop(CG,5000) 得到访问量的前5000个
@@ -204,32 +209,33 @@ public class DataAnalyse {
 		}
 //		计算以上生成的Host的数组的夹角值,生成新的相似矩阵
 		double [][]RelationMatrix= new double[h_5000.length][h_5000.length];
-//		BufferedOutputStream f_b=getBOS("HostVectors_New.txt");
-		BufferedOutputStream f_b2=getBOS("HostVectors_New_Column.txt");
+		BufferedOutputStream f_b=getBOS("HostVectors_New_Merged.txt");
+		BufferedOutputStream f_b2=getBOS("HostVectors_New_Cloumn_Merged.txt");
 		for(int i=0;i<h_5000.length;i++)
 		{	
 			System.out.println(i);
 			Host  h2= h_5000[i];
 			String str="";
+		
 			for(int j=0;j<h_5000.length;j++)
 			{
 				Host  h3= h_5000[j];
-				if(i<=j){
+				if(i<=j)
+				{
 					RelationMatrix[i][j]=getCosRec(h2.Eigenvector,h3.Eigenvector);
 					if(i<j)
 					{
-						writeString(f_b2,h2.ADDR+" "+h3.ADDR+
-								" "+String.format("%.4f",RelationMatrix[i][j])+"\n");
+						writeString(f_b2, h2.ADDR+" "+h3.ADDR+" "+
+								String.format("%.4f",RelationMatrix[i][j])+"\n");
 					}
 				}
 				else
 					RelationMatrix[i][j]=RelationMatrix[j][i];
-//				writeString(f_b, String.format("%.4f",RelationMatrix[i][j])+" ");
-//				str=str+String.valueOf(String.format("%.4f",RelationMatrix[i][j])+" ");
+				writeString(f_b, String.format("%.4f",RelationMatrix[i][j])+" ");
 			}
-//			writeString(f_b, h2.ADDR+"\n");
+			writeString(f_b, h2.ADDR+"\n");
 		}
-//		closeBOS(f_b);
+		closeBOS(f_b);
 		closeBOS(f_b2);
 		System.out.println("计算完成夹角ok!");
 	}
@@ -289,6 +295,21 @@ public class DataAnalyse {
 		for(int i=0;i<h_result.length;i++)
 			h_result[i]=h_all[i];
 		return h_result;
+	}
+	public static void writeFile(String Filename,String Content)
+	{
+		 try {
+	        	File outfile=new File(Filename);
+	        	FileOutputStream  f= new FileOutputStream(outfile,true);
+	            BufferedOutputStream f_b=new BufferedOutputStream(f);
+	            byte [] b;
+	            b=Content.getBytes();
+	            f_b.write(b);
+	            f_b.flush();
+	            f_b.close();
+	        } catch (IOException ex) {
+	           System.out.println(ex);
+	        }// TODO add your handling code here:
 	}
 	public void writeString(BufferedOutputStream f_b,String Content)
 	{
