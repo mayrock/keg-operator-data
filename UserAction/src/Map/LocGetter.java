@@ -1,4 +1,10 @@
+/**
+ * 
+ * @author WuChao
+ *
+ */
 package Map;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,17 +15,15 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts2.ServletActionContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.opensymphony.xwork2.ActionContext;
-/**
- * 
- * @author WuChao
- *
- */
-public class GetLoc {
+
+public class LocGetter {
 
 	/**
 	 * @param args
@@ -58,11 +62,11 @@ public class GetLoc {
 	public String execute()throws IOException{
 		// TODO Auto-generated method stub
 
-		int n = getLatLng();
-//		arrangeMsg(n);
 		ActionContext ac = ActionContext.getContext();
 		HttpServletResponse response = ServletActionContext.getResponse();
 		HttpServletRequest request = (HttpServletRequest)ac.get(ServletActionContext.HTTP_REQUEST);
+		int n = getLatLng();
+//		arrangeMsg(n);
 		String result = getJsonData(n);
 		System.out.println(result);
 		response.setContentType("text/html;charset=UTF-8");
@@ -74,7 +78,7 @@ public class GetLoc {
 	}
 
 	public void arrangeMsg(int n) {
-		// TODO Auto-generated method stub
+		//整理经纬度数据对应的信息
 		HashMap<String,String> map = new HashMap<String,String>();
 		for(int i = 0;i < n;i++) {
 			String latlng = String.valueOf(lat[i]) + String.valueOf(lng[i]);
@@ -137,7 +141,7 @@ public class GetLoc {
 				"inner join ZhuData.dbo.LocationInfo " +
 				"on GN.LAC = LocationInfo.LAC and GN.CI = LocationInfo.CI " +
 				"where Imsi = " + imsi_new +
-				" and ConnectTime between " + "'" + begin_new + "'" + " and " + "dateadd(day,1,'" + end_new + "') " +
+				" and ConnectTime between " + "'" + begin_new + "' and dateadd(day,1,'" + end_new + "') " +
 				"order by connectTime asc";
 		System.out.println(query);
 		try{
@@ -148,7 +152,7 @@ public class GetLoc {
 					"integratedSecurity=true;");
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next()) {
+			while(rs.next()) {
 				latitude = rs.getDouble("Latitude");
 				longitude = rs.getDouble("Longitude");
 				message = rs.getString("ConnectTime");
@@ -177,7 +181,7 @@ public class GetLoc {
 			if(i > 0) msg[i-1] += "\nEndTime : " + connTime + "\ncount = " + count;
 			stmt.close();
 			conn.close();
-		}catch (SQLException | ClassNotFoundException e) {
+		}catch(SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return i;
