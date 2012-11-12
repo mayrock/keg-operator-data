@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mobiledata.locationanalyzer;
+package edu.thu.keg.mobiledata.locationanalyzer.generator;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,6 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import edu.thu.keg.mobiledata.locationanalyzer.AdjacentLocList;
+import edu.thu.keg.mobiledata.locationanalyzer.AdjacentLocPair;
+import edu.thu.keg.mobiledata.locationanalyzer.Site;
 
 /**
  * Generate a list, each record being a adjacent location pair 

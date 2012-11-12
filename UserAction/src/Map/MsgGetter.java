@@ -208,7 +208,7 @@ public class MsgGetter {
 		String str3 = "";
 		String[] arr;
 		if(loc1_new.equals("") && loc2_new.equals("") && hour_new.equals("") && count_new.equals(""))
-			query = "select Top 200 LocName1,LocName2,Hour,UserCount, TotalCount " +
+			query = "select Top 200 SiteId1,SiteId2,Hour,UserCount, TotalCount " +
 					"from AdjacentLocation " +
 					"order by UserCount desc";
 		else {
@@ -233,7 +233,7 @@ public class MsgGetter {
 					str3 = "UserCount >= '" + arr[0] + "' and UserCount <= '"
 							+ arr[1] + "' ";
 			}
-			query = "select Top 200 LocName1,LocName2,Hour,UserCount, TotalCount "
+			query = "select Top 200 SiteId1,SiteId2,Hour,UserCount, TotalCount "
 					+ "from AdjacentLocation "
 					+ "where "
 					+ str1
@@ -252,8 +252,8 @@ public class MsgGetter {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while(rs.next()) {
-				String l1 = rs.getString("LocName1");
-				String l2 = rs.getString("LocName2");
+				String l1 = rs.getString("SiteId1");
+				String l2 = rs.getString("SiteId2");
 				int h = rs.getInt("Hour");
 				int nUser = rs.getInt("UserCount");
 				int nTotal = rs.getInt("TotalCount");
@@ -280,23 +280,25 @@ public class MsgGetter {
 					"integratedSecurity=true;");
 			stmt = conn.createStatement();
 			for(LocationTransferRecord record : records) {
-				String query = "select Longitude,Latitude " +
-						"from ZhuData.dbo.LocationInfo " +
-						"where CellName = '" + record.getLoc1() +
-						"' or CellName = '" + record.getLoc2() + "'";
-				System.out.println(query);
-				ResultSet rs = stmt.executeQuery(query);
 				Double[] latitude = new Double[2];
 				Double[] longitude = new Double[2];
-				int i = 0;
-				while(rs.next()) {
+				String[] names = new String[2];
+				names[0] = record.getLoc1();
+				names[1] = record.getLoc2();
+				
+				for (int i = 0; i < 2; ++i) {
+					String query = "select Longitude,Latitude " +
+							"from ZhuData.dbo.LocationInfo " +
+							"where SiteId = '" + names[i] + "'";
+					System.out.println(query);
+					ResultSet rs = stmt.executeQuery(query);
+				    rs.next();
 					latitude[i] = rs.getDouble("Latitude");
 					longitude[i] = rs.getDouble("Longitude");
-					i++;
 				}
 				LatlngRecord latlng = new 
-						LatlngRecord(latitude[0],longitude[0],latitude[1],longitude[1]);
-				latlngs.add(latlng);
+							LatlngRecord(latitude[0],longitude[0],latitude[1],longitude[1]);
+					latlngs.add(latlng);
 			}
 			stmt.close();
 			conn.close();
