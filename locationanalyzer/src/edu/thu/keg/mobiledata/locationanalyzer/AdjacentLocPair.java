@@ -3,15 +3,14 @@
  */
 package edu.thu.keg.mobiledata.locationanalyzer;
 
-import java.util.HashMap;
 
 /**
  * @author myc
  *
  */
 public class AdjacentLocPair {
-	private CellLocation cell1;
-	private CellLocation cell2;
+	private Site site1;
+	private Site site2;
 	
 	private int totalCount;
 	private int usersCount;
@@ -20,26 +19,26 @@ public class AdjacentLocPair {
 	
 	
 	
-	public AdjacentLocPair(CellLocation cell1, CellLocation cell2) {
+	public AdjacentLocPair(Site site1, Site site2) {
 		super();
-		this.cell1 = cell1;
-		this.cell2 = cell2;
+		this.site1 = site1;
+		this.site2 = site2;
 		totalCount = 0;
 		usersCount = 0;
 		usersPerHourCount = new int[24];
 		totalPerHourCount = new int[24];
 	}
-	public CellLocation getCell1() {
-		return cell1;
+	public Site getSite1() {
+		return site1;
 	}
-	public void setCell1(CellLocation cell1) {
-		this.cell1 = cell1;
+	public void setSite1(Site site1) {
+		this.site1 = site1;
 	}
-	public CellLocation getCell2() {
-		return cell2;
+	public Site getSite2() {
+		return site2;
 	}
-	public void setCell2(CellLocation cell2) {
-		this.cell2 = cell2;
+	public void setSite2(Site site2) {
+		this.site2 = site2;
 	}
 	public int getTotalCount() {
 		return totalCount;
