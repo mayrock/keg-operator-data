@@ -1,3 +1,7 @@
+/**
+ * author ybz
+ * 判断标签正确率
+ */
 package edu.thu.keg.mobiledata.internetgraph.dbo;
 
 import java.io.File;
@@ -16,7 +20,7 @@ public class AnalyseHostMatrix {
 	ArrayList<HostInfo> Hi_array;
 	public AnalyseHostMatrix()
 	{
-		hosttag=getHostTagTable("ZhuData", "HostTag");
+		hosttag=getHostTagTable("ZhuData", "HostTag_New");
 		Hi_array=getHostInfo();
 		System.out.println("ok");
 		System.out.println(getRightRate());

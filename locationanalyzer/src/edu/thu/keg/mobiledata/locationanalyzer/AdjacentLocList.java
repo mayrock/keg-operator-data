@@ -4,40 +4,48 @@ import java.util.HashMap;
 
 public class AdjacentLocList {
 	public static final int INITIAL_CELL_COUNT = 6000;
-	private HashMap<String, CellLocation> cells;
+	private HashMap<String, Site> sites;
 
-	public HashMap<String, CellLocation> getCells() {
-		return cells;
+	public HashMap<String, Site> getSites() {
+		return sites;
 	}
 	
 	public AdjacentLocList() {
-		cells = new HashMap<String, CellLocation>(INITIAL_CELL_COUNT);
+		sites = new HashMap<String, Site>(INITIAL_CELL_COUNT);
 	}
-	public CellLocation addCellLocation(String cellName) {
-		CellLocation newLoc = new CellLocation(cellName);
-		cells.put(cellName, newLoc);
+	/**
+	 * Add a new site location to the node list. If the site already exists,
+	 * then simply return the instance
+	 * @param siteId
+	 * @param longitude
+	 * @param latitude
+	 * @return
+	 */
+	public Site addSite(String siteId, int longitude, int latitude) {
+		if (sites.containsKey(siteId)) {
+			return sites.get(siteId);
+		}
+		Site newLoc = new Site(siteId, longitude, latitude);
+		sites.put(siteId, newLoc);
 		return newLoc;
 	}
-	public AdjacentLocPair getAdjacentLocPair(String cellName1, String cellName2) {
-		CellLocation cell1, cell2;
-		if (!cells.containsKey(cellName1)) {
-			cell1 = addCellLocation(cellName1);
-		} else {
-			cell1 = cells.get(cellName1);
-		}
-		if (!cells.containsKey(cellName2)) {
-			cell2 = addCellLocation(cellName2);
-		} else {
-			cell2 = cells.get(cellName2);
-		}
-		for (AdjacentLocPair pair : cell1.getNextCells()) {
-			if (pair.getCell2().getCellName().equals(cellName2)) {
+	/**
+	 * Return the instance of this siteId. null if the siteId does not exist
+	 * @param siteId
+	 * @return
+	 */
+	public Site getSite(String siteId) {
+		return sites.get(siteId);
+	}
+	public AdjacentLocPair getAdjacentLocPair(Site site1, Site site2) {
+		for (AdjacentLocPair pair : site1.getNextSites()) {
+			if (pair.getSite2().equals(site2)) {
 				return pair;
 			}
 		}
-		AdjacentLocPair newPair = new AdjacentLocPair(cell1, cell2);
-		cell1.addNextCell(newPair);
-		cell2.addNextCell(newPair);
+		AdjacentLocPair newPair = new AdjacentLocPair(site1, site2);
+		site1.addNextSite(newPair);
+		site2.addNextSite(newPair);
 		return newPair;
 	}
 }

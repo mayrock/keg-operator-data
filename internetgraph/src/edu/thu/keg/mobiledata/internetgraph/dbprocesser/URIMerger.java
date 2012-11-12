@@ -37,12 +37,34 @@ public class URIMerger {
 		try {
 			conn = DriverManager.getConnection
 					("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;integratedSecurity=true;");
-			mergeURI(conn);
+			generateMap(conn);
 			conn.close();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+	public static void generateMap(Connection conn) throws SQLException {
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM URI_New");
+		System.out.println("Processing...");
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO [ZhuData].[dbo].[URI_Mapping]" 
+		           + "([OriginalURI],[ProcessedURI])"
+		           + "VALUES (?,?)");
+		while (rs.next()) {
+			int nUser = rs.getInt("UserCount");
+			if (nUser < 10)
+				continue;
+			String orig = rs.getString("URI");
+			String uri = processUri(orig);
+			ps.setString(1, orig);
+			ps.setString(2, uri);;
+			ps.addBatch();
+		}
+		System.out.println("Writing...");
+		
+		ps.executeBatch();
+		System.out.println("Done");
 	}
 	public static void mergeURI (Connection conn) throws SQLException {
 		Statement stmt = conn.createStatement();
