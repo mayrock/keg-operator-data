@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mobiledata.locationanalyzer;
+package edu.thu.keg.mobiledata.locationanalyzer.generator;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,6 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import edu.thu.keg.mobiledata.locationanalyzer.AdjacentLocList;
+import edu.thu.keg.mobiledata.locationanalyzer.AdjacentLocPair;
+import edu.thu.keg.mobiledata.locationanalyzer.Site;
 
 /**
  * Generate a list, each record being a adjacent location pair 
@@ -117,9 +121,12 @@ public class AdjacentLocListGenerator {
 		HashMap<AdjacentLocPair, int[]> pairs = new HashMap<AdjacentLocPair, int[]>();
 		long count = 0;
 		while (rs.next()) {
+			if (count % 100000 == 0) {
+				System.out.println(count);
+			}
+			count++;
 			nextRecord = new LocationRecord(rs);
-			if (nextRecord.getLatitude() == record.getLatitude()
-					&& nextRecord.getLongitude() == record.getLongitude())
+			if (nextRecord.getSiteId().equals(record.getSiteId()))
 				continue;
 			if (!nextRecord.getImsi().equals(record.getImsi())) {
 				record = nextRecord;
@@ -145,10 +152,7 @@ public class AdjacentLocListGenerator {
 				pairs.get(pair)[record.getHour()] += 1;
 			}
 			record = nextRecord;
-			count++;
-			if (count % 10000 == 0) {
-				System.out.println(count);
-			}
+			
 		}
 		storePairs(pairs);
 		return list;

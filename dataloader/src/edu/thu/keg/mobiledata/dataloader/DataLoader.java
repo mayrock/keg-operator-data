@@ -20,6 +20,17 @@ import edu.thu.keg.mobiledata.dataloader.singlefileloader.TrafficIntermediateFil
  */
 public class DataLoader {
 
+	public static Connection getConn() {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection
+					("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;integratedSecurity=true;");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return conn;
+	}
 	public static void loadGNData(String dir){
 		File[] files = new File(dir).listFiles();
 		Connection conn = null;
