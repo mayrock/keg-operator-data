@@ -62,6 +62,10 @@ function getInitLoc2() {
 	var mapOptions = {
 			center: new google.maps.LatLng(lat1Arr[0],lng1Arr[0]),
 			zoom: 12,
+			scaleControl: true,
+		    scaleControlOptions: {
+		        position: google.maps.ControlPosition.BOTTOM_LEFT
+		    },
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	map = new google.maps.Map(document.getElementById("map"),mapOptions);
@@ -99,13 +103,15 @@ function setMarker2() {
 	//±£´æ±ê¼Ç
 	for(var i = 0;i < lat1Arr.length;i++) {
 		var marker = new google.maps.Marker({
-			position : new google.maps.LatLng(lat1Arr[i],lng1Arr[i])
+			position : new google.maps.LatLng(lat1Arr[i],lng1Arr[i]),
+			visible : false
 		});
 		mrkr1Arr.push(marker);
 	}
-	for(var i = 0;i < lat1Arr.length;i++) {
+	for(var i = 0;i < lat2Arr.length;i++) {
 		var marker = new google.maps.Marker({
-			position : new google.maps.LatLng(lat2Arr[i],lng2Arr[i])
+			position : new google.maps.LatLng(lat2Arr[i],lng2Arr[i]),
+			visible : false
 		});
 		mrkr2Arr.push(marker);
 	}
