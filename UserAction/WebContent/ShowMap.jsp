@@ -62,8 +62,8 @@
     </form>
    <div id="inputContainer">
     <form name="getLoc">
-      location a:<input type="text" size="15" maxlength="11" value="18421_18943" id="datepicker4"/>
-      location b:<input type="text" size="15" maxlength="11" value="18421_44683" id="datepicker5"/><br/>
+      location a:<input type="text" size="15" maxlength="11" value="1668" id="datepicker4"/>
+      location b:<input type="text" size="15" maxlength="11" value="1655" id="datepicker5"/><br/>
       hour:<input type="text" size="5" maxlength="2" value="8" id="datepicker6"/>
       user count:<input type="text" size="5" id="datepicker7"/>
       <input type="button" value="search" onClick="getMsgFromLoc()"/><br/></div>
