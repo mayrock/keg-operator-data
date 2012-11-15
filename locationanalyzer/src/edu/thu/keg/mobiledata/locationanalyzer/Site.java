@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Site {
 	private static final int INITIAL_NEIGHBER_COUNT = 20;
-	private String siteId;
+	private int siteId;
 	private int longitude;
 	private int latitude;
 
@@ -16,15 +16,16 @@ public class Site {
 		return latitude;
 	}
 
-	public String getSiteId() {
+	public int getSiteId() {
 		return siteId;
 	}
 	
-	public Site(String name, int longitude, int latitude) {
-		this.siteId = name;
+	public Site(int id, int longitude, int latitude) {
+		this.siteId = id;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		nextSites = new ArrayList<AdjacentLocPair>(INITIAL_NEIGHBER_COUNT);
+		previousSites = new ArrayList<AdjacentLocPair>(INITIAL_NEIGHBER_COUNT);
 	}
 	
 	private ArrayList<AdjacentLocPair> nextSites;

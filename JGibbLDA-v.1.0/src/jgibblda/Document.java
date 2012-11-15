@@ -38,6 +38,7 @@ public class Document {
 	public int [] words;
 	public String rawStr;
 	public int length;
+	public String uri;
 	
 	//----------------------------------------------------
 	//Constructors
@@ -74,7 +75,16 @@ public class Document {
 		}
 	}
 	
-	public Document(Vector<Integer> doc){
+	public Document(Vector<Integer> doc, String uri){
+		this.length = doc.size();
+		rawStr = "";
+		this.words = new int[length];
+		for (int i = 0; i < length; i++){
+			this.words[i] = doc.get(i);
+		}
+		this.uri = uri;
+	}
+	public Document(Vector<Integer> doc) {
 		this.length = doc.size();
 		rawStr = "";
 		this.words = new int[length];
@@ -83,12 +93,12 @@ public class Document {
 		}
 	}
 	
-	public Document(Vector<Integer> doc, String rawStr){
-		this.length = doc.size();
-		this.rawStr = rawStr;
-		this.words = new int[length];
-		for (int i = 0; i < length; ++i){
-			this.words[i] = doc.get(i);
-		}
-	}
+//	public Document(Vector<Integer> doc, String rawStr){
+//		this.length = doc.size();
+//		this.rawStr = rawStr;
+//		this.words = new int[length];
+//		for (int i = 0; i < length; ++i){
+//			this.words[i] = doc.get(i);
+//		}
+//	}
 }

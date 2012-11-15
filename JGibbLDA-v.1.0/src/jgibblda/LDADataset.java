@@ -39,6 +39,9 @@ public class LDADataset {
 	// Instance Variables
 	//---------------------------------------------------------------
 	
+	private static final int TYPE_NEW = 0;
+	private static final int TYPE_TRADITIONAL = 1;
+	
 	public Dictionary localDict;			// local dictionary	
 	public Document [] docs; 		// a list of documents	
 	public int M; 			 		// number of documents
@@ -49,7 +52,9 @@ public class LDADataset {
 	public Map<Integer, Integer> lid2gid; 
 	
 	//link to a global dictionary (optional), null for train data, not null for test data
-	public Dictionary globalDict;	 		
+	public Dictionary globalDict;	
+	
+	private int type = TYPE_NEW;
 	
 	//--------------------------------------------------------------
 	// Constructor
@@ -97,12 +102,22 @@ public class LDADataset {
 			docs[idx] = doc;
 		}
 	}
+	public void setDoc(String str, int idx) {
+		switch (type) {
+		case TYPE_NEW:
+			setDoc2(str, idx);
+			break;
+		case TYPE_TRADITIONAL:
+			setDoc1(str, idx);
+			break;
+		}
+	}
 	/**
 	 * set the document at the index idx if idx is greater than 0 and less than M
 	 * @param str string contains doc
 	 * @param idx index in the document array
 	 */
-	public void setDoc(String str, int idx){
+	public void setDoc1(String str, int idx){
 		if (0 <= idx && idx < M){
 			String [] words = str.split("[ \\t\\n]");
 			
@@ -136,6 +151,55 @@ public class LDADataset {
 			}
 			
 			Document doc = new Document(ids, str);
+			docs[idx] = doc;
+			V = localDict.word2id.size();			
+		}
+	}
+	/**
+	 * set the document at the index idx if idx is greater than 0 and less than M
+	 * @param str string contains doc
+	 * @param idx index in the document array
+	 */
+	public void setDoc2(String str, int idx){
+		System.out.println("Processing file " + idx);
+		if (0 <= idx && idx < M){
+			String [] words = str.split(" ");
+			String uri = words[0].split(":")[0];
+			Vector<Integer> ids = new Vector<Integer>();
+			
+			for (int i = 1; i < words.length; i++){
+				String[] arr = words[i].split(":");
+				String word = arr[0];
+				int n = Integer.parseInt(arr[1]);
+				for(int j = 0; j < n; j++) {
+					int _id = localDict.word2id.size();
+					
+					if (localDict.contains(word))		
+						_id = localDict.getID(word);
+									
+					if (globalDict != null){
+						//get the global id					
+						Integer id = globalDict.getID(word);
+						//System.out.println(id);
+						
+						if (id != null){
+							localDict.addWord(word);
+							
+							lid2gid.put(_id, id);
+							ids.add(_id);
+						}
+						else { //not in global dictionary
+							//do nothing currently
+						}
+					}
+					else {
+						localDict.addWord(word);
+						ids.add(_id);
+					}
+				}
+			}
+			
+			Document doc = new Document(ids, uri);
 			docs[idx] = doc;
 			V = localDict.word2id.size();			
 		}
@@ -195,8 +259,7 @@ public class LDADataset {
 		try {
 			//read number of document
 			String line;
-			line = reader.readLine();
-			int M = Integer.parseInt(line);
+			int M = 1000;
 			
 			LDADataset data = new LDADataset(M);
 			for (int i = 0; i < M; ++i){
