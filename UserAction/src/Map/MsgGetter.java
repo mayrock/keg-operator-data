@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -27,17 +26,17 @@ public class MsgGetter {
 
 	private class LocationTransferRecord {
 
-		private String loc1;
-		private String loc2;
+		private int loc1;
+		private int loc2;
 		private int hour;
 		private int userCount;
 		private int totalCount;
 
-		public String getLoc1() {
+		public int getLoc1() {
 			return loc1;
 		}
 
-		public String getLoc2() {
+		public int getLoc2() {
 			return loc2;
 		}
 
@@ -54,7 +53,7 @@ public class MsgGetter {
 		}
 
 		public LocationTransferRecord(
-				String loc1,String loc2,int hour,int userCount,int totalCount) {
+				int loc1,int loc2,int hour,int userCount,int totalCount) {
 			super();
 			this.loc1 = loc1;
 			this.loc2 = loc2;
@@ -207,39 +206,33 @@ public class MsgGetter {
 		String str2 = "";
 		String str3 = "";
 		String[] arr;
-		if(loc1_new.equals("") && loc2_new.equals("") && hour_new.equals("") && count_new.equals(""))
-			query = "select Top 200 SiteId1,SiteId2,Hour,UserCount, TotalCount " +
-					"from AdjacentLocation " +
-					"order by UserCount desc";
-		else {
-			if(loc1_new.equals("") && !(loc2_new.equals("")))
-				str1 = "LocName2 = '" + loc2_new + "' ";
-			else if (!(loc1_new.equals("")) && loc2_new.equals(""))
-				str1 = "LocName1 = '" + loc1_new + "' ";
-			else
-				str1 = "LocName1 = '" + loc1_new + "' and LocName2 = '"
-						+ loc2_new + "' ";
-			if (hour_new.equals(""))
-				str2 = "Hour >= 0 ";
-			else
-				str2 = "Hour = " + hour_new + " ";
-			if (count_new.equals(""))
-				str3 = "UserCount >= 0 ";
-			else {
+		StringBuilder sb = new StringBuilder("select Top 200 SiteId1,SiteId2,Hour,UserCount, TotalCount"
+		                         + " from AdjacentLocation ");
+		StringBuilder sbWhere = new StringBuilder();
+		if(!loc1_new.equals("") || !loc2_new.equals("") || 
+				!hour_new.equals("") || !count_new.equals("")) {
+			sbWhere.append(" Where ");
+			if(!loc1_new.equals(""))
+				sbWhere.append(" SiteId1 = " + loc1_new + " AND");
+			if (!loc2_new.equals(""))
+				sbWhere.append(" SiteId2 = " + loc2_new + " AND");
+			if (!hour_new.equals(""))
+				sbWhere.append(" Hour = " + hour_new + " AND");
+			if (!count_new.equals("")) {
 				arr = count_new.split("-");
 				if (arr.length == 1)
-					str3 = "UserCount = '" + arr[0] + "' ";
+					sbWhere.append(" UserCount = " + arr[0]);
 				else
-					str3 = "UserCount >= '" + arr[0] + "' and UserCount <= '"
-							+ arr[1] + "' ";
+					sbWhere.append(" UserCount >= " + arr[0]
+							+ " and UserCount <= " + arr[1]);
 			}
-			query = "select Top 200 SiteId1,SiteId2,Hour,UserCount, TotalCount "
-					+ "from AdjacentLocation "
-					+ "where "
-					+ str1
-					+ "and "
-					+ str2 + "and " + str3 + "order by UserCount desc";
 		}
+		if (sbWhere.lastIndexOf("AND") == sbWhere.length() - 3) {
+			sbWhere.delete(sbWhere.length() - 3, sbWhere.length());
+		}
+		sb.append(sbWhere);
+		sb.append(" Order By UserCount DESC");
+		query = sb.toString();
 		Connection conn = null;
 		Statement stmt = null;
 		System.out.println(query);
@@ -252,8 +245,8 @@ public class MsgGetter {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while(rs.next()) {
-				String l1 = rs.getString("SiteId1");
-				String l2 = rs.getString("SiteId2");
+				int l1 = rs.getInt("SiteId1");
+				int l2 = rs.getInt("SiteId2");
 				int h = rs.getInt("Hour");
 				int nUser = rs.getInt("UserCount");
 				int nTotal = rs.getInt("TotalCount");
@@ -282,15 +275,14 @@ public class MsgGetter {
 			for(LocationTransferRecord record : records) {
 				Double[] latitude = new Double[2];
 				Double[] longitude = new Double[2];
-				String[] names = new String[2];
+				int[] names = new int[2];
 				names[0] = record.getLoc1();
 				names[1] = record.getLoc2();
 				
 				for (int i = 0; i < 2; ++i) {
 					String query = "select Longitude,Latitude " +
-							"from ZhuData.dbo.LocationInfo " +
-							"where SiteId = '" + names[i] + "'";
-					System.out.println(query);
+							"from ZhuData.dbo.SiteInfo " +
+							"where SiteId = " + names[i];
 					ResultSet rs = stmt.executeQuery(query);
 				    rs.next();
 					latitude[i] = rs.getDouble("Latitude");
