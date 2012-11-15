@@ -3,10 +3,13 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/Microsoft SQL Server 2008 JDBC Driver"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container/UserAction"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/commons-fileupload-1.2.1.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/commons-io-1.3.2.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="D:/JavaLibs/ezmorph-1.0.4.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/json-lib-2.4-jdk15%281%29/json-lib-2.4-jdk15.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/json-lib-2.4-jdk15%281%29/json-lib-2.4-jdk15-javadoc.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/json-lib-2.4-jdk15%281%29/json-lib-2.4-jdk15-sources.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
