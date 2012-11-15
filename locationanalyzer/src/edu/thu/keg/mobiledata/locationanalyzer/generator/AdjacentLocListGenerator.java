@@ -35,26 +35,24 @@ public class AdjacentLocListGenerator {
 					("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;" +
 							"integratedSecurity=true;");
 			AdjacentLocList list = generator.getListFromDB(conn);
+			
 			conn.setAutoCommit(false);
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO AdjacentLocation" +
-					"(SiteId1, SiteId2, Hour, UserCount, TotalCount)" +
-					"VALUES (?, ?, ?, ?, ?)");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO AdjacentLocation_Clustered" +
+					"(SiteId1, SiteId2, UserCount, TotalCount)" +
+					"VALUES (?, ?, ?, ?)");
 			for (Site loc : list.getSites().values()) {
 				for (AdjacentLocPair pair: loc.getNextSites()) {
-					String siteId1 = pair.getSite1().getSiteId();
-					String siteId2 = pair.getSite2().getSiteId();
+					int siteId1 = pair.getSite1().getSiteId();
+					int siteId2 = pair.getSite2().getSiteId();
 					int[] uc = pair.getUsersPerHourCount();
 					int[] tc = pair.getTotalPerHourCount();
-					for (int i = 0; i < 23; i++) {
-						if (uc[i] == 0)
+						if (uc[0] == 0)
 							continue;
-						stmt.setString(1, siteId1);
-						stmt.setString(2, siteId2);
-						stmt.setInt(3, i);
-						stmt.setInt(4, uc[i]);
-						stmt.setInt(5, tc[i]);
+						stmt.setInt(1, siteId1);
+						stmt.setInt(2, siteId2);
+						stmt.setInt(3, uc[0]);
+						stmt.setInt(4, tc[0]);
 						stmt.addBatch();
-					}
 				}
 				stmt.executeBatch();
 				conn.commit();
@@ -68,14 +66,14 @@ public class AdjacentLocListGenerator {
 	}
 	public class LocationRecord {
 		private String imsi;
-		private String siteId;
+		private int siteId;
 		private int hour;
 		private int longitude;
 		private int latitude;
 		public String getImsi() {
 			return imsi;
 		}
-		public String getSiteId() {
+		public int getSiteId() {
 			return siteId;
 		}
 		public int getHour() {
@@ -88,20 +86,20 @@ public class AdjacentLocListGenerator {
 		public int getLatitude() {
 			return latitude;
 		}
-		public void init(String imsi, String siteId, int hour, int longtitude, int latitude) {
+		public void init(String imsi, int siteId, int hour, int longtitude, int latitude) {
 			this.imsi = imsi;
 			this.siteId = siteId;
 			this.hour = hour;
 			this.longitude = longtitude;
 			this.latitude = latitude;
 		}
-		public LocationRecord(String imsi, String siteId, int hour, int lon, int lat) {
+		public LocationRecord(String imsi, int siteId, int hour, int lon, int lat) {
 			super();
 			init(imsi, siteId, hour, lon, lat);
 		}
 		public LocationRecord(ResultSet rs) throws SQLException {
 			String imsi = rs.getString("IMSI");
-			String siteId = rs.getString("SiteId");
+			int siteId = rs.getInt("SiteId");
 			Calendar c = Calendar.getInstance();
 			c.setTime(rs.getTime("ConnectTime"));
 			int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -121,12 +119,12 @@ public class AdjacentLocListGenerator {
 		HashMap<AdjacentLocPair, int[]> pairs = new HashMap<AdjacentLocPair, int[]>();
 		long count = 0;
 		while (rs.next()) {
-			if (count % 100000 == 0) {
+			if (count % 1000000 == 0) {
 				System.out.println(count);
 			}
 			count++;
 			nextRecord = new LocationRecord(rs);
-			if (nextRecord.getSiteId().equals(record.getSiteId()))
+			if (nextRecord.getSiteId() == record.getSiteId())
 				continue;
 			if (!nextRecord.getImsi().equals(record.getImsi())) {
 				record = nextRecord;
@@ -146,10 +144,10 @@ public class AdjacentLocListGenerator {
 			AdjacentLocPair pair = list.getAdjacentLocPair(site1, site2);
 			if (!pairs.containsKey(pair)) {
 				int[] arr = new int[25];
-				arr[record.getHour()] = 1;
+				arr[0] = 1;
 				pairs.put(pair, arr);
 			} else {
-				pairs.get(pair)[record.getHour()] += 1;
+				pairs.get(pair)[0] += 1;
 			}
 			record = nextRecord;
 			

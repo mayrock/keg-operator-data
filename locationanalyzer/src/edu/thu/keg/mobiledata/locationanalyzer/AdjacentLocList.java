@@ -4,14 +4,14 @@ import java.util.HashMap;
 
 public class AdjacentLocList {
 	public static final int INITIAL_CELL_COUNT = 6000;
-	private HashMap<String, Site> sites;
+	private HashMap<Integer, Site> sites;
 
-	public HashMap<String, Site> getSites() {
+	public HashMap<Integer, Site> getSites() {
 		return sites;
 	}
 	
 	public AdjacentLocList() {
-		sites = new HashMap<String, Site>(INITIAL_CELL_COUNT);
+		sites = new HashMap<Integer, Site>(INITIAL_CELL_COUNT);
 	}
 	/**
 	 * Add a new site location to the node list. If the site already exists,
@@ -21,7 +21,7 @@ public class AdjacentLocList {
 	 * @param latitude
 	 * @return
 	 */
-	public Site addSite(String siteId, int longitude, int latitude) {
+	public Site addSite(int siteId, int longitude, int latitude) {
 		if (sites.containsKey(siteId)) {
 			return sites.get(siteId);
 		}
@@ -34,7 +34,7 @@ public class AdjacentLocList {
 	 * @param siteId
 	 * @return
 	 */
-	public Site getSite(String siteId) {
+	public Site getSite(int siteId) {
 		return sites.get(siteId);
 	}
 	public AdjacentLocPair getAdjacentLocPair(Site site1, Site site2) {
@@ -45,7 +45,7 @@ public class AdjacentLocList {
 		}
 		AdjacentLocPair newPair = new AdjacentLocPair(site1, site2);
 		site1.addNextSite(newPair);
-		site2.addNextSite(newPair);
+		site2.addPreviousSite(newPair);
 		return newPair;
 	}
 }
