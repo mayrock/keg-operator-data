@@ -45,7 +45,13 @@
     </script>
     <script type="text/javascript">
       function initialize() {
-    	 Init();
+    	  var mapOptions = {
+    			  center: new google.maps.LatLng(40.003834809598516,116.3263213634491),
+    			  zoom: 16,
+    			  mapTypeId: google.maps.MapTypeId.ROADMAP
+    	  };
+    	  var map = new google.maps.Map(document.getElementById("map"),mapOptions);
+    	  Init();
       }
     </script>
   </head>
@@ -62,10 +68,9 @@
     </form>
    <div id="inputContainer">
     <form name="getLoc">
-      location a:<input type="text" size="15" maxlength="11" value="1668" id="datepicker4"/>
-      location b:<input type="text" size="15" maxlength="11" value="1655" id="datepicker5"/><br/>
-      hour:<input type="text" size="5" maxlength="2" value="8" id="datepicker6"/>
-      user count:<input type="text" size="5" id="datepicker7"/>
+      location a:<input type="text" size="5" maxlength="4" value="1668" id="datepicker4"/>
+      location b:<input type="text" size="5" maxlength="4" value="1655" id="datepicker5"/><br/>
+      user count:<input type="text" size="5" id="datepicker6"/>
       <input type="button" value="search" onClick="getMsgFromLoc()"/><br/></div>
     </form><div id="locContainer">
     <form name="adjLoc">

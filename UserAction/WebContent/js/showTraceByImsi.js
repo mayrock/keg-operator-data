@@ -1,10 +1,10 @@
-var map = new Object;
 var imsi = new Object;
 var date = new Array();
 var mrkrArr = new Array();
 var locData = new Object;
 locData.locinfo = new Array();
 var userPath = new Array();
+var map = new Object;
 
 var color = new Array(
 		"#000000",//黑
@@ -20,14 +20,7 @@ var colorInfo = new Array(
 
 function getLocFromDates() {
 	//处理输入信息
-	cleanInfo();
-	var mapOptions = {
-			center: new google.maps.LatLng(40.003834809598516,116.3263213634491),
-			zoom: 16,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
-	map = new google.maps.Map(document.getElementById("map"),mapOptions);
-	//初始化地图
+//	cleanInfo();
 	imsi = document.getElementById("datepicker1").value;alert(imsi);
 	var begin = document.getElementById("datepicker2").value;
 	var end = document.getElementById("datepicker3").value;
@@ -112,6 +105,10 @@ function getInitLoc() {
 				var mapOptions = {
 						center: mrkrArr[i][0].position,
 						zoom: 15,
+						scaleControl: true,
+						scaleControlOptions: {
+							position: google.maps.ControlPosition.BOTTOM_LEFT
+						},
 						mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
 				//以第一个点为中心初始化地图
@@ -174,7 +171,6 @@ function saveOneDayInfo(n) {
 
 function cleanInfo() {
 	//初始化全局变量
-	map = new Object;
 	imsi = new Object;
 	date = new Array();
 	mrkrArr = new Array();

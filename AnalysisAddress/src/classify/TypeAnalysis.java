@@ -94,9 +94,9 @@ public class TypeAnalysis {
 		Statement stmt = null;
 		int i = 0;
 		try{
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String query = "Select Latitude,Longitude " +
+			String query = "Select SiteId,UserCount,MinuteCount,URICount,TotalCount " +
 					"From ZhuData.dbo.new_SiteInfo_2 " +
+					"Where Latitude = "+""+" and Longitude = " +
 					"Order By UserCount desc";
 			conn = DriverManager.getConnection(
 					"jdbc:sqlserver://localhost:1433;" +
