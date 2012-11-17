@@ -30,3 +30,9 @@ SELECT [SiteId]
   into new_temptemptemp
   FROM [ZhuData].[dbo].[new_GN_All_1]
   group by SiteId, Longitude, Latitude
+  -----------------------------
+SELECT  URI, COUNT(*) AS TotalCount, COUNT(DISTINCT Imsi) AS UserCount, 
+       COUNT(DISTINCT SiteId) AS LocationCount
+       INTO new_URI_Filtered_5
+FROM         dbo.new_GN_Filtered_4
+GROUP BY URI

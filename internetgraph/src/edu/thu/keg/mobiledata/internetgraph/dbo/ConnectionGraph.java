@@ -7,7 +7,9 @@ package edu.thu.keg.mobiledata.internetgraph.dbo;
 
 import java.io.Serializable;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,9 +17,9 @@ public class ConnectionGraph implements Serializable{
 	static final long serialVersionUID=100001L;
 	final String graphID;
 //	final Logger log;
-	Hashtable<String, User> graphUsers;//user's hash
-	Hashtable<String, Host> graphHosts;//host's hash
-	Hashtable<String, UserHost> graphEdges;//edge's hash
+	HashMap<String, User> graphUsers;//user's hash
+	HashMap<String, Host> graphHosts;//host's hash
+	HashMap<String, UserHost> graphEdges;//edge's hash
 	int AllConnectionTimes;
 	public ConnectionGraph(String id)
 	{
@@ -28,9 +30,9 @@ public class ConnectionGraph implements Serializable{
 	//initial the graph
 	public void initialGraph()
 	{
-		graphUsers= new Hashtable<String, User>();
-		graphHosts= new Hashtable<String, Host>();
-		graphEdges= new Hashtable<String, UserHost>();
+		graphUsers= new HashMap<String, User>();
+		graphHosts= new HashMap<String, Host>();
+		graphEdges= new HashMap<String, UserHost>();
 		AllConnectionTimes=0;
 	}
 	//clear the graph
@@ -216,10 +218,11 @@ public class ConnectionGraph implements Serializable{
 //		}
 		System.out.println();
 		
-		Enumeration<UserHost> uh_en=graphEdges.elements(); 
+//		Enumeration<UserHost> uh_en=graphEdges.elements(); 
+		Iterator<UserHost> uh_en=graphEdges.values().iterator(); 
 		for(int i=0;i<graphEdges.size();i++)
 		{
-			UserHost uh=uh_en.nextElement();
+			UserHost uh=uh_en.next();
 			System.out.println(String.valueOf(i)+":"+uh.user.IMEI+"-->"+uh.host.ADDR+uh.TotalCount+"次，"+uh.ConnectionTable.size()+"共有连接组。");
 			Enumeration<ConnectionDetail> cd_en=uh.ConnectionTable.elements();
 			for(int j=0;j<uh.ConnectionTable.size();j++)

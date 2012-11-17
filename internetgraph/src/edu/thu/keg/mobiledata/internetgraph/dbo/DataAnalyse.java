@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -18,13 +20,18 @@ import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Set;
 
+import edu.thu.keg.mobiledata.internetgraph.HostTag.HostTag;
 import edu.thu.keg.mobiledata.internetgraph.dbprocesser.URIMerger;
 
 public class DataAnalyse {
@@ -99,8 +106,8 @@ public class DataAnalyse {
 		int t;
 		CGraph.initialGraph();
 //		PrintWriter out=new PrintWriter("temp");
-		String query="select Imsi,URI"+
-				" from dbo.new_GN_Filtered_4";
+		String query="select Imsi,GroupNum"+
+				" from dbo.new_GN_Filtered_4_Grouped_For_Character";
 		int i=0;
 		try {
 			stmt = conn.createStatement();
@@ -115,7 +122,7 @@ public class DataAnalyse {
 				
 				
 				uID=String.valueOf(rs.getBigDecimal("Imsi"));
-				Addr=rs.getString("URI").replace(" ", "");
+				Addr=rs.getString("GroupNum").replace(" ", "");
 //				//保留域名
 //				Addr=URIMerger.processUri(Addr);
 //				Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
@@ -161,6 +168,93 @@ public class DataAnalyse {
 	 */
 	public void getHostRelation(DataAnalyse da,ConnectionGraph CG)
 	{
+//		int UserNum=CG.graphUsers.size();
+//		int HostNum=CG.graphHosts.size();
+//		int EdgeNum=CG.graphEdges.size();
+//		System.out.println("Users:"+UserNum);
+//		System.out.println("Hosts:"+HostNum);
+//		System.out.println("Edged:"+EdgeNum);
+//		Set<String> ukey_co=CG.graphUsers.keySet();
+//		Object [] u_Imes=(ukey_co.toArray());
+		
+		
+//		Host[] h_1000=getCharacterVect(CG);
+		HashMap<String, Double> h_1000 []= new HashMap[1000];
+		String [] Host_Addr=new String [1000];
+		
+		double [][]RelationMatrix=new double[1000][1000];
+		LineNumberReader l_r=HostTag.getLNR("HostVectors_Host1000_4.txt");
+		String line;
+		try {
+			line = l_r.readLine();
+			int k=0;
+			while(line!=null)
+			{
+				String s[]=line.split(" ");
+				h_1000[k]= new HashMap<String ,Double>();
+				Host_Addr[k]=(s[0].split(":"))[0];
+				for(int i=1;i<s.length;i++)
+				{
+					
+					String ss[]=s[i].split(":");
+					if(k==1)
+						System.out.print(ss[0]+":"+ss[1]+" ");
+					h_1000[k].put(ss[0], Double.valueOf(ss[1]));
+				}
+				k++;
+				
+				line=l_r.readLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("读入完成");
+		
+//		RelationMatrix=getRalationVector(h_1000);
+		
+		LineNumberReader l_r2=HostTag.getLNR("HostVectors_1000_4.txt");
+		String line2;
+		try {
+			line2 = l_r2.readLine();
+			int k=0;
+			while(line2!=null)
+			{
+				String s[]=line2.split(" ");
+				
+				for(int i=0;i<s.length;i++)
+				{
+					
+					RelationMatrix[k][i]=Double.valueOf(s[i]);
+				}
+				k++;
+				
+				line2=l_r2.readLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("计算完成夹角ok!");
+		ArrayList<HashSet<Integer>> group_Result=getGroupArray(Host_Addr,RelationMatrix);
+		
+		BufferedOutputStream b_f=HostTag.getBOS("Host_Group.txt");
+		for(int i=0;i<group_Result.size();i++)
+		{
+			Iterator<Integer> it_v=group_Result.get(i).iterator();
+			while(it_v.hasNext())
+			  writeString(b_f, Host_Addr[it_v.next()]+" "+String.valueOf(i)+"\n");
+		}
+		try {
+			b_f.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		insertRecord(getConnection("ZhuData"), "Host_Group.txt", "new_GN_Filtered_4_Group");
+	}
+	Host[] getCharacterVect(ConnectionGraph CG)
+	{
 		int UserNum=CG.graphUsers.size();
 		int HostNum=CG.graphHosts.size();
 		int EdgeNum=CG.graphEdges.size();
@@ -169,7 +263,6 @@ public class DataAnalyse {
 		System.out.println("Edged:"+EdgeNum);
 		Set<String> ukey_co=CG.graphUsers.keySet();
 		Object [] u_Imes=(ukey_co.toArray());
-
 //		生成Host的数组h_5000,数组的每一个纬度代表着每个Host的这个维度用户的访问次数,构成特征向量
 		//得到标签数据库的所有数据到一个哈希表中
 //		Hashtable<String, String> HostTagHashTable
@@ -211,37 +304,141 @@ public class DataAnalyse {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return h_5000;
+	}
+	double[][] getRalationVector(Host[] h_5000)
+	{
 //		计算以上生成的Host的数组的夹角值,生成新的相似矩阵
-//		double [][]RelationMatrix= new double[h_5000.length][h_5000.length];
-//		BufferedOutputStream f_b=getBOS("HostVectors_New_Merged.txt");
+		double [][]RelationMatrix= new double[h_5000.length][h_5000.length];
+		BufferedOutputStream f_b=getBOS("HostVectors_1000_4.txt");
 //		BufferedOutputStream f_b2=getBOS("HostVectors_New_Cloumn_Merged.txt");
-//		for(int i=0;i<h_5000.length;i++)
-//		{	
-//			System.out.println(i);
-//			Host  h2= h_5000[i];
-//			String str="";
-//		
-//			for(int j=0;j<h_5000.length;j++)
-//			{
-//				Host  h3= h_5000[j];
-//				if(i<=j)
-//				{
-//					RelationMatrix[i][j]=getCosRec(h2.Eigenvector,h3.Eigenvector);
+		for(int i=0;i<h_5000.length;i++)
+		{	
+			System.out.println(i);
+			Host  h2= h_5000[i];
+			String str="";
+		
+			for(int j=0;j<h_5000.length;j++)
+			{
+				Host  h3= h_5000[j];
+				if(i<=j)
+				{
+					RelationMatrix[i][j]=getCosRec(h2.Eigenvector,h3.Eigenvector);
 //					if(i<j)
 //					{
 //						writeString(f_b2, h2.ADDR+" "+h3.ADDR+" "+
 //								String.format("%.4f",RelationMatrix[i][j])+"\n");
 //					}
-//				}
-//				else
-//					RelationMatrix[i][j]=RelationMatrix[j][i];
-//				writeString(f_b, String.format("%.4f",RelationMatrix[i][j])+" ");
-//			}
-//			writeString(f_b, h2.ADDR+"\n");
-//		}
-//		closeBOS(f_b);
+				}
+				else
+					RelationMatrix[i][j]=RelationMatrix[j][i];
+				writeString(f_b, String.format("%.5f",RelationMatrix[i][j])+" ");
+			}
+			writeString(f_b, h2.ADDR+"\n");
+		}
+		closeBOS(f_b);
 //		closeBOS(f_b2);
-//		System.out.println("计算完成夹角ok!");
+		System.out.println("计算完成夹角ok!");
+		return RelationMatrix;
+	}
+	double[][] getRalationVector(HashMap<String, Double>[] h_5000)
+	{
+//		计算以上生成的Host的数组的夹角值,生成新的相似矩阵
+		double [][]RelationMatrix= new double[h_5000.length][h_5000.length];
+		BufferedOutputStream f_b=getBOS("HostVectors_1000_4.txt");
+//		BufferedOutputStream f_b2=getBOS("HostVectors_New_Cloumn_Merged.txt");
+		for(int i=0;i<h_5000.length;i++)
+		{	if(i%500==0)
+			System.out.println(i);
+			HashMap<String, Double>  h2= h_5000[i];
+			String str="";
+		
+			for(int j=0;j<h_5000.length;j++)
+			{
+				HashMap<String, Double>  h3= h_5000[j];
+				if(i<=j)
+				{
+					RelationMatrix[i][j]=getCosRec(h2,h3);
+//					if(i<j)
+//					{
+//						writeString(f_b2, h2.ADDR+" "+h3.ADDR+" "+
+//								String.format("%.4f",RelationMatrix[i][j])+"\n");
+//					}
+				}
+				else
+					RelationMatrix[i][j]=RelationMatrix[j][i];
+				writeString(f_b, String.format("%.5f",RelationMatrix[i][j])+" ");
+			}
+			writeString(f_b, "\n");
+		}
+		closeBOS(f_b);
+//		closeBOS(f_b2);
+		
+		return RelationMatrix;
+	}
+	ArrayList<HashSet<Integer>> getGroupArray(String[] Host_addr, double [][] Ral_Matrix)
+	{
+		double Alpha=0.7678;
+//		String strGroup[] = new String[Host_addr.length];
+		ArrayList<HashSet<Integer>> group= new ArrayList<HashSet<Integer>>();
+		boolean Added;
+		for(int i=0;i<Ral_Matrix.length;i++)
+		{
+			Added=compareToGroup(group,Ral_Matrix,i,Alpha);
+			if(!Added)
+			{
+				Alpha+=0.00001;
+				i=-1;
+				group.clear();
+//				strGroup= new String[Host_addr.length];
+				System.out.println("更新alpha:"+Alpha);
+			}
+				
+		}
+		System.out.println("一共有组："+group.size());
+//		for(int i=0;i<group.size();i++)
+//		{
+//			if(group.get(i).size()>1)
+//			System.out.println("grop:"+i+" "+group.get(i).size()+" members");
+//		}
+		
+		
+		return group;
+	}
+	boolean compareToGroup(ArrayList<HashSet<Integer>> group,
+			double [][] R_Matrix,int line_num,double alpha)
+	{
+		int index=-1;
+		for(int i= 0;i<group.size();i++)
+		{
+			Iterator<Integer> it_Group=group.get(i).iterator();
+			boolean isBelongTo=true;
+			while(it_Group.hasNext())
+			{
+				int mem=it_Group.next();
+				if(R_Matrix[mem][line_num]<alpha)
+				{
+					isBelongTo=false;
+					break;
+				}
+			}
+			if(isBelongTo)
+			{
+				if(index==-1)//index没设置过，还不属于任何一个group
+					index=i;
+				else if(index!=-1)//已经属于一个group了，返回false
+					return false;
+			}
+		}
+		if(index!=-1)
+			group.get(index).add(line_num);
+		else
+		{
+			 HashSet<Integer> h=new HashSet<Integer>();
+			 h.add(line_num);
+			 group.add(h);
+		}
+		return true;
 	}
 	public Hashtable<String, String> getHostTagHashTable(Connection conn,String tableName)
 	{
@@ -286,12 +483,13 @@ public class DataAnalyse {
 	public Host[] getHostTop(ConnectionGraph CG, int HostMatrixSize)
 	{
 		int HostNum=CG.graphHosts.size();
-		Enumeration<Host> h_en=CG.graphHosts.elements();
+//		Iterator<Host> h_en=CG.graphHosts.elements();
+		Iterator<Host> h_en=CG.graphHosts.values().iterator();
 		Host[] h_all= new Host[HostNum];
 		Host[] h_result= new Host[HostMatrixSize];
 		for(int i=0;i<h_all.length;i++)
 		{
-			h_all[i]=h_en.nextElement();
+			h_all[i]=h_en.next();
 		}
 		//Host排序
 		fastLine(h_all, 0, h_all.length-1);
@@ -333,7 +531,7 @@ public class DataAnalyse {
 		FileOutputStream f;
 		BufferedOutputStream f_b=null;
 		try {	
-			f = new FileOutputStream(outfile,true);
+			f = new FileOutputStream(outfile,false);
 			f_b=new BufferedOutputStream(f);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -357,24 +555,69 @@ public class DataAnalyse {
 	{
 		double re=0;
 		for(int i=0;i<a.length;i++)
-		{	if(Math.abs(a[i])<0.001 )
+		{	if(Math.abs(a[i])<0.0001 )
 				continue;
 			re=re+a[i]*a[i];
 		}
 		
-		return re;
+		return Math.sqrt(re);
+	}
+	public double getMol(HashMap<String, Double> a)
+	{
+		double re=0;
+		Iterator<Double> it_value;
+		if(a.size()>0)
+		{
+			it_value=a.values().iterator();
+			while(it_value.hasNext())
+			{
+				double v=it_value.next();
+				re=re+v*v;
+			}
+		}
+		
+		return Math.sqrt(re);
 	}
 	public double getCosRec(double[] a,double[]  b)
 	{
 	
 		double re=0;
 		for(int i=0;i<a.length;i++)
-		{	if(Math.abs(a[i])<0.001 || Math.abs(b[i])<0.001)
+		{	if(Math.abs(a[i])<1e-3 || Math.abs(b[i])<1e-3)
 				continue;
 			re=re+a[i]*b[i];
 		}
 		
-		return re/Math.sqrt(getMol(a)*getMol(b));
+		return re/(getMol(a)*getMol(b));
+		
+	}
+	public double getCosRec(HashMap<String, Double> a,HashMap<String, Double> b)
+	{
+	
+		double re=0;
+		Iterator<String> it_key;
+		if(a.size()<=b.size())
+		{
+			it_key=a.keySet().iterator();
+			while(it_key.hasNext())
+			{
+				String temp_key=it_key.next();
+				if(b.containsKey(temp_key))
+					re=re+a.get(temp_key)*b.get(temp_key);
+			}
+		}
+		else 
+		{
+			it_key=b.keySet().iterator();
+			while(it_key.hasNext())
+			{
+				String temp_key=it_key.next();
+				if(a.containsKey(temp_key))
+					re=re+a.get(temp_key)*b.get(temp_key);
+			}
+		}
+		
+		return re/(getMol(a)*getMol(b));
 		
 	}
     public  void fastLine (Host [] a,int zuo,int you){
@@ -429,7 +672,38 @@ public class DataAnalyse {
 			e.printStackTrace();
 		}
 	}
-	//
+	public void insertRecord(Connection conn,String fileName, String tableName)
+	{
+		Statement stmt = null;
+		String query3="";
+//		String query4="delete from HostTag where Tag='你妈' ";
+		
+		try {
+			stmt = conn.createStatement();
+			
+			
+			int i=0;
+			LineNumberReader f_b=HostTag.getLNR(fileName);
+			String line="";
+			while(true) {
+				line=f_b.readLine();
+				if(line==null)
+					break;
+				String [] a=line.split(" ");
+				query3="insert into "+tableName+" values('"+a[0]+"','"+a[1]+"') ";
+				stmt.execute(query3);
+			}
+
+			f_b.close();
+			System.out.println("ok!");
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String args[]) 
 	{
 		ConnectionGraph app= new ConnectionGraph("test");
@@ -444,15 +718,15 @@ public class DataAnalyse {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		app=DataAnalyse.inputBinary("graphMap_Mengo_Merged_Filtered.dat");
+//		app=DataAnalyse.inputBinary("graphMap_Mengo_Merged_Filtered.dat");
 		
-		System.out.println("内存建立完毕!");
-		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
+//		System.out.println("内存建立完毕!");
+//		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
 		long t2=System.currentTimeMillis();
-//		app.printAllSystem();
-		System.out.println("URI:"+app.graphHosts.size());
-		System.out.println("Imsi:"+app.graphUsers.size());
-		System.out.println("Edge:"+app.graphEdges.size());
+//	//	app.printAllSystem();
+//		System.out.println("URI:"+app.graphHosts.size());
+//		System.out.println("Imsi:"+app.graphUsers.size());
+//		System.out.println("Edge:"+app.graphEdges.size());
 //		DataAnalyse.outputBinary(app,"graphMap_Mengo_Merged_Filtered.dat");
 //		System.out.println("序列化生成完毕!");
 		bpp.getHostRelation(bpp,app);
@@ -461,4 +735,5 @@ public class DataAnalyse {
 		
 //		app.printAllSystem();
 	}
+	
 }
