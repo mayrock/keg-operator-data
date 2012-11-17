@@ -133,13 +133,13 @@ public class HostTag {
 		}
 		
 	}
-	public BufferedOutputStream getBOS(String Filename)
+	public static BufferedOutputStream getBOS(String Filename)
 	{
 		File outfile=new File(Filename);
 		FileOutputStream f;
 		BufferedOutputStream f_b=null;
 		try {	
-			f = new FileOutputStream(outfile,true);
+			f = new FileOutputStream(outfile,false);
 			f_b=new BufferedOutputStream(f);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -148,7 +148,7 @@ public class HostTag {
        
         return f_b;
 	}
-	public LineNumberReader getLNR(String Filename)
+	public static LineNumberReader getLNR(String Filename)
 	{
 		File infile=new File(Filename);
 		FileInputStream f;
@@ -186,7 +186,7 @@ public class HostTag {
 	           System.out.println(ex);
 	        }// TODO add your handling code here:
 	}
-	public Connection getConnection() {
+	public static Connection getConnection() {
 		//建立连接
 		Connection conn=null;
 		try {
@@ -197,7 +197,7 @@ public class HostTag {
 		System.out.println("Connected to database");
 	    return conn;
 	}
-	public  void disConnection(Connection conn) {
+	public static  void disConnection(Connection conn) {
 		//中断连接
 		try {
 			conn.close();
