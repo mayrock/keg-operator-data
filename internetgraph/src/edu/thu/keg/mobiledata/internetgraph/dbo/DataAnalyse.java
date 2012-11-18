@@ -106,8 +106,8 @@ public class DataAnalyse {
 		int t;
 		CGraph.initialGraph();
 //		PrintWriter out=new PrintWriter("temp");
-		String query="select Imsi,GroupNum"+
-				" from dbo.new_GN_Filtered_4_Grouped_For_Character";
+		String query="select Imsi,URI"+
+				" from dbo.new2_GN_Filtered_4";
 		int i=0;
 		try {
 			stmt = conn.createStatement();
@@ -120,9 +120,10 @@ public class DataAnalyse {
 			String UserAgent="none";
 			while(rs.next() ) {
 				
-				System.out.println(i+"条数据读入!");
+//				System.out.println(i+"条数据读入!");
 				uID=String.valueOf(rs.getBigDecimal("Imsi"));
-				Addr=rs.getString("GroupNum").replace(" ", "");
+//				Addr=rs.getString("GroupNum").replace(" ", "");
+				Addr=rs.getString("URI").replace(" ", "");
 //				//保留域名
 //				Addr=URIMerger.processUri(Addr);
 //				Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
@@ -177,24 +178,21 @@ public class DataAnalyse {
 //		Set<String> ukey_co=CG.graphUsers.keySet();
 //		Object [] u_Imes=(ukey_co.toArray());
 		
-		
-//		Host[] h_1000=getCharacterVect(CG);
 		String [] Host_Addr=new String [1000];
-		HashMap<String, Double>[] h_1000=readCharacterVect("HostVectors_Host1000_4.txt",Host_Addr);
+		Host[] h_1000=getCharacterVect(CG,Host_Addr,1000,"HostCharacterVectors_new2_Host1000_4.txt");//output HostCharacterVecter
+//		HashMap<String, Double>[] h_1000=readCharacterVect("HostVectors_Host1000_4.txt",Host_Addr);
 //		
-//		RelationMatrix=getRalationVector(h_1000);
-		double RelationMatrix[][]=readRaletionMatrix("HostVectors_1000_4.txt", 1000);
-		BufferedOutputStream b_f=HostTag.getBOS("HostVectors_1000_column_4.txt");
-		for(int i=0;i<RelationMatrix.length;i++)
-		{
-			for(int j=i+1;j<RelationMatrix[i].length;j++)
-			{
-				writeString(b_f, Host_Addr[i]+" "+Host_Addr[j]+" "+RelationMatrix[i][j]+"\n");
-			}
-		}
+	//-----------Host_Addr,h_1000都可以出来
+		
+		double [][]RelationMatrix=getRalationVector(h_1000,"HostRelationVectors_new2_1000_4.txt");//Host[] 得到RalationMatrix
+//		double [][]RelationMatrix=readRaletionMatrix("HostRelationVectors_new2_1000_4.txt", 1000);
+		
+		writeColumnRelation(RelationMatrix, Host_Addr,"HostVectors_new2_1000_column_4.txt");//output the column RelationMatrix
+		
 //		
-//		System.out.println("计算完成夹角ok!");
-//		ArrayList<HashSet<Integer>> group_Result=getGroupArray(Host_Addr,RelationMatrix);
+		System.out.println("计算完成夹角ok!");
+		
+//		ArrayList<HashSet<Integer>> group_Result=getGroupArray(Host_Addr,RelationMatrix);//get Group
 //		
 //		BufferedOutputStream b_f=HostTag.getBOS("Host_Group.txt");
 //		for(int i=0;i<group_Result.size();i++)
@@ -212,7 +210,7 @@ public class DataAnalyse {
 //		insertRecord(getConnection("ZhuData"), "Host_Group.txt", "new_GN_Filtered_4_Group");
 	}
 	
-	Host[] getCharacterVect(ConnectionGraph CG)
+	Host[] getCharacterVect(ConnectionGraph CG,String [] host_addr,int topNum,String filename)
 	{
 		int UserNum=CG.graphUsers.size();
 		int HostNum=CG.graphHosts.size();
@@ -228,9 +226,9 @@ public class DataAnalyse {
 //					=getHostTagHashTable(getConnection("ZhuData"),"HostTag_New");
 //		System.out.println("读取标签表完毕!"+HostTagHashTable.size());
 //		=getHostTop(CG ,HostTagHashTable);//得到所有HostTagHashTable里有的Host
-		Host[] h_5000=getHostTop(CG,1000); //得到访问量的前1000个
+		Host[] h_5000=getHostTop(CG,topNum); //得到访问量的前1000个
 		
-		BufferedOutputStream f_b=getBOS("HostVectors_Host890_4.txt");
+		BufferedOutputStream f_b=getBOS(filename);
 		for(int i=0;i<h_5000.length;i++)
 		{
 			Host  h= h_5000[i];
@@ -238,7 +236,7 @@ public class DataAnalyse {
 			System.out.println(i);
 //			遍历每一个host的user然后如果有的话就把该纬度的值设置成user的值
 			String output_line=h.ADDR+":"+h.TotalConnectNum;
-			
+			host_addr[i]=h.ADDR;
 			for(int j=0;j<u_Imes.length;j++)
 			{
 //				System.out.println(j);
@@ -330,15 +328,15 @@ public class DataAnalyse {
 		}
 		return RelationMatrix;
 	}
-	double[][] getRalationVector(Host[] h_5000)
+	double[][] getRalationVector(Host[] h_5000,String filename)
 	{
 //		计算以上生成的Host的数组的夹角值,生成新的相似矩阵
 		double [][]RelationMatrix= new double[h_5000.length][h_5000.length];
-		BufferedOutputStream f_b=getBOS("HostVectors_1000_4.txt");
+		BufferedOutputStream f_b=getBOS(filename);
 //		BufferedOutputStream f_b2=getBOS("HostVectors_New_Cloumn_Merged.txt");
 		for(int i=0;i<h_5000.length;i++)
 		{	
-			System.out.println(i);
+			System.out.println("R"+i);
 			Host  h2= h_5000[i];
 			String str="";
 		
@@ -522,7 +520,24 @@ public class DataAnalyse {
 			h_result[i]=h_all[i];
 		return h_result;
 	}
-	public static void writeFile(String Filename,String Content)
+	public void writeColumnRelation(double[][] RelationMatrix,String[] Host_Addr,String filename)
+	{
+		BufferedOutputStream b_f=HostTag.getBOS(filename);
+		for(int i=0;i<RelationMatrix.length;i++)
+		{
+			for(int j=i+1;j<RelationMatrix[i].length;j++)
+			{
+				writeString(b_f, Host_Addr[i]+" "+Host_Addr[j]+" "+RelationMatrix[i][j]+"\n");
+			}
+		}
+		try {
+			b_f.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+public static void writeFile(String Filename,String Content)
 	{
 		 try {
 	        	File outfile=new File(Filename);
@@ -742,20 +757,20 @@ public class DataAnalyse {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-//		app=DataAnalyse.inputBinary("graphMap_Mengo_Merged_Filtered.dat");
+		app=DataAnalyse.inputBinary("graphMap_Mengo_Filtered_new2_1000.dat");
 		
-//		System.out.println("内存建立完毕!");
-//		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
-//		long t2=System.currentTimeMillis();
+		System.out.println("内存建立完毕!");
+		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
+		long t2=System.currentTimeMillis();
 //
-//		System.out.println("URI:"+app.graphHosts.size());
-//		System.out.println("Imsi:"+app.graphUsers.size());
-//		System.out.println("Edge:"+app.graphEdges.size());
-//		DataAnalyse.outputBinary(app,"graphMap_Mengo_Filtered_Grouped890.dat");
-//		System.out.println("序列化生成完毕!");
+		System.out.println("URI:"+app.graphHosts.size());
+		System.out.println("Imsi:"+app.graphUsers.size());
+		System.out.println("Edge:"+app.graphEdges.size());
+//		DataAnalyse.outputBinary(app,"graphMap_Mengo_Filtered_new2_1000.dat");
+		System.out.println("序列化生成完毕!");
 		bpp.getHostRelation(bpp,app);
 		System.out.println("搞定HostRelation!");
-//		System.out.println("关系矩阵生成时间："+(System.currentTimeMillis()-t2)/(double)1000+"秒");
+		System.out.println("关系矩阵生成时间："+(System.currentTimeMillis()-t2)/(double)1000+"秒");
 		
 //		app.printAllSystem();
 	}
