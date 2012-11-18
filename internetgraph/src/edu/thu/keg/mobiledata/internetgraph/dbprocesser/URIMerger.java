@@ -19,17 +19,18 @@ import edu.thu.keg.mobiledata.internetgraph.dbo.UriInfo;
  *
  */
 public class URIMerger {
-	private static final int MAX_LENGTH = 4;
+	private static final int MAX_LENGTH = 3;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String[] t= new String[4];
+		String[] t= new String[5];
 		t[0] = "sss.5.qq.com.cn";
 		t[1] = "1.sss.5.qq.com";
 		t[2] = "keg.cs.tsinghua.edu.cn";
 		t[3] = "a108.photo.store.qq.com";
+		t[4] = "111.444.876.98";
 		for (String s : t) {
 			System.out.println(processUri(s));
 		}
@@ -46,17 +47,16 @@ public class URIMerger {
 	}
 	public static void generateMap(Connection conn) throws SQLException {
 		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM URI_New");
+		ResultSet rs = stmt.executeQuery("SELECT * FROM new_URI_All_2");
 		System.out.println("Processing...");
-		PreparedStatement ps = conn.prepareStatement("INSERT INTO [ZhuData].[dbo].[URI_Mapping]" 
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO [ZhuData].[dbo].[new_URI_Mapping]" 
 		           + "([OriginalURI],[ProcessedURI])"
 		           + "VALUES (?,?)");
 		while (rs.next()) {
-			int nUser = rs.getInt("UserCount");
-			if (nUser < 10)
-				continue;
 			String orig = rs.getString("URI");
 			String uri = processUri(orig);
+			if (uri.equals(""))
+				continue;
 			ps.setString(1, orig);
 			ps.setString(2, uri);;
 			ps.addBatch();
@@ -105,9 +105,14 @@ public class URIMerger {
 		ret.add("edu");
 		ret.add("com");
 		ret.add("net");
+		ret.add("org");
+		ret.add("gov");
 		return ret;
 	}
 	public static String processUri(String original) {
+		if (original.matches("[\\.\\d]+")) {
+			return "";
+		}
 		String[] arr = original.split("\\.");
 		int totalLength = arr.length;
 		if (totalLength <= MAX_LENGTH)
