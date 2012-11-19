@@ -24,7 +24,7 @@ public class GraphVisualizer {
 	public static void main(String[] args) {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\myc\\Desktop\\" +
-					"Book1.txt"));
+					"doc.txt"));
 			String line;
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
