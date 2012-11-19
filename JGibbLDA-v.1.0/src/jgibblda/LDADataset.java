@@ -259,7 +259,7 @@ public class LDADataset {
 		try {
 			//read number of document
 			String line;
-			int M = 1000;
+			int M = Integer.parseInt(reader.readLine());
 			
 			LDADataset data = new LDADataset(M);
 			for (int i = 0; i < M; ++i){
