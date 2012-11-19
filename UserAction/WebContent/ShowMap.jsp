@@ -41,17 +41,14 @@
     </script>
     <script src="js/showTraceByLoc.js" type="text/javascript">
     </script>
+    <script src="js/showGroupMember.js" type="text/javascript">
+    </script>
     <script src="js/jquery.min.js" type="text/javascript">
     </script>
     <script type="text/javascript">
       function initialize() {
-    	  var mapOptions = {
-    			  center: new google.maps.LatLng(40.003834809598516,116.3263213634491),
-    			  zoom: 16,
-    			  mapTypeId: google.maps.MapTypeId.ROADMAP
-    	  };
-    	  var map = new google.maps.Map(document.getElementById("map"),mapOptions);
-    	  Init();
+//    	  Init();
+    	  InitGroup();
       }
     </script>
   </head>
@@ -66,15 +63,24 @@
     </form>
     <form name="dateForm">
     </form>
-   <div id="inputContainer">
-    <form name="getLoc">
-      location a:<input type="text" size="5" maxlength="4" value="1668" id="datepicker4"/>
-      location b:<input type="text" size="5" maxlength="4" value="1655" id="datepicker5"/><br/>
-      user count:<input type="text" size="5" id="datepicker6"/>
-      <input type="button" value="search" onClick="getMsgFromLoc()"/><br/></div>
-    </form><div id="locContainer">
-    <form name="adjLoc">
-    </form></div>
+    <form name="groups">
+      <input type="checkbox" name="group1" onClick="showMemberOnMap(1)"/>group1
+      <input type="checkbox" name="group2" onClick="showMemberOnMap(2)"/>group2
+      <input type="checkbox" name="group3" onClick="showMemberOnMap(3)"/>group3
+      <input type="checkbox" name="group4" onClick="showMemberOnMap(4)"/>group4
+    </form>
+    <div id="inputContainer">
+      <form name="getLoc">
+        location a:<input type="text" size="5" maxlength="4" value="1668" id="datepicker4"/>
+        location b:<input type="text" size="5" maxlength="4" value="1655" id="datepicker5"/><br/>
+        user count:<input type="text" size="5" id="datepicker6"/>
+        <input type="button" value="search" onClick="getMsgFromLoc()"/><br/>
+      </form>
+    </div>
+    <div id="locContainer">
+      <form name="adjLoc">
+      </form>
+    </div>
     <form name="googleMap">
       <div id="mapContainer">
         <div id="map">

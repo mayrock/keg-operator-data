@@ -1,0 +1,559 @@
+0:14 weixin.qq.com video.qq.com wx.qlogo.cn tc.qq.com msoftdl.360.cn qzs.qq.com v.qq.com mmsns.qpic.cn img1.gtimg.com data.flurry.com rd.wechatapp.com shouji.360.cn mupdate.360.cn inews.qq.com
+1:14 3g.qq.com z.qq.com store.qq.com py.qlogo.cn t2.qpic.cn t3.qpic.cn t1.qpic.cn qzonestyle.gtimg.cn gdt.qq.com 3gimg.qq.com wapav.qq.com imgcache.qq.com t0.qpic.cn f.qq.com
+2:19 hdn.xnimg.cn a.xnimg.cn g3.ykimg.com i1.tdimg.com fmn.rrfmn.com m.renren.com pic02.pomoho.com fmn.rrimg.com v139.56.com 3g.renren.com v19.56.com pic01.pomoho.com mdown.renren.com fmn.xnpic.com g2.ykimg.com g1.ykimg.com pp.sohu.com.cn jebe.xnimg.cn g4.ykimg.com
+3:31 timg01.baidu-1img.cn dh.uc.cn mw.uc.cn m.baidu.com timg01.baidu-2img.cn add.uc.cn gtm.ucweb.com kwurl.ucweb.com nba.sina.cn wap.uc.cn news.uc.cn ucus.ucweb.com finance.sina.cn timg01.baidu-img.cn mynavi.ucweb.com usmsg.ucweb.com blog.sina.cn uc.ucweb.com ucwap.ifeng.com cul.sina.cn u1.sinaimg.cn safe.ucweb.com adslot.uc.cn update.ucweb.com news.sina.cn sports.sina.cn mil.sina.cn sina.cn r3.sinaimg.cn ent.sina.cn bbs1.sina.cn
+4:1 wap.soso.com
+5:1 wap.cmread.com
+6:12 ww2.sinaimg.cn wp3.sina.cn tp1.sinaimg.cn t.sinajs.cn wp2.sina.cn tp3.sinaimg.cn wp4.sina.cn mobile.sina.cn wp1.sina.cn tp2.sinaimg.cn api.weibo.cn tp4.sinaimg.cn
+7:1 book.easou.com
+8:1 imtt.qq.com
+9:1 wap.baidu.com
+10:2 3g.163.com cimg.163.com
+11:2 ota60.91woku.com cg.starflym.com
+12:1 imgt4.baidu.com
+13:5 passport.baidu.com wappass.baidu.com wapp.baidu.com tieba.baidu.com mt1.baidu.com
+14:4 home.rabeticy.com platform.gorudent.com common.91woku.com ds.nabalation.com
+15:1 wapiknow.baidu.com
+16:15 img05.taobaocdn.com assets.taobaocdn.com img03.taobaocdn.com mbuf.alipay.com wwc.taobaocdn.com img.taobaocdn.com m.tmall.com regcheckcode.taobao.com a.tbcdn.cn m.etao.com img02.taobaocdn.com img04.taobaocdn.com m.taobao.com img01.taobaocdn.com wimg.taobao.com
+17:2 www.umeng.co www.umeng.com
+18:10 l.iatu.cn i.ifeng.com iblog.ifeng.com 3g.ifeng.com mob.acs86.com wap.ifeng.com blogfile.ifeng.com mimg.ifeng.com ibbs.ifeng.com wap.bynor.com
+19:3 rescdn.qqmail.com mail.qq.com logo.qqmail.com
+20:7 download.i139.cn wap.i139.cn wap.monternet.com fs.i139.cn i.i139.cn wapad.i139.cn 3g.i139.cn
+21:1 k.sohu.com
+22:1 f.funbox.cc
+23:1 3glogo.gtimg.com
+24:1 q.qlogo.cn
+25:1 3g.sina.com.cn
+26:1 webim.xiaomi.net
+27:1 mnav.fetion.com.cn
+28:1 wireless.mapbar.com
+29:1 v1-service.idreamsky.com
+30:2 m.weather.com.cn www.weather.com.cn
+31:4 i0.uc.cn cpara.uc.cn u.uc.cn u.ucfly.com
+32:1 picwap.soso.com
+33:1 weibo.cn
+34:4 log6.devopenserv.com push7.devopenserv.com img6.devopenserv.net cloud6.devopenserv.com
+35:1 app.qq.com
+36:2 p.yovyuan.com youyuan.com
+37:1 client.cmread.com
+38:2 imap.baidu.com map.baidu.com
+39:4 t.itc.cn m.sohu.com w.sohu.com rr.itc.cn
+40:1 mmsc.monternet.com
+41:1 f.10086.cn
+42:1 dcd.monternet.com
+43:1 app.wapx.cn
+44:1 market.hiapk.com
+45:1 go5.10086.cn
+46:1 uu.qq.com
+47:2 y.sdo.com mreg.sdo.com
+48:2 msoftdlx.360.cn m.360.cn
+49:6 qp.qq.com p.qpic.cn a2.qpic.cn a3.qpic.cn a1.qpic.cn a4.qpic.cn
+50:1 c2.cmvideo.cn
+51:1 www.google.com
+52:1 wap.sogou.com
+53:2 api.renren.com talk.renren.com
+54:3 mo.baidu.com t.baidu.com imo.baidu.com
+55:1 sh1.ucweb.com
+56:8 wap.mlive365.com junshi.3g.cn ad.3g.cn ent.3g.cn news.3g.cn sports.3g.cn wap.3g.cn img.3g.cn
+57:1 sj.91.com
+58:17 zhidao.baidu.com t3.baidu.com drmcmm.baidu.com share.baidu.com picache.baidu.com www.baidu.com wapbaike.baidu.com img.baidu.com c.baidu.com eiv.baidu.com nsclick.baidu.com iknow.bdimg.com t2.baidu.com s1.bdstatic.com t1.baidu.com cpro.baidu.com sclick.baidu.com
+59:1 ucdesk.ucweb.com
+60:1 dcd1.monternet.com
+61:2 file.qidian.cn qidian.cn
+62:3 position.tigerknows.net local.tigerknows.net download.tigerknows.net
+63:1 mini5cn.opera-mini.net
+64:1 mbbms.chinamobile.com
+65:1 baidu.mobi
+66:1 book1.easou.com
+67:3 pasta.dianxinos.com ak.dxsvr.com mk.jccjd.com
+68:7 fe.duomi.com searchfe.duomi.com clientkit.duomi.com cdn.duomi.com logs.duomi.com kxt.duomi.com ad.duomi.com
+69:1 api.duapp.com
+70:2 tx.mmb.cn rep.mmb.cn
+71:1 a4.shuqi.com
+72:9 mobilecdn.kugou.com mobileinstall.kugou.com singerimg.kugou.com trackercdn.kugou.com mobilelog.kugou.com log.kugou.com install2.kugou.com mobileservice.kugou.com cdn.kugou.com
+73:4 www.google-analytics.com m.qiushibaike.com www.qiushibaike.com img.qiushibaike.com
+74:1 qqshow-user.tencent.com
+75:4 wap.58.com pic2.58.com hu.58.com image.58.com
+76:1 store.sogou.com
+77:1 duokoo.baidu.com
+78:8 zp00.easou.com i.easou.com i6.easou.com ad2.easou.com z6.easou.com mp3.easou.com ir.easou.com b.easou.com
+79:6 t0.qlogo.cn t.qlogo.cn t1.qlogo.cn t3.qlogo.cn t4.qpic.cn t2.qlogo.cn
+80:1 a3.shuqi.com
+81:1 notify.365rili.com
+82:1 gostore.3g.cn
+83:1 shouji.sogou.com
+84:1 a2.shuqi.com
+85:4 albs.moji001.com cdn.moji001.com stat.moji001.com global.moji001.com
+86:2 p2.easou.com i2.easou.cn
+87:2 mobile.360.cn hao.360.cn
+88:1 www.cooguo.com
+89:1 ucsec.ucweb.com
+90:4 imgcache.qzoneapp.com tongji.linezing.com pyapp.qlogo.cn app27571-1.qzoneapp.com
+91:1 m5.baidu.com
+92:1 dp.sina.cn
+93:3 img10.360buyimg.com m.360buy.com price.360buyimg.com
+94:1 r.snyu.com
+95:1 go.10086.cn
+96:1 hm.baidu.com
+97:1 wap.myapp.com
+98:1 3gsoft.gtimg.com
+99:1 edensvc.snowfish.cn
+100:1 q2.qlogo.cn
+101:1 q4.qlogo.cn
+102:1 q3.qlogo.cn
+103:1 go2.10086.cn
+104:1 q1.qlogo.cn
+105:1 xa.ucweb.com
+106:1 mobile.yy.com
+107:1 gate.baidu.com
+108:4 lrc.ttpod.com www.10086.cn picdown.ttpod.cn pic.ttpod.cn
+109:1 timg01.baidu-3img.cn
+110:4 app.uc.cn down1.waptw.com cm.uc.cn uccm.uc.cn
+111:1 amigo.bjmcc.net
+112:2 api.kfkx.net yhds.dxsvr.com
+113:4 uc.qglt.com 3g.qglt.com wap.people.com.cn wap.qglt.com
+114:1 book.sina.cn
+115:7 app.metekonline.net base.metekonline.net paypolicy.51mex.com base.51mex.com app.51metek.com app.51mex.com base.51metek.com
+116:6 wap.aoratec.com wap.oppo.com www.08060.com.cn wdl.oppo.com wap1.jaj.cn wap.gionee.com
+117:1 m.hao123.com
+118:5 v1-secure.idreamsky.com v1-feed.idreamsky.com r.domob.cn e.domob.cn scc.domob.cn
+119:1 3g.baidu.com
+120:1 forecast.sina.cn
+121:2 static.youmi.net gw.youmi.net
+122:1 http
+123:1 a.10086.cn
+124:2 wap.ganji.com stacdn201.ganjistatic1.com
+125:2 3g.mopimg.com 3g.mop.com
+126:1 imupdate.3g.cn
+127:1 qun.qq.com
+128:1 .xin668.com.cn
+129:1 st.ucweb.com
+130:1 woa.sdo.com
+131:1 st1.ucweb.com
+132:1 timg03.baidu-2img.cn
+133:5 202.106.230:184 202.106.230:185 202.106.230:186 http://mmsc.monternet.com 202.106.230:183
+134:1 qzone.qzoneapp.com
+135:2 download.cmgame.com gmubeta.g188.net
+136:2 cache.netease.com analytics.163.com
+137:1 book1.sina.cn
+138:1 r3.11222.cn
+139:1 m.10086.cn
+140:1 telenav.mlocso.com
+141:1 t.sina.cn
+142:1 cdn.cooguo.com
+143:1 yy.duowan.com
+144:1 browser.ovi.com.cn
+145:1 psg.ppslove.com
+146:1 wap.tianya.cn
+147:1 wap.cmvideo.cn
+148:1 dict.youdao.com
+149:1 wap.sohu.com
+150:1 vc.gtimg.com
+151:1 www.coolpadlife.com
+152:2 wap.huanqiu.com wapimg1.huanqiu.com
+153:1 rimg.sina.cn
+154:1 api.doumob.com
+155:1 ls.3gogo.net.cn
+156:3 ota.mmarket.com odp.mmarket.com uas.mmarket.com
+157:18 wap.bmccp.com dms-miniapm.gjm123.cn wap.sxapp.cn download.sxapp.cn pim1.monternet.com tips-miniapm.gjm123.cn apm3.sxapp.cn jumplog.sxapp.cn fee-vchat.sxapp.cn dds.sxminiapm.com charge.sxapp.cn dds.sxminiapp.com app-miniapm.gjm123.cn appfiles3.sxapp.cn download.gjm123.cn fee-wap.sxapp.cn admin-apm3.sxapp.cn list-vchat.sxapp.cn
+158:1 weather.moji001.com
+159:1 nm.10086.cn
+160:1 gomarket.goapk.com
+161:4 mobile.meituan.com p0.meituan.net www.meituan.com p1.meituan.net
+162:1 eladies.sina.cn
+163:1 ah2.zhangyue.com
+164:1 3gmok.cn
+165:1 3g.smtmobi.com
+166:1 tj.ucweb.com
+167:1 ossp.voicecloud.cn
+168:1 wapwenku.baidu.com
+169:1 wapnews.i139.cn
+170:1 g.doubleclick.net
+171:3 mw.ucweb.com v.uc.cn uclive.ucweb.com
+172:1 wenwen.soso.com
+173:1 mobile.appchina.com
+174:1 qrk.kuaipai.cn
+175:8 p.vavsp.com f.tongxintong.net app.uubackup.com p.vavdata.com p.vavmob.com ml.starflym.com chkupd.ttutt.cn s3.ttutt.cn
+176:1 feixin.10086.cn
+177:3 www.haeday.com www.klyun.com gw.haeday.com
+178:1 g.qq.com
+179:2 wap.139hb.com kong.net
+180:1 smtfee.2w3g.com
+181:1 ucsecc.ucweb.com
+182:4 sup-fetion.skymobiapp.com 10658588.com nav.fetion.com.cn ssi.fetion.com.cn
+183:2 uc6.ucweb.com u.uc123.com
+184:9 s40-store.ovi.com.cn mobi.ovi.com.cn s40-store.ovi.com store.ovi.com nokia.mobi d.ovi.com metrics.nokia.com store.ovi.mobi s60-store.ovi.com.cn
+185:1 wap.baoruan.com
+186:3 idigger.allyes.com wap.cmgame.com g.10086.cn
+187:1 applist2.sky-mobi.net
+188:1 wk.baidu.com
+189:1 glb.uc.cn
+190:2 shoujibao.net mnews.i139.cn
+191:2 i1.brcdn.cn baoruan.com
+192:1 wap.easou.com
+193:1 u.dxsvr.com
+194:1 api.coolmart.net.cn
+195:3 www.towaysoftnn.com zx3.wapdfw.com www.towaynn.com
+196:20 psg.win5g.com psg.wpesoft.com psg.lowmob.com psg.winmobis.com psg.smallmob.com psg.kfbar.com psg.leftmob.com psg.anzhuogo.com psg.rightmob.com psg.wpmobis.com psg.new5g.com psg.soft5g.com psg.hangamer.com psg.m-5g.com psg.soft876.com psg.goto5g.com psg.msgcen.com psg.mobiters.com psg.powerhe.com psg.win7games.com
+197:1 www.taobao.com
+198:2 ht76.easou.com ht67.easou.com
+199:1 wapmail.10086.cn
+200:2 ytaow.cn www.yigw.net
+201:1 port.fpower.cn
+202:1 ads.wapx.cn
+203:1 clients.google.com
+204:1 widgetapi.dianxinos.com
+205:1 s11.coeeland.com
+206:5 www.21cn.com photo.21cn.com pagead2.googlesyndication.com market.21cn.com news.21cn.com
+207:1 www.52dodo.com
+208:1 mobilem.360.cn
+209:1 www.iciba.com
+210:1 m.1998g.com
+211:3 mbbackend.ganji.com mobds.ganji.com image.ganjistatic1.com
+212:2 ssl.gstatic.com www.google.com.hk
+213:1 wap.10086.cn
+214:1 html5.qq.com
+215:1 wap.cctv.com
+216:1 appsrv1.madserving.com
+217:1 hmma.baidu.com
+218:1 di.ucweb.com
+219:1 [EMPTY]
+220:1 www.juhehd.com
+221:1 portal.wandoujia.com
+222:1 wap.hao123.com
+223:1 maps.google.com
+224:1 ht66.easou.com
+225:7 wap.seetion.com w2.easou.com wap.12559998.com ad3.easou.com n.easou.com s68jc.778899.cn w4.easou.com
+226:1 mobilesearch-update.com
+227:1 m1.baidu.com
+228:1 pic.58control.cn
+229:3 wap.vivo.com.cn pingtcss.qq.com 3gbbk.com
+230:2 qq.ip138.com www.365rili.com
+231:1 store.nearme.com.cn
+232:1 update49.molon110101.com
+233:1 wap.taobao.com
+234:1 iface.iqiyi.com
+235:1 wap.qq.com
+236:1 176mp3.com
+237:3 wap.9game.cn image.9game.cn game.uc.cn
+238:1 www.51coolpad.com
+239:1 m.mapabc.com
+240:3 wap.zol.com.cn 3g.zol.com.cn wappv.zol.com.cn
+241:1 source1.qq.com
+242:2 gmu.g188.net gamepie.g188.net
+243:1 hiphotos.baidu.com
+244:1 www.gotong2008.com
+245:1 pet.qq.com
+246:1 hpgm.mmlive.cn
+247:2 spd.skymobiapp.com rop.skymobiapp.com
+248:1 www.dshine.com
+249:1 w.okooo.com
+250:1 weather1.sina.cn
+251:1 flower.qzone.com
+252:4 xtra2.gpsonextra.net xtra1.gpsonextra.net xtra3.gpsonextra.net i2.sinaimg.cn
+253:1 weather.bbk.com
+254:1 c.moji001.com
+255:1 media.admob.com
+256:1 nav5.mlocso.com
+257:1 hao.uc.cn
+258:2 java.browzone.com venus.browzone.com
+259:1 wap.ucweb.com
+260:2 bgs1105.doormobi.com hp1105.doormobi.com
+261:1 news.baidu.com
+262:1 wap3.ucweb.com
+263:1 chat.xiaomi.net
+264:1 m.qwo99.com
+265:1 dev.voicecloud.cn
+266:2 m.douban.com img3.douban.com
+267:1 proxy.51mrp.com
+268:1 www.google.cn
+269:1 ast.sina.cn
+270:5 am.easou.com 17url.net www.139gz.com portal2.wapmv.net s.easou.com
+271:1 olap.tajiu.net
+272:1 hdss1ftb.fetion.com.cn
+273:1 map.soso.com
+274:1 r7.3gpp.net.cn
+275:1 weather.365rili.com
+276:3 t.qunar.com 3g.qunar.com bc.qunar.com
+277:4 pb.ovi.com.cn wapplat.tom.com wapgame.tom.com wapportal.tom.com
+278:1 dm.10086.cn
+279:1 s.139.com
+280:1 wapmap.baidu.com
+281:2 policy.cbtgame.com policy2.cbtgame.com
+282:2 android.wo.com.cn www.wo.com.cn
+283:1 wap.scmcc.com.cn
+284:1 ws.sensky.com
+285:1 image.baidu.com
+286:4 log.ttpod.com ard.ttpod.com qd.ttpod.com ayyc.ttpod.com
+287:1 qzone.qq.com
+288:2 mobi.zhangyue.com android.zhangyue.com
+289:2 plt.sxapp.cn dds.um163.com
+290:2 dl.kvbar.com wmix.kvbar.com
+291:1 t.sina.com.cn
+292:1 as.vspace.net.cn
+293:1 itunes.apple.com
+294:1 easou.com
+295:1 baidu.com
+296:1 fc.pkingame.net
+297:2 xuan.3g.cn res.3g.cn
+298:1 obase.openjoy.net
+299:1 cache.3g.cn
+300:1 ht65.easou.com
+301:1 gmp.i139.cn
+302:1 tech.sina.cn
+303:1 200.249.249"
+304:1 cloud.hidroid.net
+305:1 users.51.la
+306:1 yydl.duowan.com
+307:1 ad.moji001.com
+308:1 mm.baidu.com
+309:1 suggestion.baidu.com
+310:1 df2.downfun.com
+311:2 t.qq.com mat1.gtimg.com
+312:1 view.sina.cn
+313:1 gequ998.com
+314:1 sup.skymobiapp.com
+315:1 img.ifeng.com
+316:11 a.soft5g.com a.leftmob.com a.win5g.com a.kfbar.com a.m-5g.com a.rightmob.com a.mmlive.cn a.smallmob.com a.goto5g.com a.lowmob.com a.new5g.com
+317:1 fanyi.youdao.com
+318:2 box.newpolar.com.cn box.newpolar.cn
+319:1 voiceking.iflytek.com
+320:2 gdown.baidu.com imgsrc.baidu.com
+321:1 newtq.oppo.com
+322:4 wap1.coeeland.com more8.coeeland.com saveinfo31.coeeland.com saveinfo32.coeeland.com
+323:1 wall.youmi.net
+324:1 m.youdao.com
+325:1 wap.sina.cn
+326:1 fm.kkfun.net
+327:1 api.dianping.com
+328:1 stat.jawa.me
+329:1 hdss1fta.fetion.com.cn
+330:1 auto.sina.cn
+331:1 lotto.sina.cn
+332:1 proc.sina.cn
+333:1 mtk5.wapdfw.com
+334:1 a.shuqiread.com
+335:1 www.blovestorm.com
+336:1 3g.youku.com
+337:1 wthrcdn.etouch.cn
+338:1 wap.youdao.com
+339:4 www.ht87879.com www.xlht16.com www.oo7878.com www.xl17189.com
+340:3 s1.hao123img.com s0.hao123img.com www.hao123.com
+341:1 ma.ucweb.com
+342:1 vcsh.gtimg.com
+343:1 soft.3g.cn
+344:1 u.ttpod.com
+345:1 m.youku.com
+346:1 www.wapforum.org
+347:1 s12.wapwat.com
+348:2 dmenu.51coolbar.com corp.wayin.cn
+349:1 wap.kaixin001.com
+350:1 mp3.3g.cn
+351:1 youhui.cn
+352:7 img5.paipaiimg.com img7.paipaiimg.com img3.paipaiimg.com img1.paipaiimg.com img0.paipaiimg.com img4.paipaiimg.com img2.paipaiimg.com
+353:1 www.cbtgame.com
+354:1 ivr2.men8.cn
+355:1 gh.zhaoying999.com
+356:1 gg.ttpod.com
+357:1 mi.baidu.com
+358:1 mail.10086.cn
+359:1 ftn.qq.com
+360:1 ddt.szdw168.com
+361:1 wap.kvbar.com
+362:1 mobile2.uvan.com
+363:1 sa.pkingame.net
+364:1 head.xiaonei.com
+365:1 cache.soso.com
+366:1 m.huango.cn
+367:2 image2.sina.com.cn www.sinaimg.cn
+368:1 when.365rili.com
+369:1 h2.pkingame.net
+370:1 www.easou.com
+371:1 cn.widsets.com
+372:1 http://3g.qq.com
+373:1 aq.qq.com
+374:3 www.symok.com www.10086pro.com www.asp-work.com
+375:1 www.gstatic.com
+376:1 jingyan.baidu.com
+377:1 mtk6.wapdfw.com
+378:1 mail.book38.com
+379:2 waphi.baidu.com hi.bdimg.com
+380:1 139.10086.cn
+381:1 soso1.gtimg.cn
+382:1 po.aikeye.com
+383:1 wap.51wre.com
+384:1 av.fetion.com.cn
+385:1 3g.qq.com:8080
+386:1 adsclick.uc.cn
+387:1 m.uc.cn
+388:1 read.byread.com
+389:1 cn.samsungapps.com
+390:1 download.browzone.com
+391:2 y.10086.cn images.139cm.com
+392:1 etwap.cn
+393:1 3gqq.com
+394:1 wap.sina.com.cn
+395:1 shell.coeeland.com
+396:3 ext.nokia.mobi m.nokia.com mobile.nokia.com
+397:1 wlclick.soso.com
+398:1 s.xnimg.cn
+399:2 cbjs.baidu.com c.cnzz.com
+400:1 ht75.easou.com
+401:1 gchat.qpic.cn
+402:1 ht68.easou.com
+403:1 menubd.mob178.com
+404:2 b10.handelement.com www.yhlfsl.com
+405:1 update14.molon110201.com
+406:1 down2.uc.cn
+407:4 cnav.netqin.com contentserver.netqin.com sc.netqin.com cavserver.netqin.com
+408:1 qde.qunar.com
+409:1 image.sxadmin.cn
+410:1 www.wodpy.com
+411:1 source2.qq.com
+412:1 navi.uc.cn
+413:1 www.topsdnn.com
+414:1 caclick.qq.com
+415:1 sms.perun.cn
+416:1 spi.zxmob.com
+417:1 stat.zdworks.com
+418:1 music.ovi.com.cn
+419:1 wap.tom.com
+420:1 d01.coeeland.com
+421:1 wapimg.kaixin001.com.cn
+422:2 mv.guotv.com mana.doladola.cn
+423:1 s1.sina.cn
+424:1 svr1.dewav.com
+425:1 www.myapp.com
+426:1 ditu.google.cn
+427:1 search.dqp88.com
+428:1 10086.cn
+429:1 wrmb.opemobi.cn
+430:1 yicha.cn
+431:1 wbk.baidu.com
+432:1 getface.qq.com
+433:1 wenku.baidu.com
+434:3 dl.aqgj.cn s.aqgj.cn su.aqgj.cn
+435:1 d02.coeeland.com
+436:1 www.g3handwireless.com
+437:1 3g.778899.cn
+438:1 blog.163.com
+439:3 d1.szsea.net d1.171708.com d1.haokk.net
+440:1 cnzz.mmstat.com
+441:1 ocsp.verisign.com
+442:1 config.handinrelax.com
+443:1 imn.baidu.com
+444:1 www.mobilegoldenplan.com
+445:1 www.stonehd.com
+446:1 oldtq.oppo.com
+447:8 spconfig.pokjuk.com api.notiy.net api.yunler.net service.fiteri.com api.italke.net service.esisie.com service.aritop.com api.lanery.net
+448:1 www.bldre.com
+449:1 www.3gqq.com
+450:1 video.sina.cn
+451:1 ap8.zmapp.com
+452:1 139.pushmail.cn
+453:2 s.vv0vv.com wap.vv0vv.com
+454:1 fe.huashangtech.com
+455:1 go.mob189.com
+456:3 appfiles.sxapp.cn list.mno6.cn apm.sxapp.cn
+457:1 www.crosstan.com
+458:1 eewap1.zmapp.com
+459:1 mmsc.myuni.com.cn
+460:1 wm.10086.cn
+461:1 sd.kvbar.com
+462:1 box2.newpolar.cn
+463:2 wap.lenovomobile.com megfun.com
+464:1 api.wedmob.net
+465:1 cfg.mobimediaad.com
+466:1 nm.chinamobile.com
+467:1 spconfig.kuaituwang.net
+468:1 config.iwanshequ.com
+469:1 www.southpoi.com
+470:1 login.sina.cn
+471:1 o.shifen.com
+472:1 vip.778899.cn
+473:1 rpt.zifei.cn
+474:2 dmsminiapm.sxapp.cn miniapm.sxapp.cn
+475:1 down-charge.sxapp.cn
+476:1 payinfo.51mex.com
+477:1 http://dsm.wingtech.cn
+478:1 b.macozone.com
+479:1 imgl.fetionpic.com
+480:1 ads.uc.cn
+481:1 whelper.skymobiapp.com
+482:1 wap.17url.net
+483:1 wap.fxun3g.com
+484:1 ap2.mz30.cn
+485:1 qqspace-av.qq.com
+486:1 www.wxkjtec.com
+487:1 ap5.mz30.cn
+488:1 js.i139.cn
+489:1 cv.annimm.com
+490:1 114wap.kk570.com
+491:1 dw1005.szdw168.com
+492:1 s12.coeeland.com
+493:1 www.qq.com
+494:1 wap.uuwldh.com
+495:1 mad.baidu.com
+496:1 nvcsz.gtimg.com
+497:1 mtk4.wapdfw.com
+498:1 www.sky-mobi.com
+499:1 go.ttpod.com
+500:1 mtkupdate9.meswap.cn
+501:1 url.cn
+502:1 ctl.mtkloft.cn
+503:1 x.funbox.cc
+504:1 nokiau.org
+505:1 file.i9i8.com
+506:1 cn.samsungmobile.com
+507:1 http://wap.monternet.com
+508:1 vip1.mobileshouji.com
+509:1 plan.pgame123.com
+510:1 fm.kkfun.com
+511:1 wap.opemobi0.cn
+512:1 36o.mobi
+513:1 ec.easou.com
+514:1 midc.monternet.com
+515:1 mp.qq.com
+516:1 xml.opera.com
+517:1 cmg.netqin.com
+518:1 zx.wapdfw.com
+519:1 cbe.51coolbar.com
+520:1 0.xin668.com.cn
+521:1 dl2.ekool-tech.com
+522:1 download.dqp88.com
+523:1 ervice.ej-tek.com
+524:1 www.tecine.com
+525:1 update.sz-dragon.cn
+526:1 sp.imichat.com
+527:1 138.100.244
+528:1 ap1.mz30.cn
+529:3 m.lihy.org h.ylrx.net st.hdwangku.com
+530:1 config.shfeedo.com
+531:1 t.i139.cn
+532:1 ap1.zmapp.com
+533:1 3g.rock007.com
+534:1 s1.hxssmob.com
+535:3 te.hulianpc.com di.hymth.com so.slzw.net
+536:1 dl.awcmt.com
+537:1 www.fivesky.net
+538:6 mcs1.dto4g.com mcs1.ato4g.com mcs1.into4g.com.cn mcs1.cto4g.com mcs1.into4g.mobi mcs1.bto4g.com
+539:1 ap5.zmapp.com
+540:2 s01.shsxh.com s01.zgdjxt.com
+541:1 f5.yy820.com
+542:1 www.adlyuyingwang.com
+543:1 www.bee-nest.com
+544:1 1o086.net
+545:1 ap2.zmapp.com
+546:1 wsms.51coolbar.com
+547:1 service2.appgames.cn
+548:1 9991.51coo1bar.com
+549:1 app1x.elevensky.net
+550:1 s.imichat.com
+551:1 www.marshine.com
+552:1 http://go.10086.cn
+553:1 drk.51base.cn
+554:1 1207.3g90.com
+555:2 update.i3gi3g.com update.9202.cn
+556:1 box.iyacoo.cn
+557:1 mmsc.montemet.com
+558:1 1617.3g90.com
