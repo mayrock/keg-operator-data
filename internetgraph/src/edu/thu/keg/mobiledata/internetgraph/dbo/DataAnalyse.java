@@ -11,6 +11,7 @@ import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -179,21 +180,46 @@ public class DataAnalyse {
 //		Object [] u_Imes=(ukey_co.toArray());
 		
 		String [] Host_Addr=new String [1000];
-		Host[] h_1000=getCharacterVect(CG,Host_Addr,1000,"HostCharacterVectors_new2_Host1000_4.txt");//output HostCharacterVecter
-//		HashMap<String, Double>[] h_1000=readCharacterVect("HostVectors_Host1000_4.txt",Host_Addr);
+//		Host[] h_1000=getCharacterVect(CG,Host_Addr,1000,"HostCharacterVectors_new2_Host1000_4.txt");//output HostCharacterVecter
+//		HashMap<String, Double>[] h_1000=readCharacterVect("HostCharacterVectors_new2_Host1000_4.txt",Host_Addr);
 //		
 	//-----------Host_Addr,h_1000都可以出来
 		
-		double [][]RelationMatrix=getRalationVector(h_1000,"HostRelationVectors_new2_1000_4.txt");//Host[] 得到RalationMatrix
-//		double [][]RelationMatrix=readRaletionMatrix("HostRelationVectors_new2_1000_4.txt", 1000);
+//		double [][]RelationMatrix=getRalationVector(h_1000,"HostRelationVectors_new2_1000_4.txt");//Host[] 得到RalationMatrix
+		double [][]RelationMatrix=readRaletionMatrix("HostRelationVectors_new2_1000_4.txt", 1000,Host_Addr);
+	
 		
-		writeColumnRelation(RelationMatrix, Host_Addr,"HostVectors_new2_1000_column_4.txt");//output the column RelationMatrix
+		
+//		writeColumnRelation(RelationMatrix, Host_Addr,"HostVectors_new2_1000_column_4.txt");//output the column RelationMatrix
 		
 //		
 		System.out.println("计算完成夹角ok!");
+		double yu=0.3,delta=1e-3;
+		while(yu<0.81)
+		{
+			ArrayList<HashSet<Integer>> group_Result=getGroupArray(Host_Addr,yu,RelationMatrix);//get Group
+			
+			if(delta >Math.abs(0.3-yu) || delta >Math.abs(0.8-yu)|| delta >Math.abs(0.5-yu) )
+			{
+				BufferedOutputStream b_f=HostTag.getBOS("Group_alpha-"+String.valueOf(yu)+".txt");
+				for(int i=0;i<group_Result.size();i++)
+				{
+					
+					Iterator<Integer> h_i=group_Result.get(i).iterator();
+					String str=String.valueOf(i)+":"+group_Result.get(i).size();
+					while(h_i.hasNext())
+					{
+						str=str+" "+Host_Addr[h_i.next()];
+					}
+					str=str+"\n";
+					writeString(b_f, str);
+				}
+			}
+			
+			yu+=0.01;
+		}
 		
-//		ArrayList<HashSet<Integer>> group_Result=getGroupArray(Host_Addr,RelationMatrix);//get Group
-//		
+		//		
 //		BufferedOutputStream b_f=HostTag.getBOS("Host_Group.txt");
 //		for(int i=0;i<group_Result.size();i++)
 //		{
@@ -300,7 +326,7 @@ public class DataAnalyse {
 		
 		return h_1000;
 	}
-	double [][] readRaletionMatrix(String fineName,int lineNum)
+	double [][] readRaletionMatrix(String fineName,int lineNum,String [] host_addr)
 	{
 		double RelationMatrix[][]= new double [lineNum][lineNum];
 		LineNumberReader l_r2=HostTag.getLNR(fineName);
@@ -314,8 +340,10 @@ public class DataAnalyse {
 				
 				for(int i=0;i<s.length;i++)
 				{
-					
-					RelationMatrix[k][i]=Double.valueOf(s[i]);
+					if(i<s.length-1)
+						RelationMatrix[k][i]=Double.valueOf(s[i]);
+					else
+						host_addr[k]=s[i];
 				}
 				k++;
 				
@@ -398,18 +426,18 @@ public class DataAnalyse {
 		
 		return RelationMatrix;
 	}
-	ArrayList<HashSet<Integer>> getGroupArray(String[] Host_addr, double [][] Ral_Matrix)
+	ArrayList<HashSet<Integer>> getGroupArray(String[] Host_addr,double alpha, double [][] Ral_Matrix)
 	{
-		double Alpha=0.7678;
+		double Alpha=alpha;
 //		String strGroup[] = new String[Host_addr.length];
 		ArrayList<HashSet<Integer>> group= new ArrayList<HashSet<Integer>>();
 		boolean Added;
 		for(int i=0;i<Ral_Matrix.length;i++)
 		{
-			Added=compareToGroup(group,Ral_Matrix,i,Alpha);
+			Added=compareToGroup(group,Ral_Matrix,i,Alpha,Host_addr);
 			if(!Added)
 			{
-				Alpha+=0.00001;
+				Alpha+=0.0001;
 				i=-1;
 				group.clear();
 //				strGroup= new String[Host_addr.length];
@@ -417,7 +445,7 @@ public class DataAnalyse {
 			}
 				
 		}
-		System.out.println("一共有组："+group.size());
+		System.out.println("阈值:"+Alpha+",一共有组："+group.size());
 //		for(int i=0;i<group.size();i++)
 //		{
 //			if(group.get(i).size()>1)
@@ -428,32 +456,80 @@ public class DataAnalyse {
 		return group;
 	}
 	boolean compareToGroup(ArrayList<HashSet<Integer>> group,
-			double [][] R_Matrix,int line_num,double alpha)
+			double [][] R_Matrix,int line_num,double alpha,String [] host_addr)
 	{
+//		R_Matrix[342][278]=0.7;
+//		R_Matrix[278][342]=0.7;
+//		R_Matrix[11][3]=0.7;
+//		R_Matrix[3][11]=0.7;
+//		R_Matrix[46][32]=0.7;
+//		R_Matrix[32][46]=0.7;
+//		R_Matrix[39][34]=0.7;
+//		R_Matrix[34][39]=0.7;
 		int index=-1;
+		ArrayList<Integer> index_g=new ArrayList<Integer>();
 		for(int i= 0;i<group.size();i++)
 		{
 			Iterator<Integer> it_Group=group.get(i).iterator();
-			boolean isBelongTo=true;
+			boolean isBelongTo=false;
 			while(it_Group.hasNext())
 			{
 				int mem=it_Group.next();
-				if(R_Matrix[mem][line_num]<alpha)
+				if(R_Matrix[mem][line_num]>=alpha)
 				{
-					isBelongTo=false;
+					isBelongTo=true;
 					break;
 				}
 			}
 			if(isBelongTo)
 			{
+				index_g.add(i);
 				if(index==-1)//index没设置过，还不属于任何一个group
 					index=i;
 				else if(index!=-1)//已经属于一个group了，返回false
-					return false;
+				{
+//					Iterator<Integer> it_Group1=group.get(i).iterator();
+//					Iterator<Integer> it_Group2=group.get(index).iterator();
+//					System.out.println(alpha);
+//					System.out.println(host_addr[line_num]+"和下两组都相似");
+//					System.out.print("第一组:");
+//					int ii=0,jj=0;
+//					while(it_Group1.hasNext())
+//					{
+//						ii=it_Group1.next();
+//						System.out.print(host_addr[ii]+" ");
+//					}
+//					System.out.println();
+//					System.out.print("第二组:");
+//					while(it_Group2.hasNext())
+//					{
+//						jj=it_Group2.next();
+//						System.out.print(host_addr[jj]+":");
+//						System.out.print(ii+" "+jj+" "+R_Matrix[jj][ii]+" ");
+//					}
+//					System.out.println();
+//					return false;
+				}
 			}
 		}
 		if(index!=-1)
-			group.get(index).add(line_num);
+		{
+//			group.get(index).add(line_num);//没有重复的时候,不可以传递合并
+		//---------------------------------------------------------------//	
+			int mom_group=index_g.get(0);
+			for(int i=1;i<index_g.size();i++)
+			{
+				
+				group.get(mom_group).addAll(group.get(index_g.get(i)));
+				
+			}
+			group.get(mom_group).add(line_num);
+			for(int i=index_g.size()-1;i>0;i--)
+			{
+				int del_member=index_g.get(i);
+				group.remove(del_member);
+			}
+		}
 		else
 		{
 			 HashSet<Integer> h=new HashSet<Integer>();
@@ -757,19 +833,19 @@ public static void writeFile(String Filename,String Content)
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		app=DataAnalyse.inputBinary("graphMap_Mengo_Filtered_new2_1000.dat");
+//		app=DataAnalyse.inputBinary("graphMap_Mengo_Filtered_new2_1000.dat");
 		
-		System.out.println("内存建立完毕!");
-		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
+//		System.out.println("内存建立完毕!");
+//		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
 		long t2=System.currentTimeMillis();
 //
-		System.out.println("URI:"+app.graphHosts.size());
-		System.out.println("Imsi:"+app.graphUsers.size());
-		System.out.println("Edge:"+app.graphEdges.size());
+//		System.out.println("URI:"+app.graphHosts.size());
+//		System.out.println("Imsi:"+app.graphUsers.size());
+//		System.out.println("Edge:"+app.graphEdges.size());
 //		DataAnalyse.outputBinary(app,"graphMap_Mengo_Filtered_new2_1000.dat");
-		System.out.println("序列化生成完毕!");
+//		System.out.println("序列化生成完毕!");
 		bpp.getHostRelation(bpp,app);
-		System.out.println("搞定HostRelation!");
+//		System.out.println("搞定HostRelation!");
 		System.out.println("关系矩阵生成时间："+(System.currentTimeMillis()-t2)/(double)1000+"秒");
 		
 //		app.printAllSystem();
