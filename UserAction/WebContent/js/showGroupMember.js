@@ -8,6 +8,10 @@ function InitGroup() {
 		mrkrArr[i-1] = new Array();
 		getGroupInfo(i);
 	}
+	for(var i = 1;i <= 4;i++) {
+		mrkrArr[i+3] = new Array();
+		getGroupInfo_2(i);
+	}
 	var mapOptions = {
 			center: mrkrArr[0][0].position,
 			zoom: 12,
@@ -38,6 +42,27 @@ function getGroupInfo(i) {
 				locData.locinfo[j] = loc_list[j];
 			}
 			saveGroupInfo(i-1);
+		}
+	});
+}
+
+function getGroupInfo_2(i) {
+	$.ajax({
+		type : "get",
+		async: false,
+		//请求与回应同步
+		url : "GetGroup_2.action",
+		data : "groupNum = " + i,
+		success : function(msg) {
+			var result = eval("(" + msg + ")");
+			var loc_list = result.locinfo;
+			locData = new Object;
+			locData.locinfo = new Array();
+			//初始化记录经纬度信息的数组
+			for(var j = 0;j < loc_list.length;j++) {
+				locData.locinfo[j] = loc_list[j];
+			}
+			saveGroupInfo(i+3);
 		}
 	});
 }

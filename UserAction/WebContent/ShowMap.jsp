@@ -64,10 +64,15 @@
     <form name="dateForm">
     </form>
     <form name="groups">
-      <input type="checkbox" name="group1" onClick="showMemberOnMap(1)"/>group1
+      data1<input type="checkbox" name="group1" onClick="showMemberOnMap(1)"/>group1
       <input type="checkbox" name="group2" onClick="showMemberOnMap(2)"/>group2
       <input type="checkbox" name="group3" onClick="showMemberOnMap(3)"/>group3
       <input type="checkbox" name="group4" onClick="showMemberOnMap(4)"/>group4
+      <br/>
+      data2<input type="checkbox" name="group5" onClick="showMemberOnMap(5)"/>group5
+      <input type="checkbox" name="group6" onClick="showMemberOnMap(6)"/>group6
+      <input type="checkbox" name="group7" onClick="showMemberOnMap(7)"/>group7
+      <input type="checkbox" name="group8" onClick="showMemberOnMap(8)"/>group8
     </form>
     <div id="inputContainer">
       <form name="getLoc">
