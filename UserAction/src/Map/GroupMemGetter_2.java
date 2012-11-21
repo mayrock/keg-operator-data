@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 import com.opensymphony.xwork2.ActionContext;
 
-public class GroupMemGetter {
+public class GroupMemGetter_2 {
 
 	private double[] lat = new double[2000];
 	private double[] lng = new double[2000];
@@ -76,7 +76,7 @@ public class GroupMemGetter {
 		int i = 0;
 		try{
 			String inputPath = "C:\\Users\\wuchao\\Git\\keg-operator-data\\result\\location\\" +
-					"500_17features\\Result" + groupNum_new + ".txt";
+					"500_21features\\Result" + groupNum_new + ".txt";
 			System.out.println(inputPath);
 			Scanner in = new Scanner(new File(inputPath));
 			in.nextLine();

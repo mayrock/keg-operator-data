@@ -11,5 +11,7 @@
 		</action>
 		<action name="GetGroup" class="Map.GroupMemGetter">
 		</action>
+		<action name="GetGroup_2" class="Map.GroupMemGetter_2">
+		</action>
 	</package>
 </struts>

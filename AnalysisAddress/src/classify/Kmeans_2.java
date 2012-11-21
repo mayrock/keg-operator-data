@@ -11,11 +11,11 @@ import java.util.Scanner;
  * @author Ariesnix
  *
  */
-public class Kmeans {
+public class Kmeans_2 {
 
-	private int[][] pattern = new int[2000][20];//原始数据
-	private double[][] norm = new double[2000][20];//归一化后数据
-	private double[][] clusterCenter = new double[5][20];//簇中心点数据
+	private int[][] pattern = new int[2000][30];//原始数据
+	private double[][] norm = new double[2000][30];//归一化后数据
+	private double[][] clusterCenter = new double[5][30];//簇中心点数据
 	private int[][] clusterMember = new int[5][2000];//簇包含成员
 	private String[][] countFile = new String[2000][40];//全部原始数据
 	private int numPatterns;
@@ -34,7 +34,7 @@ public class Kmeans {
 			title = in.nextLine();
 			String[] s = title.split("\t");
 			l = s.length;
-			sizeVector = l - 16;
+			sizeVector = l - 6;
 			int c = 0;
 			String str;
 			while (in.hasNextLine()) {
@@ -44,18 +44,38 @@ public class Kmeans {
 					continue;
 				for (int i = 0; i < l; i++)
 					countFile[c][i] = s[i];
-				for (int i = 0; i < sizeVector; i++)
-					pattern[c][i] = Integer.parseInt(s[7 + i]);
+				for (int i = 0; i < sizeVector - 6; i++)
+					pattern[c][i] = Integer.parseInt(s[3 + i]);
+				for (int i = sizeVector - 6; i < sizeVector; i++)
+					pattern[c][i] = Integer.parseInt(s[i + 6]);
 				c++;
 			}
 			numPatterns = c;
 			int total;
-			for(int i = 0; i < sizeVector; i++) {
+			for (int i = 0; i < 4; i++) {
+				total = 0;
+				for(int j = 0; j < numPatterns; j++)
+					total += pattern[j][i];
+				for(int j = 0; j < numPatterns; j++) {
+					norm[j][i] = ((double)pattern[j][i]) / total;
+					norm[j][i] *= 0;
+				}
+			}
+			for(int i = 4; i < sizeVector - 6; i++) {
 				total = 0;
 				for(int j = 0; j < numPatterns; j++)
 					total += pattern[j][i];
 				for(int j = 0; j < numPatterns; j++)
 					norm[j][i] = ((double)pattern[j][i]) / total;
+			}
+			for (int i = sizeVector - 6; i < sizeVector; i++) {
+				total = 0;
+				for(int j = 0; j < numPatterns; j++)
+					total += pattern[j][i];
+				for(int j = 0; j < numPatterns; j++) {
+					norm[j][i] = ((double)pattern[j][i]) / total;
+					norm[j][i] *= 0;
+				}
 			}
 			System.out.println("numPatterns = " + numPatterns + "\tsizeVector = " + sizeVector +
 					"\tnumClusters = " + numClusters);
@@ -179,16 +199,12 @@ public class Kmeans {
 			try {
 				PrintWriter out = new PrintWriter("C:\\Users\\wuchao\\Git\\" +
 						"keg-operator-data\\result\\location\\" +
-						"500_17features_new\\Result" + (i + 1) + ".txt");
+						"500_17features_new2\\Result" + (i + 1) + ".txt");
 				out.print("平均值");
 				for (int j = 0; j < sizeVector; j++)
 					out.print("\t" + clusterCenter[i][j]);
 				out.println();
-				out.print("SiteId\tLatitude\tLongitude\tUserCount\t" +
-						"MinuteCount\tURICount\tTotalCount");
-				for(int j = 0;j < aeraSpecies.length;j++)
-					out.print("\t" + aeraSpecies[j]);
-				out.println("\t工作区\t生活区\t商业区");
+				out.println(title);
 				for(int j = 1; j <= clusterMember[i][0]; j++) {
 					for (int k = 0; k < l - 1; k++)
 						out.print(countFile[clusterMember[i][j]][k] + "\t");
@@ -203,7 +219,7 @@ public class Kmeans {
 	}
 
 	public static void main(String[] args) {
-		Kmeans kmean=new Kmeans();
+		Kmeans_2 kmean = new Kmeans_2();
 		kmean.loadPatterns("C:\\Users\\wuchao\\Git\\" +
 				"keg-operator-data\\result\\location\\" +
 				"AreaCount_500_allKind_new.txt");
