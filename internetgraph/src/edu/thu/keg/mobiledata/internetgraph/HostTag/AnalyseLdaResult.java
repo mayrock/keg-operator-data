@@ -20,7 +20,7 @@ public class AnalyseLdaResult {
 		this.Column=column;
 		this.Line=line;
 		//get the lda result
-		Lda_Matrix=readLdaResult(Line, Column,"model-final.theta");
+		Lda_Matrix=readLdaResult(Line, Column,"model-00500.theta");
 		System.out.print("读入lda完成!");
 		HashMap<String,Integer>[] Group_Info= new HashMap[Line];//每个组是个哈西表,对应着tag以及每个tag的访问数量
 		int [] Goup_totalCount=new int[Line];//记录每个group的taotalcount
@@ -158,7 +158,7 @@ public class AnalyseLdaResult {
 				{
 					times++;
 					String k_tag=gi[k].Tag;
-					double rate=0.7;
+					double rate=0.5;
 					if(type_Result.containsKey(k_tag))
 					{
 						if(Lda_Matrix[i][j]>rate)
