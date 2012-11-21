@@ -76,7 +76,7 @@ public class GroupMemGetter {
 		int i = 0;
 		try{
 			String inputPath = "C:\\Users\\wuchao\\Git\\keg-operator-data\\result\\location\\" +
-					"500_17features\\Result" + groupNum_new + ".txt";
+					"200_27features_0.75_4\\Result" + groupNum_new + ".txt";
 			System.out.println(inputPath);
 			Scanner in = new Scanner(new File(inputPath));
 			in.nextLine();

@@ -13,20 +13,18 @@ import java.util.Scanner;
  */
 public class Kmeans_2 {
 
-	private int[][] pattern = new int[2000][30];//原始数据
-	private double[][] norm = new double[2000][30];//归一化后数据
-	private double[][] clusterCenter = new double[5][30];//簇中心点数据
-	private int[][] clusterMember = new int[5][2000];//簇包含成员
-	private String[][] countFile = new String[2000][40];//全部原始数据
+	private int[][] pattern = new int[2000][15];//原始数据
+	private double[][] norm = new double[2000][15];//归一化后数据
+	private double[][] clusterCenter = new double[20][15];//簇中心点数据
+	private int[][] clusterMember = new int[20][2000];//簇包含成员
+	private String[][] countFile = new String[2000][20];//全部原始数据
 	private int numPatterns;
 	private int sizeVector;
 	private int numClusters = 4;
 	private int l;
 	private String title;
-	private final static String[] aeraSpecies = {
-		"美食","休闲娱乐","购物","结婚","宾馆酒店","旅游景点",
-		"教育培育","生活服务","医疗服务","丽人","汽车服务",
-		"运动健身","商务服务","机构","金融银行","楼宇小区","交通出行"};
+	private double var = 0.75;
+	private double[] var2 = {0.47,1.0,0.4,1.0};
 
 	private void loadPatterns(String input) {
 		try {
@@ -34,34 +32,21 @@ public class Kmeans_2 {
 			title = in.nextLine();
 			String[] s = title.split("\t");
 			l = s.length;
-			sizeVector = l - 6;
+			sizeVector = l - 7;
 			int c = 0;
 			String str;
 			while (in.hasNextLine()) {
 				str = in.nextLine();
 				s = str.split("\t");
-				if (s[l - 9].equals("0") && s[l - 8].equals("0") && s[l - 7].equals("0"))
-					continue;
 				for (int i = 0; i < l; i++)
 					countFile[c][i] = s[i];
-				for (int i = 0; i < sizeVector - 6; i++)
-					pattern[c][i] = Integer.parseInt(s[3 + i]);
-				for (int i = sizeVector - 6; i < sizeVector; i++)
-					pattern[c][i] = Integer.parseInt(s[i + 6]);
+				for (int i = 0; i < sizeVector; i++)
+					pattern[c][i] = Integer.parseInt(s[i + 7]);
 				c++;
 			}
 			numPatterns = c;
 			int total;
-			for (int i = 0; i < 4; i++) {
-				total = 0;
-				for(int j = 0; j < numPatterns; j++)
-					total += pattern[j][i];
-				for(int j = 0; j < numPatterns; j++) {
-					norm[j][i] = ((double)pattern[j][i]) / total;
-					norm[j][i] *= 0;
-				}
-			}
-			for(int i = 4; i < sizeVector - 6; i++) {
+			for(int i = 0; i < sizeVector - 6; i++) {
 				total = 0;
 				for(int j = 0; j < numPatterns; j++)
 					total += pattern[j][i];
@@ -74,14 +59,13 @@ public class Kmeans_2 {
 					total += pattern[j][i];
 				for(int j = 0; j < numPatterns; j++) {
 					norm[j][i] = ((double)pattern[j][i]) / total;
-					norm[j][i] *= 0;
+					norm[j][i] *= var;
 				}
 			}
 			System.out.println("numPatterns = " + numPatterns + "\tsizeVector = " + sizeVector +
 					"\tnumClusters = " + numClusters);
 			in.close();
 		}catch (IOException e) {
-			System.out.println(e);
 			System.out.println("Cann't read file " +  new File(input).getAbsolutePath());
 		}
     }
@@ -108,7 +92,32 @@ public class Kmeans_2 {
 			System.out.println("Run " + runCount++ + " times!");
 			runSimpleTime();
 			converged = calNewCenter();
+			for (int i = 0; i < numClusters; i++) {
+				System.out.print("ClusterCenter[" + i + "] =");
+				for (int j = 0; j < sizeVector; j++)
+					System.out.print(" " + clusterCenter[i][j]);
+				System.out.println();
+			}
 //			showCluster();
+		}
+		delNotImp();
+	}
+
+	private void delNotImp() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < numClusters; i++) {
+			double max = 0.0;
+			int count = 1;
+			System.out.print(clusterMember[i][0]);
+			for (int j = 1; j <= clusterMember[i][0]; j++)
+				if(Distance(clusterMember[i][j],i) > max)
+					max = Distance(clusterMember[i][j],i);
+			for (int j = 1; j <= clusterMember[i][0]; j++)
+				if(Distance(clusterMember[i][j],i) <= max * var2[i]) {
+					clusterMember[i][count] = clusterMember[i][j];
+					count ++;
+				}
+			clusterMember[i][0] = count - 1;
 		}
 	}
 
@@ -119,7 +128,7 @@ public class Kmeans_2 {
 			clusterMember[i][0] = 0;
 		for (int pat = 0; pat < numPatterns; pat++) {
 			clustid = findClosestCluster(pat);
-			System.out.println("pattern " + pat + " belong to cluster[" + clustid + "]");
+	//		System.out.println("pattern " + pat + " belong to cluster[" + clustid + "]");
 			clusterMember[clustid][0] += 1;
 			clusterMember[clustid][clusterMember[clustid][0]] = pat;
 		}
@@ -132,8 +141,8 @@ public class Kmeans_2 {
 		min = 9.9e+99;
 		for (int i = 0; i < numClusters; i++) {
 			d = Distance(pat,i);
-			System.out.println("pattern " + pat + " to cluster [" + i + "]'s " +
-					"distance is " + d + "!");
+		//	System.out.println("pattern " + pat + " to cluster [" + i + "]'s " +
+		//			"distance is " + d + "!");
 			if (d < min) {
 				min = d;
 				clustID = i;
@@ -149,7 +158,7 @@ public class Kmeans_2 {
 	private double Distance(int p, int c) {
 		//计算一个点到簇中心点的距离
 		double x = 0.0;
-		System.out.println("Now calculate pattern " + p + " to cluster[" + c + "]'s distance:");
+	//	System.out.println("Now calculate pattern " + p + " to cluster[" + c + "]'s distance:");
 		for (int i = 0; i < sizeVector; i++)
 			x += (clusterCenter[c][i] - norm[p][i]) * (clusterCenter[c][i] - norm[p][i]);
 		return Math.sqrt(x);
@@ -197,9 +206,12 @@ public class Kmeans_2 {
 	public void saveCluster() {
 		for(int i = 0; i < numClusters; i++) {
 			try {
-				PrintWriter out = new PrintWriter("C:\\Users\\wuchao\\Git\\" +
+				File f = new File("C:\\Users\\wuchao\\Git\\" +
 						"keg-operator-data\\result\\location\\" +
-						"500_17features_new2\\Result" + (i + 1) + ".txt");
+						"200_27features_" + var + "_" + numClusters);
+				f.mkdir();
+				PrintWriter out = new PrintWriter(f.getAbsolutePath() + 
+						"\\Result" + (i + 1) + ".txt");
 				out.print("平均值");
 				for (int j = 0; j < sizeVector; j++)
 					out.print("\t" + clusterCenter[i][j]);
@@ -220,9 +232,8 @@ public class Kmeans_2 {
 
 	public static void main(String[] args) {
 		Kmeans_2 kmean = new Kmeans_2();
-		kmean.loadPatterns("C:\\Users\\wuchao\\Git\\" +
-				"keg-operator-data\\result\\location\\" +
-				"AreaCount_500_allKind_new.txt");
+		kmean.loadPatterns("C:\\Users\\wuchao\\Git\\keg-operator-data\\" +
+				"result\\location\\AeraCount_200_allKind_new.txt");
 		kmean.initClusters();
 		kmean.runKmeans();
 		kmean.saveCluster();
