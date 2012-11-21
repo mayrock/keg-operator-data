@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -19,6 +20,7 @@ public class Kmeans_2 {
 	private int numPatterns = 125897;
 	private int sizeVector = 15;
 	private int numClusters = 5;
+	private HashMap<Integer,Long> map = new HashMap<Integer,Long>();
 
 	private void loadPatterns(String input) {
 		try {
@@ -160,13 +162,15 @@ public class Kmeans_2 {
 		for(int i = 0; i < numClusters; i++) {
 			try {
 				File f = new File("C:\\Users\\wuchao\\Git\\" +
-						"keg-operator-data\\result");
+						"keg-operator-data\\result\\result");
 				PrintWriter out = new PrintWriter(f.getAbsolutePath() + 
 						"\\Result" + (i + 1) + ".txt");
+				out.print("Average");
+				for (int k = 0; k < sizeVector; k++)
+					out.print("\t" + clusterCenter[i][k]);
+				out.println();
 				for(int j = 1; j <= clusterMember[i][0]; j++) {
-					for (int k = 0; k < 14; k++)
-						out.print(norm[clusterMember[i][j]][k] + "\t");
-					out.println(norm[clusterMember[i][j]][14]);
+					out.println(map.get(clusterMember[i][j]) + " " + clusterMember[i][j]);
 				}
 				out.close();
 			} catch (FileNotFoundException e) {
@@ -178,6 +182,7 @@ public class Kmeans_2 {
 
 	public static void main(String[] args) {
 		Kmeans_2 kmean = new Kmeans_2();
+		kmean.createMap();
 		kmean.loadPatterns("C:\\Users\\wuchao\\Git\\keg-operator-data\\" +
 				"result\\model-final.phi");
 		kmean.initClusters();
@@ -185,4 +190,21 @@ public class Kmeans_2 {
 		kmean.saveCluster();
 	}
 
+	private void createMap() {
+		try {
+			Scanner in = new Scanner(new File(
+					"D:\\result\\internet\\topic\\15-new\\wordmap.txt"));
+			String str = in.nextLine();
+			String[] temp;
+			while(in.hasNextLine()) {
+				str = in.nextLine();
+				temp = str.split(" ");
+				map.put(Integer.parseInt(temp[1]),Long.parseLong(temp[0]));
+			}
+			in.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
