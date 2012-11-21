@@ -18,7 +18,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import edu.thu.keg.mobiledata.internetgraph.dbprocesser.URIMerger;
 
@@ -31,7 +33,7 @@ public class HostTag {
 	}
 	public void mergeList()
 	{
-		Hashtable<String, String> Ht=new Hashtable<String, String>();
+		HashMap<String, String> Ht=new HashMap<String, String>();
 		LineNumberReader f_b=getLNR("URI_New.txt");
 		String line="";
 		try {
@@ -41,22 +43,22 @@ public class HostTag {
 				if(line==null)
 					break;
 				String [] a=line.split(" ");
-				
+				if(Ht.containsKey(URIMerger.processUri(a[0])))
+					a[1]=Ht.get(URIMerger.processUri(a[0]))+" "+a[1];
 				Ht.put(URIMerger.processUri(a[0]), a[1]);
 			}
 			f_b.close();
 			
-			BufferedOutputStream b_s=getBOS("URI_New_Merged.txt");
-			Enumeration<String> e_key=Ht.keys();
+			BufferedOutputStream b_s=getBOS("URI_New2_Merged.txt");
+			Iterator<String> e_key=Ht.keySet().iterator();
 			
 			int i=0;
-			while(e_key.hasMoreElements())
+			while(e_key.hasNext())
 			{
-				line=e_key.nextElement();
+				line=e_key.next();
 				byte b []=(line+" "+Ht.get(line)+"\n").getBytes();
 				b_s.write(b);
 				b_s.flush();
-				
 				
 			}
 			b_s.close();
@@ -76,14 +78,14 @@ public class HostTag {
 			
 			
 			int i=0;
-			LineNumberReader f_b=getLNR("URI_New_Merged.txt");
+			LineNumberReader f_b=getLNR("URI_New2_Merged.txt");
 			String line="";
 			while(true) {
 				line=f_b.readLine();
 				if(line==null)
 					break;
 				String [] a=line.split(" ");
-				query3="insert into HostTag_New values('"+a[0]+"','"+a[1]+"') ";
+				query3="insert into HostTag_New2 values('"+a[0]+"','"+a[1]+"') ";
 				stmt.execute(query3);
 			}
 
@@ -209,6 +211,7 @@ public class HostTag {
 	{
 		HostTag app= new HostTag();
 		Connection conn=app.getConnection();
+		//合并两个文件,其中的URI经过过滤
 //		app.mergeList();
 //		app.viewTable(conn);
 		app.insertTag(conn);
