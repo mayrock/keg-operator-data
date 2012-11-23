@@ -165,7 +165,58 @@ public class HostTag {
        
         return f_b;
 	}
-	public void closeBOS(BufferedOutputStream f_b)
+	public  static void outPutGraphToTxt(Connection conn, String query,
+			String filename,String [] domain)
+	{
+		try {
+			Statement stmt = conn.createStatement();
+			
+			ResultSet rs = stmt.executeQuery(query);
+			int k=0;
+			BufferedOutputStream f_b=getBOS(filename);
+			String[] domain_I=new String[domain.length];
+			
+			while(rs.next()) {
+				String str_w="";
+				for(int i=0;i<domain.length;i++)
+				{
+					str_w+=rs.getString(domain[i]);
+					if(i<domain.length-1)
+						str_w+=" ";
+				}
+				
+				
+				writeString(f_b, str_w+"\n");
+				k++;			
+			}
+//			writeString(f_b, String.valueOf(sum_per)+"\n");
+			closeBOS(f_b);
+			System.out.println(filename+" ok!");
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void addLineNum(String filenameTXT)
+	{
+		try {
+			LineNumberReader l_r=getLNR(filenameTXT);
+			BufferedOutputStream b_f=getBOS(filenameTXT.replace(".txt", "_num.txt"));
+			String str=l_r.readLine();
+			int i=1;
+			while(str!=null) {
+				writeString(b_f, String.valueOf(i)+" "+str+"\n");
+				i++;
+				 str=l_r.readLine();
+			}
+			closeBOS(b_f);
+			l_r.close();
+			System.out.println(filenameTXT+" ok!");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void closeBOS(BufferedOutputStream f_b)
 	{
 		
         try {

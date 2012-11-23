@@ -1,6 +1,7 @@
 package edu.thu.keg.mobiledata.internetgraph.HostTag;
 
 import java.sql.Statement;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.sql.Connection;
@@ -15,16 +16,19 @@ public class AnalyseLdaResult {
 	int Column=0,Line=0;
 	double Lda_Matrix[][];
 	String []Lable_Vec;
+	HashMap<String,Integer> Hash_TagNum= new HashMap<>();
 	public AnalyseLdaResult(Connection conn,int line,int column )
 	{
 		this.Column=column;
 		this.Line=line;
 		//get the lda result
-		Lda_Matrix=readLdaResult(Line, Column,"model-00500.theta");
-		System.out.print("读入lda完成!");
+		Lda_Matrix=readLdaResult(Line, Column,"model-final.theta");
+		System.out.println("读入lda完成!");
 		HashMap<String,Integer>[] Group_Info= new HashMap[Line];//每个组是个哈西表,对应着tag以及每个tag的访问数量
 		int [] Goup_totalCount=new int[Line];//记录每个group的taotalcount
+		
 		setGroupInfo(conn,Group_Info,Goup_totalCount);
+		Nomolization(Goup_totalCount);
 		ArrayList<GroupInfo[]> tag_count_group=analyseGrouInfo(Group_Info,Goup_totalCount);
 		
 		
@@ -80,12 +84,20 @@ public class AnalyseLdaResult {
 					{
 						Group_Info[GroupNum].put(
 								Tag, Group_Info[GroupNum].get(Tag)+TotalCount);
+						
 					}
 					else
 						Group_Info[GroupNum].put(Tag, TotalCount);
-
+					if(!Hash_TagNum.containsKey(Tag))
+						Hash_TagNum.put(Tag, Hash_TagNum.size());
 				}
 				Goup_totalCount[GroupNum]+=TotalCount;
+			}
+			Iterator<String> it_key= Hash_TagNum.keySet().iterator();
+			while(it_key.hasNext())
+			{
+				String s=it_key.next();
+				System.out.println(s+" "+Hash_TagNum.get(s));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -120,20 +132,20 @@ public class AnalyseLdaResult {
 			group_top.add(gf);
 			
 		}
-		int m=0;
-		for(int i=0;i<group_top.size();i++)
-		{
-			GroupInfo gf[]=group_top.get(i);
-			if(gf.length>0)
-				System.out.print(i+": ");
-			for(int j=0;j<gf.length;j++)
-			{m++;
-				System.out.print(gf[j].Tag+":"+gf[j].Totalcount+" ");
-			}
-			if(gf.length>0)
-			System.out.println();
-		}
-		System.out.println(m);
+//		int m=0;
+//		for(int i=0;i<group_top.size();i++)
+//		{
+//			GroupInfo gf[]=group_top.get(i);
+//			if(gf.length>0)
+//				System.out.print(i+": ");
+//			for(int j=0;j<gf.length;j++)
+//			{m++;
+//				System.out.print(gf[j].Tag+":"+gf[j].Totalcount+" ");
+//			}
+//			if(gf.length>0)
+//			System.out.println();
+//		}
+//		System.out.println(m);
 		return group_top;
 	}
 	void getClusterType(ArrayList<GroupInfo[]> tc_group,int [] group_totalcount)
@@ -148,17 +160,17 @@ public class AnalyseLdaResult {
 				if(tc_group.get(i).length==0)
 					continue;
 				GroupInfo[] gi=tc_group.get(i);
-				if(j==0)
-				{
-					System.out.print(Lda_Matrix[i][j]+" ");
-				}
-				if(j==0)
-					System.out.println();
+//				if(j==0)
+//				{
+//					System.out.print(Lda_Matrix[i][j]+" ");
+//				}
+//				if(j==0)
+//					System.out.println();
 				for(int k=0;k<gi.length;k++)
 				{
 					times++;
 					String k_tag=gi[k].Tag;
-					double rate=0.5;
+					double rate=0.7;
 					if(type_Result.containsKey(k_tag))
 					{
 						if(Lda_Matrix[i][j]>rate)
@@ -179,7 +191,7 @@ public class AnalyseLdaResult {
 			}
 			Iterator<String> it_key= type_Result.keySet().iterator();
 			GroupInfo[] temp_GI=new GroupInfo[type_Result.size()];
-			System.out.print(j+" "+times+": ");
+			System.out.println(j+" ");
 			int h=0;
 			while(it_key.hasNext())
 			{
@@ -189,10 +201,43 @@ public class AnalyseLdaResult {
 			
 			}
 			fastLine(temp_GI,0,temp_GI.length-1);
+			
+			int c=0;
+			while(c<temp_GI.length)
+			{
+				
+			}
 			for(int i=0;i<temp_GI.length;i++)
-				System.out.print(temp_GI[i].Tag+":"+temp_GI[i].Totalcount+" ");
+				System.out.println(Hash_TagNum.get(temp_GI[i].Tag)+" "+temp_GI[i].Totalcount);
+			
+			
+			
+			
 			System.out.println();
 		}
+	}
+	double [] Nomolization(int[] array)
+	{
+		double [] re=new double[array.length];
+		double sum=0;
+		for(int i=0 ; i< array.length;i++)
+		{
+			sum+=array[i];
+		}
+		BufferedOutputStream b_f= new HostTag().getBOS("Group_times_nolmolization.txt");
+		try {
+			for(int i=0 ; i< array.length;i++)
+			{
+				re[i]=array[i]/sum;
+				byte [] b=(String .valueOf(re[i])+"\n").getBytes();
+				b_f.write(b);
+			}
+			b_f.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return re;
 	}
     public  void fastLine (GroupInfo [] a,int zuo,int you){
         int i,j;
@@ -221,6 +266,21 @@ public class AnalyseLdaResult {
 		
 		Connection conn=HostTag.getConnection();
 		AnalyseLdaResult arr= new AnalyseLdaResult(conn,755,15);
+		String q="SELECT Imsi,count(distinct URI) as TotalCount " +
+				"FROM new2_GN_Filtered_4 group by Imsi order by TotalCount";
+		
+		String q1="SELECT URI,count(distinct Imsi) as TotalCount " +
+				"FROM new2_GN_Filtered_4 group by URI order by TotalCount";
+		
+		String q2="SELECT GroupNum,COUNT(distinct Imsi) as ImsiCount,COUNT(distinct URI) as URICount " +
+				"FROM new2_GN_Filtered_4_Grouped_For_Character group by GroupNum order by GroupNum";
+		
+//		HostTag.outPutGraphToTxt(conn, q1, "URI-ImsiTotalCount.txt", 
+//				new String[] {"URI", "TotalCount"});
+//		HostTag.addLineNum("URI-ImsiTotalCount_dis.txt");
+//		HostTag.addLineNum("Imsi-URITotalCount_dis.txt");
+//		HostTag.addLineNum("URI-ImsiTotalCount.txt");
+//		HostTag.addLineNum("Imsi-URITotalCount.txt");
 //		app.mergeList();
 //		app.viewTable(conn);
 		
