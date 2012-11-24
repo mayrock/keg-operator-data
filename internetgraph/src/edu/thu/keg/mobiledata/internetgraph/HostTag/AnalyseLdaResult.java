@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.swing.plaf.basic.BasicScrollPaneUI.HSBChangeListener;
+
 public class AnalyseLdaResult {
 
 	int Column=0,Line=0;
@@ -21,20 +23,102 @@ public class AnalyseLdaResult {
 	{
 		this.Column=column;
 		this.Line=line;
+		zhuanZhi("model-final.phi","model-final_zhuanzhi.phi",15,755);
+		reflection("model-final_zhuanzhi.phi","wordmap.txt","model-final_zhuanzhi_Mapped.phi");
 		//get the lda result
-		Lda_Matrix=readLdaResult(Line, Column,"model-final.theta");
+		Lda_Matrix=readLdaResult(Line, Column,"model-final_zhuanzhi_Mapped.phi");
 		System.out.println("读入lda完成!");
 		HashMap<String,Integer>[] Group_Info= new HashMap[Line];//每个组是个哈西表,对应着tag以及每个tag的访问数量
 		int [] Goup_totalCount=new int[Line];//记录每个group的taotalcount
 		
-		setGroupInfo(conn,Group_Info,Goup_totalCount);
-		Nomolization(Goup_totalCount);
-		ArrayList<GroupInfo[]> tag_count_group=analyseGrouInfo(Group_Info,Goup_totalCount);
+		setGroupInfo(conn,Group_Info,Goup_totalCount);//设置Group_info和Group_totalCount
+		//归一化
+		HashMap<String, Double> []Group_Info_Dstribt=Nomolization(Group_Info,Goup_totalCount);//
+		
+		getClusterType2(Group_Info_Dstribt,Goup_totalCount);
+		/*原先
+		//得到一个List,每个元素是一个GroupInfo的数组,其中每个记录着标签和这个标签在这个组的访问量的比例
+		ArrayList<GroupInfo[]> tag_count_group=
+				analyseGrouInfo(Group_Info,Goup_totalCount);
 		
 		
 		getClusterType(tag_count_group,Goup_totalCount);
+		*/
 		
-		
+	}
+	void zhuanZhi(String Sourcefile,String Outputfile,int Line ,int Column)
+	{
+		LineNumberReader l_r_s= HostTag.getLNR(Sourcefile);
+		BufferedOutputStream b_f=HostTag.getBOS(Outputfile);
+		String[][] matrix_s=new String[Column][Line];
+		String str;
+		try {
+			str = l_r_s.readLine();
+			int k=0;
+			while(str!=null)
+			{
+				String s[]=str.split(" ");
+				for(int i=0;i<Column;i++)
+					matrix_s[i][k]=s[i];
+				k++;
+				str = l_r_s.readLine();
+			}
+			
+			for(int i =0;i<matrix_s.length;i++)
+			{
+				String str_re="";
+				for(int j=0;j<matrix_s[i].length;j++)
+				{
+					if(j==0)
+						str_re=matrix_s[i][j];
+					else
+						str_re=str_re+" "+matrix_s[i][j];
+				}
+				HostTag.writeString(b_f, str_re+"\n");
+			}
+			l_r_s.close();
+			b_f.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	void reflection(String Sourcefile,String Mapfile,String Outputfile)
+	{
+		LineNumberReader l_r_s= HostTag.getLNR(Sourcefile);
+		LineNumberReader l_r_m= HostTag.getLNR(Mapfile);
+		BufferedOutputStream b_f=HostTag.getBOS(Outputfile);
+		int LineNum=0;
+		String str_m,str_s[];
+		try {
+			str_m = l_r_m.readLine();			
+			LineNum=Integer.valueOf(str_m);
+			int [] map=new int[LineNum];
+			str_m=l_r_m.readLine();
+			while(str_m!=null)
+			{
+				String f[]= str_m.split(" ");
+				map[Integer.valueOf(f[0])]=Integer.valueOf(f[1]);
+				str_m=l_r_m.readLine();
+			}
+			str_s= new String[LineNum];
+			for(int i=0;i<str_s.length;i++)
+			{
+				str_s[i]=l_r_s.readLine();
+			}
+			for(int i=0;i<str_s.length;i++)
+			{
+				HostTag.writeString(b_f, str_s[map[i]]+"\n");
+			}
+			l_r_s.close();
+			l_r_m.close();
+			b_f.close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	double[][] readLdaResult(int line,int column,String filename)
 	{
@@ -155,7 +239,7 @@ public class AnalyseLdaResult {
 		{
 			HashMap<String ,Double> type_Result=new HashMap<>();
 			int times=0;
-			for(int i=0;i<Line;i++)
+			for(int i=0;i<Line;i++)//755
 			{
 				if(tc_group.get(i).length==0)
 					continue;
@@ -175,17 +259,17 @@ public class AnalyseLdaResult {
 					{
 						if(Lda_Matrix[i][j]>rate)
 							type_Result.put(k_tag, 
-								type_Result.get(k_tag)+gi[k].Totalcount*Lda_Matrix[i][j]);
+								type_Result.get(k_tag)+gi[k].TagInThisPrecent*Lda_Matrix[i][j]);
 						else if(Lda_Matrix[i][j]<1-rate)
 							type_Result.put(k_tag, 
-									type_Result.get(k_tag)-gi[k].Totalcount*Lda_Matrix[i][j]);
+									type_Result.get(k_tag)-gi[k].TagInThisPrecent*Lda_Matrix[i][j]);
 					}
 					else
 					{
 						if(Lda_Matrix[i][j]>rate)
-							type_Result.put(k_tag,gi[k].Totalcount*Lda_Matrix[i][j]);
+							type_Result.put(k_tag,gi[k].TagInThisPrecent*Lda_Matrix[i][j]);
 						else if(Lda_Matrix[i][j]<1-rate)
-							type_Result.put(k_tag,-gi[k].Totalcount*Lda_Matrix[i][j]);
+							type_Result.put(k_tag,-gi[k].TagInThisPrecent*Lda_Matrix[i][j]);
 					}
 				}
 			}
@@ -202,52 +286,115 @@ public class AnalyseLdaResult {
 			}
 			fastLine(temp_GI,0,temp_GI.length-1);
 			
-			int c=0;
-			while(c<temp_GI.length)
+			for(int i=0;i<temp_GI.length;i++)
 			{
+				System.out.println(Hash_TagNum.get(temp_GI[i].Tag)+" "+temp_GI[i].Tag+" "+temp_GI[i].TagInThisPrecent);
 				
 			}
-			for(int i=0;i<temp_GI.length;i++)
-				System.out.println(Hash_TagNum.get(temp_GI[i].Tag)+" "+temp_GI[i].Totalcount);
 			
-			
-			
-			
+//			int c=0;
+//			while(c<temp_GI.length)
+//			{
+//				for(int i=0;i<temp_GI.length;i++)
+//				{
+//					if(Hash_TagNum.get(temp_GI[i].Tag)==c)
+//					{
+//						System.out.println(Hash_TagNum.get(temp_GI[i].Tag)+" "+temp_GI[i].Tag+" "+temp_GI[i].Totalcount);
+//						break;
+//					}
+//					
+//				}
+//				c++;
+//			}
+//			for(int i=0;i<temp_GI.length;i++)
+//				System.out.println(temp_GI[i].Tag+" "+temp_GI[i].Totalcount);
+
 			System.out.println();
 		}
 	}
-	double [] Nomolization(int[] array)
+	void getClusterType2(HashMap<String, Double>[] group_Info,int [] group_totalcount)
 	{
-		double [] re=new double[array.length];
-		double sum=0;
-		for(int i=0 ; i< array.length;i++)
+		//村每一个的hash表
+		HashMap<String, Double>[][]dis_All= new HashMap[Lda_Matrix.length][Lda_Matrix[0].length];
+		for(int i=0;i<Lda_Matrix.length;i++)
 		{
-			sum+=array[i];
-		}
-		BufferedOutputStream b_f= new HostTag().getBOS("Group_times_nolmolization.txt");
-		try {
-			for(int i=0 ; i< array.length;i++)
-			{
-				re[i]=array[i]/sum;
-				byte [] b=(String .valueOf(re[i])+"\n").getBytes();
-				b_f.write(b);
+			HashMap<String , Double> thisGroup=group_Info[i];
+			Iterator<String > it_key= thisGroup.keySet().iterator();
+			for(int j=0;j<Lda_Matrix[i].length;j++)
+			{   
+				dis_All[i][j]= new HashMap<String, Double>();
+				while(it_key.hasNext())
+				{
+					String s =it_key.next();
+					dis_All[i][j].put(s, thisGroup.get(s)*Lda_Matrix[i][j]);
+				}
 			}
-			b_f.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return re;
+		double [][] final_distribution= new double [Lda_Matrix[0].length][Lda_Matrix[0].length];
+		String tag_Array[]= new String [Lda_Matrix[0].length];
+		Iterator<String> it_key1=Hash_TagNum.keySet().iterator();
+		int m=0;
+		while(it_key1.hasNext())
+		{
+			tag_Array[m]=it_key1.next();
+			m++;
+		}
+		for(int j=0;j<Lda_Matrix[0].length;j++)
+		{
+			Iterator<String> it_key=Hash_TagNum.keySet().iterator();
+			int k=0;
+			
+			while(it_key.hasNext())
+			{
+				double sum_Tag=0;
+				String thisTag=it_key.next();
+				for(int i=0;i<Lda_Matrix.length;i++)
+				{
+					if(dis_All[i][j].containsKey(thisTag))
+						sum_Tag=sum_Tag+dis_All[i][j].get(thisTag);//如果这个disall有新闻就+
+				}
+				final_distribution[k][j]=sum_Tag;
+				k++;
+			}
+			
+		}
+		for(int i=0;i<final_distribution.length;i++)
+		{
+			for(int j=0;j<final_distribution[i].length;j++)
+			{
+				if(j==0)
+					System.out.print(tag_Array[i]+" ");
+				System.out.print(final_distribution[i][j]+" ");
+			}
+			System.out.println();
+			
+		}
+	}
+	HashMap<String,Double>[] Nomolization(HashMap<String,Integer>[] group_info,int [] groupTotalCount)
+	{
+		HashMap<String,Double>[] Group_TagDistribution = new HashMap[group_info.length];
+		for(int i=0;i<group_info.length;i++)
+		{
+			Group_TagDistribution[i]=new HashMap<String,Double>();
+			HashMap<String,Integer> thisGroup=group_info[i];
+			Iterator<String> it_key= thisGroup.keySet().iterator();
+			while(it_key.hasNext())
+			{
+				String s= it_key.next();
+				Group_TagDistribution[i].put(s, new Double(thisGroup.get(s)/groupTotalCount[i]));
+			}
+		}
+		return Group_TagDistribution;
 	}
     public  void fastLine (GroupInfo [] a,int zuo,int you){
         int i,j;
         double key;
         GroupInfo temp;
         if(zuo>you)return;
-        key=a[you].Totalcount;
+        key=a[you].TagInThisPrecent;
         i=zuo-1;
         for(j=zuo;j<you;j++){
-            if(a[j].Totalcount>key){
+            if(a[j].TagInThisPrecent>key){
                 i++;
                 temp=a[j];
                 a[j]=a[i];
@@ -290,11 +437,11 @@ public class AnalyseLdaResult {
 class GroupInfo
 {
 	String Tag="";
-	double Totalcount=0;
-	GroupInfo(String Tag,double Totalcount)
+	double TagInThisPrecent=0;
+	GroupInfo(String Tag,double TagInThisPrecent)
 	{
 		this.Tag=Tag;
-		this.Totalcount=Totalcount;
+		this.TagInThisPrecent=TagInThisPrecent;
 		
 	}
 }
