@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -18,13 +19,13 @@ import java.util.Scanner;
  */
 public class Kmeans_2 {
 
-	private double[][] norm = new double[125897][15];//数据
 	private double[] pro = new double[15];
-	private int numClusters = 12;
-	private double[][] clusterCenter = new double[numClusters][15];//簇中心点数据
-	private int[][] clusterMember = new int[numClusters][125897];//簇包含成员
-	private int numPatterns = 125897;
+	private int numClusters = 5;
 	private int sizeVector = 15;
+	private int numPatterns = 125897;
+	private double[][] norm = new double[125897][sizeVector];//数据
+	private double[][] clusterCenter = new double[numClusters][sizeVector];//簇中心点数据
+	private int[][] clusterMember = new int[numClusters][numPatterns];//簇包含成员
 	private HashMap<Integer,Long> map = new HashMap<Integer,Long>();
 	private HashMap<Long,Integer> map2 = new HashMap<Long,Integer>();
 	private HashMap<Long,String> map3 = new HashMap<Long,String>();
@@ -35,21 +36,53 @@ public class Kmeans_2 {
 			String str;
 			String[] temp = null;
 			int i = 0;
+	//		double[] count = new double[numPatterns];
 			while(in.hasNextLine()) {
 				str = in.nextLine();
 				temp = str.split(" ");
-				for(int j = 0; j < numPatterns; j++)
-					norm[j][i] = Double.parseDouble(temp[j]) * pro[i];
+				for (int j = 0; j < temp.length; j++) {
+					norm[i][j] = Double.parseDouble(temp[j]);
+				}
 				i++;
+	/*			for (int j = 0; j < 15; j++) {
+					norm[i][j] = Double.parseDouble(temp[j]);
+				}
+				i++;*/
 			}
+		/*	numPatterns = temp.length;
 			in.close();
-			PrintWriter output = new PrintWriter("D:\\result\\model-final.txt");
-			for(i = 0; i < 125897; i++) {
-				for(int j = 0; j < 14; j++)
-					output.print(norm[i][j] + "\t");
-				output.println(norm[i][14]);
+			for (i = 0; i < numPatterns; i++) {
+				for (int j = 0; j < 15; j++) {
+					norm[i][j] = norm[i][j] / count[i];
+				}
+			}*/
+		/*	long n = -1;
+			int totalCount;
+			int[] timeZone = new int[6];
+			for (i = 0; i < numPatterns; i++) {
+				n = map.get(i);
+				totalCount = map2.get(n);
+				norm[i][15] = totalCount;
+				str = map3.get(n);
+				temp = str.split(" ");
+				for (int k = 0; k < 6; k++) {
+					timeZone[k] = Integer.parseInt(temp[k]);
+					norm[i][k + 16] = timeZone[k];
+				}
 			}
-			output.close();
+			for (i = 0; i < sizeVector; i++) {
+				for (int j = 0; j < numPatterns; j++)
+					count[i] += norm[j][i];
+				for (int j = 0; j < numPatterns; j++)
+					norm[j][i] = norm[j][i] / count[i];
+			}*/
+		/*	PrintWriter output = new PrintWriter("D:\\result\\model-final_2.txt");
+			for(i = 0; i < numPatterns; i++) {
+				for(int j = 0; j < sizeVector - 1; j++)
+					output.print(norm[i][j] + " ");
+				output.println(norm[i][sizeVector - 1]);
+			}
+			output.close();*/
 		}catch (IOException e) {
 			System.out.println("Cann't read file " +  new File(input).getAbsolutePath());
 		}
@@ -155,7 +188,7 @@ public class Kmeans_2 {
 		}
 		return Flag;
 	}
-
+/*
 	public void showCluster() {
 		for(int i = 0; i < numClusters; i++) {
 			System.out.print("ClusterCenter[" + i + "] =");
@@ -171,50 +204,67 @@ public class Kmeans_2 {
 			}
 		}
 	}
-
+*/
 	public void saveCluster() {
-		File f = new File("C:\\Users\\wuchao\\Git\\" +
-				"keg-operator-data\\result\\result" + numClusters);
+		Calendar now = Calendar.getInstance();
+		String nowTime = now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) +
+				"-" + now.get(Calendar.DAY_OF_MONTH) + "-" + now.get(Calendar.HOUR_OF_DAY) +
+				"-" + now.get(Calendar.MINUTE) + "-" + now.get(Calendar.SECOND);
+		File f = new File("D:\\result\\result_" + numClusters + "_" + nowTime);
 		f.mkdir();
 		try {
 			PrintWriter output = new PrintWriter(f.getAbsolutePath()
 					+ "\\Result_all.txt");
-			output.println("\tuserCount\ttotalCount\t0:00~3:59\t4:00~7:59\t" +
-					"8:00~11:59\t12:00~15:59\t16:00~19:59\t20:00~23:59");
+			output.print("userCount\ttotalCount");
+			for (int i = 0; i < 24; i++)
+				output.print("\t" + i);
+			for (int i = 0; i < 15; i++)
+				output.print("\t" + i);
+			output.println();
+			PrintWriter outputUser = new PrintWriter(f.getAbsolutePath()
+					+ "\\Result_all_user.txt");
 			for (int i = 0; i < numClusters; i++) {
 				PrintWriter out = new PrintWriter(f.getAbsolutePath()
 						+ "\\Result" + (i + 1) + ".txt");
-				output.print("Average\t" + clusterMember[i][0]);
+				outputUser.print(clusterMember[i][0]);
+				for(int j = 1; j <= clusterMember[i][0]; j++) {
+					outputUser.print("\t" + clusterMember[i][j]);
+					for(int k = 0; k < sizeVector - 1; k++)
+						out.print(norm[clusterMember[i][j]][k] + "\t");
+					out.println(norm[clusterMember[i][j]][sizeVector - 1]);
+				}
+				outputUser.println();
+				out.close();
+				output.print(clusterMember[i][0]);
 				int totalCount;
 				int total = 0;
 				String time;
 				String[] temp;
 				int[] timeZone;
-				int[] totalTimeZone = new int[6];
+				int[] totalTimeZone = new int[24];
 				for (int j = 1; j <= clusterMember[i][0]; j++) {
-					timeZone = new int[6];
-					out.print(map.get(clusterMember[i][j]) + "\t"
-							+ clusterMember[i][j]);
+					timeZone = new int[24];
 					totalCount = map2.get(map.get(clusterMember[i][j]));
 					total += totalCount;
-					out.print("\t" + totalCount);
 					time = map3.get(map.get(clusterMember[i][j]));
 					temp = time.split(" ");
-					for (int k = 0; k < 6; k++) {
+					for (int k = 0; k < 24; k++) {
 						timeZone[k] = Integer.parseInt(temp[k]);
 						totalTimeZone[k] += timeZone[k];
-						out.print("\t" + timeZone[k]);
 					}
-					out.println();
 					System.out.println(i + "*" + j);
 				}
-				output.print("\t" + (((double) total) / clusterMember[i][0]));
-				for (int k = 0; k < 6; k++) {
-					output.print("\t" + (((double) totalTimeZone[k]) / clusterMember[i][0]));
+				double average = (((double) total) / clusterMember[i][0]);
+				output.print("\t" + average);
+				for (int k = 0; k < 24; k++) {
+					output.print("\t" + ((((double) totalTimeZone[k]) / clusterMember[i][0]) / average));
+				}
+				for (int k = 0; k < sizeVector; k++) {
+					output.print("\t" + clusterCenter[i][k]);
 				}
 				output.println();
-				out.close();
 			}
+			outputUser.close();
 			output.close();
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -224,34 +274,36 @@ public class Kmeans_2 {
 
 	public static void main(String[] args) {
 		Kmeans_2 kmean = new Kmeans_2();
-		kmean.initPro();
+	/*	kmean.initPro();
+		System.out.println("Done!");*/
+		kmean.createMap();
 		System.out.println("Done!");
-	//	kmean.createMap();
-	//	System.out.println("Done!");
-	//	kmean.createMap2();
-	//	System.out.println("Done!");
-	//	kmean.createMap3();
-	//	System.out.println("Done!");
-	//	kmean.loadPatterns("C:\\Users\\wuchao\\Git\\keg-operator-data\\" +
-	//			"result\\model-final.phi");
-	//	System.out.println("Done!");
-	//	kmean.initClusters();
-	//	System.out.println("Done!");
-	//	kmean.runKmeans();
-	//	System.out.println("Done!");
-	//	kmean.saveCluster();
+		kmean.createMap2();
+		System.out.println("Done!");
+		kmean.createMap3();
+		System.out.println("Done!");
+		kmean.loadPatterns("D:\\result\\internet\\topic\\15-newnew\\model-final.theta");
+		System.out.println("Done!");
+		kmean.initClusters();
+		System.out.println("Done!");
+		kmean.runKmeans();
+		System.out.println("Done!");
+		kmean.saveCluster();
 	}
 
 	private void createMap() {
 		try {
 			Scanner in = new Scanner(new File(
-					"D:\\result\\internet\\topic\\15-new\\wordmap.txt"));
+					"D:\\result\\internet\\topic\\ImsiCharacterVectors_new2_Group755_4.txt"));
 			String str = in.nextLine();
 			String[] temp;
+			int i = 0;
 			while(in.hasNextLine()) {
 				str = in.nextLine();
 				temp = str.split(" ");
-				map.put(Integer.parseInt(temp[1]),Long.parseLong(temp[0]));
+				temp = temp[0].split(":");
+				map.put(i,Long.parseLong(temp[0]));
+				i++;
 			}
 			in.close();
 		} catch (FileNotFoundException e) {
@@ -291,16 +343,18 @@ public class Kmeans_2 {
 					"databaseName=ZhuData;" +
 					"integratedSecurity=true;");
 			stmt = conn.createStatement();
-			String query = "Select Imsi,t0,t1,t2,t3,t4,t5 "
-					+ "From ZhuData.dbo.new2_IMSI_TimeSeg_5";
+			String query = "Select imsi";
+			for(int i = 0; i < 24; i++)
+				query += ",[" + i + "]";
+			query += " From ZhuData.dbo.new2_IMSI_TimeSeg_5_uu";
 			ResultSet rs = stmt.executeQuery(query);
 			String msg;
 			while (rs.next()) {
 				msg = "";
-				msg += rs.getInt("t0");
-				for(int i = 1; i < 6; i++)
-					msg += " " + rs.getInt("t" + i);
-				map3.put(rs.getLong("Imsi"), msg);
+				for(int i = 0; i < 23; i++)
+					msg += rs.getInt("" + i) + " ";
+				msg += rs.getInt("23");
+				map3.put(rs.getLong("imsi"), msg);
 			}
 			stmt.close();
 			conn.close();
@@ -312,20 +366,27 @@ public class Kmeans_2 {
 	private void initPro() {
 		Scanner in;
 		try {
-			double[] userPro = new double[755];
-			double[][] topicPro = new double[755][15];
+			double[] userPro = new double[numPatterns];
+			double[][] topicPro = new double[numPatterns][15];
 			int i = 0;
 			in = new Scanner(new File(
-					"D:\\result\\internet\\Group_times_nolmalization.txt"));
+					"D:\\result\\internet\\topic\\ImsiCharacterVectors_new2_Group755_4.txt"));
+			String str = in.nextLine();
+			String[] temp;
+			double count = 0.0;
 			while (in.hasNextLine()) {
-				userPro[i] = Double.parseDouble(in.nextLine());
+				str = in.nextLine();
+				temp = str.split(" ");
+				temp = temp[0].split(":");
+				userPro[i] = Double.parseDouble(temp[1]);
+				count += userPro[i];
 				i++;
 			}
 			in.close();
+			for(i = 0; i < numPatterns; i++)
+				userPro[i] /= count;
 			in = new Scanner(new File(
-					"D:\\result\\internet\\topic\\15-new\\model-final.theta"));
-			String str;
-			String[] temp;
+					"D:\\result\\internet\\topic\\15-newnew\\model-final.theta"));
 			i = 0;
 			while (in.hasNextLine()) {
 				str = in.nextLine();
@@ -335,10 +396,10 @@ public class Kmeans_2 {
 				i++;
 			}
 			in.close();
-			PrintWriter output = new PrintWriter("D:\\result\\topicProbability.txt");
+			PrintWriter output = new PrintWriter("D:\\result\\topicProbability_2.txt");
 			for(i = 0; i < 15; i++) {
 				pro[i] = 0.0;
-				for(int j = 0; j < 755; j++)
+				for(int j = 0; j < numPatterns; j++)
 					pro[i] += userPro[j] * topicPro[j][i];
 				output.println(pro[i]);
 			}

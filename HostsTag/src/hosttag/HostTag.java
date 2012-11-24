@@ -29,7 +29,7 @@ public class HostTag {
 	{
 		Statement stmt = null;
 		String query3="";
-//		String query4="delete from HostTag where Tag='ÄãÂè' ";
+//		String query4="delete from HostTag where Tag='ÄãÂè'! ";
 		
 		try {
 			stmt = conn.createStatement();
