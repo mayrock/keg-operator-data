@@ -31,13 +31,23 @@ public class DataLoader {
 		}
 		return conn;
 	}
-	public static void loadGNData(String dir){
-		File[] files = new File(dir).listFiles();
+	public static Connection getBeijingConn() {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection
+					("jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return conn;
+	}
+	public static void loadGNData(File[] files, FileWriter writer){
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			conn = DriverManager.getConnection
-					("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;integratedSecurity=true;");
+					("jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;");
 			stmt = conn.createStatement();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
@@ -59,10 +69,21 @@ public class DataLoader {
 			}
 			ret = stmt.executeBatch();
 			} catch (SQLException e) {
+				String s = e.getMessage();
+				System.out.println(s);
 			}
 			System.out.println("Insert complete!");
 			if (ret != null & insert != null)
 				System.out.println("Lines inserted: " + ret.length + "; Error: " + (insert.size() - ret.length));
+			else {
+				System.out.println("Error!!!");
+				try {
+					writer.write(f.getAbsolutePath());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			System.out.println();			
 		}
 		try {
@@ -166,7 +187,7 @@ public class DataLoader {
 				
 			});
 			for (File subF : subFs) {
-				loadGNData(subF.getAbsolutePath());
+				//loadGNData(new File(subF.getAbsolutePath()).listFiles());
 			}
 		}
 	}
