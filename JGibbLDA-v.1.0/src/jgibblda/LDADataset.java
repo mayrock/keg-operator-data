@@ -163,7 +163,7 @@ public class LDADataset {
 	public void setDoc2(String str, int idx){
 		System.out.println("Processing file " + idx);
 		if (0 <= idx && idx < M){
-			String [] words = str.split(" ");
+			String [] words = str.split(" +");
 			String uri = words[0].split(":")[0];
 			Vector<Integer> ids = new Vector<Integer>();
 			
