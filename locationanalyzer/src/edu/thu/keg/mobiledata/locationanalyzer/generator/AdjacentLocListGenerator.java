@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import edu.thu.keg.mobiledata.dataloader.DataLoader;
 import edu.thu.keg.mobiledata.locationanalyzer.AdjacentLocList;
 import edu.thu.keg.mobiledata.locationanalyzer.AdjacentLocPair;
 import edu.thu.keg.mobiledata.locationanalyzer.Site;
@@ -31,28 +32,29 @@ public class AdjacentLocListGenerator {
 		AdjacentLocListGenerator generator = new AdjacentLocListGenerator();
 		Connection conn;
 		try {
-			conn = DriverManager.getConnection
-					("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;" +
-							"integratedSecurity=true;");
+			conn = DataLoader.getBeijingConn();
 			AdjacentLocList list = generator.getListFromDB(conn);
 			
 			conn.setAutoCommit(false);
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO AdjacentLocation_Clustered" +
-					"(SiteId1, SiteId2, UserCount, TotalCount)" +
-					"VALUES (?, ?, ?, ?)");
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO AdjacentLocation" +
+					"(SiteId1, SiteId2, Hour, UserCount, TotalCount)" +
+					"VALUES (?, ?, ?, ?, ?)");
 			for (Site loc : list.getSites().values()) {
 				for (AdjacentLocPair pair: loc.getNextSites()) {
 					int siteId1 = pair.getSite1().getSiteId();
 					int siteId2 = pair.getSite2().getSiteId();
 					int[] uc = pair.getUsersPerHourCount();
 					int[] tc = pair.getTotalPerHourCount();
-						if (uc[0] == 0)
+					for (int i = 0; i < 24; ++i) {	
+						if (pair.getUsersCount() == 0)
 							continue;
 						stmt.setInt(1, siteId1);
 						stmt.setInt(2, siteId2);
-						stmt.setInt(3, uc[0]);
-						stmt.setInt(4, tc[0]);
+						stmt.setInt(3, i);
+						stmt.setInt(4, uc[i]);
+						stmt.setInt(5, tc[i]);
 						stmt.addBatch();
+					}
 				}
 				stmt.executeBatch();
 				conn.commit();
@@ -111,7 +113,7 @@ public class AdjacentLocListGenerator {
 	public AdjacentLocList getListFromDB(Connection conn) throws SQLException {
 		AdjacentLocList list = new AdjacentLocList();
 		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT IMSI,SiteId, Longitude,Latitude,ConnectTime FROM GN_Processed" 
+		ResultSet rs = stmt.executeQuery("SELECT IMSI,SiteId, Longitude,Latitude,ConnectTime FROM Data" 
 		        + " ORDER BY IMSI ASC, ConnectTime ASC");
 		rs.next();
 		LocationRecord record = new LocationRecord(rs);
@@ -141,13 +143,14 @@ public class AdjacentLocListGenerator {
 				site2 = list.addSite(nextRecord.getSiteId(),
 						nextRecord.getLongitude(), nextRecord.getLatitude());
 			}
+			int hour = record.getHour();
 			AdjacentLocPair pair = list.getAdjacentLocPair(site1, site2);
 			if (!pairs.containsKey(pair)) {
-				int[] arr = new int[25];
-				arr[0] = 1;
+				int[] arr = new int[24];
+				arr[hour] = 1;
 				pairs.put(pair, arr);
 			} else {
-				pairs.get(pair)[0] += 1;
+				pairs.get(pair)[hour] += 1;
 			}
 			record = nextRecord;
 			
