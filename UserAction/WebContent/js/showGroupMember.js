@@ -2,6 +2,16 @@ var mrkrArr = new Array();
 var locData = new Object;
 locData.locinfo = new Array();
 var map = new Object;
+var color = new Array(
+		"FF0000",
+		"FF0000",
+		"FF0000",
+		"FF0000",
+		"FF0000",//红
+		"D94600",//棕
+		"00EC00",//绿
+		"FFD306"//黄
+		);//轨迹可选用的颜色
 
 function InitGroup() {
 	for(var i = 1;i <= 4;i++) {
@@ -92,10 +102,17 @@ function cleanOverlays_2(i) {
 
 function saveGroupInfo(n) {
 	//保存轨迹
+	var pinIcon = new google.maps.MarkerImage(
+			"http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + color[n],
+			null, /* size is determined at runtime */
+			null, /* origin is 0,0 */
+			null, /* anchor is bottom center of the scaled image */
+			new google.maps.Size(10.5, 17)
+			);
 	for(var i = 0;i < locData.locinfo.length;i++) {
 		var marker = new google.maps.Marker({
-			position : new google.maps.LatLng(
-					locData.locinfo[i].lat,locData.locinfo[i].lng),
+			position : new google.maps.LatLng(locData.locinfo[i].lat,locData.locinfo[i].lng),
+			icon : pinIcon
 		});
 		mrkrArr[n].push(marker);
 	}

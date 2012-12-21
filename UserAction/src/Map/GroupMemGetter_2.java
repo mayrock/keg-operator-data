@@ -75,11 +75,10 @@ public class GroupMemGetter_2 {
 		//去除不必要的空格
 		int i = 0;
 		try{
-			String inputPath = "C:\\Users\\wuchao\\Git\\keg-operator-data\\result\\location\\" +
-					"500_21features\\Result" + groupNum_new + ".txt";
+			String inputPath = "D:\\result\\location\\" +
+					"Result_4\\Result" + groupNum_new + ".txt";
 			System.out.println(inputPath);
 			Scanner in = new Scanner(new File(inputPath));
-			in.nextLine();
 			in.nextLine();
 			String str;
 			String[] temp;

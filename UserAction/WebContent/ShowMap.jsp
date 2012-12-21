@@ -35,7 +35,7 @@
       }
     </style>
     <script type="text/javascript"
-      src="http://maps.google.com/maps/api/js?sensor=false">
+      src="http://maps.google.com/maps/api/js?sensor=false&language=en">
     </script>
     <script src="js/showTraceByImsi.js" type="text/javascript">
     </script>

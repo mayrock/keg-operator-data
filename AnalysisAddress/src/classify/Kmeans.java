@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.Scanner;
 
 /**
@@ -13,55 +14,68 @@ import java.util.Scanner;
  */
 public class Kmeans {
 
-	private int[][] pattern = new int[2000][20];//原始数据
-	private double[][] norm = new double[2000][20];//归一化后数据
-	private double[][] clusterCenter = new double[5][20];//簇中心点数据
-	private int[][] clusterMember = new int[5][2000];//簇包含成员
-	private String[][] countFile = new String[2000][40];//全部原始数据
+	private int sizeVector = 7;
+	private int numClusters = 3;
+	private int[][] pattern = new int[2000][sizeVector];//原始数据
+	private double[][] norm = new double[2000][sizeVector];//归一化后数据
+	private double[][] clusterCenter = new double[numClusters][sizeVector];//簇中心点数据
+	private int[][] clusterMember = new int[numClusters][2000];//簇包含成员
 	private int numPatterns;
-	private int sizeVector;
-	private int numClusters = 4;
-	private int l;
-	private String title;
 	private final static String[] aeraSpecies = {
 		"美食","休闲娱乐","购物","结婚","宾馆酒店","旅游景点",
 		"教育培育","生活服务","医疗服务","丽人","汽车服务",
 		"运动健身","商务服务","机构","金融银行","楼宇小区","交通出行"};
+	private int[][] countArea = new int[2000][aeraSpecies.length];//Area数据
+	private String[][] latlng = new String[2000][3];
 
 	private void loadPatterns(String input) {
 		try {
 			Scanner in = new Scanner(new File(input));
-			title = in.nextLine();
-			String[] s = title.split("\t");
-			l = s.length;
-			sizeVector = l - 16;
+			in.nextLine();
+			String[] s;
+			int t;
 			int c = 0;
 			String str;
 			while (in.hasNextLine()) {
 				str = in.nextLine();
 				s = str.split("\t");
-				if (s[l - 9].equals("0") && s[l - 8].equals("0") && s[l - 7].equals("0"))
+				t = 0;
+				for (int i = 0; i < aeraSpecies.length; i++) {
+					countArea[c][i] = Integer.parseInt(s[i + 7]);
+					t += countArea[c][i];
+				}
+				if (t == 0)
 					continue;
-				for (int i = 0; i < l; i++)
-					countFile[c][i] = s[i];
+				for (int i = 0; i < 3; i++)
+					latlng[c][i] = s[i];
 				for (int i = 0; i < sizeVector; i++)
-					pattern[c][i] = Integer.parseInt(s[7 + i]);
+					pattern[c][i] = Integer.parseInt(s[i + 24]);
 				c++;
 			}
 			numPatterns = c;
-			int total;
-			for(int i = 0; i < sizeVector; i++) {
-				total = 0;
-				for(int j = 0; j < numPatterns; j++)
-					total += pattern[j][i];
-				for(int j = 0; j < numPatterns; j++)
-					norm[j][i] = ((double)pattern[j][i]) / total;
-			}
-			System.out.println("numPatterns = " + numPatterns + "\tsizeVector = " + sizeVector +
-					"\tnumClusters = " + numClusters);
 			in.close();
+			File f = new File("D:\\result\\location\\Result_norm.txt");
+			PrintWriter out = new PrintWriter(f.getAbsolutePath());
+			for (int i = 0; i < sizeVector; i++) {
+				t = 0;
+				for (int j = 0; j < numPatterns; j++)
+					t += pattern[j][i];
+				for (int j = 0; j < numPatterns; j++) {
+					norm[j][i] = ((double) pattern[j][i]) / t;
+				}
+			}
+			for (int j = 0; j < numPatterns; j++) {
+				for (int i = 0; i < sizeVector - 1; i++) {
+					out.print(norm[j][i] + "\t");
+				}
+				out.println(norm[j][sizeVector - 1]);
+			}
+			out.close();
+			System.out.println("numPatterns = " + numPatterns
+					+ "\tsizeVector = " + sizeVector + "\tnumClusters = "
+					+ numClusters);
 		}catch (IOException e) {
-			System.out.println(e);
+			e.printStackTrace();
 			System.out.println("Cann't read file " +  new File(input).getAbsolutePath());
 		}
     }
@@ -69,9 +83,12 @@ public class Kmeans {
 	public void initClusters() {
 		//初始化簇
 		System.out.println("Initial cluster centers:");
-		for (int i = 0; i < numClusters; i++)
+		for (int i = 0; i < numClusters; i++){
+			double a = Math.random();
+			int k = (int)(numPatterns * a);
 			for (int j = 0; j < sizeVector; j++)
-				clusterCenter[i][j] = norm[i][j];
+				clusterCenter[i][j] = norm[k][j];
+		}
 		for (int i = 0; i < numClusters; i++) {
 			System.out.print("ClusterCenter[" + i + "] =");
 			for (int j = 0; j < sizeVector; j++)
@@ -99,7 +116,7 @@ public class Kmeans {
 			clusterMember[i][0] = 0;
 		for (int pat = 0; pat < numPatterns; pat++) {
 			clustid = findClosestCluster(pat);
-			System.out.println("pattern " + pat + " belong to cluster[" + clustid + "]");
+//			System.out.println("pattern " + pat + " belong to cluster[" + clustid + "]");
 			clusterMember[clustid][0] += 1;
 			clusterMember[clustid][clusterMember[clustid][0]] = pat;
 		}
@@ -112,8 +129,8 @@ public class Kmeans {
 		min = 9.9e+99;
 		for (int i = 0; i < numClusters; i++) {
 			d = Distance(pat,i);
-			System.out.println("pattern " + pat + " to cluster [" + i + "]'s " +
-					"distance is " + d + "!");
+//			System.out.println("pattern " + pat + " to cluster [" + i + "]'s " +
+//					"distance is " + d + "!");
 			if (d < min) {
 				min = d;
 				clustID = i;
@@ -129,7 +146,7 @@ public class Kmeans {
 	private double Distance(int p, int c) {
 		//计算一个点到簇中心点的距离
 		double x = 0.0;
-		System.out.println("Now calculate pattern " + p + " to cluster[" + c + "]'s distance:");
+//		System.out.println("Now calculate pattern " + p + " to cluster[" + c + "]'s distance:");
 		for (int i = 0; i < sizeVector; i++)
 			x += (clusterCenter[c][i] - norm[p][i]) * (clusterCenter[c][i] - norm[p][i]);
 		return Math.sqrt(x);
@@ -175,38 +192,68 @@ public class Kmeans {
 	}
 
 	public void saveCluster() {
-		for(int i = 0; i < numClusters; i++) {
-			try {
-				PrintWriter out = new PrintWriter("C:\\Users\\wuchao\\Git\\" +
-						"keg-operator-data\\result\\location\\" +
-						"500_17features_new\\Result" + (i + 1) + ".txt");
-				out.print("平均值");
-				for (int j = 0; j < sizeVector; j++)
-					out.print("\t" + clusterCenter[i][j]);
-				out.println();
-				out.print("SiteId\tLatitude\tLongitude\tUserCount\t" +
-						"MinuteCount\tURICount\tTotalCount");
-				for(int j = 0;j < aeraSpecies.length;j++)
-					out.print("\t" + aeraSpecies[j]);
-				out.println("\t工作区\t生活区\t商业区");
-				for(int j = 1; j <= clusterMember[i][0]; j++) {
-					for (int k = 0; k < l - 1; k++)
-						out.print(countFile[clusterMember[i][j]][k] + "\t");
-					out.println(countFile[clusterMember[i][j]][l-1]);
+		Calendar now = Calendar.getInstance();
+		String nowTime = now.get(Calendar.YEAR) + "-"
+				+ (now.get(Calendar.MONTH) + 1) + "-"
+				+ now.get(Calendar.DAY_OF_MONTH) + "-"
+				+ now.get(Calendar.HOUR_OF_DAY) + "-"
+				+ now.get(Calendar.MINUTE) + "-" + now.get(Calendar.SECOND);
+		File f = new File("D:\\result\\location\\Result_"
+				+ numClusters + "_" + nowTime);
+		f.mkdir();
+		try {
+			PrintWriter output = new PrintWriter(f.getAbsolutePath()
+					+ "\\Result_all.txt");
+			for (int j = 0; j < sizeVector; j++)
+				output.print("\t" + j);
+			for (int j = 0; j < aeraSpecies.length; j++)
+				output.print("\t" + aeraSpecies[j]);
+			output.println();
+			for (int i = 0; i < numClusters; i++) {
+				PrintWriter out = new PrintWriter(f.getAbsolutePath()
+						+ "\\Result" + (i + 1) + ".txt");
+				out.print("SiteId\tLatitude\tLongitude");
+				for (int j = 0; j < sizeVector; j++) {
+					out.print("\t" + j);
 				}
+				for (int j = 0; j < aeraSpecies.length; j++) {
+					out.print("\t" + aeraSpecies[j]);
+				}
+				out.println();
+				output.print(clusterMember[i][0] + "\t");
+				output.print(clusterCenter[i][0]);
+				for (int j = 1; j < sizeVector; j++) {
+					output.print("\t" + clusterCenter[i][j]);
+				}
+				int[] count = new int[aeraSpecies.length];
+				for (int j = 1; j <= clusterMember[i][0]; j++) {
+					for (int k = 0; k < 3; k++)
+						out.print(latlng[clusterMember[i][j]][k] + "\t");
+					for (int k = 0; k < sizeVector; k++)
+						out.print(norm[clusterMember[i][j]][k] + "\t");
+					for (int k = 0; k < aeraSpecies.length - 1; k++) {
+						out.print(countArea[clusterMember[i][j]][k] + "\t");
+						count[k] += countArea[clusterMember[i][j]][k];
+					}
+					out.println(countArea[i][aeraSpecies.length - 1]);
+				}
+				for (int k = 0; k < aeraSpecies.length; k++) {
+					output.print("\t" + (((double)count[k]) / clusterMember[i][0]));
+				}
+				output.println();
 				out.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+			output.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args) {
-		Kmeans kmean=new Kmeans();
-		kmean.loadPatterns("C:\\Users\\wuchao\\Git\\" +
-				"keg-operator-data\\result\\location\\" +
-				"AreaCount_500_allKind_new.txt");
+		Kmeans kmean = new Kmeans();
+		kmean.loadPatterns("D:\\result\\location" +
+				"\\AreaCount_200_allKind_new_2.txt");
 		kmean.initClusters();
 		kmean.runKmeans();
 		kmean.saveCluster();
