@@ -1,6 +1,7 @@
 package edu.thu.keg.mobiledata.internetgraph.dbo;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 /**
 *
 * @author Yuan Bozhi
@@ -14,19 +15,39 @@ public class UserHost implements Serializable{
 	public Host host;
 	final String ID;
 	public int TotalCount;
+	public int day;
 	public Hashtable<String, ConnectionDetail> ConnectionTable;//connection details
+	
+	public HashMap<String, Integer> LocationConTable;
+	public HashMap<String, Integer> TimeConTable;
 	public UserHost(User u,Host h)
 	{
 		ID=u.IMEI+h.ADDR;
 		user=u;
 		host=h;
 		TotalCount=0;
+		day=0;
 //		ConnectionTable= new Hashtable<String, ConnectionDetail>();
+		LocationConTable=new HashMap<String, Integer>();
+		TimeConTable=new HashMap<String, Integer>();
 	}
-	public boolean insertConnnection(String location,int timeSegment,String userAgent)
+	public boolean insertConnnection(String location, int day, int timeSegment,String userAgent)
 	{
-		String LTs=location+","+timeSegment;
-//**暂时注释		if(ConnectionTable.containsKey(LTs))
+		String LDTs=location+" "+String.valueOf(day)+" "+String.valueOf(timeSegment);
+		String DTs=String.valueOf(day)+" "+String.valueOf(timeSegment);
+		//同一天同一时间同一地点
+		if(LocationConTable.containsKey(LDTs))
+			LocationConTable.put(LDTs, LocationConTable.get(LDTs)+1);
+		else
+			LocationConTable.put(LDTs, 1);
+		//同一天同一时间
+		if(TimeConTable.containsKey(DTs))
+			TimeConTable.put(DTs, TimeConTable.get(DTs)+1);
+		else
+			TimeConTable.put(DTs, 1);
+		
+//**暂时注释		
+//		if(ConnectionTable.containsKey(LTs))
 //		{
 //			ConnectionTable.get(LTs).ConnectionCount++;
 //			ConnectionTable.get(LTs).UserAgent.add(userAgent);
@@ -35,15 +56,16 @@ public class UserHost implements Serializable{
 //		{
 //			ConnectionTable.put(LTs, new ConnectionDetail(location, timeSegment, userAgent));
 //			ConnectionTable.get(LTs).ConnectionCount++;
-//**		}
+//		}
 		this.TotalCount++;
 		this.host.TotalConnectNum++;
-		return false;
+		this.user.TotalConnectNum++;
+		return true;
 	}
 	@Override
 	public String toString()
 	{
-		String s=user.IMEI+host.ADDR;
+		String s=user.IMEI+" "+host.ADDR;
 		return s;
 	}
 }
@@ -65,7 +87,7 @@ class ConnectionDetail implements Serializable{
 	@Override
 	public String toString()
 	{
-		return Location+Integer.toString(TimeSegment);
+		return Location+" "+Integer.toString(TimeSegment);
 	}
 	
 }

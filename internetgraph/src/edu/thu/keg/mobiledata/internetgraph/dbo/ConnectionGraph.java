@@ -8,6 +8,7 @@ package edu.thu.keg.mobiledata.internetgraph.dbo;
 import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -20,6 +21,7 @@ public class ConnectionGraph implements Serializable{
 	HashMap<String, User> graphUsers;//user's hash
 	HashMap<String, Host> graphHosts;//host's hash
 	HashMap<String, UserHost> graphEdges;//edge's hash
+	HashSet<Integer> days_of_year;
 	int AllConnectionTimes;
 	public ConnectionGraph(String id)
 	{
@@ -33,6 +35,7 @@ public class ConnectionGraph implements Serializable{
 		graphUsers= new HashMap<String, User>();
 		graphHosts= new HashMap<String, Host>();
 		graphEdges= new HashMap<String, UserHost>();
+		days_of_year=new HashSet<Integer>();
 		AllConnectionTimes=0;
 	}
 	//clear the graph
@@ -67,7 +70,7 @@ public class ConnectionGraph implements Serializable{
 		return false;
 	}
 	//insert a relationship
-	public boolean insertEdge(String imei,String addr, String location,int timeSegment,String userAgent)
+	public boolean insertEdge(String imei,String addr, String location,int day, int timeSegment,String userAgent)
 	{
 		if(imei==null || addr==null )
 		{
@@ -75,18 +78,20 @@ public class ConnectionGraph implements Serializable{
 			System.out.println("imei or addr is null");
 			return false;
 		}
-	
+		if(!days_of_year.contains(day))
+			days_of_year.add(day);
 		this.AllConnectionTimes++;
 		
 		UserHost tempUH=null;
 		if(graphUsers.containsKey(imei) && graphHosts.containsKey(addr))//exist the UserNode & HostNode
 		{
+			String key=imei+" "+addr;
 			
-			if(graphEdges.containsKey(imei+addr))//already exist an edge
+			if(graphEdges.containsKey(key))//already exist an edge
 			{
 				
-				tempUH=graphEdges.get(imei+addr);
-				tempUH.insertConnnection(location, timeSegment, userAgent);
+				tempUH=graphEdges.get(key);
+				tempUH.insertConnnection(location, day,timeSegment, userAgent);
 //				log.log(Level.INFO, "在已有双节点添加边-已经存在一条边");
 //				System.out.println("在已有双节点添加边-已经存在一条边");
 				return true;
@@ -96,7 +101,7 @@ public class ConnectionGraph implements Serializable{
 				User u=graphUsers.get(imei);
 				Host h=graphHosts.get(addr);
 				tempUH= new UserHost(u, h);
-				tempUH.insertConnnection(location, timeSegment, userAgent);
+				tempUH.insertConnnection(location, day,timeSegment, userAgent);
 				u.addConnectedHost(tempUH.toString(), tempUH);
 				h.addConnectedUser(tempUH.toString(), tempUH);
 				graphEdges.put(tempUH.toString(), tempUH);//add to the graphEdges
@@ -111,7 +116,7 @@ public class ConnectionGraph implements Serializable{
 			Host h=new Host(addr);
 			this.insertHostNode(h);
 			tempUH= new UserHost(u, h);
-			tempUH.insertConnnection(location, timeSegment, userAgent);
+			tempUH.insertConnnection(location,day, timeSegment, userAgent);
 			u.addConnectedHost(tempUH.toString(), tempUH);
 			h.addConnectedUser(tempUH.toString(), tempUH);
 			graphEdges.put(tempUH.toString(), tempUH);//add to the graphEdges
@@ -126,7 +131,7 @@ public class ConnectionGraph implements Serializable{
 			this.insertUserNode(u);
 			Host h=graphHosts.get(addr);
 			tempUH= new UserHost(u, h);
-			tempUH.insertConnnection(location, timeSegment, userAgent);
+			tempUH.insertConnnection(location, day,timeSegment, userAgent);
 			u.addConnectedHost(tempUH.toString(), tempUH);
 			h.addConnectedUser(tempUH.toString(), tempUH);
 			graphEdges.put(tempUH.toString(), tempUH);//add to the graphEdges
@@ -141,7 +146,7 @@ public class ConnectionGraph implements Serializable{
 			Host h=new Host(addr);
 			this.insertHostNode(h);
 			tempUH= new UserHost(u, h);
-			tempUH.insertConnnection(location, timeSegment, userAgent);
+			tempUH.insertConnnection(location,day, timeSegment, userAgent);
 			u.addConnectedHost(tempUH.toString(), tempUH);
 			h.addConnectedUser(tempUH.toString(), tempUH);
 			graphEdges.put(tempUH.toString(), tempUH);//add to the graphEdges

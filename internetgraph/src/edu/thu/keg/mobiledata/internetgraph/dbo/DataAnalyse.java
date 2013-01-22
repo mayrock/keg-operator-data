@@ -107,8 +107,8 @@ public class DataAnalyse {
 		int t;
 		CGraph.initialGraph();
 //		PrintWriter out=new PrintWriter("temp");
-		String query="select Imsi,GroupNum"+
-				" from dbo.new2_GN_Filtered_4_Grouped_For_Character";
+		String query="select Imsi,WebsiteNum,GroupNum,ConnectTime"+
+				" from dbo.group_data_filtered6";
 		int i=0;
 		try {
 			stmt = conn.createStatement();
@@ -120,46 +120,33 @@ public class DataAnalyse {
 			String ConnectionTime="none";
 			String UserAgent="none";
 			while(rs.next() ) {
-				
-//				System.out.println(i+"条数据读入!");
+				//				System.out.println(i+"条数据读入!");
 				uID=String.valueOf(rs.getBigDecimal("Imsi"));
-				Addr=rs.getString("GroupNum");
-//				Addr=rs.getString("URI").replace(" ", "");
-//				//保留域名
-//				Addr=URIMerger.processUri(Addr);
-//				Location=rs.getShort("Lac")+"+"+rs.getString("Ci");
-//				Calendar CT=Calendar.getInstance();
-//				ConnectionTime=rs.getString("ConnectTime");
-//				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//				java.util.Date dt = sdf.parse(ConnectionTime);
-//				CT.setTime(dt);
-//				Date FRT=rs.getDate("RequestTime");
-//				Date LPT=rs.getDate("LastPkgTime");
-//				int hour=CT.get(CT.HOUR_OF_DAY);
+				Addr=rs.getString("WebsiteNum");
+				
+				Location=rs.getString("GroupNum");
+				Calendar CT=Calendar.getInstance();
+				ConnectionTime=rs.getString("ConnectTime");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				java.util.Date dt = sdf.parse(ConnectionTime);
+				CT.setTime(dt);
+
+				double hour=CT.get(CT.HOUR_OF_DAY);
+				hour=hour+CT.get(CT.MINUTE)/60.0;
+				int day= CT.get(CT.DAY_OF_YEAR);
 //				long FRT_ms=FRT.getTime();
 //				long LPT_ms=LPT.getTime();
 //				String UserAgent=rs.getString("UserAgent");
-				int timeSegment=0;
-//				if(hour>=0&&hour<4)
-//					timeSegment=1;
-//				else if(hour>=4&&hour<8)
-//					timeSegment=2;
-//				else if(hour>=8&&hour<12)
-//					timeSegment=3;
-//				else if(hour>=12&&hour<16)
-//					timeSegment=4;
-//				else if(hour>=16&&hour<20)
-//					timeSegment=5;
-//				else if(hour>=20&&hour<24)
-//					timeSegment=6;
-				CGraph.insertEdge(uID, Addr, Location, timeSegment, UserAgent);
+				int timeSegment=(int)(hour/0.5);
+				
+				CGraph.insertEdge(uID, Addr, Location, day, timeSegment, UserAgent);
 				i++;
 //				System.out.println(i+":已经快了...");
 				
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
-		}
+		}System.out.println(i+"个记录时工作日");
 //			if(stmt!=null) 
 //				stmt.close();
 		
@@ -170,31 +157,33 @@ public class DataAnalyse {
 	 */
 	public void getHostRelation(DataAnalyse da,ConnectionGraph CG)
 	{
-//		int UserNum=CG.graphUsers.size();
-//		int HostNum=CG.graphHosts.size();
-//		int EdgeNum=CG.graphEdges.size();
-//		System.out.println("Users:"+UserNum);
-//		System.out.println("Hosts:"+HostNum);
-//		System.out.println("Edged:"+EdgeNum);
+		int UserNum=CG.graphUsers.size();
+		int HostNum=CG.graphHosts.size();
+		int EdgeNum=CG.graphEdges.size();
+		System.out.println("Users:"+UserNum);
+		System.out.println("Hosts:"+HostNum);
+		System.out.println("Edged:"+EdgeNum);
 //		Set<String> ukey_co=CG.graphUsers.keySet();
 //		Object [] u_Imes=(ukey_co.toArray());
+		//第一次,生成组
+//		String [] Host_Addr=new String [990];
+//		Host[] h_1000=getCharacterVect(CG,Host_Addr,1000,"HostCharacterVectors_BJ_CT.txt");//output HostCharacterVecter
+//		HashMap<String, Double>[] h_1000=readCharacterVect("HostCharacterVectors_BJ_CT_990.txt",Host_Addr);
+
 		
-		String [] Host_Addr=new String [755];
-//		Host[] h_1000=getCharacterVect(CG,Host_Addr,755,"HostCharacterVectors_new2_Group755_4.txt");//output HostCharacterVecter
-		HashMap<String, Double>[] h_1000=readCharacterVect("HostCharacterVectors_new2_Group755_4.txt",Host_Addr);
-		getImsiCharacterVec(h_1000,"ImsiCharacterVectors_new2_Group755_4.txt");
 	//-----------Host_Addr,h_1000都可以出来
-		
-//		double [][]RelationMatrix=getRalationVector(h_1000,"HostRelationVectors_new2_1000_4.txt");//Host[] 得到RalationMatrix
-//		double [][]RelationMatrix=readRaletionMatrix("HostRelationVectors_new2_1000_4.txt", 1000,Host_Addr);
+//		System.out.print(Host_Addr[0]+" "+Host_Addr[1]);
+//		double [][]RelationMatrix1=getRalationVector(h_1000,"HostRelationVectors_BJ_CT.txt");//Host[] 得到RalationMatrix
+//		double [][]RelationMatrix=readRaletionMatrix("HostRelationVectors_BJ_CT_990.txt", 990);
 	
+//		double [][]RelationMatrix2=getRalationVector(h_1000,"BJ\\ImsiCharacterVectors_BJ_CT.txt");//HashMap<String, Double>[]得到RalationMatrix
+//		
 		
-		
-//		writeColumnRelation(RelationMatrix, Host_Addr,"HostVectors_new2_1000_column_4.txt");//output the column RelationMatrix
+//		writeColumnRelation(RelationMatrix, Host_Addr,"HostRelationVectors_BJ_CT_990_column.txt");//output the column RelationMatrix
 		
 //		
-		System.out.println("计算完成夹角ok!");
-//		double yu=0.1;
+//		System.out.println("计算完成夹角ok!");
+//		double yu=0.5;
 //		while(yu<1.0)
 //			{
 //				ArrayList<HashSet<Integer>> group_Result=getGroupArray(Host_Addr,yu,RelationMatrix);//get Group
@@ -228,9 +217,20 @@ public class DataAnalyse {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-//		insertRecord(getConnection("ZhuData"), "Host_Group.txt", "new2_GN_Filtered_4_Group");
+//		insertRecord(getConnection("BeijingData"), "Host_Group.txt", "Host990_Group924");
 	}
-	
+
+	public void getGroupRelation(DataAnalyse da,ConnectionGraph CG)
+	{
+		//第二次,根据组号生成的
+//		String [] User_Imsi=new String[CG.graphUsers.size()];
+		getImsiCharacterVecByTimeslot(CG,"ImsiTimeslotLda_Allday.txt");
+//		User[] h_40w=getImsiCharacterVec(CG,User_Imsi,CG.graphUsers.size(),"ImsiCharacterVectors_BJ_CT_Grouped_Location.txt");//输出imsi对应的访问前1000个网站的特征向量
+		getRandomLDAInput(50000,"ImsiTimeslotLda_Allday.txt");
+		getTopLDAInput(50000,"ImsiTimeslotLda_Allday.txt");
+		
+		
+	}
 	Host[] getCharacterVect(ConnectionGraph CG,String [] host_addr,
 			int topNum,String filename)
 	{
@@ -285,6 +285,7 @@ public class DataAnalyse {
 		}
 		return h_5000;
 	}
+	
 	HashMap<String, Double>[] readCharacterVect(String fineName,String [] Host_Addr)
 	{
 		HashMap<String, Double> h_1000 []= new HashMap[Host_Addr.length];
@@ -295,7 +296,7 @@ public class DataAnalyse {
 		try {
 			line = l_r.readLine();
 			int k=0;
-			while(line!=null)
+			while(line!=null && k<h_1000.length)
 			{
 				String s[]=line.split(" ");
 				h_1000[k]= new HashMap<String ,Double>();
@@ -321,68 +322,195 @@ public class DataAnalyse {
 		
 		return h_1000;
 	}
-	void getImsiCharacterVec(HashMap<String, Double>[] HostLine,String filename)
+	
+	User[] getImsiCharacterVec(ConnectionGraph CG,String [] user_Imsi,
+			int topNum,String filename)
 	{
-//		HashSet<String> Hset_Imsi=new HashSet<>();
-//		for(int i=0;i<HostLine.length;i++)
-//		{
-//			HashMap<String, Double> h=HostLine[i];
-//			Set<String> s_Imei_j=h.keySet();
-//			Hset_Imsi.addAll(s_Imei_j);
-//			
-//		}
-//		
-		HashMap<String,Double[]> Imesi_All=
-				new HashMap<String,Double[]>();
-		for(int i=0;i<HostLine.length;i++)
-		{
-			HashMap<String, Double> h=HostLine[i];
-			Iterator<String> it_key_h=h.keySet().iterator();
-			while(it_key_h.hasNext())
-			{
-				String s=it_key_h.next();
-				if(Imesi_All.containsKey(s))
-				{
-					Double[] h_temp=Imesi_All.get(s);
-					h_temp[i]=h_temp[i]+h.get(s);
-				}
-				else
-				{
-					Double a[]= new Double[HostLine.length];
-					for(int n=0;n<a.length;n++)
-						a[n]=0.0;
-					Imesi_All.put(s,a);
-					Double[] h_temp=Imesi_All.get(s);
-					h_temp[i]=h.get(s);
-				}
-			}
-		}
+		int UserNum=CG.graphUsers.size();
+		int HostNum=CG.graphHosts.size();
+		int EdgeNum=CG.graphEdges.size();
+		System.out.println("Users:"+UserNum);
+		System.out.println("Hosts:"+HostNum);
+		System.out.println("Edged:"+EdgeNum);
+		Set<String> hkey_co=CG.graphHosts.keySet();
+		Object [] h_Addr=(hkey_co.toArray());
+		User[] u_5000=getUserTop(CG,topNum); //得到访问量的前topNum个排序好的
 		
-		BufferedOutputStream b_f= HostTag.getBOS(filename);
-		writeString(b_f,String.valueOf(Imesi_All.size())+"\n");
-		Iterator<String> it_key_I=Imesi_All.keySet().iterator();
-		while(it_key_I.hasNext()){
-			String s=it_key_I.next();
-			String str="";
-			Double [] d_line=Imesi_All.get(s);
-			int k=0;
-			for(int i=0;i<d_line.length;i++)
+		BufferedOutputStream f_b=getBOS(filename);
+		for(int i=0;i<u_5000.length;i++)//针对每一个user,过滤所有的host
+		{
+			User  u= u_5000[i];
+//			u.Eigenvector= new double[HostNum];
+			System.out.println(i);
+//			遍历每一个host的user然后如果有的话就把该纬度的值设置成user的值
+			String output_line=u.IMEI+" "+u.TotalConnectNum;
+			user_Imsi[i]=u.IMEI;
+			for(int j=0;j<h_Addr.length;j++)
 			{
-				if(d_line[i]>0.0001)
+//				System.out.println(j);
+				String hostId=(String)h_Addr[j];
+				
+				if(u.ConnectedHost.containsKey(u.IMEI+" "+hostId))//如果
 				{
-					str=str+" "+String.valueOf(i)+":"+String.valueOf((int)d_line[i].doubleValue());
-					k++;
+					int v=(u.ConnectedHost.get(u.IMEI+" "+hostId).TotalCount);
+//					u.Eigenvector[j]=(double)v;
+					output_line =output_line+" "+hostId+" "+String.valueOf(v);
 				}
+//				else
+//					u.Eigenvector[j]=0.0;
 			}
-			str=s+":"+String.valueOf(k)+str;
-			writeString(b_f, str+"\n");
+			output_line +="\n";
+			writeString(f_b, output_line);
+
 		}
 		try {
-			b_f.close();
+			f_b.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return u_5000;
+	}
+	
+	void getImsiCharacterVecByTimeslot(ConnectionGraph CG, String outfilename)
+	{
+		BufferedOutputStream f_b= getBOS(outfilename);
+		BufferedOutputStream f_b_detail= getBOS("Timeslot_detail.txt");
+		
+		Iterator<User> i_u=CG.graphUsers.values().iterator();
+		System.out.println(CG.graphUsers.values().size());
+		int a=0;
+		while(i_u.hasNext())//每一个用户
+		{
+			System.out.println("user"+String.valueOf(a++));
+			HashMap<String, Integer> User_output=new HashMap<String, Integer>();
+			User u=i_u.next();			
+			Iterator<Integer> i_day= CG.days_of_year.iterator();
+			while(i_day.hasNext())//每一天
+			{
+				int day= i_day.next();
+				ArrayList<String>[] url=new ArrayList[48];
+				ArrayList<Integer>[] url_count=new ArrayList[48];
+				ArrayList<String>[] url_loc=new ArrayList[48];
+				ArrayList<Integer>[] url_loc_maxcount=new ArrayList[48];
+				
+				for(int i=0;i<48;i++)//每一个时间段
+				{
+					Iterator<UserHost> i_uh=u.ConnectedHost.values().iterator();
+					url[i]= new ArrayList<String>();//保存这一天第i个时间段的前三名url
+					url_count[i]= new ArrayList<Integer>();//保存这一天第i个时间段的前三名url的访问次数
+					url_loc[i]= new ArrayList<String>();//保存这一天第i个时间段的前三名url的location
+					url_loc_maxcount[i]=new ArrayList<Integer>();//保存这一天第i个时间访问前三名最多地点的访问次数
+					while(i_uh.hasNext())//根据每个userHost找出在这一天这个时间段访问量最大的前三个url
+					{
+						UserHost uh=i_uh.next();
+						String key_DTs=String.valueOf(day)+" "+String.valueOf(i);
+						if(uh.TimeConTable.containsKey(key_DTs))//找到这一天这个时段的数据
+						{
+							String url_temp=uh.host.ADDR;
+							int url_count_temp=uh.TimeConTable.get(key_DTs);
+							if(url[i].size()==0)
+							{
+								url[i].add(url_temp);
+								url_count[i].add(url_count_temp);
+							}
+							else
+							{
+								int us=url[i].size();
+								for(int j=0;j<us;j++)
+								{
+									if(url_count_temp>url_count[i].get(j))//添加到起前3个中
+									{
+										url[i].add(j, url_temp);
+										url_count[i].add(j, url_count_temp);
+										break;
+									}
+									if(j==us-1)//添加到最后一个
+									{
+										url[i].add(url_temp);
+										url_count[i].add(url_count_temp);
+									}
+									
+								}
+							}
+							if(url[i].size()>3)
+							{
+								url[i].remove(3);
+								url_count[i].remove(3);
+							}
+						}
+					}
+					for(int j=0;j<url[i].size();j++)//获得这个时间段这一天的前三个的url的位置信息储存到url_loc
+					{
+						UserHost uh=u.ConnectedHost.get(u.IMEI+" "+url[i].get(j));
+						Iterator<String> i_loc=uh.LocationConTable.keySet().iterator();
+						String max_loc="";
+						while(i_loc.hasNext())
+						{
+							String i_loc_key=i_loc.next().split(" ")[0];
+							if(max_loc.equals("") && uh.LocationConTable.get(i_loc_key+" "+String.valueOf(day)+" "+String.valueOf(i))!=null)
+							{
+								max_loc=i_loc_key;
+								continue;
+							}
+							if(uh.LocationConTable.get(i_loc_key+" "+String.valueOf(day)+" "+String.valueOf(i))
+									==null||uh.LocationConTable.get(max_loc+" "+String.valueOf(day)+" "+String.valueOf(i))==null)
+								continue;
+							if(	uh.LocationConTable.get(i_loc_key+" "+String.valueOf(day)+" "+String.valueOf(i))
+									>uh.LocationConTable.get(max_loc+" "+String.valueOf(day)+" "+String.valueOf(i)))
+							{
+								max_loc=i_loc_key;
+							}
+						}
+						
+						url_loc[i].add(j, max_loc);
+						url_loc_maxcount[i].add(j, uh.LocationConTable.get(max_loc+" "+String.valueOf(day)+" "+String.valueOf(i)));
+								
+					}
+					for(int j=0;j<url[i].size();j++)//把每个时间段的url,location加入到输出中User_output
+					{
+						String key_out=url[i].get(j)+" "+url_loc[i].get(j);
+						if(User_output.containsKey(key_out))
+						{
+							User_output.put(key_out, User_output.get(key_out)+1);
+						}
+						else
+							User_output.put(key_out,1);
+					}
+					String line="";
+					for(int k=0;k<url[i].size();k++)
+					{
+						line=u.IMEI
+								+" "+String.valueOf(url[i].get(k))
+								+" "+String.valueOf(url_loc[i].get(k))
+								+" "+String.valueOf(day)
+								+" "+String.valueOf(i)
+								+" "+String.valueOf(k)
+								+" "+String.valueOf(url_count[i].get(k))
+								+" "+String.valueOf(url_loc_maxcount[i].get(k))
+								+"\n";
+						writeString(f_b_detail, line);
+					}
+					url[i]=null;
+					url_count[i]= null;
+					url_loc[i]= null;
+					url_loc_maxcount[i]=null;
+				}
+				
+			}
+	//这块是第一次生成lda数据的时候用的,user,website,按照半小时的次数,在这个半小时内访问次数最多的location		
+			Iterator<String> i_o=User_output.keySet().iterator();
+			String content=u.IMEI,key_t="";
+			while(i_o.hasNext())
+			{
+				key_t=i_o.next();
+				content=content+" "+key_t+" "+User_output.get(key_t);
+			}
+			writeString(f_b, content.trim()+"\n");
+		}
+		
+		closeBOS(f_b);
+		closeBOS(f_b_detail);
 	}
 	double [][] readRaletionMatrix(String fineName,int lineNum,String [] host_addr)
 	{
@@ -414,6 +542,36 @@ public class DataAnalyse {
 		}
 		return RelationMatrix;
 	}
+	double [][] readRaletionMatrix(String fineName,int lineNum)
+	{
+		double RelationMatrix[][]= new double [lineNum][lineNum];
+		LineNumberReader l_r2=HostTag.getLNR(fineName);
+		String line2;
+		try {
+			line2 = l_r2.readLine();
+			int k=0;
+			while(line2!=null)
+			{
+				String s[]=line2.split(" ");
+				
+				for(int i=0;i<s.length;i++)
+				{
+					
+						RelationMatrix[k][i]=Double.valueOf(s[i]);
+				
+				}
+				k++;
+				
+				line2=l_r2.readLine();
+			}
+			l_r2.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return RelationMatrix;
+	}
+	
 	double[][] getRalationVector(Host[] h_5000,String filename)
 	{
 //		计算以上生成的Host的数组的夹角值,生成新的相似矩阵
@@ -449,11 +607,11 @@ public class DataAnalyse {
 		System.out.println("计算完成夹角ok!");
 		return RelationMatrix;
 	}
-	double[][] getRalationVector(HashMap<String, Double>[] h_5000)
+	double[][] getRalationVector(HashMap<String, Double>[] h_5000,String outputFilename)
 	{
 //		计算以上生成的Host的数组的夹角值,生成新的相似矩阵
 		double [][]RelationMatrix= new double[h_5000.length][h_5000.length];
-		BufferedOutputStream f_b=getBOS("HostVectors_1000_4.txt");
+		BufferedOutputStream f_b=getBOS(outputFilename);
 //		BufferedOutputStream f_b2=getBOS("HostVectors_New_Cloumn_Merged.txt");
 		for(int i=0;i<h_5000.length;i++)
 		{	if(i%500==0)
@@ -654,6 +812,96 @@ public class DataAnalyse {
 			h_result[i]=h_all[i];
 		return h_result;
 	}
+	public User[] getUserTop(ConnectionGraph CG, int UserMatrixSize)
+	{
+		int UserNum=CG.graphUsers.size();
+//		Iterator<Host> h_en=CG.graphHosts.elements();
+		Iterator<User> u_en=CG.graphUsers.values().iterator();
+		User[] u_all= new User[UserNum];
+		User[] u_result= new User[UserMatrixSize];
+		for(int i=0;i<u_all.length;i++)
+		{
+			u_all[i]=u_en.next();
+		}
+		//Host排序
+		fastLine(u_all, 0, u_all.length-1);
+		//取得访问次数最多的前5000个Host
+		for(int i=0;i<u_result.length;i++)
+			u_result[i]=u_all[i];
+		return u_result;
+	}
+	//得到lda输入的随即Num行
+	public void getRandomLDAInput(int Num, String filename)
+	{
+		LineNumberReader l_r=null;
+		BufferedOutputStream b_f=null;
+		try {
+			l_r= getLNR(filename);
+			b_f=getBOS(filename.replace(".txt", "")+"_Ran"+String.valueOf(Num)+".txt");
+			String line;
+			line = l_r.readLine();
+			int i=0,j=0;
+			while(line!=null && j<Num)
+			{
+				if(i%5==0)
+				{
+					writeString(b_f,line+"\n");
+					j++;
+				}
+				i++;
+				
+				line = l_r.readLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally
+		{
+			try {
+				l_r.close();
+				b_f.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+	}
+	//得到lda输入的前Num行
+	public void getTopLDAInput(int Num, String filename)
+	{
+		LineNumberReader l_r=null;
+		BufferedOutputStream b_f=null;
+		try {
+			l_r= getLNR(filename);
+			b_f=getBOS(filename.replace(".txt", "")+"_Top"+String.valueOf(Num)+".txt");
+			String line;
+			line = l_r.readLine();
+			int i=0;
+			while(line!=null && i<Num)
+			{
+				writeString(b_f,line+"\n");
+				i++;
+				line = l_r.readLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				l_r.close();
+				b_f.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+	//将关系矩阵变换成向量
 	public void writeColumnRelation(double[][] RelationMatrix,String[] Host_Addr,String filename)
 	{
 		BufferedOutputStream b_f=HostTag.getBOS(filename);
@@ -671,21 +919,7 @@ public class DataAnalyse {
 			e.printStackTrace();
 		}
 	}
-public static void writeFile(String Filename,String Content)
-	{
-		 try {
-	        	File outfile=new File(Filename);
-	        	FileOutputStream  f= new FileOutputStream(outfile,true);
-	            BufferedOutputStream f_b=new BufferedOutputStream(f);
-	            byte [] b;
-	            b=Content.getBytes();
-	            f_b.write(b);
-	            f_b.flush();
-	            f_b.close();
-	        } catch (IOException ex) {
-	           System.out.println(ex);
-	        }// TODO add your handling code here:
-	}
+
 	public void writeString(BufferedOutputStream f_b,String Content)
 	{
 		 try {
@@ -697,6 +931,21 @@ public static void writeFile(String Filename,String Content)
 	        } catch (IOException ex) {
 	           System.out.println(ex);
 	        }// TODO add your handling code here:
+	}
+	public  LineNumberReader getLNR(String Filename)
+	{
+		File infile=new File(Filename);
+		FileInputStream f;
+		LineNumberReader f_b=null;
+		try {	
+			f = new FileInputStream(infile);
+			f_b = new LineNumberReader(new InputStreamReader(f));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
+        return f_b;
 	}
 	public BufferedOutputStream getBOS(String Filename)
 	{
@@ -815,6 +1064,28 @@ public static void writeFile(String Filename,String Content)
         fastLine(a, zuo, i-1);
         fastLine(a, i+1, you);
     }
+    public  void fastLine (User [] a,int zuo,int you){
+        int i,j;
+        int key;
+        User temp;
+        if(zuo>you)return;
+        key=a[you].TotalConnectNum;
+        i=zuo-1;
+        for(j=zuo;j<you;j++){
+            if(a[j].TotalConnectNum>key){
+                i++;
+                temp=a[j];
+                a[j]=a[i];
+                a[i]=temp;
+            }
+        }
+        i++;
+        temp=a[j];
+        a[j]=a[i];
+        a[i]=temp;
+        fastLine(a, zuo, i-1);
+        fastLine(a, i+1, you);
+    }
     public  void fastLine (int [] a,int zuo,int you){
         int i,j;
         int key;
@@ -885,25 +1156,39 @@ public static void writeFile(String Filename,String Content)
 		DataAnalyse bpp= new DataAnalyse();			
 		
 		try {
-//			Connection conn=getConnection("Zhudata");
+//			Connection conn=getConnection("BeijingData");
 //			bpp.viewTable(conn,app);
 //			disConnection(conn);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-//		app=DataAnalyse.inputBinary("graphMap_Mengo_Filtered_new2_1000.dat");
-		
+//		app=DataAnalyse.inputBinary("graphMap_BeijingData_CT_Domain.dat");
+//		app=DataAnalyse.inputBinary("graphMap_BeijingData_CT_Domain_grouped.dat");
+//		app=DataAnalyse.inputBinary("graphMap_BeijingData_CT_Domain_grouped_Location.dat");
+//		app=DataAnalyse.inputBinary("graphMap_BeijingData_New_grouped_Location_Timeslot_Workday.dat");
+//		app=DataAnalyse.inputBinary("graphMap_BeijingData_New_grouped_Location_Timeslot_Weekend.dat");
+		app=DataAnalyse.inputBinary("graphMap_BeijingData_New_grouped_Location_Timeslot_Allday.dat");
+
 //		System.out.println("内存建立完毕!");
 //		System.out.println("图建立时间："+(System.currentTimeMillis()-t1)/(double)1000+"秒");
 		long t2=System.currentTimeMillis();
-//
-//		System.out.println("URI:"+app.graphHosts.size());
-//		System.out.println("Imsi:"+app.graphUsers.size());
-//		System.out.println("Edge:"+app.graphEdges.size());
-//		DataAnalyse.outputBinary(app,"graphMap_Mengo_Filtered_new2_755.dat");
-//		System.out.println("序列化生成完毕!");
-		bpp.getHostRelation(bpp,app);
-//		System.out.println("搞定HostRelation!");
+////
+		System.out.println("URI:"+app.graphHosts.size());
+		System.out.println("Imsi:"+app.graphUsers.size());
+		System.out.println("Edge:"+app.graphEdges.size());
+//		DataAnalyse.outputBinary(app,"graphMap_BeijingData_CT_Domain.dat");
+//		DataAnalyse.outputBinary(app,"graphMap_BeijingData_CT_Domain_grouped.dat");
+//		DataAnalyse.outputBinary(app,"graphMap_BeijingData_CT_Domain_grouped_Location.dat");
+//		DataAnalyse.outputBinary(app,"graphMap_BeijingData_New_grouped_Location_Timeslot_Workday.dat");
+//		DataAnalyse.outputBinary(app,"graphMap_BeijingData_New_grouped_Location_Timeslot_Weekend.dat");
+//		DataAnalyse.outputBinary(app,"graphMap_BeijingData_New_grouped_Location_Timeslot_Allday.dat");
+		
+		System.out.println("序列化生成完毕!");
+//		bpp.getHostRelation(bpp,app);
+		//对于分组后的数据
+		bpp.getGroupRelation(bpp,app);
+		
+		System.out.println("搞定HostRelation!");
 		System.out.println("关系矩阵生成时间："+(System.currentTimeMillis()-t2)/(double)1000+"秒");
 		
 //		app.printAllSystem();

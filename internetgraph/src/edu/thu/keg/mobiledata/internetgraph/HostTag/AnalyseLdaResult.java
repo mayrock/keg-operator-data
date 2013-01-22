@@ -318,10 +318,11 @@ public class AnalyseLdaResult {
 		HashMap<String, Double>[][]dis_All= new HashMap[Lda_Matrix.length][Lda_Matrix[0].length];
 		for(int i=0;i<Lda_Matrix.length;i++)
 		{
-			HashMap<String , Double> thisGroup=group_Info[i];
-			Iterator<String > it_key= thisGroup.keySet().iterator();
+			
 			for(int j=0;j<Lda_Matrix[i].length;j++)
 			{   
+				HashMap<String , Double> thisGroup=group_Info[i];
+				Iterator<String > it_key= thisGroup.keySet().iterator();
 				dis_All[i][j]= new HashMap<String, Double>();
 				while(it_key.hasNext())
 				{
@@ -339,6 +340,7 @@ public class AnalyseLdaResult {
 			tag_Array[m]=it_key1.next();
 			m++;
 		}
+		//按照每一列,把每个元素(15tags维度的向量分布)从列相加
 		for(int j=0;j<Lda_Matrix[0].length;j++)
 		{
 			Iterator<String> it_key=Hash_TagNum.keySet().iterator();
