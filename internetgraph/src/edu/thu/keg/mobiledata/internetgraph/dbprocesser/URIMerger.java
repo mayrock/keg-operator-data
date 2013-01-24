@@ -9,9 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import edu.thu.keg.mobiledata.dataloader.DataLoader;
 import edu.thu.keg.mobiledata.internetgraph.dbo.UriInfo;
 
 /**
@@ -19,7 +21,6 @@ import edu.thu.keg.mobiledata.internetgraph.dbo.UriInfo;
  *
  */
 public class URIMerger {
-	private static final int MAX_LENGTH = 3;
 
 	/**
 	 * @param args
@@ -32,39 +33,49 @@ public class URIMerger {
 		t[3] = "a108.photo.store.qq.com";
 		t[4] = "111.444.876.98";
 		for (String s : t) {
-			System.out.println(processUri(s));
+			System.out.println(processUri(s, 2));
 		}
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection
-					("jdbc:sqlserver://localhost:1433;databaseName=ZhuData;integratedSecurity=true;");
+			conn = DataLoader.getBeijingConn();
 			generateMap(conn);
 			conn.close();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	public static void generateMap(Connection conn) throws SQLException {
 		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM new_URI_All_2");
-		System.out.println("Processing...");
-		PreparedStatement ps = conn.prepareStatement("INSERT INTO [ZhuData].[dbo].[new_URI_Mapping]" 
-		           + "([OriginalURI],[ProcessedURI])"
-		           + "VALUES (?,?)");
+		ResultSet rs = stmt.executeQuery("SELECT URI FROM temp_URI3");
+		System.out.println("Processing..." + (new Date()).toString());
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO [URI_Mapping]" 
+		           + "([OriginalURI],[Domain3],[Domain2])"
+		           + "VALUES (?,?,?)");
 		while (rs.next()) {
 			String orig = rs.getString("URI");
-			String uri = processUri(orig);
+			if (orig == null)
+				continue;
+			String uri = processUri(orig, 3);
+			String domain = processUri(orig, 2);
 			if (uri.equals(""))
 				continue;
 			ps.setString(1, orig);
-			ps.setString(2, uri);;
+			ps.setString(2, uri);
+			ps.setString(3, domain);
 			ps.addBatch();
 		}
-		System.out.println("Writing...");
+		System.out.println("Writing..."+ (new Date()).toString());
 		
 		ps.executeBatch();
-		System.out.println("Done");
+		System.out.println("Done"+ (new Date()).toString());
 	}
 	public static void mergeURI (Connection conn) throws SQLException {
 		Statement stmt = conn.createStatement();
@@ -76,7 +87,7 @@ public class URIMerger {
 			int nTotal = rs.getInt("TotalCount");
 			int nUser = rs.getInt("UserCount");
 			int nLocation = rs.getInt("LocationCount");
-			String uri = processUri(orig);
+			String uri = processUri(orig, 2);
 			if (!map.containsKey(uri)) {
 				map.put(uri, 
 						new UriInfo(uri, nTotal, nUser, nLocation));
@@ -107,17 +118,31 @@ public class URIMerger {
 		ret.add("net");
 		ret.add("org");
 		ret.add("gov");
+		ret.add("ac");
+		ret.add("co");
+		ret.add("or");
+		ret.add("go");
+		ret.add("ne");
 		return ret;
 	}
 	public static String processUri(String original) {
-		if (original.matches("[\\.\\d]+")) {
+		return processUri(original, 2);
+	}
+	public static String processUri(String original, int level) {
+		original = original.trim();
+		if (original.matches("[\\.\\d:]+")) {
 			return "";
 		}
+		if (original.contains("?") || original.contains("%")
+				|| original.contains("(") || original.contains("<"))
+			return "";
 		String[] arr = original.split("\\.");
 		int totalLength = arr.length;
-		if (totalLength <= MAX_LENGTH)
+		if (totalLength <= 1)
+			return "";
+		if (totalLength <= level)
 			return original;
-		int maxLength = MAX_LENGTH;
+		int maxLength = level;
 		String level1 = arr[arr.length - 2];
 		if (getCommonLevel1Subfix().contains(level1)) {
 			maxLength++;
@@ -127,7 +152,7 @@ public class URIMerger {
 				i < totalLength; i++) {
 			sb.append("." + arr[i]);
 		}
-		return sb.toString();
+		return sb.toString().trim();
 	}
 
 }

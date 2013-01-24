@@ -127,6 +127,9 @@ public class SingleFileLoader extends AbstractSingleFileReader {
 			} else {
 				value = arr[i];
 			}
+			if (typeArr[i].equals("date")) {
+				value = value.substring(0, value.length() - 5) + "'";
+			}
 			if (!(isNumericType(typeArr[i]) && arr[i].equals(""))) {
 				sb1.append(nameArr[i] + ", " );
 				sb2.append(value + ", " );
@@ -137,6 +140,9 @@ public class SingleFileLoader extends AbstractSingleFileReader {
 			value = "'" + arr[arr.length - 1].replaceAll("\'", "\'\'") + "'";
 		} else {
 			value = arr[arr.length - 1];
+		}
+		if (typeArr[arr.length - 1].equals("date")) {
+			value = value.substring(0, value.length() - 5) + "'";
 		}
 		if (!(isNumericType(typeArr[arr.length - 1]) && arr[arr.length - 1].equals(""))) {
 			sb1.append(nameArr[arr.length - 1]);

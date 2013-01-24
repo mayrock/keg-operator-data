@@ -44,6 +44,7 @@ FROM         dbo.new_GN_All_1 as GN INNER JOIN
            dbo.new_URI_Mapping ON GN.URI = dbo.new_URI_Mapping.OriginalUri 
 ------------------------------------------------
 SELECT     IMSI, COUNT(DISTINCT URI) AS URICount, COUNT(DISTINCT CONVERT(smalldatetime, ConnectTime)) AS MinuteCount, COUNT(DISTINCT siteId) AS LocationCount
+, COUNT(*) AS TotalCount
 into new2_IMSI_All_2
 FROM         dbo.new2_GN_All_1
 GROUP BY IMSI
