@@ -477,6 +477,7 @@ public class DataAnalyse {
 						else
 							User_output.put(key_out,1);
 					}
+					//生成详细数据库中用的
 					String line="";
 					for(int k=0;k<url[i].size();k++)
 					{
