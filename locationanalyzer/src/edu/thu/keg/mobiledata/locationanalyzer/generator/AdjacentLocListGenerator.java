@@ -28,7 +28,7 @@ public class AdjacentLocListGenerator {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main3(String[] args) {
 		AdjacentLocListGenerator generator = new AdjacentLocListGenerator();
 		Connection conn;
 		try {
@@ -55,6 +55,70 @@ public class AdjacentLocListGenerator {
 						stmt.setInt(5, tc[i]);
 						stmt.addBatch();
 					}
+				}
+				stmt.executeBatch();
+				conn.commit();
+				System.out.println(loc.getSiteId() + " succeed.");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	public static void main(String[] args) {
+		Connection conn = null;
+		try {
+			conn = DataLoader.getBeijingConn();
+			Statement stmt = conn.createStatement();
+			PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO ttttttttt" +
+					"(SiteId, ConnHour)" +
+					" VALUES (?, ?)");
+			ResultSet rs = stmt.executeQuery(
+					"SELECT * FROM FilteredSiteInfo");
+			while (rs.next()) {
+				int siteid = rs.getInt("SiteId");
+				for (int i = 0; i < 24; ++i) {
+					stmt2.setInt(1, siteid);
+					stmt2.setInt(2, i);
+					stmt2.addBatch();
+				}
+			}
+			stmt2.executeBatch();
+			conn.commit();
+		} catch (Exception ex) {
+			
+		}
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void main2(String[] args) {
+		AdjacentLocListGenerator generator = new AdjacentLocListGenerator();
+		Connection conn;
+		try {
+			conn = DataLoader.getBeijingConn();
+			AdjacentLocList list = generator.getListFromDB(conn);
+			
+			conn.setAutoCommit(false);
+			PreparedStatement stmt = conn.prepareStatement(
+					"INSERT INTO AdjacentLocation_Clustered" +
+					"(SiteId1, SiteId2, UserCount, TotalCount)" +
+					"VALUES (?, ?, ?, ?)");
+			for (Site loc : list.getSites().values()) {
+				for (AdjacentLocPair pair: loc.getNextSites()) {
+					int siteId1 = pair.getSite1().getSiteId();
+					int siteId2 = pair.getSite2().getSiteId();
+					if (pair.getUsersCount() == 0)
+						continue;
+					stmt.setInt(1, siteId1);
+					stmt.setInt(2, siteId2);
+					stmt.setInt(3, pair.getUsersCount());
+					stmt.setInt(4, pair.getTotalCount());
+					stmt.addBatch();
 				}
 				stmt.executeBatch();
 				conn.commit();
@@ -113,7 +177,7 @@ public class AdjacentLocListGenerator {
 	public AdjacentLocList getListFromDB(Connection conn) throws SQLException {
 		AdjacentLocList list = new AdjacentLocList();
 		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT IMSI,SiteId, Longitude,Latitude,ConnectTime FROM Data" 
+		ResultSet rs = stmt.executeQuery("SELECT IMSI,SiteId, Longitude,Latitude,ConnectTime FROM FilteredByCT_Data2" 
 		        + " ORDER BY IMSI ASC, ConnectTime ASC");
 		rs.next();
 		LocationRecord record = new LocationRecord(rs);
