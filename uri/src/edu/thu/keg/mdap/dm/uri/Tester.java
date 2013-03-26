@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
 /**
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public class Tester {

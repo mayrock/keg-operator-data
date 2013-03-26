@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 //Plain old Java Object it does not extend as class or implements 
