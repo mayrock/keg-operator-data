@@ -1,11 +1,12 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.provider;
+package edu.thu.keg.mdap_impl.provider;
 
 import java.sql.ResultSet;
 
 import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
  * This class is responsible for interacting 
