@@ -13,7 +13,7 @@ import edu.thu.keg.mdap.datafield.DataField;
  * points, regions, etc.
  * @author Yuanchao Ma
  */
-public interface GeographicalDataSet {
+public interface GeographicalDataSet extends DataSet {
 	/**
 	 * @return Reference of the latitude field 
 	 * in the database

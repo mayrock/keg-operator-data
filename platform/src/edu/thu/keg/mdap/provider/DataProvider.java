@@ -5,7 +5,7 @@ package edu.thu.keg.mdap.provider;
 
 import java.sql.ResultSet;
 
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.dataset.AbstractDataSet;
 
 /**
  * Represents a data provider storing datasets. 
@@ -28,7 +28,7 @@ public abstract class DataProvider {
 	 * @param ds the dataset whose contents (ResultSet) are expected
 	 * @return the disconnected ResultSet of the dataset
 	 */
-	public ResultSet queryDataSet(DataSet ds) {
+	public ResultSet queryDataSet(AbstractDataSet ds) {
 		return this.executeQuery(ds.getQueryStatement());
 	}
 }

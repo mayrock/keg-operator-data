@@ -3,7 +3,7 @@
  */
 package edu.thu.keg.mdap.datafield;
 
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.dataset.AbstractDataSet;
 
 /**
  * A field containing IMSI number of a user
@@ -24,7 +24,7 @@ public class ImsiField extends DataField {
 	 * @param ds The DataSet which the constructed 
 	 * field belongs to
 	 */
-	public ImsiField(String name, DataSet ds, String desciption) {
+	public ImsiField(String name, AbstractDataSet ds, String desciption) {
 		init(name, ds, desciption, true);
 	}
 	/**
@@ -33,7 +33,7 @@ public class ImsiField extends DataField {
 	 * @param ds The DataSet which the constructed 
 	 * field belongs to
 	 */
-	public ImsiField(DataSet ds) {
+	public ImsiField(AbstractDataSet ds) {
 		init("IMSI", ds, 
 				"IMSI number of a user", true);
 	}

@@ -5,7 +5,7 @@ package edu.thu.keg.mdap_impl.provider;
 
 import java.sql.ResultSet;
 
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.dataset.AbstractDataSet;
 import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
@@ -32,7 +32,7 @@ public class HiveProvider extends DataProvider {
 	}
 
 	@Override
-	public ResultSet queryDataSet(DataSet ds) {
+	public ResultSet queryDataSet(AbstractDataSet ds) {
 		return this.executeQuery(ds.getQueryStatement());
 	}
 	

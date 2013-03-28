@@ -10,6 +10,6 @@ package edu.thu.keg.mdap.dataset;
  * @author Yuanchao Ma
  *
  */
-public interface StatisticsDataSet {
+public interface StatisticsDataSet extends DataSet {
 	
 }
