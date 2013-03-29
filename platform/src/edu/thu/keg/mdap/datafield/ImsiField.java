@@ -11,13 +11,8 @@ import edu.thu.keg.mdap.dataset.AbstractDataSet;
  * is built in here. This field is always a key field
  * @author Yuanchao Ma
  */
-public class ImsiField extends DataField {
+public class ImsiField extends GeneralDataField {
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Class getDataType() {
-		return String.class;
-	}
 	/**
 	 * Construct a instance within a DataSet,
 	 *   name and description
@@ -25,7 +20,7 @@ public class ImsiField extends DataField {
 	 * field belongs to
 	 */
 	public ImsiField(String name, AbstractDataSet ds, String desciption) {
-		init(name, ds, desciption, true);
+		super(name, String.class, ds, desciption, true);
 	}
 	/**
 	 * Construct a instance within a DataSet,
@@ -34,7 +29,7 @@ public class ImsiField extends DataField {
 	 * field belongs to
 	 */
 	public ImsiField(AbstractDataSet ds) {
-		init("IMSI", ds, 
+		super("IMSI", String.class, ds, 
 				"IMSI number of a user", true);
 	}
 
