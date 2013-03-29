@@ -5,15 +5,15 @@ package edu.thu.keg.mdap_impl.provider;
 
 import java.sql.ResultSet;
 
-import edu.thu.keg.mdap.dataset.AbstractDataSet;
-import edu.thu.keg.mdap.provider.DataProvider;
+import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.provider.AbstractDataProvider;
 
 /**
  * This class is responsible for interacting 
  * with Hive 
  * @author Yuanchao Ma
  */
-public class HiveProvider extends DataProvider {
+public class HiveProvider extends AbstractDataProvider {
 	private static HiveProvider instance;
 	/**
 	 * Get the unique instance of this Singleton
@@ -32,7 +32,7 @@ public class HiveProvider extends DataProvider {
 	}
 
 	@Override
-	public ResultSet queryDataSet(AbstractDataSet ds) {
+	public ResultSet queryDataSet(DataSet ds) {
 		return this.executeQuery(ds.getQueryStatement());
 	}
 	

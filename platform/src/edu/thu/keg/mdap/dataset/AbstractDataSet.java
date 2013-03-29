@@ -11,7 +11,7 @@ import edu.thu.keg.mdap.datafield.DataField;
 import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
- * Stands for a dataset hosted in the platform.
+ * A general implementation of the interface DataSet
  * @author Yuanchao Ma
  *
  */
