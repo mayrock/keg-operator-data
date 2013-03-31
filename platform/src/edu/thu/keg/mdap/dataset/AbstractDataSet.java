@@ -9,6 +9,7 @@ import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.datafield.DataField;
 import edu.thu.keg.mdap.provider.DataProvider;
+import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
  * A general implementation of the interface DataSet
@@ -39,7 +40,7 @@ public abstract class AbstractDataSet implements DataSet {
 	}
 
 	@Override
-	public ResultSet getResultSet() throws OperationNotSupportedException {
+	public ResultSet getResultSet() throws OperationNotSupportedException, IllegalQueryException {
 		if (!isLoadable())
 			throw new OperationNotSupportedException();
 		if (resultSet == null)

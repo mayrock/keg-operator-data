@@ -3,9 +3,8 @@
  */
 package edu.thu.keg.mdap.datafield;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.dataset.DataSet;
 
@@ -41,12 +40,12 @@ public interface DataField {
 	
 	
 	/**
-	 * Get the value of this field of the current record
+	 * Get the value of this field from the given ResultSet
 	 * @return A reference of the value
-	 * @throws OperationNotSupportedException If the dataset cannot be loaded
-	 * @throws SQLException when reading the resultset
+	 * @throws SQLException when reading the resultset, i.e.
+	 * the column name doesnot exist in the resultset
 	 */
-	public Object getValue() throws OperationNotSupportedException, SQLException;
+	public Object getValue(ResultSet rs) throws SQLException;
 	@SuppressWarnings("rawtypes")
 	/**
 	 * Get the type of the field

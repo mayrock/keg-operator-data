@@ -19,16 +19,18 @@ public interface DataProvider {
 	 * Run a query against the dataset and return ResultSet
 	 * @param query the query string returning a table
 	 * @return the disconnected ResultSet returned by the query.
+	 * @throws IllegalQueryException when the DataSet (with its name) does not exist on the DataProvider.
 	 */
-	public abstract ResultSet executeQuery(String query);
+	public abstract ResultSet executeQuery(String query) throws IllegalQueryException;
 	/**
 	 * Query the data provider the get the ResultSet of a dataset.
 	 * Default implementation is calling executeQuery on the query statement of the 
 	 * dataset.
 	 * @param ds the dataset whose contents (ResultSet) are expected
 	 * @return the disconnected ResultSet of the dataset
+	 * @throws IllegalQueryException when the DataSet (with its name) does not exist on the DataProvider.
 	 */
-	public ResultSet queryDataSet(DataSet ds);
+	public ResultSet queryDataSet(DataSet ds) throws IllegalQueryException;
 	/**
 	 * 
 	 * @return The connection string of this DataProvider

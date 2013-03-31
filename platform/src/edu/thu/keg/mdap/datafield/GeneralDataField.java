@@ -7,8 +7,6 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.naming.OperationNotSupportedException;
-
 import edu.thu.keg.mdap.dataset.DataSet;
 
 /**
@@ -66,11 +64,6 @@ public class GeneralDataField implements DataField {
 	}
 	
 	@Override
-	public Object getValue() throws OperationNotSupportedException, SQLException {
-		return this.getValue(this.getDataSet().getResultSet());
-	}
-
-	@Override
 	public Class getDataType() {
 		return this.c;
 	}
@@ -80,7 +73,8 @@ public class GeneralDataField implements DataField {
 	 * @return A reference of the value
 	 * @throws SQLException when reading the resultset
 	 */
-	protected Object getValue(ResultSet rs) throws SQLException {
+	@Override
+	public Object getValue(ResultSet rs) throws SQLException {
 		if (getDataType() == String.class) {
 			return rs.getString(this.getColumnName());
 		} else if (getDataType() == Double.class) {

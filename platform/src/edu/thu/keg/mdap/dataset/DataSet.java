@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.datafield.DataField;
+import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
  * @author myc
@@ -33,10 +34,13 @@ public interface DataSet {
 	 *  containing the records of this dataset, if it is loadable
 	 * The default implementation uses HIVE.
 	 * @return a JDBC ResultSet. The ResultSet is generated when the 
-	 * method is called for the first time 
+	 * method is called for the first time. Return null if no data 
+	 * exists in the data provider
 	 * @throws OperationNotSupportedException when dataset is not loadable
+	 * @throws IllegalQueryException when actual data of the DataSet does not
+	 * exist on the DataProvider
 	 */
-	public ResultSet getResultSet() throws OperationNotSupportedException;
+	public ResultSet getResultSet() throws OperationNotSupportedException, IllegalQueryException;
 	/**
 	 * Whether this dataset is small enough to be loaded into memory
 	 * @return a boolean indicates whether this dataset is small enough to be loaded into memory
