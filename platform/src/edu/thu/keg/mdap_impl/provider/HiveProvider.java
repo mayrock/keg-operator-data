@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 
 import edu.thu.keg.mdap.dataset.DataSet;
 import edu.thu.keg.mdap.provider.AbstractDataProvider;
+import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
  * This class is responsible for interacting 
@@ -19,15 +20,18 @@ public class HiveProvider extends AbstractDataProvider {
 		init(connString);
 		//TODO
 	}
-	@Override
-	public ResultSet executeQuery(String query) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
-	public ResultSet queryDataSet(DataSet ds) {
+	public ResultSet queryDataSet(DataSet ds) throws IllegalQueryException {
 		return this.executeQuery(ds.getQueryStatement());
+	}
+
+
+	@Override
+	public ResultSet executeQuery(String query) throws IllegalQueryException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
