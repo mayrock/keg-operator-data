@@ -10,7 +10,7 @@ import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
  * Interact with SQL database and provide datasets
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public class SqlProvider extends AbstractDataProvider {

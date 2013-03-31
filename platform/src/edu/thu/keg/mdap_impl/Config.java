@@ -12,7 +12,7 @@ import java.util.Properties;
 
 /**
  * Store platform-wide configurations
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public final class Config {

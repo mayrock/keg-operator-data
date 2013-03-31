@@ -6,7 +6,7 @@ package edu.thu.keg.mdap;
 /**
  * The main entrance of the whole platform.
  * 
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public interface Platform {

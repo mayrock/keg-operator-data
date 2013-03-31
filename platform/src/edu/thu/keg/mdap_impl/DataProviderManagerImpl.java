@@ -7,7 +7,7 @@ import edu.thu.keg.mdap.DataProviderManager;
 import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public class DataProviderManagerImpl implements DataProviderManager {

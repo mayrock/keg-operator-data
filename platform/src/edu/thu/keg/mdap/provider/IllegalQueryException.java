@@ -6,7 +6,7 @@ package edu.thu.keg.mdap.provider;
 /**
  * Thrown when a query is illegal
  * (cannot be executed) on a data provider
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public class IllegalQueryException extends Exception {

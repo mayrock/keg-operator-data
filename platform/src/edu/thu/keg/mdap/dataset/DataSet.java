@@ -11,7 +11,7 @@ import edu.thu.keg.mdap.datafield.DataField;
 import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public interface DataSet {

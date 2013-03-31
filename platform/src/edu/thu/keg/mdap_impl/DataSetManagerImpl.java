@@ -10,7 +10,7 @@ import edu.thu.keg.mdap.dataset.DataSet;
 import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public class DataSetManagerImpl implements DataSetManager {

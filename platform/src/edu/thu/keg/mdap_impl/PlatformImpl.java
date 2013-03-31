@@ -8,7 +8,7 @@ import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
 
 /**
- * @author myc
+ * @author Yuanchao Ma
  *
  */
 public class PlatformImpl implements Platform {
