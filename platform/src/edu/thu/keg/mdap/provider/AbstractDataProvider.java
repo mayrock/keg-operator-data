@@ -14,8 +14,18 @@ import edu.thu.keg.mdap.dataset.DataSet;
  */
 public abstract class AbstractDataProvider implements DataProvider {
 
+	protected String connString;
 	@Override
 	public ResultSet queryDataSet(DataSet ds) {
 		return this.executeQuery(ds.getQueryStatement());
 	}
+	@Override
+	public String getConnectionString() {
+		return connString;
+	}
+	
+	protected void init(String connString) {
+		this.connString = connString;
+	}
+
 }

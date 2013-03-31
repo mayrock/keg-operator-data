@@ -14,18 +14,8 @@ import edu.thu.keg.mdap.provider.AbstractDataProvider;
  */
 public class SqlProvider extends AbstractDataProvider {
 
-	private static SqlProvider instance;
-	private SqlProvider() {
-		
-	}
-	/**
-	 * Get the unique instance of this Singleton
-	 * @return reference of the unique instance
-	 */
-	public static synchronized SqlProvider getInstance() {
-		if (instance == null)
-			instance = new SqlProvider();
-		return instance;
+	private SqlProvider(String connString) {
+		init(connString);
 	}
 	
 	//private Connection conn;
@@ -37,5 +27,6 @@ public class SqlProvider extends AbstractDataProvider {
 		//TODO
 		return null;
 	}
+
 
 }

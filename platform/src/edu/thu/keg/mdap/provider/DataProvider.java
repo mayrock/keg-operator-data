@@ -10,8 +10,8 @@ import edu.thu.keg.mdap.dataset.DataSet;
 /**
  * Represents a data provider storing datasets. 
  * Can be a SQL database, Hive, HDFS files, etc..
- * It is recommended that subclasses are designed
- * as singletons
+ * A DataProvider object is uniquely identified 
+ * by a Connection String
  * @author Yuanchao Ma
  */
 public interface DataProvider {
@@ -29,4 +29,9 @@ public interface DataProvider {
 	 * @return the disconnected ResultSet of the dataset
 	 */
 	public ResultSet queryDataSet(DataSet ds);
+	/**
+	 * 
+	 * @return The connection string of this DataProvider
+	 */
+	public String getConnectionString();
 }

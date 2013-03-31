@@ -14,17 +14,11 @@ import edu.thu.keg.mdap.provider.AbstractDataProvider;
  * @author Yuanchao Ma
  */
 public class HiveProvider extends AbstractDataProvider {
-	private static HiveProvider instance;
-	/**
-	 * Get the unique instance of this Singleton
-	 * @return reference of the unique instance
-	 */
-	public static synchronized HiveProvider getInstance() {
-		if (instance == null)
-			instance = new HiveProvider();
-		return instance;
+	
+	public HiveProvider(String connString) {
+		init(connString);
+		//TODO
 	}
-	private HiveProvider() {}
 	@Override
 	public ResultSet executeQuery(String query) {
 		// TODO Auto-generated method stub

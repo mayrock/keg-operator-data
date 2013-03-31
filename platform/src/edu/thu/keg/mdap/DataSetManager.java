@@ -7,11 +7,10 @@ import edu.thu.keg.mdap.dataset.DataSet;
  * about all datasets stored in the platform,
  * including all suppliers. Metadata stored in 
  * all data providers are found here.
- * This should be the main entrance of the framework
  * @author Yuanchao Ma
  *
  */
-public interface DataSetFactory {
+public interface DataSetManager {
 	/**
 	 * Get a dataset stored in the platform and return a reference.
 	 * It can be stored in all registered providers.
@@ -24,5 +23,9 @@ public interface DataSetFactory {
 	 * @return a array containing all the dataset references
 	 */
 	public DataSet[] getDataSetList();
-	
+	/**
+	 * Store(register) metadata of the DataSet into the platform
+	 * @param ds The DataSet object to be stored.
+	 */
+	public void storeDataSet(DataSet ds);
 }
