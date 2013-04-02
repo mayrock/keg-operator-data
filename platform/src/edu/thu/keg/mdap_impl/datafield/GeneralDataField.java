@@ -1,12 +1,13 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.datafield;
+package edu.thu.keg.mdap_impl.datafield;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import edu.thu.keg.mdap.datafield.DataField;
 import edu.thu.keg.mdap.dataset.DataSet;
 
 /**
@@ -40,13 +41,11 @@ public class GeneralDataField implements DataField {
 		return this.isKey;
 	}
 	/**
-	 * Construct a instance within a DataSet,
-	 *   name and description
-	 * @param ds The DataSet which the constructed 
-	 * field belongs to
+	 * Construct a instance using the given
+	 *   name, type and description
 	 */
-	public GeneralDataField(String name, Class type, DataSet ds, String desciption, boolean isKey) {
-		init(name, type, ds, desciption, isKey);
+	public GeneralDataField(String name, Class type, String desciption, boolean isKey) {
+		init(name, type, null, desciption, isKey);
 	}
 	/**
 	 * Initialize the fields of the object
@@ -85,5 +84,9 @@ public class GeneralDataField implements DataField {
 			return rs.getDate(this.getColumnName());
 		}
 		throw new IllegalArgumentException("Type of this field is not supported");
+	}
+	@Override
+	public void setDataSet(DataSet ds) {
+		this.dataset = ds;
 	}
 }

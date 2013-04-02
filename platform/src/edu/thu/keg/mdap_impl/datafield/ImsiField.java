@@ -1,9 +1,8 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.datafield;
+package edu.thu.keg.mdap_impl.datafield;
 
-import edu.thu.keg.mdap.dataset.AbstractDataSet;
 
 /**
  * A field containing IMSI number of a user
@@ -19,8 +18,8 @@ public class ImsiField extends GeneralDataField {
 	 * @param ds The DataSet which the constructed 
 	 * field belongs to
 	 */
-	public ImsiField(String name, AbstractDataSet ds, String desciption) {
-		super(name, String.class, ds, desciption, true);
+	public ImsiField(String name, String desciption) {
+		super(name, String.class, desciption, true);
 	}
 	/**
 	 * Construct a instance within a DataSet,
@@ -28,8 +27,8 @@ public class ImsiField extends GeneralDataField {
 	 * @param ds The DataSet which the constructed 
 	 * field belongs to
 	 */
-	public ImsiField(AbstractDataSet ds) {
-		super("IMSI", String.class, ds, 
+	public ImsiField() {
+		super("IMSI", String.class, 
 				"IMSI number of a user", true);
 	}
 

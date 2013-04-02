@@ -3,6 +3,8 @@
  */
 package edu.thu.keg.mdap;
 
+import java.sql.SQLException;
+
 import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
@@ -20,6 +22,7 @@ public interface DataProviderManager {
 	 * Get a DataProvider instance from a connection string
 	 * @param conn
 	 * @return
+	 * @throws SQLException 
 	 */
 	public DataProvider getProvider(String connString);
 }

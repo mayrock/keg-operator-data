@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.datafield.DataField;
+import edu.thu.keg.mdap.provider.DataProvider;
+import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
@@ -40,7 +42,26 @@ public interface DataSet {
 	 * @throws IllegalQueryException when actual data of the DataSet does not
 	 * exist on the DataProvider
 	 */
-	public ResultSet getResultSet() throws OperationNotSupportedException, IllegalQueryException;
+	public ResultSet getResultSet() throws OperationNotSupportedException, DataProviderException;
+	/**
+	 * Return a disconnected in-memroy JDBC ResultSet
+	 *  containing the records of this dataset, if it is loadable
+	 * The default implementation uses HIVE.
+	 * @return a JDBC ResultSet. The ResultSet is generated when the 
+	 * method is called for the first time. Return null if no data 
+	 * exists in the data provider
+	 * @throws OperationNotSupportedException when dataset is not loadable
+	 * @throws IllegalQueryException when actual data of the DataSet does not
+	 * exist on the DataProvider
+	 * @throws DataProviderException 
+	 */
+	public ResultSet getResultSet(DataField[] fields) throws 
+		OperationNotSupportedException, DataProviderException;
+	/**
+	 * Get the provider of this DataSet
+	 * @return a DataProvider instance
+	 */
+	public DataProvider getProvider();
 	/**
 	 * Whether this dataset is small enough to be loaded into memory
 	 * @return a boolean indicates whether this dataset is small enough to be loaded into memory
@@ -51,4 +72,10 @@ public interface DataSet {
 	 * @return an array containing all the fields in the schema
 	 */
 	public DataField[] getDataFields();
+	/**
+	 * Close the ResultSet of this DataSet, if any.
+	 * @throws SQLException 
+	 * @throws DataProviderException 
+	 */
+	public void closeResultSet() throws DataProviderException;
 }

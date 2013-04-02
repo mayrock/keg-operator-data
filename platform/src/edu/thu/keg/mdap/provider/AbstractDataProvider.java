@@ -16,7 +16,9 @@ public abstract class AbstractDataProvider implements DataProvider {
 
 	protected String connString;
 	@Override
-	public ResultSet queryDataSet(DataSet ds) throws IllegalQueryException {
+	public ResultSet queryDataSet(DataSet ds) throws DataProviderException {
+		if (ds.getProvider() != this)
+			throw new IllegalQueryException();
 		return this.executeQuery(ds.getQueryStatement());
 	}
 	@Override

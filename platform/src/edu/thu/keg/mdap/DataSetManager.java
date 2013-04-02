@@ -1,5 +1,8 @@
 package edu.thu.keg.mdap;
 
+import java.util.Collection;
+
+import edu.thu.keg.mdap.datafield.DataField;
 import edu.thu.keg.mdap.dataset.DataSet;
 
 /**
@@ -22,10 +25,19 @@ public interface DataSetManager {
 	 * Get all datasets stored in the platform
 	 * @return a array containing all the dataset references
 	 */
-	public DataSet[] getDataSetList();
+	public Collection<DataSet> getDataSetList();
 	/**
 	 * Store(register) metadata of the DataSet into the platform
 	 * @param ds The DataSet object to be stored.
 	 */
 	public void storeDataSet(DataSet ds);
+	/**
+	 * Create a new DataSet instance, using the given name, connection string
+	 * and data field set.
+	 * @param name The unique name of the DataSet
+	 * @param connString Connection string of its DataProvider
+	 * @param fields DataField set
+	 * @return A new DataSet instance
+	 */
+	public DataSet createDataSet(String name, String connString, DataField[] fields, boolean loadable);
 }

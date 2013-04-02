@@ -16,32 +16,25 @@ import java.util.Properties;
  *
  */
 public final class Config {
-	private static final String FILE = "config.xml";
+	private static String file = "config.xml";
+	public static final String DataSetFile = "DataSetFile";
 	private static Properties prop = null;
 	
-	public static void init() throws IOException {
-		InputStream is = new FileInputStream(FILE);
+	public static void init(String file) throws IOException {
+		Config.file = file;
+		InputStream is = new FileInputStream(file);
 		prop = new Properties();
 		prop.loadFromXML(is);
 	}
-	private static Properties getProp() throws IOException {
-		if (prop == null)
-			init();
-		return prop;
-	}
 	public static String getProperty(String key){
-		try {
-			return getProp().getProperty(key);
-		} catch (IOException e) {
-			return null;
-		}
+		return prop.getProperty(key);
 	}
 	public static void setProperty(String key, String value) throws IOException {
-		getProp().setProperty(key, value);
-		OutputStream os = new FileOutputStream(FILE);
-		getProp().storeToXML(os, null);
+		prop.setProperty(key, value);
+		OutputStream os = new FileOutputStream(file);
+		prop.storeToXML(os, null);
 	}
-	public static String getDataSetStorage() {
-		return getProperty("DataSetStorage");
+	public static String getDataSetFile() {
+		return getProperty("DataSetFile");
 	}
 }

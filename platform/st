@@ -1,0 +1,29 @@
+<map>
+  <entry>
+    <string>WebsiteId_URL</string>
+    <edu.thu.keg.mdap__impl.dataset.DataSetImpl>
+      <name>WebsiteId_URL</name>
+      <provider class="edu.thu.keg.mdap_impl.provider.JdbcProvider">
+        <connString>jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
+        <results/>
+      </provider>
+      <loadable>true</loadable>
+      <fields class="edu.thu.keg.mdap_impl.datafield.GeneralDataField-array">
+        <edu.thu.keg.mdap__impl.datafield.GeneralDataField>
+          <columnName>WebsiteId</columnName>
+          <dataset class="edu.thu.keg.mdap_impl.dataset.DataSetImpl" reference="../../.."/>
+          <desp></desp>
+          <isKey>true</isKey>
+          <c>java.lang.Integer</c>
+        </edu.thu.keg.mdap__impl.datafield.GeneralDataField>
+        <edu.thu.keg.mdap__impl.datafield.GeneralDataField>
+          <columnName>URL</columnName>
+          <dataset class="edu.thu.keg.mdap_impl.dataset.DataSetImpl" reference="../../.."/>
+          <desp></desp>
+          <isKey>false</isKey>
+          <c>java.lang.String</c>
+        </edu.thu.keg.mdap__impl.datafield.GeneralDataField>
+      </fields>
+    </edu.thu.keg.mdap__impl.dataset.DataSetImpl>
+  </entry>
+</map>

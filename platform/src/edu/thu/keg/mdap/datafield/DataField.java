@@ -48,8 +48,12 @@ public interface DataField {
 	public Object getValue(ResultSet rs) throws SQLException;
 	@SuppressWarnings("rawtypes")
 	/**
-	 * Get the type of the field
-	 * @return
+	 * @return the type of the field
 	 */
 	public Class getDataType();
+	/**
+	 * Set the DataSet which this field belongs to
+	 * @param ds the DataSet instance
+	 */
+	public void setDataSet(DataSet ds);
 }

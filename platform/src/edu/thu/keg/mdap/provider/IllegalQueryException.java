@@ -9,11 +9,18 @@ package edu.thu.keg.mdap.provider;
  * @author Yuanchao Ma
  *
  */
-public class IllegalQueryException extends Exception {
+public class IllegalQueryException extends DataProviderException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2518079930070277161L;
+	
+	public IllegalQueryException(String msg) {
+		super(msg);
+	}
+	public IllegalQueryException() {
+		super();
+	}
 
 }
