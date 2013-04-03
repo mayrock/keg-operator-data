@@ -22,4 +22,20 @@ public class DataProviderManagerImpl implements DataProviderManager {
 		return new JdbcProvider(connString);
 	}
 
+	@Override
+	public DataProvider getDefaultSQLProvider(String dbName) {
+		String address = Config.getProperty(Config.SqlAddress);
+		String conn = "jdbc:" + address + ";databaseName="
+				+ dbName + ";integratedSecurity=true;";
+		return getProvider(conn);
+	}
+
+	@Override
+	public DataProvider getDefaultHiveProvider() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+
 }

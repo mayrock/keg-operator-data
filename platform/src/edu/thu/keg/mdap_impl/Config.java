@@ -18,6 +18,7 @@ import java.util.Properties;
 public final class Config {
 	private static String file = "config.xml";
 	public static final String DataSetFile = "DataSetFile";
+	public static final String SqlAddress = "SqlAddress";
 	private static Properties prop = null;
 	
 	public static void init(String file) throws IOException {

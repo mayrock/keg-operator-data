@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import edu.thu.keg.mdap.datafield.DataField;
 import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
  * This object provides information
@@ -39,5 +40,6 @@ public interface DataSetManager {
 	 * @param fields DataField set
 	 * @return A new DataSet instance
 	 */
-	public DataSet createDataSet(String name, String connString, DataField[] fields, boolean loadable);
+	public DataSet createDataSet(String name, DataProvider provider, DataField[] fields, boolean loadable);
+	
 }

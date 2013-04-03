@@ -37,7 +37,7 @@ public class PlatformImpl implements Platform {
 	 */
 	@Override
 	public DataSetManager getDataSetManager() {
-		return new DataSetManagerImpl(getDataProviderManager());
+		return new DataSetManagerImpl();
 	}
 
 	/* (non-Javadoc)
@@ -52,18 +52,25 @@ public class PlatformImpl implements Platform {
 	public static void main(String[] args) {
 		Platform p = new PlatformImpl(
 				"C:\\Users\\myc\\git\\mayrock\\keg-operator-data\\platform\\config.xml");
-		DataField[] fields = new GeneralDataField[2];
+		// Construct a new dataset
+		DataField[] fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", Integer.class, "", true );
 		fields[1] = new GeneralDataField("URL", String.class, "", false );
-		DataSet ds = p.getDataSetManager().createDataSet("WebsiteId_URL", 
-				"jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;",
-				fields, true);
-		p.getDataSetManager().storeDataSet(ds);
+		DataSet newDs = p.getDataSetManager().createDataSet("WebsiteId_URL", 
+				p.getDataProviderManager().getDefaultSQLProvider("BeijingData"),
+				fields, true);		
 		
+		//Store a dataset
+		p.getDataSetManager().storeDataSet(newDs);
+		
+		//Get a dataset
+		DataSet ds = p.getDataSetManager().getDataSet("WebsiteId_URL");
+				
+		//Read data from a dataset
 		try {
 			ResultSet rs = ds.getResultSet();
 			while (rs.next()) {
-				System.out.println(fields[0].getValue(rs).toString() + " " + fields[1].getValue(rs).toString());
+				System.out.println(ds.getDataFields()[0].getValue(rs).toString() + " " + ds.getDataFields()[1].getValue(rs).toString());
 			}
 			ds.closeResultSet();
 		} catch (DataProviderException | SQLException | OperationNotSupportedException ex) {
