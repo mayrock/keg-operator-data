@@ -2,3 +2,5 @@
 platform_restful/WebContent/WEB-INF/lib
 platform_restful/build
 *.classpath
+platform/
+libraries/
