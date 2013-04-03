@@ -10,7 +10,6 @@ import javax.naming.OperationNotSupportedException;
 import edu.thu.keg.mdap.datafield.DataField;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
-import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
  * @author Yuanchao Ma
@@ -20,8 +19,7 @@ public interface DataSet {
 	/**
 	 * Get the name (unique identifier) of the dataset,
 	 * like a table name in SQL or HIVE.
-	 * @return the unique name. Default implementation
-	 * is returning the class name. Subclass can override this.
+	 * @return the unique name. 
 	 */
 	public String getName();
 	/**
@@ -32,28 +30,23 @@ public interface DataSet {
 	 */
 	public String getQueryStatement();
 	/**
-	 * Return a disconnected in-memroy JDBC ResultSet
-	 *  containing the records of this dataset, if it is loadable
-	 * The default implementation uses HIVE.
+	 * Return a connected ResultSet
+	 *  containing the records of this dataset, if it is loadable.
 	 * @return a JDBC ResultSet. The ResultSet is generated when the 
-	 * method is called for the first time. Return null if no data 
-	 * exists in the data provider
+	 * method is called for the first time. 
 	 * @throws OperationNotSupportedException when dataset is not loadable
-	 * @throws IllegalQueryException when actual data of the DataSet does not
+	 * @throws DataProviderException when actual data of the DataSet does not
 	 * exist on the DataProvider
 	 */
 	public ResultSet getResultSet() throws OperationNotSupportedException, DataProviderException;
 	/**
-	 * Return a disconnected in-memroy JDBC ResultSet
+	 * Return a connected JDBC ResultSet
 	 *  containing the records of this dataset, if it is loadable
-	 * The default implementation uses HIVE.
 	 * @return a JDBC ResultSet. The ResultSet is generated when the 
-	 * method is called for the first time. Return null if no data 
-	 * exists in the data provider
+	 * method is called for the first time. 
 	 * @throws OperationNotSupportedException when dataset is not loadable
-	 * @throws IllegalQueryException when actual data of the DataSet does not
+	 * @throws DataProviderException when actual data of the DataSet does not
 	 * exist on the DataProvider
-	 * @throws DataProviderException 
 	 */
 	public ResultSet getResultSet(DataField[] fields) throws 
 		OperationNotSupportedException, DataProviderException;

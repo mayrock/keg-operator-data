@@ -36,7 +36,7 @@ public interface DataSetManager {
 	 * Create a new DataSet instance, using the given name, connection string
 	 * and data field set.
 	 * @param name The unique name of the DataSet
-	 * @param connString Connection string of its DataProvider
+	 * @param provider its DataProvider
 	 * @param fields DataField set
 	 * @return A new DataSet instance
 	 */

@@ -15,17 +15,15 @@ public class ImsiField extends GeneralDataField {
 	/**
 	 * Construct a instance within a DataSet,
 	 *   name and description
-	 * @param ds The DataSet which the constructed 
-	 * field belongs to
+	 * @param name The name of this field
+	 * @param description description of this field
 	 */
-	public ImsiField(String name, String desciption) {
-		super(name, String.class, desciption, true);
+	public ImsiField(String name, String description) {
+		super(name, String.class, description, true);
 	}
 	/**
 	 * Construct a instance within a DataSet,
 	 *  using default name and description
-	 * @param ds The DataSet which the constructed 
-	 * field belongs to
 	 */
 	public ImsiField() {
 		super("IMSI", String.class, 

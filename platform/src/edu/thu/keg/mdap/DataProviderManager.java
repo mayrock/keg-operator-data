@@ -20,7 +20,7 @@ public interface DataProviderManager {
 
 	/**
 	 * Get a DataProvider instance from a connection string
-	 * @param conn the connection string of the demanded DataProvider
+	 * @param connString the connection string of the demanded DataProvider
 	 * @return A DataProvider instance. The instance is only created, and is
 	 * not guaranteed of connectivity
 	 */

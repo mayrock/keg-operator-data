@@ -42,23 +42,23 @@ public class GeneralDataField implements DataField {
 	}
 	/**
 	 * Construct a instance using the given
-	 *   name, type and description
+	 *   name, type and description, and whether is key
 	 */
-	public GeneralDataField(String name, Class type, String desciption, boolean isKey) {
-		init(name, type, null, desciption, isKey);
+	public GeneralDataField(String name, Class type, String description, boolean isKey) {
+		init(name, type, null, description, isKey);
 	}
 	/**
 	 * Initialize the fields of the object
 	 * @param name Name of the column
 	 * @param ds DataSet which the field belongs to
-	 * @param desciption Description of the field
+	 * @param description Description of the field
 	 * @param isKey Whether the field is key
 	 */
-	protected void init(String name, Class type, DataSet ds, String desciption, boolean isKey) {
+	protected void init(String name, Class type, DataSet ds, String description, boolean isKey) {
 		this.columnName = name;
 		this.c = type;
 		this.dataset = ds;
-		this.desp = desciption;
+		this.desp = description;
 		this.isKey = isKey;
 	}
 	
