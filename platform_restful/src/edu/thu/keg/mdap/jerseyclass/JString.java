@@ -2,6 +2,8 @@ package edu.thu.keg.mdap.jerseyclass;
 
 import java.lang.String;
 
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement
 public class JString {
 	private String classname;
 	private double longitude;
