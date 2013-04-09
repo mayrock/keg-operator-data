@@ -1,9 +1,8 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.dataset;
+package edu.thu.keg.mdap.datamodel;
 
-import edu.thu.keg.mdap.datafield.DataField;
 
 
 /**

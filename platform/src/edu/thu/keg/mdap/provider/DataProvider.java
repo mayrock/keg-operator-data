@@ -5,7 +5,11 @@ package edu.thu.keg.mdap.provider;
 
 import java.sql.ResultSet;
 
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.Convertor;
+import edu.thu.keg.mdap.datamodel.DataContent;
+import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.Query;
 
 /**
  * Represents a data provider storing datasets. 
@@ -16,23 +20,21 @@ import edu.thu.keg.mdap.dataset.DataSet;
  */
 public interface DataProvider {
 	/**
-	 * Run a query against the dataset and return ResultSet
+	 * Run a query against the DataProvider and return ResultSet
 	 * @param query the query string returning a table
 	 * @return the disconnected ResultSet returned by the query.
 	 * @throws DataProviderException when the query is invalid,
 	 * 	or communication with the provider returns a error.
 	 */
-	public abstract ResultSet executeQuery(String query) throws DataProviderException;
+	public ResultSet executeQuery(String query) throws DataProviderException;
 	/**
-	 * Query the data provider the get the ResultSet of a dataset.
-	 * Default implementation is calling executeQuery on the query statement of the 
-	 * dataset.
-	 * @param ds the dataset whose contents (ResultSet) are expected
-	 * @return the disconnected ResultSet of the dataset
-	 * @throws DataProviderException when the DataSet (with its name) does not exist on the DataProvider,
+	 * Execute a non-table query against the DataProvider, like
+	 * creating and dropping datasets
+	 * @param text The query text to be executed
+	 * @throws DataProviderException when the query is invalid,
 	 * 	or communication with the provider returns a error.
 	 */
-	public ResultSet queryDataSet(DataSet ds) throws DataProviderException;
+	public void execute(String text) throws DataProviderException;
 	/**
 	 * 
 	 * @return The connection string of this DataProvider
@@ -43,5 +45,12 @@ public interface DataProvider {
 	 * @param rs
 	 * @throws DataProviderException 
 	 */
-	public void closeResultSet(ResultSet rs) throws DataProviderException;
+	public void closeQuery(Query q) throws DataProviderException;
+	
+	public void removeDataSet(String dsName);
+	
+	@SuppressWarnings("rawtypes")
+	public void writeDataSetContent(DataSet ds, Iterable data, Convertor convertor);
+	
+	public void writeDataSetContent(DataSet ds, DataContent data);
 }

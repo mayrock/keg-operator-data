@@ -5,7 +5,7 @@ package edu.thu.keg.mdap.provider;
 
 import java.sql.ResultSet;
 
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.DataSet;
 
 /**
  * A general implementation of the interface DataProvider,
@@ -15,12 +15,6 @@ import edu.thu.keg.mdap.dataset.DataSet;
 public abstract class AbstractDataProvider implements DataProvider {
 
 	protected String connString;
-	@Override
-	public ResultSet queryDataSet(DataSet ds) throws DataProviderException {
-		if (ds.getProvider() != this)
-			throw new IllegalQueryException();
-		return this.executeQuery(ds.getQueryStatement());
-	}
 	@Override
 	public String getConnectionString() {
 		return connString;

@@ -1,14 +1,14 @@
 /**
  * 
  */
-package edu.thu.keg.mdap_impl.datafield;
+package edu.thu.keg.mdap_impl.datamodel;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.thu.keg.mdap.datafield.DataField;
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
 
 /**
 

@@ -1,14 +1,14 @@
 /**
  * 
  */
-package edu.thu.keg.mdap_impl.dataset;
+package edu.thu.keg.mdap_impl.datamodel;
 
 import java.sql.ResultSet;
 
 import javax.naming.OperationNotSupportedException;
 
-import edu.thu.keg.mdap.datafield.DataField;
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 

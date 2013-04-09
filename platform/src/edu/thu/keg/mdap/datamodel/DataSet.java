@@ -1,13 +1,12 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.dataset;
+package edu.thu.keg.mdap.datamodel;
 
 import java.sql.ResultSet;
 
 import javax.naming.OperationNotSupportedException;
 
-import edu.thu.keg.mdap.datafield.DataField;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -38,18 +37,8 @@ public interface DataSet {
 	 * @throws DataProviderException when actual data of the DataSet does not
 	 * exist on the DataProvider
 	 */
-	public ResultSet getResultSet() throws OperationNotSupportedException, DataProviderException;
-	/**
-	 * Return a connected JDBC ResultSet
-	 *  containing the records of this dataset, if it is loadable
-	 * @return a JDBC ResultSet. The ResultSet is generated when the 
-	 * method is called for the first time. 
-	 * @throws OperationNotSupportedException when dataset is not loadable
-	 * @throws DataProviderException when actual data of the DataSet does not
-	 * exist on the DataProvider
-	 */
-	public ResultSet getResultSet(DataField[] fields) throws 
-		OperationNotSupportedException, DataProviderException;
+	public ResultSet getQuery() throws OperationNotSupportedException, DataProviderException;
+	
 	/**
 	 * Get the provider of this DataSet
 	 * @return a DataProvider instance

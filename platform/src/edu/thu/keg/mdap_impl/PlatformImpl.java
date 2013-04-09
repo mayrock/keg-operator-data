@@ -12,10 +12,10 @@ import javax.naming.OperationNotSupportedException;
 import edu.thu.keg.mdap.DataProviderManager;
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
-import edu.thu.keg.mdap.datafield.DataField;
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.provider.DataProviderException;
-import edu.thu.keg.mdap_impl.datafield.GeneralDataField;
+import edu.thu.keg.mdap_impl.datamodel.GeneralDataField;
 
 /**
  * @author Yuanchao Ma

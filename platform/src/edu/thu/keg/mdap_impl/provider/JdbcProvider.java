@@ -75,4 +75,21 @@ public class JdbcProvider extends AbstractDataProvider {
 		}
 	}
 
+	@Override
+	public void removeDataSet(String dsName) {
+		
+	}
+
+	@Override
+	public void execute(String text) throws DataProviderException {
+		Statement stmt;
+		try {
+			stmt = this.getConnection().createStatement();
+			stmt.executeUpdate(text);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

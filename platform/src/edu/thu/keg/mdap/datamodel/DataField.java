@@ -1,12 +1,11 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.datafield;
+package edu.thu.keg.mdap.datamodel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.thu.keg.mdap.dataset.DataSet;
 
 /**
 

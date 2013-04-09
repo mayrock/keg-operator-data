@@ -2,8 +2,8 @@ package edu.thu.keg.mdap;
 
 import java.util.Collection;
 
-import edu.thu.keg.mdap.datafield.DataField;
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
@@ -41,5 +41,11 @@ public interface DataSetManager {
 	 * @return A new DataSet instance
 	 */
 	public DataSet createDataSet(String name, DataProvider provider, DataField[] fields, boolean loadable);
-	
+	/**
+	 * Remove a DataSet from the platform, as well as remove 
+	 * its actual data from its provider.
+	 * No operation is performed if the DataSet does not exist.
+	 * @param ds The DataSet to be removed
+	 */
+	public void removeDataSet(DataSet ds);
 }

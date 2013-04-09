@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.dataset;
+package edu.thu.keg.mdap.datamodel;
 
 
 /**
