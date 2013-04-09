@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true">  
-  <interface id="1" language="java" name="edu.thu.keg.mdap.datafield.DataField" project="platform" 
-    file="/platform/src/edu/thu/keg/mdap/datafield/DataField.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="1" language="java" name="edu.thu.keg.mdap.datamodel.DataField" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datamodel/DataField.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1433" y="259"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -10,8 +10,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
-  <interface id="2" language="java" name="edu.thu.keg.mdap.dataset.DataSet" project="platform" 
-    file="/platform/src/edu/thu/keg/mdap/dataset/DataSet.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="2" language="java" name="edu.thu.keg.mdap.datamodel.DataSet" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datamodel/DataSet.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1666" y="236"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
-  <interface id="3" language="java" name="edu.thu.keg.mdap.dataset.GeographicalDataSet" project="platform" 
-    file="/platform/src/edu/thu/keg/mdap/dataset/GeographicalDataSet.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="3" language="java" name="edu.thu.keg.mdap.datamodel.GeographicalDataSet" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datamodel/GeographicalDataSet.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1750" y="406"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -37,8 +37,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
-  <interface id="5" language="java" name="edu.thu.keg.mdap.dataset.StatisticsDataSet" project="platform" 
-    file="/platform/src/edu/thu/keg/mdap/dataset/StatisticsDataSet.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="5" language="java" name="edu.thu.keg.mdap.datamodel.StatisticsDataSet" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datamodel/StatisticsDataSet.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1589" y="402"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
