@@ -11,8 +11,6 @@ import java.util.ArrayList;
  *
  */
 public class SingleFileLoader extends AbstractSingleFileReader {
-	
-	private File file;
 	private int fileId;
 	private int type = 0;
 	public String getCreateSQL() {

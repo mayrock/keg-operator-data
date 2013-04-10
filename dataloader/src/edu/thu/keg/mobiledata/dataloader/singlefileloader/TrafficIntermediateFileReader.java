@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class TrafficIntermediateFileReader extends AbstractSingleFileReader {
-	File file;
+
 	ArrayList<String> insertSQL = null;
 	public void setFile(File file) {
 		this.file = file;
