@@ -50,18 +50,21 @@ public class PlatformImpl implements Platform {
 	
 	
 	public static void main(String[] args) {
+//		Platform p = new PlatformImpl(
+//				"C:\\Users\\myc\\git\\mayrock\\keg-operator-data\\platform\\config.xml");
 		Platform p = new PlatformImpl(
-				"C:\\Users\\myc\\git\\mayrock\\keg-operator-data\\platform\\config.xml");
-		// Construct a new dataset
-		DataField[] fields = new DataField[2];
-		fields[0] = new GeneralDataField("WebsiteId", Integer.class, "", true );
-		fields[1] = new GeneralDataField("URL", String.class, "", false );
-		DataSet newDs = p.getDataSetManager().createDataSet("WebsiteId_URL", 
-				p.getDataProviderManager().getDefaultSQLProvider("BeijingData"),
-				fields, true);		
+				"D:\\GitHub\\keg-operator-data\\platform\\config.xml");
 		
-		//Store a dataset
-		p.getDataSetManager().storeDataSet(newDs);
+		// Construct a new dataset
+//		DataField[] fields = new DataField[2];
+//		fields[0] = new GeneralDataField("WebsiteId", Integer.class, "", true );
+//		fields[1] = new GeneralDataField("URL", String.class, "", false );
+//		DataSet newDs = p.getDataSetManager().createDataSet("WebsiteId_URL", 
+//				p.getDataProviderManager().getDefaultSQLProvider("BeijingData"),
+//				fields, true);		
+//		
+//		//Store a dataset
+//		p.getDataSetManager().storeDataSet(newDs);
 		
 		//Get a dataset
 		DataSet ds = p.getDataSetManager().getDataSet("WebsiteId_URL");
