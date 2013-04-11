@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServlet;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,14 +18,15 @@ import javax.ws.rs.core.MediaType;
 
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
+import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.GeoDataSet;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
 import edu.thu.keg.mdap.restful.jerseyclasses.JFieldName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JLocation;
-import edu.thu.keg.mdap_impl.PlatformImpl;
 
 /**
  * the functions of dataset's operation
@@ -89,39 +88,38 @@ public class DataSetFunctions {
 		System.out.println("½øÀ´ÁË" + dataset);
 		List<JLocation> al_rs = new ArrayList<JLocation>();
 		DataSet ds = null;
-		// try {
+		DataContent rs = null;
+		try {
 
-		// Platform p = (Platform) sc.getAttribute("platform");
-		//
-		// DataSetManager datasetManager = p.getDataSetManager();
-		// ds = datasetManager.getDataSet(dataset);
-		// ResultSet rs = ds.getResultSet();
-		// while (rs.next()) {
-		// System.out.println(ds.getDataFields()[0].getValue(rs)
-		// .toString()
-		// + " "
-		// + ds.getDataFields()[1].getValue(rs).toString());
-		//
-		// JLocation location = new JLocation();
-		// location.setLatitude(rs.getDouble("Longitude"));
-		// location.setLongitude(rs.getDouble("Latitude"));
-		// al_rs.add(location);
-		// }
-		// } catch (OperationNotSupportedException | DataProviderException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (SQLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// return null;
-		// } finally {
-		// try {
-		// ds.closeResultSet();
-		// } catch (DataProviderException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
+			Platform p = (Platform) sc.getAttribute("platform");
+
+			DataSetManager datasetManager = p.getDataSetManager();
+			ds = datasetManager.getDataSet(dataset);
+			rs = ds.getQuery();
+			GeoDataSet gds = (GeoDataSet)ds.getFeatures().get(GeoDataSet.class);
+			rs.open();
+			while (rs.next()) {
+				System.out.println(rs.getValue(ds.getDataFields()[0])
+						.toString()
+						+ " "
+						+ rs.getValue(ds.getDataFields()[1]).toString());
+
+				JLocation location = new JLocation();
+				location.setLatitude((double)rs.getValue(gds.getLatitudeField()));
+				location.setLongitude((double)rs.getValue(gds.getLongtitudeField()));
+				al_rs.add(location);
+			}
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+			} catch (DataProviderException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return al_rs;
 	}
 
@@ -182,14 +180,14 @@ public class DataSetFunctions {
 			Platform p = (Platform) sc.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
-			ResultSet rs =null;
+			ResultSet rs = null;
 			int column = rs.findColumn(fieldname);
 			while (rs.next()) {
 				JField jf = new JField();
 				jf.setField(rs.getObject(column));
 				all_jf.add(jf);
 			}
-		}  catch (SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -203,11 +201,9 @@ public class DataSetFunctions {
 	@Path("/hello")
 	@Produces({ MediaType.TEXT_PLAIN })
 	public String getString() {
-<<<<<<< HEAD
-		String a = "({\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025})";
-=======
+
 		String a = "{\"city\":\"helloworld_json\"}";
->>>>>>> 40e459fd451ee55338712ddbd3f63111376fbb67
+
 		System.out.println(a);
 		return a;
 	}

@@ -2,7 +2,7 @@
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>WebsiteId_URL</name>
     <provider class="edu.thu.keg.mdap_impl.provider.JdbcProvider">
-      <connString>jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
+      <connString>jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
       <results/>
     </provider>
     <loadable>true</loadable>
@@ -27,7 +27,7 @@
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>RegionInfo3</name>
     <provider class="edu.thu.keg.mdap_impl.provider.JdbcProvider">
-      <connString>jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
+      <connString>jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
       <results/>
     </provider>
     <loadable>true</loadable>

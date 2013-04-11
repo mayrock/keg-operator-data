@@ -15,6 +15,7 @@ import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.GeneralGeoDataSet;
 import edu.thu.keg.mdap.datamodel.GeoDataSet;
+import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
