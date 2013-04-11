@@ -107,20 +107,14 @@ public class DataSetFunctions {
 				JLocation location = new JLocation();
 				location.setTag((String)rs.getValue(gds.getTagField()));
 				location.setLatitude((double)rs.getValue(gds.getLatitudeField()));
-				location.setLongitude((double)rs.getValue(gds.getLongtitudeField()));
+				location.setLongitude((double)rs.getValue(gds.getLongitudeField()));
 				al_rs.add(location);
 			}
+			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-			} catch (DataProviderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return al_rs;
 	}
 

@@ -36,7 +36,7 @@ public class GeneralGeoDataSet extends GeoDataSet {
 	 * @see edu.thu.keg.mdap.datamodel.GeographicalDataSet#getLongtitudeField()
 	 */
 	@Override
-	public DataField getLongtitudeField() {
+	public DataField getLongitudeField() {
 		return this.longitudeField;
 	}
 

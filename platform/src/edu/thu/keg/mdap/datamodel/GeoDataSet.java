@@ -22,7 +22,7 @@ public abstract class GeoDataSet implements DataSetFeature {
 	 * @return Reference of the longitude field 
 	 * in the database
 	 */
-	public abstract DataField getLongtitudeField();
+	public abstract DataField getLongitudeField();
 	
 	public abstract DataField getTagField();
 	/**

@@ -53,12 +53,12 @@ public class PlatformImpl implements Platform {
 	
 	public static void main(String[] args) {
 		Platform p = new PlatformImpl(
-				"C:\\Users\\myc\\git\\mayrock\\keg-operator-data\\platform\\config.xml");
+				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
 //		Platform p = new PlatformImpl(
 //				"D:\\GitHub\\keg-operator-data\\platform\\config.xml");
 		// Construct a new dataset
 		DataProvider provider = p.getDataProviderManager().getDefaultSQLProvider("BeijingData");
-		DataSet[] dss = new DataSet[2];
+		DataSet[] dss = new DataSet[3];
 		
 		DataField[] fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", Integer.class, "", true );
@@ -72,6 +72,15 @@ public class PlatformImpl implements Platform {
 		fields[2] = new GeneralDataField("Latitude", Double.class, "", false );
 		fields[3] = new GeneralDataField("Longitude", Double.class, "", false );
 		dss[1] = p.getDataSetManager().createDataSet("RegionInfo3", 
+				provider, fields, true);
+		dss[1].addFeature(new GeneralGeoDataSet(fields[2], fields[3], fields[1], false));
+		
+		fields = new DataField[4];
+		fields[0] = new GeneralDataField("Region", Integer.class, "", true );
+		fields[1] = new GeneralDataField("Name", String.class, "", false );
+		fields[2] = new GeneralDataField("Latitude", Double.class, "", false );
+		fields[3] = new GeneralDataField("Longitude", Double.class, "", false );
+		dss[1] = p.getDataSetManager().createDataSet("RegionInfo2", 
 				provider, fields, true);
 		dss[1].addFeature(new GeneralGeoDataSet(fields[2], fields[3], fields[1], false));
 		
@@ -93,7 +102,7 @@ public class PlatformImpl implements Platform {
 						q.getValue(ds.getDataFields()[0]).toString()
 						+ " " + q.getValue(ds.getDataFields()[1]).toString()
 						+ " " + q.getValue(gds.getLatitudeField()).toString()
-						+ " " + q.getValue(gds.getLatitudeField()).toString());
+						+ " " + q.getValue(gds.getLongitudeField()).toString());
 			}
 			q.close();
 		} catch (DataProviderException | OperationNotSupportedException ex) {
