@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class JFieldName {
 	private String fieldName;
 	private String description;
+	private String type;
 private boolean isKey;
 	public void setFieldName(String fieldname) {
 		this.fieldName = fieldname;
@@ -28,5 +29,13 @@ private boolean isKey;
 
 	public boolean getIsKey() {
 		return this.isKey;
+	}
+	public void setType(String type)
+	{
+		this.type=type;
+	}
+	public String getType()
+	{
+		return this.type;
 	}
 }

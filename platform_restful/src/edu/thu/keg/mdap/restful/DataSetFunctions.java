@@ -135,7 +135,7 @@ public class DataSetFunctions {
 	 * @return a list of all fields name
 	 */
 	@GET
-	@Path("/getdatasetfield/{datasetname}")
+	@Path("/getdatasetfields/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JFieldName> getFieldNames(
 			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
@@ -152,6 +152,7 @@ public class DataSetFunctions {
 				jfn.setFieldName(df.getColumnName());
 				jfn.setDescription(df.getDescription());
 				jfn.setIsKey(df.isKey());
+				jfn.setType(df.getDataType().getSimpleName());
 				all_fn.add(jfn);
 			}
 
@@ -218,7 +219,7 @@ public class DataSetFunctions {
 	@Path("/hello")
 	@Produces({ MediaType.TEXT_PLAIN })
 	public String getString() {
-		String a = "{\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025}";
+		String a = "({\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025})";
 		System.out.println(a);
 		return a;
 	}
