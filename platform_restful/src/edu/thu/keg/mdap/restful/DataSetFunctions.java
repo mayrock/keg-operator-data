@@ -105,6 +105,7 @@ public class DataSetFunctions {
 						+ rs.getValue(ds.getDataFields()[1]).toString());
 
 				JLocation location = new JLocation();
+				location.setTag((String)rs.getValue(gds.getTagField()));
 				location.setLatitude((double)rs.getValue(gds.getLatitudeField()));
 				location.setLongitude((double)rs.getValue(gds.getLongtitudeField()));
 				al_rs.add(location);

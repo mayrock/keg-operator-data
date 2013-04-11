@@ -11,14 +11,16 @@ public class GeneralGeoDataSet extends GeoDataSet {
 
 	private DataField latitudeField;
 	private DataField longitudeField;
+	private DataField tagField;
 	private boolean ordered;
 	
 	
 	public GeneralGeoDataSet(DataField latitudeField, DataField longitudeField,
-			boolean ordered) {
+			DataField tagField, boolean ordered) {
 		super();
 		this.latitudeField = latitudeField;
 		this.longitudeField = longitudeField;
+		this.tagField = tagField;
 		this.ordered = ordered;
 	}
 
@@ -44,6 +46,11 @@ public class GeneralGeoDataSet extends GeoDataSet {
 	@Override
 	public boolean isOrdered() {
 		return this.ordered;
+	}
+
+	@Override
+	public DataField getTagField() {
+		return this.tagField;
 	}
 
 }

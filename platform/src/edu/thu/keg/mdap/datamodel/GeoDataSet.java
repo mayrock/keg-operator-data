@@ -23,6 +23,8 @@ public abstract class GeoDataSet implements DataSetFeature {
 	 * in the database
 	 */
 	public abstract DataField getLongtitudeField();
+	
+	public abstract DataField getTagField();
 	/**
 	 * Whether points of the dataset is ordered
 	 * @return True if ordered. False otherwise

@@ -3,6 +3,7 @@
 	<name>platform_restful</name>
 	<comment></comment>
 	<projects>
+		<project>platform</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
