@@ -2,9 +2,9 @@
 <<<<<<< HEAD
 *.txt
 *.dat
-=======
-platform_restful/WebContent/WEB-INF/lib
+platform_restful/WebContent/
 platform_restful/build
+*.properties
 *.classpath
 platform/
 libraries/
