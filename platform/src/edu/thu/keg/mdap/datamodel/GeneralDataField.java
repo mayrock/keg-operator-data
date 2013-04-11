@@ -1,14 +1,8 @@
 /**
  * 
  */
-package edu.thu.keg.mdap_impl.datafield;
+package edu.thu.keg.mdap.datamodel;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import edu.thu.keg.mdap.datafield.DataField;
-import edu.thu.keg.mdap.dataset.DataSet;
 
 /**
 
@@ -66,25 +60,7 @@ public class GeneralDataField implements DataField {
 	public Class getDataType() {
 		return this.c;
 	}
-	/**
-	 * Get value of the field of the current record of the given resultset.
-	 * @param rs The field should be contained in rs
-	 * @return A reference of the value
-	 * @throws SQLException when reading the resultset
-	 */
-	@Override
-	public Object getValue(ResultSet rs) throws SQLException {
-		if (getDataType() == String.class) {
-			return rs.getString(this.getColumnName());
-		} else if (getDataType() == Double.class) {
-			return rs.getDouble(this.getColumnName());
-		} else if (getDataType() == Integer.class) {
-			return rs.getInt(this.getColumnName());
-		} else if (getDataType() == Date.class) {
-			return rs.getDate(this.getColumnName());
-		}
-		throw new IllegalArgumentException("Type of this field is not supported");
-	}
+
 	@Override
 	public void setDataSet(DataSet ds) {
 		this.dataset = ds;

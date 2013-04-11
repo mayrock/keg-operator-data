@@ -1,14 +1,17 @@
 /**
  * 
  */
-package edu.thu.keg.mdap_impl.dataset;
+package edu.thu.keg.mdap_impl.datamodel;
 
-import java.sql.ResultSet;
+import java.util.HashMap;
 
 import javax.naming.OperationNotSupportedException;
 
-import edu.thu.keg.mdap.datafield.DataField;
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.DataSetFeature;
+import edu.thu.keg.mdap.datamodel.Query;
+import edu.thu.keg.mdap.datamodel.SimpleQuery;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -18,11 +21,12 @@ import edu.thu.keg.mdap.provider.DataProviderException;
  *
  */
 public class DataSetImpl implements DataSet {
-	private ResultSet resultSet = null;
+
 	private String name = null;
 	private DataProvider provider = null;
 	private boolean loadable;
 	private DataField[] fields;
+	private HashMap<Class<? extends DataSetFeature>, DataSetFeature> features;
 
 	private String defaultStmt(DataField[] fields) {
 		StringBuffer sb = new StringBuffer("SELECT ");
@@ -37,7 +41,8 @@ public class DataSetImpl implements DataSet {
 		return sb.toString();
 	}
 	public DataSetImpl(){
-	
+		features = new HashMap<Class<? extends DataSetFeature>,
+				DataSetFeature>();
 	}
 
 
@@ -48,6 +53,7 @@ public class DataSetImpl implements DataSet {
 		this.provider = provider;
 		this.loadable = loadable;
 		setDataFields(fields);
+		features = new HashMap<Class<? extends DataSetFeature>, DataSetFeature>();
 	}
 	
 	private void setDataFields(DataField[] fields) {
@@ -63,19 +69,7 @@ public class DataSetImpl implements DataSet {
 	public String getName() {
 		return this.name;
 	}
-	@Override
-	public String getQueryStatement() {
-		return defaultStmt(getDataFields());
-	}
-	@Override
-	public ResultSet getResultSet() throws 
-	OperationNotSupportedException, DataProviderException {
-		if (!isLoadable())
-			throw new OperationNotSupportedException();
-		if (resultSet == null)
-			resultSet = provider.queryDataSet(this);
-		return resultSet;
-	}
+
 	@Override
 	public boolean isLoadable() {
 		return this.loadable;
@@ -85,21 +79,24 @@ public class DataSetImpl implements DataSet {
 		return this.fields;
 	}
 	@Override
-	public ResultSet getResultSet(DataField[] fields)
-			throws OperationNotSupportedException, DataProviderException {
-		String stmt = defaultStmt(getDataFields());
-		return provider.executeQuery(stmt);
-	}
-	@Override
 	public DataProvider getProvider() {
 		return this.provider;
 	}
+	
 	@Override
-	public void closeResultSet() throws DataProviderException {
-		if (resultSet == null) {
-			return;
-		} else {
-			getProvider().closeResultSet(resultSet);
-		}
+	public Query getQuery() throws OperationNotSupportedException,
+			DataProviderException {
+		Query q = new SimpleQuery(getDataFields(),
+				defaultStmt(getDataFields()));
+		q.setProvider(this.getProvider());
+		return q;
+	}
+	@Override
+	public HashMap<Class<? extends DataSetFeature>, DataSetFeature> getFeatures() {
+		return features;
+	}
+	@Override
+	public void addFeature(DataSetFeature feature) {
+		features.put(feature.getFeatureType(), feature);
 	}
 }

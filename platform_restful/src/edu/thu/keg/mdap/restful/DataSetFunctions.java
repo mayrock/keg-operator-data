@@ -18,21 +18,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import net.sf.json.JSON;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
-
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
-import edu.thu.keg.mdap.datafield.DataField;
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
 import edu.thu.keg.mdap.restful.jerseyclasses.JFieldName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JLocation;
 import edu.thu.keg.mdap_impl.PlatformImpl;
-import edu.thu.keg.mdap_impl.datafield.GeneralDataField;
 
 /**
  * the functions of dataset's operation
@@ -55,7 +50,8 @@ public class DataSetFunctions {
 	@GET
 	@Path("/getdatasets")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getAllDataSetsNames_list(@Context ServletContext sc) {
+	public List<JDatasetName> getAllDataSetsNames_list(
+			@Context ServletContext sc) {
 		String result = "";
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
@@ -87,44 +83,45 @@ public class DataSetFunctions {
 	@GET
 	@Path("/getdatasetlocation/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JLocation> getDataSetLocation(@PathParam("datasetname") String dataset, @Context ServletContext sc) {
+	public List<JLocation> getDataSetLocation(
+			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
 		String result = "";
 		System.out.println("½øÀ´ÁË" + dataset);
 		List<JLocation> al_rs = new ArrayList<JLocation>();
 		DataSet ds = null;
-		try {
+		// try {
 
-			Platform p = (Platform) sc.getAttribute("platform");
-
-			DataSetManager datasetManager = p.getDataSetManager();
-			ds = datasetManager.getDataSet(dataset);
-			ResultSet rs = ds.getResultSet();
-			while (rs.next()) {
-				System.out.println(ds.getDataFields()[0].getValue(rs)
-						.toString()
-						+ " "
-						+ ds.getDataFields()[1].getValue(rs).toString());
-
-				JLocation location = new JLocation();
-				location.setLatitude(rs.getDouble("Longitude"));
-				location.setLongitude(rs.getDouble("Latitude"));
-				al_rs.add(location);
-			}
-		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		} finally {
-			try {
-				ds.closeResultSet();
-			} catch (DataProviderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		// Platform p = (Platform) sc.getAttribute("platform");
+		//
+		// DataSetManager datasetManager = p.getDataSetManager();
+		// ds = datasetManager.getDataSet(dataset);
+		// ResultSet rs = ds.getResultSet();
+		// while (rs.next()) {
+		// System.out.println(ds.getDataFields()[0].getValue(rs)
+		// .toString()
+		// + " "
+		// + ds.getDataFields()[1].getValue(rs).toString());
+		//
+		// JLocation location = new JLocation();
+		// location.setLatitude(rs.getDouble("Longitude"));
+		// location.setLongitude(rs.getDouble("Latitude"));
+		// al_rs.add(location);
+		// }
+		// } catch (OperationNotSupportedException | DataProviderException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (SQLException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// return null;
+		// } finally {
+		// try {
+		// ds.closeResultSet();
+		// } catch (DataProviderException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
 		return al_rs;
 	}
 
@@ -159,12 +156,7 @@ public class DataSetFunctions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				ds.closeResultSet();
-			} catch (DataProviderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 		}
 		return all_fn;
 	}
@@ -190,27 +182,19 @@ public class DataSetFunctions {
 			Platform p = (Platform) sc.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
-			ResultSet rs = ds.getResultSet();
+			ResultSet rs =null;
 			int column = rs.findColumn(fieldname);
 			while (rs.next()) {
 				JField jf = new JField();
 				jf.setField(rs.getObject(column));
 				all_jf.add(jf);
 			}
-		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
+		}  catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		} finally {
-			try {
-				ds.closeResultSet();
-			} catch (DataProviderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 		}
 		return all_jf;
 	}
@@ -219,7 +203,11 @@ public class DataSetFunctions {
 	@Path("/hello")
 	@Produces({ MediaType.TEXT_PLAIN })
 	public String getString() {
+<<<<<<< HEAD
 		String a = "({\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025})";
+=======
+		String a = "{\"city\":\"helloworld_json\"}";
+>>>>>>> 40e459fd451ee55338712ddbd3f63111376fbb67
 		System.out.println(a);
 		return a;
 	}
@@ -229,6 +217,6 @@ public class DataSetFunctions {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String getString2() {
 		System.out.println("{helloworld_json}");
-		return "helloworld_json";
+		return "{\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025}";
 	}
 }

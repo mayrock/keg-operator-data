@@ -14,10 +14,10 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 import edu.thu.keg.mdap.DataSetManager;
-import edu.thu.keg.mdap.datafield.DataField;
-import edu.thu.keg.mdap.dataset.DataSet;
+import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.provider.DataProvider;
-import edu.thu.keg.mdap_impl.dataset.DataSetImpl;
+import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 
 /**
  * Implementation of the interface DataSetManager
@@ -92,6 +92,13 @@ public class DataSetManagerImpl implements DataSetManager {
 	public DataSet createDataSet(String name, DataProvider provider,
 			DataField[] fields, boolean loadable) {
 		return new DataSetImpl(name, provider, loadable, fields);
+	}
+
+	@Override
+	public void removeDataSet(DataSet ds) {
+		if (!datasets.containsValue(ds))
+			return;
+		
 	}
 	
 

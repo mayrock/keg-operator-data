@@ -1,12 +1,8 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.datafield;
+package edu.thu.keg.mdap.datamodel;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import edu.thu.keg.mdap.dataset.DataSet;
 
 /**
 
@@ -38,14 +34,6 @@ public interface DataField {
 	 */
 	public boolean isKey();
 	
-	
-	/**
-	 * Get the value of this field from the given ResultSet
-	 * @return A reference of the value
-	 * @throws SQLException when reading the resultset, i.e.
-	 * the column name doesnot exist in the resultset
-	 */
-	public Object getValue(ResultSet rs) throws SQLException;
 	@SuppressWarnings("rawtypes")
 	/**
 	 * @return the type of the field

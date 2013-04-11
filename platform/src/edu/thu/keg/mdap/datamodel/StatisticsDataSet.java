@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.dataset;
+package edu.thu.keg.mdap.datamodel;
 
 
 /**
@@ -10,6 +10,6 @@ package edu.thu.keg.mdap.dataset;
  * @author Yuanchao Ma
  *
  */
-public interface StatisticsDataSet {
+public interface StatisticsDataSet extends DataSetFeature {
 	
 }

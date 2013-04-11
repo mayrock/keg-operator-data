@@ -36,7 +36,7 @@ public class ServerInitial implements ServletContextListener{
 				.getString("PlatformImpl_CONFIG");
 		Platform p = new PlatformImpl(P_Config);
 		sc.setAttribute("platform", p);
-		
+		System.out.println("Æô¶¯·þÎñÆ÷");
 		
 	}
 }

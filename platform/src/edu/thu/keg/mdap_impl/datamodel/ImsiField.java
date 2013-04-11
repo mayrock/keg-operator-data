@@ -1,7 +1,10 @@
 /**
  * 
  */
-package edu.thu.keg.mdap_impl.datafield;
+package edu.thu.keg.mdap_impl.datamodel;
+
+import edu.thu.keg.mdap.datamodel.GeneralDataField;
+
 
 
 /**

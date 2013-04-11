@@ -1,6 +1,11 @@
 *.class
-platform_restful/WebContent/WEB-INF/lib
+<<<<<<< HEAD
+*.txt
+*.dat
+platform_restful/WebContent/
 platform_restful/build
+*.properties
 *.classpath
 platform/
 libraries/
+>>>>>>> 11f11e400214849f0b3d212dd5cc65fadd773361
