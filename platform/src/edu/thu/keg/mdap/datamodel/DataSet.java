@@ -3,8 +3,7 @@
  */
 package edu.thu.keg.mdap.datamodel;
 
-import java.sql.ResultSet;
-
+import java.util.HashMap;
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.provider.DataProvider;
@@ -22,13 +21,6 @@ public interface DataSet {
 	 */
 	public String getName();
 	/**
-	 * get query statement for querying data
-	 * in the dataset. The statement would be 
-	 * executed against the data provider. 
-	 * @return A string representing the query statement
-	 */
-	public String getQueryStatement();
-	/**
 	 * Return a connected ResultSet
 	 *  containing the records of this dataset, if it is loadable.
 	 * @return a JDBC ResultSet. The ResultSet is generated when the 
@@ -37,7 +29,7 @@ public interface DataSet {
 	 * @throws DataProviderException when actual data of the DataSet does not
 	 * exist on the DataProvider
 	 */
-	public ResultSet getQuery() throws OperationNotSupportedException, DataProviderException;
+	public Query getQuery() throws OperationNotSupportedException, DataProviderException;
 	
 	/**
 	 * Get the provider of this DataSet
@@ -54,10 +46,8 @@ public interface DataSet {
 	 * @return an array containing all the fields in the schema
 	 */
 	public DataField[] getDataFields();
-	/**
-	 * Close the ResultSet of this DataSet, if any.
-	 * @throws SQLException 
-	 * @throws DataProviderException 
-	 */
-	public void closeResultSet() throws DataProviderException;
+	
+	public HashMap<Class<? extends DataSetFeature>, DataSetFeature> getFeatures();
+	
+	public void addFeature(DataSetFeature feature);
 }

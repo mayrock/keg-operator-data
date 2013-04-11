@@ -1,5 +1,5 @@
-<edu.thu.keg.mdap.dataset.DataSet-array>
-  <edu.thu.keg.mdap__impl.dataset.DataSetImpl>
+<edu.thu.keg.mdap.datamodel.DataSet-array>
+  <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>WebsiteId_URL</name>
     <provider class="edu.thu.keg.mdap_impl.provider.JdbcProvider">
       <connString>jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
@@ -7,20 +7,69 @@
     </provider>
     <loadable>true</loadable>
     <fields>
-      <edu.thu.keg.mdap__impl.datafield.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
         <columnName>WebsiteId</columnName>
-        <dataset class="edu.thu.keg.mdap_impl.dataset.DataSetImpl" reference="../../.."/>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
         <desp></desp>
         <isKey>true</isKey>
         <c>java.lang.Integer</c>
-      </edu.thu.keg.mdap__impl.datafield.GeneralDataField>
-      <edu.thu.keg.mdap__impl.datafield.GeneralDataField>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
         <columnName>URL</columnName>
-        <dataset class="edu.thu.keg.mdap_impl.dataset.DataSetImpl" reference="../../.."/>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
         <desp></desp>
         <isKey>false</isKey>
         <c>java.lang.String</c>
-      </edu.thu.keg.mdap__impl.datafield.GeneralDataField>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
     </fields>
-  </edu.thu.keg.mdap__impl.dataset.DataSetImpl>
-</edu.thu.keg.mdap.dataset.DataSet-array>
+    <features/>
+  </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+  <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+    <name>RegionInfo3</name>
+    <provider class="edu.thu.keg.mdap_impl.provider.JdbcProvider">
+      <connString>jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
+      <results/>
+    </provider>
+    <loadable>true</loadable>
+    <fields>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>Region</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp></desp>
+        <isKey>true</isKey>
+        <c>java.lang.Integer</c>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>Name</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp></desp>
+        <isKey>false</isKey>
+        <c>java.lang.String</c>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>Latitude</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp></desp>
+        <isKey>false</isKey>
+        <c>java.lang.Double</c>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>Longitude</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp></desp>
+        <isKey>false</isKey>
+        <c>java.lang.Double</c>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+    </fields>
+    <features>
+      <entry>
+        <java-class>edu.thu.keg.mdap.datamodel.GeoDataSet</java-class>
+        <edu.thu.keg.mdap.datamodel.GeneralGeoDataSet>
+          <latitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
+          <longitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[4]"/>
+          <ordered>false</ordered>
+        </edu.thu.keg.mdap.datamodel.GeneralGeoDataSet>
+      </entry>
+    </features>
+  </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+</edu.thu.keg.mdap.datamodel.DataSet-array>

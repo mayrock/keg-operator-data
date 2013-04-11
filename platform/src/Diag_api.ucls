@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
-  <interface id="3" language="java" name="edu.thu.keg.mdap.datamodel.GeographicalDataSet" project="platform" 
-    file="/platform/src/edu/thu/keg/mdap/datamodel/GeographicalDataSet.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="3" language="java" name="edu.thu.keg.mdap.datamodel.GeoDataSet" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datamodel/GeoDataSet.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1750" y="406"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

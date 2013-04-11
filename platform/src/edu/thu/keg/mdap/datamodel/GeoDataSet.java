@@ -12,7 +12,7 @@ package edu.thu.keg.mdap.datamodel;
  * points, regions, etc.
  * @author Yuanchao Ma
  */
-public interface GeographicalDataSet {
+public abstract class GeoDataSet implements DataSetFeature {
 	/**
 	 * @return Reference of the latitude field 
 	 * in the database
@@ -28,4 +28,10 @@ public interface GeographicalDataSet {
 	 * @return True if ordered. False otherwise
 	 */
 	public abstract boolean isOrdered();
+	@Override
+	public Class<? extends DataSetFeature> getFeatureType() {
+		return GeoDataSet.class;
+	}
+	
+	
 }

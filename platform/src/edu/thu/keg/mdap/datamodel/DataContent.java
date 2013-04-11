@@ -3,7 +3,7 @@
  */
 package edu.thu.keg.mdap.datamodel;
 
-import edu.thu.keg.mdap.provider.DataProvider;
+import edu.thu.keg.mdap.provider.DataProviderException;
 
 /**
  * 
@@ -11,7 +11,10 @@ import edu.thu.keg.mdap.provider.DataProvider;
  *
  */
 public interface DataContent {
-	public DataProvider getProvider();
 	public DataField[] getFields();
-	public DataRow nextRow();
+
+	public void open() throws DataProviderException;
+	public void close() throws DataProviderException;
+	public boolean next() throws DataProviderException;
+	public Object getValue(DataField field) throws DataProviderException;
 }
