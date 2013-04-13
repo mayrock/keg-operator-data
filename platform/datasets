@@ -5,17 +5,11 @@
       <connString>jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
       <results/>
     </provider>
+    <description>Region info 2</description>
     <loadable>true</loadable>
     <fields>
       <edu.thu.keg.mdap.datamodel.GeneralDataField>
-        <columnName>Region</columnName>
-        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
-        <desp></desp>
-        <isKey>true</isKey>
-        <c>java.lang.Integer</c>
-      </edu.thu.keg.mdap.datamodel.GeneralDataField>
-      <edu.thu.keg.mdap.datamodel.GeneralDataField>
-        <columnName>Name</columnName>
+        <columnName>SiteName</columnName>
         <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
         <desp></desp>
         <isKey>false</isKey>
@@ -40,9 +34,9 @@
       <entry>
         <java-class>edu.thu.keg.mdap.datamodel.GeoDataSet</java-class>
         <edu.thu.keg.mdap.datamodel.GeneralGeoDataSet>
-          <latitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
-          <longitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[4]"/>
-          <tagField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+          <latitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+          <longitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
+          <tagField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
           <ordered>false</ordered>
         </edu.thu.keg.mdap.datamodel.GeneralGeoDataSet>
       </entry>
@@ -54,6 +48,7 @@
       <connString>jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
       <results/>
     </provider>
+    <description>Website info</description>
     <loadable>true</loadable>
     <fields>
       <edu.thu.keg.mdap.datamodel.GeneralDataField>
@@ -76,9 +71,10 @@
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>RegionInfo3</name>
     <provider class="edu.thu.keg.mdap_impl.provider.JdbcProvider">
-      <connString>jdbc:sqlserver://localhost:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
+      <connString>jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</connString>
       <results/>
     </provider>
+    <description>Region info 3</description>
     <loadable>true</loadable>
     <fields>
       <edu.thu.keg.mdap.datamodel.GeneralDataField>

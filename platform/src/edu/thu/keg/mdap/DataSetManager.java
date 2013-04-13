@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 
 /**
@@ -40,7 +41,7 @@ public interface DataSetManager {
 	 * @param fields DataField set
 	 * @return A new DataSet instance
 	 */
-	public DataSet createDataSet(String name, DataProvider provider, DataField[] fields, boolean loadable);
+	public DataSet createDataSet(String name, String description, DataProvider provider, DataField[] fields, boolean loadable);
 	/**
 	 * Remove a DataSet from the platform, as well as remove 
 	 * its actual data from its provider.
@@ -48,4 +49,6 @@ public interface DataSetManager {
 	 * @param ds The DataSet to be removed
 	 */
 	public void removeDataSet(DataSet ds);
+	
+	public Collection<DataSet> getDataSetList(Class<? extends DataSetFeature> feature);
 }

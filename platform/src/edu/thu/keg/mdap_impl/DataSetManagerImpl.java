@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
@@ -16,6 +17,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 
@@ -27,6 +29,7 @@ import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 public class DataSetManagerImpl implements DataSetManager {
 
 	private HashMap<String, DataSet> datasets = null;
+	private HashMap<Class<? extends DataSetFeature>, HashSet<DataSet>> features = null;
 	private XStream xstream;
 	
 	private XStream getXstream() {
@@ -38,6 +41,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	
 	public DataSetManagerImpl() {
 		datasets = new HashMap<String, DataSet>();
+		features = new HashMap<Class<? extends DataSetFeature>, HashSet<DataSet>>();
 		try {
 			loadDataSets();
 		} catch (Exception ex) {
@@ -68,12 +72,12 @@ public class DataSetManagerImpl implements DataSetManager {
 		String f = Config.getDataSetFile();
 		DataSet[] sets = (DataSet[])getXstream().fromXML(new File(f));
 		for (DataSet ds : sets) {
-			datasets.put(ds.getName(), ds);
+			addDataSet(ds);
 		}
 	}
 	@Override
 	public void storeDataSet(DataSet ds) {
-		datasets.put(ds.getName(), ds);
+		addDataSet(ds);
 		FileWriter fw;
 		try {
 			DataSet[] dss = new DataSet[datasets.size()];
@@ -89,17 +93,38 @@ public class DataSetManagerImpl implements DataSetManager {
 		}
 	}
 	@Override
-	public DataSet createDataSet(String name, DataProvider provider,
+	public DataSet createDataSet(String name, String description, DataProvider provider,
 			DataField[] fields, boolean loadable) {
-		return new DataSetImpl(name, provider, loadable, fields);
+		return new DataSetImpl(name, description, provider, loadable, fields);
 	}
 
 	@Override
 	public void removeDataSet(DataSet ds) {
 		if (!datasets.containsValue(ds))
 			return;
-		
+		//TODO
 	}
-	
 
+	@Override
+	public Collection<DataSet> getDataSetList(
+			Class<? extends DataSetFeature> feature) {
+		return features.get(feature);	
+	}
+	private void addDataSet(DataSet ds) {
+		datasets.put(ds.getName(), ds);
+		for (DataSetFeature feature : ds.getFeatures().values()) {
+			Class<? extends DataSetFeature> c = feature.getFeatureType();
+			while (c != null) {
+				if (!features.containsKey(c))
+					features.put(c, new HashSet<DataSet>());
+				features.get(c).add(ds);
+				@SuppressWarnings("unchecked")
+				Class<? extends DataSetFeature>[] cl =
+						(Class<? extends DataSetFeature>[]) c.getInterfaces();
+				if (cl.length == 0)
+					break;
+				c = cl[0];
+			}
+		}
+	}
 }

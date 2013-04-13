@@ -24,6 +24,7 @@ public class DataSetImpl implements DataSet {
 
 	private String name = null;
 	private DataProvider provider = null;
+	private String description = null;
 	private boolean loadable;
 	private DataField[] fields;
 	private HashMap<Class<? extends DataSetFeature>, DataSetFeature> features;
@@ -46,12 +47,13 @@ public class DataSetImpl implements DataSet {
 	}
 
 
-	public DataSetImpl(String name, DataProvider provider,
+	public DataSetImpl(String name, String description, DataProvider provider,
 			 boolean loadable, DataField[] fields) {
 		super();
 		this.name = name;
 		this.provider = provider;
 		this.loadable = loadable;
+		this.description = description;
 		setDataFields(fields);
 		features = new HashMap<Class<? extends DataSetFeature>, DataSetFeature>();
 	}
@@ -98,5 +100,9 @@ public class DataSetImpl implements DataSet {
 	@Override
 	public void addFeature(DataSetFeature feature) {
 		features.put(feature.getFeatureType(), feature);
+	}
+	@Override
+	public String getDescription() {
+		return this.description;
 	}
 }

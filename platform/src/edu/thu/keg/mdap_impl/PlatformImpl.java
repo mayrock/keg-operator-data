@@ -15,7 +15,6 @@ import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.GeneralGeoDataSet;
 import edu.thu.keg.mdap.datamodel.GeoDataSet;
-import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -63,7 +62,7 @@ public class PlatformImpl implements Platform {
 		DataField[] fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", Integer.class, "", true );
 		fields[1] = new GeneralDataField("URL", String.class, "", false );
-		dss[0] = p.getDataSetManager().createDataSet("WebsiteId_URL", 
+		dss[0] = p.getDataSetManager().createDataSet("WebsiteId_URL", "Website info", 
 				provider, fields, true);		
 		
 		fields = new DataField[4];
@@ -71,18 +70,17 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("Name", String.class, "", false );
 		fields[2] = new GeneralDataField("Latitude", Double.class, "", false );
 		fields[3] = new GeneralDataField("Longitude", Double.class, "", false );
-		dss[1] = p.getDataSetManager().createDataSet("RegionInfo3", 
+		dss[1] = p.getDataSetManager().createDataSet("RegionInfo3", "Region info 3",
 				provider, fields, true);
 		dss[1].addFeature(new GeneralGeoDataSet(fields[2], fields[3], fields[1], false));
 		
-		fields = new DataField[4];
-		fields[0] = new GeneralDataField("Region", Integer.class, "", true );
-		fields[1] = new GeneralDataField("Name", String.class, "", false );
-		fields[2] = new GeneralDataField("Latitude", Double.class, "", false );
-		fields[3] = new GeneralDataField("Longitude", Double.class, "", false );
-		dss[1] = p.getDataSetManager().createDataSet("RegionInfo2", 
+		fields = new DataField[3];
+		fields[0] = new GeneralDataField("SiteName", String.class, "", false );
+		fields[1] = new GeneralDataField("Latitude", Double.class, "", false );
+		fields[2] = new GeneralDataField("Longitude", Double.class, "", false );
+		dss[2] = p.getDataSetManager().createDataSet("RegionInfo2", "Region info 2",
 				provider, fields, true);
-		dss[1].addFeature(new GeneralGeoDataSet(fields[2], fields[3], fields[1], false));
+		dss[2].addFeature(new GeneralGeoDataSet(fields[1], fields[2], fields[0], false));
 		
 		//Store a dataset
 		for (DataSet ds : dss) {
@@ -90,23 +88,26 @@ public class PlatformImpl implements Platform {
 		}
 		
 		//Get a dataset
-		DataSet ds = p.getDataSetManager().getDataSet("RegionInfo3");
-				
-		//Read data from a dataset
-		try {
-			DataContent q = ds.getQuery();
-			GeoDataSet gds = (GeoDataSet)ds.getFeatures().get(GeoDataSet.class);
-			q.open();
-			while (q.next()) {
-				System.out.println(
-						q.getValue(ds.getDataFields()[0]).toString()
-						+ " " + q.getValue(ds.getDataFields()[1]).toString()
-						+ " " + q.getValue(gds.getLatitudeField()).toString()
-						+ " " + q.getValue(gds.getLongitudeField()).toString());
+		for (DataSet ds : p.getDataSetManager().getDataSetList(GeoDataSet.class)) {		
+			//Read data from a dataset
+			try {
+				System.out.println(ds.getDescription());
+				DataContent q = ds.getQuery();
+				GeoDataSet gds = (GeoDataSet)ds.getFeatures().get(GeoDataSet.class);
+				q.open();
+				int count = 0;
+				while (q.next()) {
+					count ++;
+					System.out.println(
+							q.getValue(gds.getTagField()).toString()
+							+ " " + q.getValue(gds.getLatitudeField()).toString()
+							+ " " + q.getValue(gds.getLongitudeField()).toString());
+				}
+				q.close();
+				System.out.println(count);
+			} catch (DataProviderException | OperationNotSupportedException ex) {
+				ex.printStackTrace();
 			}
-			q.close();
-		} catch (DataProviderException | OperationNotSupportedException ex) {
-			ex.printStackTrace();
 		}
 	}
 

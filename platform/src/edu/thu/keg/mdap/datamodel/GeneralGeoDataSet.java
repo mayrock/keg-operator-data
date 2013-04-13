@@ -4,6 +4,7 @@
 package edu.thu.keg.mdap.datamodel;
 
 /**
+ * General implementation of the GeoDataSet interface
  * @author myc
  *
  */
@@ -33,7 +34,7 @@ public class GeneralGeoDataSet extends GeoDataSet {
 	}
 
 	/* (non-Javadoc)
-	 * @see edu.thu.keg.mdap.datamodel.GeographicalDataSet#getLongtitudeField()
+	 * @see edu.thu.keg.mdap.datamodel.GeographicalDataSet#getLongitudeField()
 	 */
 	@Override
 	public DataField getLongitudeField() {

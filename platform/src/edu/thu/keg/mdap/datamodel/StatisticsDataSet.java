@@ -11,5 +11,7 @@ package edu.thu.keg.mdap.datamodel;
  *
  */
 public interface StatisticsDataSet extends DataSetFeature {
+	public DataField getKeyField();
 	
+	public DataField[] getValueFields();
 }

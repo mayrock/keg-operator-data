@@ -3,8 +3,6 @@
  */
 package edu.thu.keg.mdap.provider;
 
-import java.sql.ResultSet;
-
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;

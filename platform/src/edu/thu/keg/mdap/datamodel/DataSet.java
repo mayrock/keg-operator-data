@@ -10,6 +10,7 @@ import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
 /**
+ * Contains all metadata describing a dataset, stored in a data provider.
  * @author Yuanchao Ma
  *
  */
@@ -41,6 +42,11 @@ public interface DataSet {
 	 * @return a boolean indicates whether this dataset is small enough to be loaded into memory
 	 */
 	public boolean isLoadable();
+	/**
+	 * Get description of this dataset.
+	 * @return Human-friendly description.
+	 */
+	public String getDescription();
 	/**
 	 * Get an array of the fields contained in the dataset
 	 * @return an array containing all the fields in the schema

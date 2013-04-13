@@ -3,10 +3,14 @@ package edu.thu.keg.mdap.datamodel;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
+/**
+ * Simple implementation of the Query interface.
+ * Only a wrapper around plain SQL query.
+ * @author Yuanchao Ma
+ *
+ */
 public class SimpleQuery implements Query {
 	
-	
-
 	public SimpleQuery(DataField[] fields, String queryString) {
 		this.fields = fields;
 		this.queryString = queryString;
