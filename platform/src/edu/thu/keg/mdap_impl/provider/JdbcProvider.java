@@ -69,8 +69,8 @@ public class JdbcProvider extends AbstractDataProvider {
 	}
 
 	@Override
-	public void removeDataSet(String dsName) {
-		
+	public void removeDataSet(DataSet ds) {
+		//TODO
 	}
 
 
@@ -126,6 +126,18 @@ public class JdbcProvider extends AbstractDataProvider {
 			throw new DataProviderException(e.getMessage());
 		}
 		throw new IllegalArgumentException("Type of this field is not supported");
+	}
+
+	@Override
+	public void closeQuery(Query q) throws DataProviderException {
+		try {
+			results.get(q).close();
+			results.remove(q);
+			if (results.size() == 0)
+				getConnection().close();
+		} catch (SQLException e) {
+			throw new DataProviderException();
+		}
 	}
 
 }

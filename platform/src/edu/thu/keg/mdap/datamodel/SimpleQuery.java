@@ -39,8 +39,7 @@ public class SimpleQuery implements Query {
 	}
 	@Override
 	public void close() throws DataProviderException {
-		// TODO Auto-generated method stub
-		
+		this.getProvider().closeQuery(this);
 	}
 	@Override
 	public boolean next() throws DataProviderException {

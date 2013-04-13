@@ -17,9 +17,9 @@ import edu.thu.keg.mdap.datamodel.Query;
  */
 public interface DataProvider {
 	/**
-	 * Run a query against the DataProvider and return ResultSet
-	 * @param query the query string returning a table
-	 * @return the disconnected ResultSet returned by the query.
+	 * Open(run) the query against the data provider, 
+	 * and open the stream for reading data
+	 * @param query the query 
 	 * @throws DataProviderException when the query is invalid,
 	 * 	or communication with the provider returns a error.
 	 */
@@ -29,12 +29,37 @@ public interface DataProvider {
 	 * @return The connection string of this DataProvider
 	 */
 	public String getConnectionString();
-	
+	/**
+	 * Advance a previously opened query 
+	 * @param q the query
+	 * @return whether the query has past the last record
+	 * @throws DataProviderException when data provider gives an error
+	 */
 	public boolean next(Query q) throws DataProviderException ;
-	
+	/**
+	 * Get value of current record of a query, of the given field
+	 * @param q the query
+	 * @param field the field
+	 * @return the value
+	 * @throws DataProviderException when data provider gives an error
+	 */
 	public Object getValue(Query q, DataField field) throws DataProviderException ;
-	
-	public void removeDataSet(String dsName);
-	
+	/**
+	 * Close a query and release resource.
+	 * @param q the query
+	 * @throws DataProviderException when data provider gives an error
+	 */
+	public void closeQuery(Query q) throws DataProviderException;
+	/**
+	 * Remove a dataset content from the provider
+	 * @param ds the to-be-removed dataset.
+	 */
+	public void removeDataSet(DataSet ds);
+	/**
+	 * Write to the data provider the actual data of the dataset.
+	 * Existing data would be wiped first.
+	 * @param ds the dataset whose data is to be written
+	 * @param data the data to be written
+	 */
 	public void writeDataSetContent(DataSet ds, DataContent data);
 }

@@ -34,8 +34,8 @@ public interface Query extends DataContent {
 	 */
 	public DataProvider getProvider();
 	/**
-	 * String representation of this query.
-	 * @return
+	 *
+	 * @return String representation of this query.
 	 */
 	public String getQueryString();
 }

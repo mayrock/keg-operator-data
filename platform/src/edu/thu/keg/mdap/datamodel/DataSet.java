@@ -52,8 +52,13 @@ public interface DataSet {
 	 * @return an array containing all the fields in the schema
 	 */
 	public DataField[] getDataFields();
-	
+	/**
+	 * @return a map containing all features of this dataset
+	 */
 	public HashMap<Class<? extends DataSetFeature>, DataSetFeature> getFeatures();
-	
+	/**
+	 * Add information about a new feature supported by this dataset
+	 * @param feature describes the to-be-added feature
+	 */
 	public void addFeature(DataSetFeature feature);
 }

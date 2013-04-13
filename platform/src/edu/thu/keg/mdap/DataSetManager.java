@@ -50,5 +50,10 @@ public interface DataSetManager {
 	 */
 	public void removeDataSet(DataSet ds);
 	
+	/**
+	 * Get all datasets that supports the certain type of feature
+	 * @param feature A Class instance that represents the demanded feature type
+	 * @return A collection of DataSet's
+	 */
 	public Collection<DataSet> getDataSetList(Class<? extends DataSetFeature> feature);
 }
