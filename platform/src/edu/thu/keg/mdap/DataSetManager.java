@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datamodel.DataSetFeature;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 
 /**

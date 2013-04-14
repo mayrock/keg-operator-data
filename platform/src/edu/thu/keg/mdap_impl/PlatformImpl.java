@@ -13,8 +13,7 @@ import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
-import edu.thu.keg.mdap.datamodel.GeneralGeoDataSet;
-import edu.thu.keg.mdap.datamodel.GeoDataSet;
+import edu.thu.keg.mdap.datasetfeature.GeoDataSet;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -72,7 +71,7 @@ public class PlatformImpl implements Platform {
 		fields[3] = new GeneralDataField("Longitude", Double.class, "", false );
 		dss[1] = p.getDataSetManager().createDataSet("RegionInfo3", "Region info 3",
 				provider, fields, true);
-		dss[1].addFeature(new GeneralGeoDataSet(fields[2], fields[3], fields[1], false));
+		dss[1].addFeature(new GeoDataSet(fields[2], fields[3], fields[1], false));
 		
 		fields = new DataField[3];
 		fields[0] = new GeneralDataField("SiteName", String.class, "", false );
@@ -80,7 +79,7 @@ public class PlatformImpl implements Platform {
 		fields[2] = new GeneralDataField("Longitude", Double.class, "", false );
 		dss[2] = p.getDataSetManager().createDataSet("RegionInfo2", "Region info 2",
 				provider, fields, true);
-		dss[2].addFeature(new GeneralGeoDataSet(fields[1], fields[2], fields[0], false));
+		dss[2].addFeature(new GeoDataSet(fields[1], fields[2], fields[0], false));
 		
 		//Store a dataset
 		for (DataSet ds : dss) {
@@ -93,7 +92,7 @@ public class PlatformImpl implements Platform {
 			try {
 				System.out.println(ds.getDescription());
 				DataContent q = ds.getQuery();
-				GeoDataSet gds = (GeoDataSet)ds.getFeatures().get(GeoDataSet.class);
+				GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
 				q.open();
 				int count = 0;
 				while (q.next()) {

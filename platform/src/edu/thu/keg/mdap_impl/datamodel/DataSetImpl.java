@@ -3,15 +3,16 @@
  */
 package edu.thu.keg.mdap_impl.datamodel;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datamodel.DataSetFeature;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.SimpleQuery;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -27,7 +28,7 @@ public class DataSetImpl implements DataSet {
 	private String description = null;
 	private boolean loadable;
 	private DataField[] fields;
-	private HashMap<Class<? extends DataSetFeature>, DataSetFeature> features;
+	private HashSet<DataSetFeature> features;
 
 	private String defaultStmt(DataField[] fields) {
 		StringBuffer sb = new StringBuffer("SELECT ");
@@ -42,8 +43,7 @@ public class DataSetImpl implements DataSet {
 		return sb.toString();
 	}
 	public DataSetImpl(){
-		features = new HashMap<Class<? extends DataSetFeature>,
-				DataSetFeature>();
+		features = new HashSet<DataSetFeature>();
 	}
 
 
@@ -55,7 +55,7 @@ public class DataSetImpl implements DataSet {
 		this.loadable = loadable;
 		this.description = description;
 		setDataFields(fields);
-		features = new HashMap<Class<? extends DataSetFeature>, DataSetFeature>();
+		features = new HashSet<DataSetFeature>();
 	}
 	
 	private void setDataFields(DataField[] fields) {
@@ -94,15 +94,23 @@ public class DataSetImpl implements DataSet {
 		return q;
 	}
 	@Override
-	public HashMap<Class<? extends DataSetFeature>, DataSetFeature> getFeatures() {
+	public Set<DataSetFeature> getFeatures() {
 		return features;
 	}
 	@Override
 	public void addFeature(DataSetFeature feature) {
-		features.put(feature.getFeatureType(), feature);
+		features.add(feature);
 	}
 	@Override
 	public String getDescription() {
 		return this.description;
+	}
+	@Override
+	public DataSetFeature getFeature(Class<? extends DataSetFeature> type) {
+		for (DataSetFeature feature : features) {
+			if (feature.hasFeatureType(type))
+				return feature;
+		}
+		return null;
 	}
 }

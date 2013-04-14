@@ -3,9 +3,11 @@
  */
 package edu.thu.keg.mdap.datamodel;
 
-import java.util.HashMap;
+import java.util.Set;
+
 import javax.naming.OperationNotSupportedException;
 
+import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -55,10 +57,12 @@ public interface DataSet {
 	/**
 	 * @return a map containing all features of this dataset
 	 */
-	public HashMap<Class<? extends DataSetFeature>, DataSetFeature> getFeatures();
+	public Set<DataSetFeature> getFeatures();
 	/**
 	 * Add information about a new feature supported by this dataset
 	 * @param feature describes the to-be-added feature
 	 */
 	public void addFeature(DataSetFeature feature);
+	
+	public DataSetFeature getFeature(Class<? extends DataSetFeature> type);
 }

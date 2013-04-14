@@ -6,9 +6,10 @@ package edu.thu.keg.mdap_impl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
@@ -17,7 +18,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datamodel.DataSetFeature;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 
@@ -29,7 +30,7 @@ import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 public class DataSetManagerImpl implements DataSetManager {
 
 	private HashMap<String, DataSet> datasets = null;
-	private HashMap<Class<? extends DataSetFeature>, HashSet<DataSet>> features = null;
+	private HashMap<Class<? extends DataSetFeature>, List<DataSet>> features = null;
 	private XStream xstream;
 	
 	private XStream getXstream() {
@@ -41,7 +42,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	
 	public DataSetManagerImpl() {
 		datasets = new HashMap<String, DataSet>();
-		features = new HashMap<Class<? extends DataSetFeature>, HashSet<DataSet>>();
+		features = new HashMap<Class<? extends DataSetFeature>, List<DataSet>>();
 		try {
 			loadDataSets();
 		} catch (Exception ex) {
@@ -112,18 +113,11 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 	private void addDataSet(DataSet ds) {
 		datasets.put(ds.getName(), ds);
-		for (DataSetFeature feature : ds.getFeatures().values()) {
-			Class<? extends DataSetFeature> c = feature.getFeatureType();
-			while (c != null) {
-				if (!features.containsKey(c))
-					features.put(c, new HashSet<DataSet>());
-				features.get(c).add(ds);
-				@SuppressWarnings("unchecked")
-				Class<? extends DataSetFeature>[] cl =
-						(Class<? extends DataSetFeature>[]) c.getInterfaces();
-				if (cl.length == 0)
-					break;
-				c = cl[0];
+		for (DataSetFeature feature : ds.getFeatures()) {
+			for (Class<? extends DataSetFeature> type : feature.getAllFeatureTypes()) {
+				if (!features.containsKey(type))
+					features.put(type, new ArrayList<DataSet>());
+				features.get(type).add(ds);
 			}
 		}
 	}
