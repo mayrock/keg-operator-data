@@ -150,19 +150,20 @@ public class DataSetFunctions {
 			StatisticsFeature gds = (StatisticsFeature) ds
 					.getFeature(StatisticsFeature.class);
 			rs.open();
-			while (rs.next()) {
+			int i=0;
+			while (rs.next() && i++<100) {
 				System.out.println(rs.getValue(ds.getDataFields()[0])
 						.toString()
 						+ " "
 						+ rs.getValue(ds.getDataFields()[1]).toString());
 				JStatistic statistic = new JStatistic();
 				ArrayList<String> keys=new ArrayList<>();
-				for(DataField key: gds.getValueFields())
+				for(DataField key: gds.getKeyFields())
 				{
-					keys.add((String)rs.getValue(key));
+					keys.add(rs.getValue(key).toString());
 				}
 				statistic.setKey(keys);
-				statistic.setValue((String) rs.getValue(gds.getKeyFields()[0]));
+				statistic.setValue(rs.getValue(gds.getValueFields()[0]).toString());
 				al_rs.add(statistic);
 			}
 			rs.close();
