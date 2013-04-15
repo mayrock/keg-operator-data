@@ -91,6 +91,27 @@ public class PlatformImpl implements Platform {
 		tds.addFeature(new GeoDataSet(fields[1], fields[2], fields[0], false));
 		dss.add(tds);
 		
+		fields = new DataField[6];
+		fields[0] = new GeneralDataField("Domain", FieldType.LongString, 
+				"Domain", true);
+		fields[1] = new GeneralDataField("DayCount", FieldType.Int, 
+				"appear days of this domain", false);
+		fields[2] = new GeneralDataField("HourCount", FieldType.Int, 
+				"appear hours of this domain", false);
+		fields[3] = new GeneralDataField("LocCount", FieldType.Int, 
+				"appear locations of this domain", false);
+		fields[4] = new GeneralDataField("UserCount", FieldType.Int, 
+				"number of users visiting this domain", false);
+		fields[5] = new GeneralDataField("TotalCount", FieldType.Int, 
+				"total visits of this domain", false);
+		tds = p.getDataSetManager().createDataSet("FilteredByCT_Domain", 
+				"Domain statistics", provider, fields, false);
+		tds.addFeature(new StatisticsDataSet(
+				new DataField[]{fields[0]},
+				new DataField[]
+						{fields[1],fields[2],fields[3],fields[4],fields[5]}) );
+		dss.add(tds);
+		
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
 				"Content Type of websites", true);
@@ -120,6 +141,7 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		//Store a dataset
 		for (DataSet ds : dss) {
@@ -163,6 +185,13 @@ public class PlatformImpl implements Platform {
 			} catch (DataProviderException | OperationNotSupportedException ex) {
 				ex.printStackTrace();
 			}
+		}
+		//remove a dataset
+		try {
+			p.getDataSetManager().removeDataSet(tds2);
+		} catch (DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
