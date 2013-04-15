@@ -15,7 +15,7 @@ import edu.thu.keg.mdap.datamodel.DataField;
  * points, regions, etc.
  * @author Yuanchao Ma
  */
-public class GeoDataSet extends DataSetFeature {
+public class GeoFeature extends DataSetFeature {
 	/**
 	 * @return Reference of the latitude field 
 	 * in the database
@@ -46,7 +46,7 @@ public class GeoDataSet extends DataSetFeature {
 	}
 	@Override
 	public Class<? extends DataSetFeature> getFeatureType() {
-		return GeoDataSet.class;
+		return GeoFeature.class;
 	}
 	
 
@@ -62,7 +62,7 @@ public class GeoDataSet extends DataSetFeature {
 	 * @param tagField the tag DataField
 	 * @param ordered whether the points are ordered
 	 */
-	public GeoDataSet(DataField latitudeField, DataField longitudeField,
+	public GeoFeature(DataField latitudeField, DataField longitudeField,
 			DataField tagField, boolean ordered) {
 		super(new DataField[]{latitudeField, longitudeField}, 
 				new DataField[]{tagField});

@@ -18,8 +18,8 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
-import edu.thu.keg.mdap.datasetfeature.GeoDataSet;
-import edu.thu.keg.mdap.datasetfeature.StatisticsDataSet;
+import edu.thu.keg.mdap.datasetfeature.GeoFeature;
+import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -79,7 +79,7 @@ public class PlatformImpl implements Platform {
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false );
 		tds = p.getDataSetManager().createDataSet("RegionInfo3", "Region info 3",
 				provider, fields, true);
-		tds.addFeature(new GeoDataSet(fields[2], fields[3], fields[1], false));
+		tds.addFeature(new GeoFeature(fields[2], fields[3], fields[1], false));
 		dss.add(tds);
 		
 		fields = new DataField[3];
@@ -88,7 +88,7 @@ public class PlatformImpl implements Platform {
 		fields[2] = new GeneralDataField("Longitude", FieldType.Double, "", false );
 		tds = p.getDataSetManager().createDataSet("RegionInfo2", "Region info 2",
 				provider, fields, true);
-		tds.addFeature(new GeoDataSet(fields[1], fields[2], fields[0], false));
+		tds.addFeature(new GeoFeature(fields[1], fields[2], fields[0], false));
 		dss.add(tds);
 		
 		fields = new DataField[6];
@@ -106,7 +106,7 @@ public class PlatformImpl implements Platform {
 				"total visits of this domain", false);
 		tds = p.getDataSetManager().createDataSet("FilteredByCT_Domain", 
 				"Domain statistics", provider, fields, false);
-		tds.addFeature(new StatisticsDataSet(
+		tds.addFeature(new StatisticsFeature(
 				new DataField[]{fields[0]},
 				new DataField[]
 						{fields[1],fields[2],fields[3],fields[4],fields[5]}) );
@@ -119,7 +119,7 @@ public class PlatformImpl implements Platform {
 				"appear times of the ContentType", false);
 		tds = p.getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", 
 				"Top 90% Content Type distribution", provider, fields, true);
-		tds.addFeature(new StatisticsDataSet(fields[0], fields[1]));
+		tds.addFeature(new StatisticsFeature(fields[0], fields[1]));
 		dss.add(tds);
 		
 		fields = new DataField[2];
@@ -129,7 +129,7 @@ public class PlatformImpl implements Platform {
 				"appear times of the ContentType", false);
 		DataSet tds2 = p.getDataSetManager().createDataSet("New_Test", 
 				"Top 90% Content Type distribution", provider, fields, true);
-		tds2.addFeature(new StatisticsDataSet(fields[0], fields[1]));
+		tds2.addFeature(new StatisticsFeature(fields[0], fields[1]));
 		dss.add(tds2);
 		
 		try {
@@ -149,7 +149,7 @@ public class PlatformImpl implements Platform {
 		}
 		
 		//Get a dataset
-		for (DataSet ds : p.getDataSetManager().getDataSetList(GeoDataSet.class)) {		
+		for (DataSet ds : p.getDataSetManager().getDataSetList(GeoFeature.class)) {		
 			//Read data from a dataset
 			try {
 				System.out.println(ds.getDescription());
@@ -171,7 +171,7 @@ public class PlatformImpl implements Platform {
 			}
 		}
 		
-		for (DataSet ds : p.getDataSetManager().getDataSetList(StatisticsDataSet.class)) {
+		for (DataSet ds : p.getDataSetManager().getDataSetList(StatisticsFeature.class)) {
 			try {
 				System.out.println(ds.getDescription());
 				int count = 0;

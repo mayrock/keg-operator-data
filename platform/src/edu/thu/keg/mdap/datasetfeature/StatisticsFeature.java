@@ -13,7 +13,7 @@ import edu.thu.keg.mdap.datamodel.DataField;
  * @author Yuanchao Ma
  *
  */
-public class StatisticsDataSet extends DataSetFeature {
+public class StatisticsFeature extends DataSetFeature {
 	
 
 	
@@ -22,7 +22,7 @@ public class StatisticsDataSet extends DataSetFeature {
 	 * @param keyFields the key DataFields
 	 * @param valueFields the value fields
 	 */
-	public StatisticsDataSet(DataField[] keyFields, DataField[] valueFields) {
+	public StatisticsFeature(DataField[] keyFields, DataField[] valueFields) {
 		super(keyFields, valueFields);
 	}
 	
@@ -31,7 +31,7 @@ public class StatisticsDataSet extends DataSetFeature {
 	 * @param keyField the key DataField
 	 * @param valueField the value field
 	 */
-	public StatisticsDataSet(DataField keyField, DataField valueField) {
+	public StatisticsFeature(DataField keyField, DataField valueField) {
 		super(keyField, valueField);
 	}
 }

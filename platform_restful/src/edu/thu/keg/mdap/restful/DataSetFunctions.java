@@ -21,7 +21,7 @@ import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datasetfeature.GeoDataSet;
+import edu.thu.keg.mdap.datasetfeature.GeoFeature;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
@@ -96,7 +96,7 @@ public class DataSetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery();
-			GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
+			GeoFeature gds = (GeoFeature)ds.getFeature(GeoFeature.class);
 			rs.open();
 			while (rs.next()) {
 				System.out.println(rs.getValue(ds.getDataFields()[0])

@@ -10,7 +10,7 @@ import edu.thu.keg.mdap.datamodel.DataField;
  * @author Yuanchao Ma
  *
  */
-public class TimeSeriesDataSet extends StatisticsDataSet {
+public class TimeSeriesFeature extends StatisticsFeature {
 	
 	/**
 	 * Init a new TimeSeriesDataSet instance with all its fields
@@ -18,7 +18,7 @@ public class TimeSeriesDataSet extends StatisticsDataSet {
 	 * @param timeField the time DataField
 	 * @param valueFields the value DataFields
 	 */
-	public TimeSeriesDataSet(DataField[] keyFields, DataField timeField, DataField[] valueFields) {
+	public TimeSeriesFeature(DataField[] keyFields, DataField timeField, DataField[] valueFields) {
 		super(keyFields, valueFields);
 		this.timeField = timeField;
 	}
@@ -29,7 +29,7 @@ public class TimeSeriesDataSet extends StatisticsDataSet {
 	 * @param timeField the time DataField
 	 * @param valueField the value DataField
 	 */
-	public TimeSeriesDataSet(DataField keyField, DataField timeField, DataField valueField) {
+	public TimeSeriesFeature(DataField keyField, DataField timeField, DataField valueField) {
 		super(keyField, valueField);
 		this.timeField = timeField;
 	}
