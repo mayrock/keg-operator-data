@@ -14,7 +14,12 @@ import edu.thu.keg.mdap.provider.DataProvider;
  *
  */
 public interface Query extends DataContent {
-	
+	/**
+	 * Representing a Where clause in the Query for 
+	 * filtering data
+	 * @author myc
+	 *
+	 */
 	class WhereClause {
 		DataField field;
 		Operator operator;
@@ -45,7 +50,11 @@ public interface Query extends DataContent {
 		}
 	}
 
-	
+	/**
+	 * Operator available for where clause
+	 * @author Yuanchao Ma
+	 *
+	 */
 	public enum Operator {
 		EQ(" = "), NEQ(" <> "), GT(" > "), LT(" < "),
 		GEQ(" >= "), LEQ(" <= "), LIKE(" LIKE ");
@@ -53,8 +62,19 @@ public interface Query extends DataContent {
 		Operator(String str) {
 			this.str = str;
 		}
+		/**
+		 * @return String representation of this operator
+		 */
 		public String getStr() {
 			return this.str;
+		}
+		
+		public static Operator get(String s) {
+			for (Operator op : Operator.values()) {
+				if (s.trim() == op.getStr().trim())
+					return op;
+			}
+			return null;
 		}
 	}
 	
