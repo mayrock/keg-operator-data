@@ -93,27 +93,37 @@ public class DataSetManagerImpl implements DataSetManager {
 			addDataSet(ds);
 		}
 	}
+
 	@Override
-	public void storeDataSet(DataSet ds) {
-		addDataSet(ds);
+	public void saveChanges() throws IOException {
 		FileWriter fw;
-		try {
-			DataSet[] dss = new DataSet[datasets.size()];
-			int i = 0;
-			for (DataSet d : datasets.values()) {
-				dss[i++] = d;
-			}
-			fw = new FileWriter(Config.getDataSetFile(), false);
-			getXstream().marshal(dss, new PrettyPrintWriter(fw));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		DataSet[] dss = new DataSet[datasets.size()];
+		int i = 0;
+		for (DataSet d : datasets.values()) {
+			dss[i++] = d;
 		}
+		fw = new FileWriter(Config.getDataSetFile(), false);
+		getXstream().marshal(dss, new PrettyPrintWriter(fw));
+	}
+	@Override
+	public DataSet createDataSet(String name, String description, DataProvider provider,
+			DataField[] fields, boolean loadable, DataSetFeature[] features) {
+		DataSet ds = new DataSetImpl(name, description, provider, 
+				loadable, fields, features);
+		addDataSet(ds);
+		return ds;
+	}
+	@Override
+	public DataSet createDataSet(String name, String description, DataProvider provider,
+			DataField[] fields, boolean loadable, DataSetFeature feature) {
+		DataSetFeature[] features = new DataSetFeature[]{feature};
+		return createDataSet(name, description, provider, fields, loadable, features);
 	}
 	@Override
 	public DataSet createDataSet(String name, String description, DataProvider provider,
 			DataField[] fields, boolean loadable) {
-		return new DataSetImpl(name, description, provider, loadable, fields);
+		DataSetFeature[] features = new DataSetFeature[]{};
+		return createDataSet(name, description, provider, fields, loadable, features);
 	}
 
 	@Override
@@ -122,7 +132,6 @@ public class DataSetManagerImpl implements DataSetManager {
 			return;
 		ds.getProvider().removeContent(ds);
 		removeDSMeta(ds);
-		
 	}
 
 	@Override

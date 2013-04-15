@@ -1,5 +1,6 @@
 package edu.thu.keg.mdap;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import edu.thu.keg.mdap.datamodel.DataField;
@@ -30,19 +31,37 @@ public interface DataSetManager {
 	 */
 	public Collection<DataSet> getDataSetList();
 	/**
-	 * Store(register) metadata of the DataSet into the platform
-	 * @param ds The DataSet object to be stored.
+	 * Create a new DataSet instance, using the given name, connection string
+	 * data fields, and a single features
+	 * @param name The unique name of the DataSet
+	 * @param provider its DataProvider
+	 * @param fields DataField set
+	 * @param features DataSetFeature's supported by this DataSet
+	 * @return A new DataSet instance
 	 */
-	public void storeDataSet(DataSet ds);
+	public DataSet createDataSet(String name, String description, DataProvider provider, 
+			DataField[] fields, boolean loadable, DataSetFeature[] features);
 	/**
 	 * Create a new DataSet instance, using the given name, connection string
-	 * and data field set.
+	 * data fields, and a single feature
+	 * @param name The unique name of the DataSet
+	 * @param provider its DataProvider
+	 * @param fields DataField set
+	 * @param feature the DataSetFeature supported by this DataSet
+	 * @return A new DataSet instance
+	 */
+	public DataSet createDataSet(String name, String description, DataProvider provider, 
+			DataField[] fields, boolean loadable, DataSetFeature feature);
+	/**
+	 * Create a new DataSet instance, using the given name, connection string
+	 * data fields, and no feature
 	 * @param name The unique name of the DataSet
 	 * @param provider its DataProvider
 	 * @param fields DataField set
 	 * @return A new DataSet instance
 	 */
-	public DataSet createDataSet(String name, String description, DataProvider provider, DataField[] fields, boolean loadable);
+	public DataSet createDataSet(String name, String description, DataProvider provider, 
+			DataField[] fields, boolean loadable);
 	/**
 	 * Remove a DataSet from the platform, as well as remove 
 	 * its actual data from its provider.
@@ -58,4 +77,9 @@ public interface DataSetManager {
 	 * @return A collection of DataSet's
 	 */
 	public Collection<DataSet> getDataSetList(Class<? extends DataSetFeature> feature);
+	/**
+	 * Save current DataSet list to disk
+	 * @throws IOException
+	 */
+	public void saveChanges() throws IOException;
 }

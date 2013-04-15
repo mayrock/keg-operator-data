@@ -49,14 +49,17 @@ public class DataSetImpl implements DataSet {
 
 
 	public DataSetImpl(String name, String description, DataProvider provider,
-			 boolean loadable, DataField[] fields) {
+			 boolean loadable, DataField[] fields, DataSetFeature[] features) {
 		super();
 		this.name = name;
 		this.provider = provider;
 		this.loadable = loadable;
 		this.description = description;
 		setDataFields(fields);
-		features = new HashSet<DataSetFeature>();
+		this.features = new HashSet<DataSetFeature>();
+		for (DataSetFeature feature : features) {
+			this.features.add(feature);
+		}
 	}
 	
 	private void setDataFields(DataField[] fields) {
@@ -97,10 +100,6 @@ public class DataSetImpl implements DataSet {
 	@Override
 	public Set<DataSetFeature> getFeatures() {
 		return features;
-	}
-	@Override
-	public void addFeature(DataSetFeature feature) {
-		features.add(feature);
 	}
 	@Override
 	public String getDescription() {

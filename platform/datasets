@@ -23,14 +23,14 @@
       </edu.thu.keg.mdap.datamodel.GeneralDataField>
     </fields>
     <features>
-      <edu.thu.keg.mdap.datasetfeature.StatisticsDataSet>
+      <edu.thu.keg.mdap.datasetfeature.StatisticsFeature>
         <keyFields>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         </keyFields>
         <valueFields>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
         </valueFields>
-      </edu.thu.keg.mdap.datasetfeature.StatisticsDataSet>
+      </edu.thu.keg.mdap.datasetfeature.StatisticsFeature>
     </features>
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
@@ -89,7 +89,7 @@
       </edu.thu.keg.mdap.datamodel.GeneralDataField>
     </fields>
     <features>
-      <edu.thu.keg.mdap.datasetfeature.StatisticsDataSet>
+      <edu.thu.keg.mdap.datasetfeature.StatisticsFeature>
         <keyFields>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         </keyFields>
@@ -100,7 +100,7 @@
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[5]"/>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[6]"/>
         </valueFields>
-      </edu.thu.keg.mdap.datasetfeature.StatisticsDataSet>
+      </edu.thu.keg.mdap.datasetfeature.StatisticsFeature>
     </features>
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
@@ -127,40 +127,15 @@
       </edu.thu.keg.mdap.datamodel.GeneralDataField>
     </fields>
     <features>
-      <edu.thu.keg.mdap.datasetfeature.StatisticsDataSet>
+      <edu.thu.keg.mdap.datasetfeature.StatisticsFeature>
         <keyFields>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         </keyFields>
         <valueFields>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
         </valueFields>
-      </edu.thu.keg.mdap.datasetfeature.StatisticsDataSet>
+      </edu.thu.keg.mdap.datasetfeature.StatisticsFeature>
     </features>
-  </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-  <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-    <name>WebsiteId_URL</name>
-    <provider class="Jdbc">jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</provider>
-    <description>Website info</description>
-    <loadable>true</loadable>
-    <fields>
-      <edu.thu.keg.mdap.datamodel.GeneralDataField>
-        <columnName>WebsiteId</columnName>
-        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
-        <desp></desp>
-        <isKey>true</isKey>
-        <type>Int</type>
-        <allowNull>false</allowNull>
-      </edu.thu.keg.mdap.datamodel.GeneralDataField>
-      <edu.thu.keg.mdap.datamodel.GeneralDataField>
-        <columnName>URL</columnName>
-        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
-        <desp></desp>
-        <isKey>false</isKey>
-        <type>Double</type>
-        <allowNull>true</allowNull>
-      </edu.thu.keg.mdap.datamodel.GeneralDataField>
-    </fields>
-    <features/>
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>RegionInfo2</name>
@@ -194,20 +169,42 @@
       </edu.thu.keg.mdap.datamodel.GeneralDataField>
     </fields>
     <features>
-      <edu.thu.keg.mdap.datasetfeature.GeoDataSet>
+      <edu.thu.keg.mdap.datasetfeature.GeoFeature>
         <keyFields>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
         </keyFields>
-        <valueFields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        </valueFields>
         <latitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
         <longitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
         <tagField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <ordered>false</ordered>
-      </edu.thu.keg.mdap.datasetfeature.GeoDataSet>
+      </edu.thu.keg.mdap.datasetfeature.GeoFeature>
     </features>
+  </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+  <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+    <name>WebsiteId_URL</name>
+    <provider class="Jdbc">jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</provider>
+    <description>Website info</description>
+    <loadable>true</loadable>
+    <fields>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>WebsiteId</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp></desp>
+        <isKey>true</isKey>
+        <type>Int</type>
+        <allowNull>false</allowNull>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>URL</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp></desp>
+        <isKey>false</isKey>
+        <type>Double</type>
+        <allowNull>true</allowNull>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+    </fields>
+    <features/>
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>RegionInfo3</name>
@@ -249,19 +246,16 @@
       </edu.thu.keg.mdap.datamodel.GeneralDataField>
     </fields>
     <features>
-      <edu.thu.keg.mdap.datasetfeature.GeoDataSet>
+      <edu.thu.keg.mdap.datasetfeature.GeoFeature>
         <keyFields>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
           <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[4]"/>
         </keyFields>
-        <valueFields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        </valueFields>
         <latitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
         <longitudeField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[4]"/>
         <tagField class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
         <ordered>false</ordered>
-      </edu.thu.keg.mdap.datasetfeature.GeoDataSet>
+      </edu.thu.keg.mdap.datasetfeature.GeoFeature>
     </features>
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
 </edu.thu.keg.mdap.datamodel.DataSet-array>

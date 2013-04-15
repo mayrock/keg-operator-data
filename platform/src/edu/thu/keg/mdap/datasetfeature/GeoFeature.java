@@ -63,9 +63,9 @@ public class GeoFeature extends DataSetFeature {
 	 * @param ordered whether the points are ordered
 	 */
 	public GeoFeature(DataField latitudeField, DataField longitudeField,
-			DataField tagField, boolean ordered) {
+			DataField tagField, DataField[] valueFields, boolean ordered) {
 		super(new DataField[]{latitudeField, longitudeField}, 
-				new DataField[]{tagField});
+				valueFields);
 		this.latitudeField = latitudeField;
 		this.longitudeField = longitudeField;
 		this.tagField = tagField;

@@ -59,11 +59,6 @@ public interface DataSet {
 	 */
 	public Set<DataSetFeature> getFeatures();
 	/**
-	 * Add information about a new feature supported by this dataset
-	 * @param feature describes the to-be-added feature
-	 */
-	public void addFeature(DataSetFeature feature);
-	/**
 	 * Get an instance representing the feature of this dataset supporting
 	 * the specified feature type
 	 * @param type The feature type whose instance is expected

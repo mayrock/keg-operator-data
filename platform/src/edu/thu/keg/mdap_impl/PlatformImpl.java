@@ -4,9 +4,6 @@
 package edu.thu.keg.mdap_impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.DataProviderManager;
@@ -18,6 +15,7 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.datasetfeature.GeoFeature;
 import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
@@ -62,7 +60,6 @@ public class PlatformImpl implements Platform {
 //				"D:\\GitHub\\keg-operator-data\\platform\\config.xml");
 		// Construct a new dataset
 		DataProvider provider = p.getDataProviderManager().getDefaultSQLProvider("BeijingData");
-		Collection<DataSet> dss = new ArrayList<DataSet>();
 		
 		
 		DataField[] fields = new DataField[2];
@@ -70,7 +67,6 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false );
 		DataSet tds = p.getDataSetManager().createDataSet("WebsiteId_URL", "Website info", 
 				provider, fields, true);
-		dss.add(tds);
 		
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("Region", FieldType.Int, "", true );
@@ -78,18 +74,16 @@ public class PlatformImpl implements Platform {
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false );
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false );
 		tds = p.getDataSetManager().createDataSet("RegionInfo3", "Region info 3",
-				provider, fields, true);
-		tds.addFeature(new GeoFeature(fields[2], fields[3], fields[1], false));
-		dss.add(tds);
+				provider, fields, true,
+				new GeoFeature(fields[2], fields[3], fields[1], null, false));
 		
 		fields = new DataField[3];
 		fields[0] = new GeneralDataField("SiteName", FieldType.ShortString, "", false );
 		fields[1] = new GeneralDataField("Latitude", FieldType.Double, "", false );
 		fields[2] = new GeneralDataField("Longitude", FieldType.Double, "", false );
 		tds = p.getDataSetManager().createDataSet("RegionInfo2", "Region info 2",
-				provider, fields, true);
-		tds.addFeature(new GeoFeature(fields[1], fields[2], fields[0], false));
-		dss.add(tds);
+				provider, fields, true,
+				new GeoFeature(fields[1], fields[2], fields[0], null, false));
 		
 		fields = new DataField[6];
 		fields[0] = new GeneralDataField("Domain", FieldType.LongString, 
@@ -104,13 +98,12 @@ public class PlatformImpl implements Platform {
 				"number of users visiting this domain", false);
 		fields[5] = new GeneralDataField("TotalCount", FieldType.Int, 
 				"total visits of this domain", false);
-		tds = p.getDataSetManager().createDataSet("FilteredByCT_Domain", 
-				"Domain statistics", provider, fields, false);
-		tds.addFeature(new StatisticsFeature(
+		DataSetFeature feature = new StatisticsFeature(
 				new DataField[]{fields[0]},
 				new DataField[]
-						{fields[1],fields[2],fields[3],fields[4],fields[5]}) );
-		dss.add(tds);
+						{fields[1],fields[2],fields[3],fields[4],fields[5]});
+		tds = p.getDataSetManager().createDataSet("FilteredByCT_Domain", 
+				"Domain statistics", provider, fields, false, feature);
 		
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
@@ -118,9 +111,8 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("times", FieldType.Int, 
 				"appear times of the ContentType", false);
 		tds = p.getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", 
-				"Top 90% Content Type distribution", provider, fields, true);
-		tds.addFeature(new StatisticsFeature(fields[0], fields[1]));
-		dss.add(tds);
+				"Top 90% Content Type distribution", provider, fields, true,
+				new StatisticsFeature(fields[0], fields[1]));
 		
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
@@ -128,9 +120,8 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("times", FieldType.Int, 
 				"appear times of the ContentType", false);
 		DataSet tds2 = p.getDataSetManager().createDataSet("New_Test", 
-				"Top 90% Content Type distribution", provider, fields, true);
-		tds2.addFeature(new StatisticsFeature(fields[0], fields[1]));
-		dss.add(tds2);
+				"Top 90% Content Type distribution", provider, fields, true,
+				new StatisticsFeature(fields[0], fields[1]));
 		
 		try {
 			tds2.writeData(tds.getQuery());
@@ -142,11 +133,6 @@ public class PlatformImpl implements Platform {
 			e.printStackTrace();
 		}
 		
-		
-		//Store a dataset
-		for (DataSet ds : dss) {
-			p.getDataSetManager().storeDataSet(ds);
-		}
 		
 		//Get a dataset
 		for (DataSet ds : p.getDataSetManager().getDataSetList(GeoFeature.class)) {		
@@ -190,6 +176,12 @@ public class PlatformImpl implements Platform {
 		try {
 			p.getDataSetManager().removeDataSet(tds2);
 		} catch (DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			p.getDataSetManager().saveChanges();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
