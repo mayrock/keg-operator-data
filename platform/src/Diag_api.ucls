@@ -64,8 +64,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="edu.thu.keg.mdap.datamodel.SimpleQuery" project="platform" 
-    file="/platform/src/edu/thu/keg/mdap/datamodel/SimpleQuery.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="8" language="java" name="edu.thu.keg.mdap_impl.datamodel.QueryImpl" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap_impl/datamodel/QueryImpl.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="243" width="176" x="891" y="501"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
