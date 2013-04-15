@@ -22,11 +22,13 @@ import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datasetfeature.GeoFeature;
+import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
 import edu.thu.keg.mdap.restful.jerseyclasses.JFieldName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JLocation;
+import edu.thu.keg.mdap.restful.jerseyclasses.JStatistic;
 
 /**
  * the functions of dataset's operation
@@ -34,7 +36,7 @@ import edu.thu.keg.mdap.restful.jerseyclasses.JLocation;
  * @author Law
  * 
  */
-@Path("/dataset")
+@Path("/ds")
 public class DataSetFunctions {
 	/**
 	 * 
@@ -80,7 +82,7 @@ public class DataSetFunctions {
 	 * @return a json or xml format location array
 	 */
 	@GET
-	@Path("/getdatasetlocation/{datasetname}")
+	@Path("/getlocation/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JLocation> getDataSetLocation(
 			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
@@ -96,7 +98,7 @@ public class DataSetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery();
-			GeoFeature gds = (GeoFeature)ds.getFeature(GeoFeature.class);
+			GeoFeature gds = (GeoFeature) ds.getFeature(GeoFeature.class);
 			rs.open();
 			while (rs.next()) {
 				System.out.println(rs.getValue(ds.getDataFields()[0])
@@ -105,16 +107,64 @@ public class DataSetFunctions {
 						+ rs.getValue(ds.getDataFields()[1]).toString());
 
 				JLocation location = new JLocation();
-				location.setTag((String)rs.getValue(gds.getTagField()));
-				location.setLatitude((double)rs.getValue(gds.getLatitudeField()));
-				location.setLongitude((double)rs.getValue(gds.getLongitudeField()));
+				location.setTag((String) rs.getValue(gds.getValueFields()[0]));
+				location.setWeight((double) rs.getValue(gds.getValueFields()[1]));
+				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
+				location.setLongitude((double) rs.getValue(gds.getKeyFields()[1]));
+				// location.setTag((String)rs.getValue(gds.getTagField()));
+				// location.setLatitude((double)rs.getValue(gds.getLatitudeField()));
+				// location.setLongitude((double)rs.getValue(gds.getLongitudeField()));
 				al_rs.add(location);
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
+		return al_rs;
+	}
+
+	/**
+	 * get the location fields form the dataset
+	 * 
+	 * @param dataset
+	 * @return a json or xml format location array
+	 */
+	@GET
+	@Path("/getstatistic/{datasetname}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<JStatistic> getDataSetStatistic(
+			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
+		String result = "";
+		System.out.println("½øÀ´ÁË" + dataset);
+		List<JStatistic> al_rs = new ArrayList<JStatistic>();
+		DataSet ds = null;
+		DataContent rs = null;
+		try {
+
+			Platform p = (Platform) sc.getAttribute("platform");
+
+			DataSetManager datasetManager = p.getDataSetManager();
+			ds = datasetManager.getDataSet(dataset);
+			rs = ds.getQuery();
+			StatisticsFeature gds = (StatisticsFeature) ds
+					.getFeature(StatisticsFeature.class);
+			rs.open();
+			while (rs.next()) {
+				System.out.println(rs.getValue(ds.getDataFields()[0])
+						.toString()
+						+ " "
+						+ rs.getValue(ds.getDataFields()[1]).toString());
+				JStatistic statistic = new JStatistic();
+				statistic.setKey((String) rs.getValue(gds.getValueFields()[0]));
+				statistic.setValue((String) rs.getValue(gds.getKeyFields()[0]));
+				al_rs.add(statistic);
+			}
+			rs.close();
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return al_rs;
 	}
 
