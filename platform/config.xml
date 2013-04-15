@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+<<<<<<< HEAD
 <entry key="DataSetFile">D:/GitHub/keg-operator-data/platform/datasets</entry>
+=======
+<entry key="DataSetFile">C:\Users\myc\git\mayrock\keg-operator-data\platform\datasets</entry>
+>>>>>>> 70c184893b364335a1e36a7f6bd543fe66a5c084
 <entry key="SqlAddress">sqlserver://10.1.1.55:1433</entry>
 </properties>
