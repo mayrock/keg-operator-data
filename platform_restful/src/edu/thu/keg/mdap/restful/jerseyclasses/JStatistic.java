@@ -7,7 +7,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class JStatistic {
 	private List<Object> keys;
-	private Object value;
+	private List<String> names;
+	private List<Object> values;
 	
 	public void setKey(List<Object> keys) {
 		this.keys=keys;
@@ -16,12 +17,19 @@ public class JStatistic {
 	public List<Object> getKey() {
 		return this.keys;
 	}
-	public void setValue(Object value) {
-		this.value = value;
+	public void setName(List<String> names) {
+		this.names = names;
 	}
 
-	public Object getValue() {
-		return this.value;
+	public List<String> getName() {
+		return this.names;
+	}
+	public void setValue(List<Object> values) {
+		this.values = values;
+	}
+
+	public List<Object> getValue() {
+		return this.values;
 	}
 	
 }

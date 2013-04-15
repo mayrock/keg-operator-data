@@ -1,7 +1,4 @@
 import java.net.URI;
-
-import java.net.URI;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
@@ -25,10 +22,10 @@ public class Test_con {
 		System.out.println(service.path("rest").path("ds").path("getdatasets")
 		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 		
-		System.out.println(service.path("rest").path("ds").path("getlocation/RegionInfo3")
-		        .accept(MediaType.APPLICATION_JSON).get(String.class));
-		
-		System.out.println(service.path("rest").path("ds").path("getstatistic/RegionInfo3")
+//		System.out.println(service.path("rest").path("ds").path("getlocation/RegionInfo3")
+//		        .accept(MediaType.APPLICATION_JSON).get(String.class));
+//		
+		System.out.println(service.path("rest").path("ds").path("/getstatistic/FilteredByCT_Domain")
 		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 		
 //		System.out.println(service.path("dataset").path("getdatasets")
