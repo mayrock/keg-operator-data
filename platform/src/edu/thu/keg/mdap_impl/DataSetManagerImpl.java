@@ -32,6 +32,14 @@ import edu.thu.keg.mdap_impl.provider.JdbcProvider;
  */
 public class DataSetManagerImpl implements DataSetManager {
 
+	private static DataSetManagerImpl instance;
+	public static DataSetManagerImpl getInstance() {
+		//TODO multi-thread
+		if (instance == null)
+			instance = new DataSetManagerImpl();
+		return instance;
+	}
+	
 	private HashMap<String, DataSet> datasets = null;
 	private HashMap<Class<? extends DataSetFeature>, Set<DataSet>> features = null;
 	private XStream xstream;
@@ -57,7 +65,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		return xstream;
 	}
 	
-	public DataSetManagerImpl() {
+	private DataSetManagerImpl() {
 		datasets = new HashMap<String, DataSet>();
 		features = new HashMap<Class<? extends DataSetFeature>, Set<DataSet>>();
 		try {

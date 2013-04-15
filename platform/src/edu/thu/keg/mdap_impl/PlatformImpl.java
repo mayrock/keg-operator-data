@@ -42,7 +42,7 @@ public class PlatformImpl implements Platform {
 	 */
 	@Override
 	public DataSetManager getDataSetManager() {
-		return new DataSetManagerImpl();
+		return DataSetManagerImpl.getInstance();
 	}
 
 	/* (non-Javadoc)
@@ -50,15 +50,15 @@ public class PlatformImpl implements Platform {
 	 */
 	@Override
 	public DataProviderManager getDataProviderManager() {
-		return new DataProviderManagerImpl();
+		return DataProviderManagerImpl.getInstance();
 	}
 	
 	
-	public static void main0(String[] args) {
-		Platform p = new PlatformImpl(
-				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
+	public static void main(String[] args) {
 //		Platform p = new PlatformImpl(
-//				"D:\\GitHub\\keg-operator-data\\platform\\config.xml");
+//				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
+		Platform p = new PlatformImpl(
+				"C:\\Users\\myc\\git\\mayrock\\keg-operator-data\\platform\\config.xml");
 		// Construct a new dataset
 		DataProvider provider = p.getDataProviderManager().getDefaultSQLProvider("BeijingData");
 		
@@ -115,41 +115,63 @@ public class PlatformImpl implements Platform {
 				"Top 90% Content Type distribution", provider, fields, true,
 				new StatisticsFeature(fields[0], fields[1]));
 		
-		fields = new DataField[2];
-		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
-				"Content Type of websites", true);
-		fields[1] = new GeneralDataField("times", FieldType.Int, 
-				"appear times of the ContentType", false);
-		DataSet tds2 = p.getDataSetManager().createDataSet("New_Test", 
-				"Top 90% Content Type distribution", provider, fields, true,
-				new StatisticsFeature(fields[0], fields[1]));
+		fields = new DataField[4];
+		fields[0] = new GeneralDataField("Imsi", FieldType.ShortString, 
+				"User IMSI", true);
+		fields[1] = new GeneralDataField("WebsiteCount", FieldType.Int, 
+				"Total count of visited websites", false);
+		fields[2] = new GeneralDataField("RegionCount", FieldType.Int, 
+				"Total count of appeared regions", false);
+		fields[3] = new GeneralDataField("TotalCount", FieldType.Int, 
+				"Total count of requests", false);
+		feature = new StatisticsFeature(
+				new DataField[]{fields[0]},
+				new DataField[]
+						{fields[1],fields[2],fields[3]});
 		
-		try {
-			tds2.writeData(tds.getQuery());
-		} catch (OperationNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		tds = p.getDataSetManager().createDataSet("slot_Imsi_All", 
+				"User statistics by time slot", provider, fields, true,
+				feature);
+		
+//		fields = new DataField[2];
+//		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
+//				"Content Type of websites", true);
+//		fields[1] = new GeneralDataField("times", FieldType.Int, 
+//				"appear times of the ContentType", false);
+//		DataSet tds2 = p.getDataSetManager().createDataSet("New_Test", 
+//				"Top 90% Content Type distribution", provider, fields, true,
+//				new StatisticsFeature(fields[0], fields[1]));
+//		
+//		try {
+//			tds2.writeData(tds.getQuery());
+//		} catch (OperationNotSupportedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (DataProviderException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 
-		//remove a dataset
-		try {
-			p.getDataSetManager().removeDataSet(tds2);
-		} catch (DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		//remove a dataset
+//		try {
+//			p.getDataSetManager().removeDataSet(tds2);
+//		} catch (DataProviderException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
 		try {
 			p.getDataSetManager().saveChanges();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		for (DataSet ds : p.getDataSetManager().getDataSetList()) {
+			System.out.println(ds.getName() + " " + ds.getDescription());
+		}
 	}
-	public static void main(String[] args) {
+	public static void main2(String[] args) {
 		
 		Platform p = new PlatformImpl(
 				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
@@ -182,10 +204,16 @@ public class PlatformImpl implements Platform {
 				StatisticsFeature sf =  ds.getFeature(StatisticsFeature.class);
 				int count = 0;
 				Query q = ds.getQuery().where(sf.getValueFields()[0],
-						Operator.GEQ, 20);
+						Operator.GEQ, 50000).select(new DataField[]
+								{ sf.getKeyField(), sf.getValueFields()[0]});
 				q.open();
 				while (q.next()) {
-					count ++;
+					count++;
+					DataField[] fields = q.getDataFields();
+					for (DataField field : fields) {
+						System.out.print(q.getValue(field).toString() + " ");
+					}
+					System.out.println();
 				}
 				q.close();
 				System.out.println(count);

@@ -1,7 +1,59 @@
 <edu.thu.keg.mdap.datamodel.DataSet-array>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-    <name>DataAggr_ContentTypes_Up90</name>
+    <name>slot_Imsi_All</name>
     <provider class="Jdbc">jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</provider>
+    <description>User statistics by time slot</description>
+    <loadable>true</loadable>
+    <fields>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>Imsi</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp>User IMSI</desp>
+        <isKey>true</isKey>
+        <type>ShortString</type>
+        <allowNull>false</allowNull>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>WebsiteCount</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp>Total count of visited websites</desp>
+        <isKey>false</isKey>
+        <type>Int</type>
+        <allowNull>true</allowNull>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>RegionCount</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp>Total count of appeared regions</desp>
+        <isKey>false</isKey>
+        <type>Int</type>
+        <allowNull>true</allowNull>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+      <edu.thu.keg.mdap.datamodel.GeneralDataField>
+        <columnName>TotalCount</columnName>
+        <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../.."/>
+        <desp>Total count of requests</desp>
+        <isKey>false</isKey>
+        <type>Int</type>
+        <allowNull>true</allowNull>
+      </edu.thu.keg.mdap.datamodel.GeneralDataField>
+    </fields>
+    <features>
+      <edu.thu.keg.mdap.datasetfeature.StatisticsFeature>
+        <keyFields>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        </keyFields>
+        <valueFields>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField[4]"/>
+        </valueFields>
+      </edu.thu.keg.mdap.datasetfeature.StatisticsFeature>
+    </features>
+  </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+  <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+    <name>DataAggr_ContentTypes_Up90</name>
+    <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
     <description>Top 90% Content Type distribution</description>
     <loadable>true</loadable>
     <fields>
@@ -35,7 +87,7 @@
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>FilteredByCT_Domain</name>
-    <provider class="Jdbc">jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</provider>
+    <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
     <description>Domain statistics</description>
     <loadable>false</loadable>
     <fields>
@@ -139,7 +191,7 @@
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>RegionInfo2</name>
-    <provider class="Jdbc">jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</provider>
+    <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
     <description>Region info 2</description>
     <loadable>true</loadable>
     <fields>
@@ -183,7 +235,7 @@
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>WebsiteId_URL</name>
-    <provider class="Jdbc">jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</provider>
+    <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
     <description>Website info</description>
     <loadable>true</loadable>
     <fields>
@@ -208,7 +260,7 @@
   </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>RegionInfo3</name>
-    <provider class="Jdbc">jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</provider>
+    <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
     <description>Region info 3</description>
     <loadable>true</loadable>
     <fields>
