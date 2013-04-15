@@ -128,7 +128,7 @@ public class DataSetFunctions {
 	 * get the location fields form the dataset
 	 * 
 	 * @param dataset
-	 * @return a json or xml format location array
+	 * @return a json or xml format statistics array
 	 */
 	@GET
 	@Path("/getstatistic/{datasetname}")
@@ -150,14 +150,20 @@ public class DataSetFunctions {
 			StatisticsFeature gds = (StatisticsFeature) ds
 					.getFeature(StatisticsFeature.class);
 			rs.open();
-			while (rs.next()) {
+			int i=0;
+			while (rs.next() && i++<100) {
 				System.out.println(rs.getValue(ds.getDataFields()[0])
 						.toString()
 						+ " "
 						+ rs.getValue(ds.getDataFields()[1]).toString());
 				JStatistic statistic = new JStatistic();
-				statistic.setKey((String) rs.getValue(gds.getValueFields()[0]));
-				statistic.setValue((String) rs.getValue(gds.getKeyFields()[0]));
+				ArrayList<Object> keys=new ArrayList<>();
+				for(DataField key: gds.getValueFields())
+				{
+					keys.add(rs.getValue(key));
+				}
+				statistic.setKey(keys);
+				statistic.setValue( rs.getValue(gds.getKeyFields()[0]));
 				al_rs.add(statistic);
 			}
 			rs.close();

@@ -1,24 +1,26 @@
 package edu.thu.keg.mdap.restful.jerseyclasses;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class JStatistic {
-	private String key;
-	private String value;
+	private List<Object> keys;
+	private Object value;
 	
-	public void setKey(String key) {
-		this.key = key;
+	public void setKey(List<Object> keys) {
+		this.keys=keys;
 	}
 
-	public String getKey() {
-		return this.key;
+	public List<Object> getKey() {
+		return this.keys;
 	}
-	public void setValue(String value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 
-	public String getValue() {
+	public Object getValue() {
 		return this.value;
 	}
 	

@@ -65,7 +65,7 @@
           <tags>persp.actionSet:org.eclipse.wst.server.ui.internal.webbrowser.actionSet</tags>
           <tags>persp.actionSet:org.eclipse.debug.ui.breakpointActionSet</tags>
           <tags>persp.actionSet:org.eclipse.wst.ws.explorer.explorer</tags>
-          <children xsi:type="basic:PartSashContainer" xmi:id="_x-wy4BLxEeKLhuTFVGgVRA" selectedElement="_x-wy5hLxEeKLhuTFVGgVRA" horizontal="true">
+          <children xsi:type="basic:PartSashContainer" xmi:id="_x-wy4BLxEeKLhuTFVGgVRA" selectedElement="_x-wy4RLxEeKLhuTFVGgVRA" horizontal="true">
             <children xsi:type="basic:PartStack" xmi:id="_x-wy4RLxEeKLhuTFVGgVRA" elementId="topLeft" containerData="2500" selectedElement="_x-wy4hLxEeKLhuTFVGgVRA">
               <tags>newtablook</tags>
               <children xsi:type="advanced:Placeholder" xmi:id="_x-wy4hLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.navigator.ProjectExplorer" ref="_x7VrcBLxEeKLhuTFVGgVRA"/>
@@ -133,7 +133,7 @@
       </children>
     </sharedElements>
     <sharedElements xsi:type="basic:Part" xmi:id="_x7VrcBLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.navigator.ProjectExplorer" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Project Explorer" iconURI="platform:/plugin/org.eclipse.ui.navigator.resources//icons/full/eview16/resource_persp.gif" tooltip="Workspace" closeable="true">
-      <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;view CommonNavigator.LINKING_ENABLED=&quot;0&quot; org.eclipse.cdt.ui.cview.groupincludes=&quot;false&quot; org.eclipse.cdt.ui.cview.groupmacros=&quot;false&quot; org.eclipse.cdt.ui.editor.CUChildren=&quot;true&quot; org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets=&quot;0&quot;/>"/>
+      <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;view CommonNavigator.LINKING_ENABLED=&quot;0&quot; org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets=&quot;0&quot;/>"/>
       <tags>View</tags>
       <tags>categoryTag:General</tags>
       <menus xmi:id="_yHMWIBLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.navigator.ProjectExplorer">
@@ -885,6 +885,14 @@
   <bindingTables xmi:id="_x7SBEBLxEeKLhuTFVGgVRA" bindingContext="_x7RaABLxEeKLhuTFVGgVRA"/>
   <bindingTables xmi:id="_x7SoIRLxEeKLhuTFVGgVRA" bindingContext="_x7SoIBLxEeKLhuTFVGgVRA"/>
   <bindingTables xmi:id="_x7SoIxLxEeKLhuTFVGgVRA" bindingContext="_x7SoIhLxEeKLhuTFVGgVRA"/>
+  <bindingTables xmi:id="_HLVrQKWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.textContext" bindingContext="_HKTwgKWjEeKUzf2EqNf1ug">
+    <bindings xmi:id="_HLXgcKWjEeKUzf2EqNf1ug" keySequence="CTRL+I" command="_HKJ_gKWjEeKUzf2EqNf1ug"/>
+    <bindings xmi:id="_HLdAAKWjEeKUzf2EqNf1ug" keySequence="CTRL+B" command="_HKKmkKWjEeKUzf2EqNf1ug"/>
+  </bindingTables>
+  <bindingTables xmi:id="_HLn_IKWjEeKUzf2EqNf1ug" elementId="org.ecipse.gef.textContext" bindingContext="_HLnYEKWjEeKUzf2EqNf1ug">
+    <bindings xmi:id="_HLn_IaWjEeKUzf2EqNf1ug" keySequence="CTRL+U" command="_HKLNoaWjEeKUzf2EqNf1ug"/>
+  </bindingTables>
+  <bindingTables xmi:id="_HpiqMaWjEeKUzf2EqNf1ug" bindingContext="_HpiqMKWjEeKUzf2EqNf1ug"/>
   <rootContext xmi:id="_xNtwexLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.contexts.dialogAndWindow" contributorURI="platform:/plugin/org.eclipse.ui.workbench" name="In Dialogs and Windows" description="Either a dialog or a window is open">
     <children xmi:id="_xNtwfBLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.contexts.window" contributorURI="platform:/plugin/org.eclipse.ui.workbench" name="In Windows" description="A window is open">
       <children xmi:id="_xNtwfRLxEeKLhuTFVGgVRA" elementId="org.eclipse.e4.ui.contexts.views" contributorURI="platform:/plugin/org.eclipse.ui.workbench" name="%bindingcontext.name.bindingView"/>
@@ -943,6 +951,7 @@
       </children>
       <children xmi:id="_xRYvhxLxEeKLhuTFVGgVRA" elementId="org.eclipse.debug.ui.memoryview" name="In Memory View" description="In Memory View"/>
       <children xmi:id="_xRYvjhLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.console.ConsoleView" name="In Console View" description="In Console View"/>
+      <children xmi:id="_HKTwgKWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.textContext" name="WYSIWYG Text Editing" description="WYSIWYG Text Editing"/>
     </children>
     <children xmi:id="_xNtwfhLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.contexts.dialog" contributorURI="platform:/plugin/org.eclipse.ui.workbench" name="In Dialogs" description="A dialog is open"/>
     <children xmi:id="_xRXhbhLxEeKLhuTFVGgVRA" elementId="org.eclipse.cdt.ui.macroExpansionHoverScope" name="In Macro Expansion Hover" description="In Macro Expansion Hover"/>
@@ -1057,6 +1066,8 @@
   <rootContext xmi:id="_x7RaABLxEeKLhuTFVGgVRA" elementId="org.eclipse.mylyn.context.ui.actionSet" name="Auto::org.eclipse.mylyn.context.ui.actionSet"/>
   <rootContext xmi:id="_x7SoIBLxEeKLhuTFVGgVRA" elementId="org.eclipse.mylyn.tasks.ui.navigation" name="Auto::org.eclipse.mylyn.tasks.ui.navigation"/>
   <rootContext xmi:id="_x7SoIhLxEeKLhuTFVGgVRA" elementId="org.eclipse.mylyn.tasks.ui.navigation.additions" name="Auto::org.eclipse.mylyn.tasks.ui.navigation.additions"/>
+  <rootContext xmi:id="_HLnYEKWjEeKUzf2EqNf1ug" elementId="org.ecipse.gef.textContext" name="Auto::org.ecipse.gef.textContext"/>
+  <rootContext xmi:id="_HpiqMKWjEeKUzf2EqNf1ug" elementId="com.android.ide.eclipse.gltrace.actionset" name="Auto::com.android.ide.eclipse.gltrace.actionset"/>
   <descriptors xmi:id="_xZWYsBLxEeKLhuTFVGgVRA" elementId="org.eclipse.e4.ui.compatibility.editor" allowMultiple="true" category="org.eclipse.e4.primaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor">
     <tags>Editor</tags>
   </descriptors>
@@ -1148,7 +1159,7 @@
     <tags>View</tags>
     <tags>categoryTag:Java</tags>
   </descriptors>
-  <descriptors xmi:id="_xZx2gBLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.texteditor.TemplatesView" label="Templates" iconURI="platform:/plugin/org.eclipse.cdt.ui//icons/view16/templates.gif" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+  <descriptors xmi:id="_xZx2gBLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.texteditor.TemplatesView" label="Templates" iconURI="platform:/plugin/org.eclipse.jdt.ui//icons/full/eview16/templates.gif" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
     <tags>View</tags>
     <tags>categoryTag:General</tags>
   </descriptors>
@@ -1515,6 +1526,34 @@
   <descriptors xmi:id="_xaZhkRLxEeKLhuTFVGgVRA" elementId="org.eclipse.mylyn.tasks.ui.views.repositories" label="Task Repositories" iconURI="platform:/plugin/org.eclipse.mylyn.tasks.ui/icons/eview16/repositories.gif" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
     <tags>View</tags>
     <tags>categoryTag:Mylyn</tags>
+  </descriptors>
+  <descriptors xmi:id="_HOyA0KWjEeKUzf2EqNf1ug" elementId="glesv2debuggerclient.views.SampleView" label="OpenGL Trace" iconURI="platform:/plugin/com.android.ide.eclipse.gldebugger/icons/sample.gif" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <tags>View</tags>
+    <tags>categoryTag:Tracer for OpenGL ES</tags>
+  </descriptors>
+  <descriptors xmi:id="_HUmU8KWjEeKUzf2EqNf1ug" elementId="com.android.ide.eclipse.gltrace.views.FrameBuffer" label="Frame Summary" iconURI="platform:/plugin/com.android.ide.eclipse.gldebugger/icons/opengl.png" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <tags>View</tags>
+    <tags>categoryTag:Tracer for OpenGL ES</tags>
+  </descriptors>
+  <descriptors xmi:id="_HUnjEKWjEeKUzf2EqNf1ug" elementId="com.android.ide.eclipse.gltrace.views.State" label="GL State" iconURI="platform:/plugin/com.android.ide.eclipse.gldebugger/icons/opengl.png" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <tags>View</tags>
+    <tags>categoryTag:Tracer for OpenGL ES</tags>
+  </descriptors>
+  <descriptors xmi:id="_HUoKIKWjEeKUzf2EqNf1ug" elementId="com.android.ide.eclipse.gltrace.views.Details" label="Details" iconURI="platform:/plugin/com.android.ide.eclipse.gldebugger/icons/opengl.png" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <tags>View</tags>
+    <tags>categoryTag:Tracer for OpenGL ES</tags>
+  </descriptors>
+  <descriptors xmi:id="_HUoxMKWjEeKUzf2EqNf1ug" elementId="edu.thu.keg.spl.ide.comp.view" label="Component View" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/defaultview_misc.gif" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <tags>View</tags>
+    <tags>categoryTag:DPOSPL IDE</tags>
+  </descriptors>
+  <descriptors xmi:id="_HUpYQKWjEeKUzf2EqNf1ug" elementId="edu.thu.keg.spl.ide.gui.gxeditor.ui.PropertyDefinitionView" label="Control Properties" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/defaultview_misc.gif" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <tags>View</tags>
+    <tags>categoryTag:DPOSPL IDE</tags>
+  </descriptors>
+  <descriptors xmi:id="_HUp_UKWjEeKUzf2EqNf1ug" elementId="edu.thu.keg.spl.ide.proj.view" label="DPOSPL Project View" iconURI="platform:/plugin/edu.thu.keg.spl.ide.proj/icons/project_tree.PNG" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <tags>View</tags>
+    <tags>categoryTag:DPOSPL IDE</tags>
   </descriptors>
   <commands xmi:id="_xNtwfxLxEeKLhuTFVGgVRA" elementId="e4.exit" contributorURI="platform:/plugin/org.eclipse.ui.workbench" commandName="%command.name.exit" description=""/>
   <commands xmi:id="_xNtwgBLxEeKLhuTFVGgVRA" elementId="e4.show.view" contributorURI="platform:/plugin/org.eclipse.ui.workbench" commandName="%command.name.showView">
@@ -2606,6 +2645,14 @@
   <commands xmi:id="_xd0B8BLxEeKLhuTFVGgVRA" elementId="AUTOGEN:::org.eclipse.jdt.debug.ui.JavaSnippetToolbarActions/org.eclipse.jdt.debug.ui.SnippetDisplay" commandName="Displa&amp;y"/>
   <commands xmi:id="_xd3FQBLxEeKLhuTFVGgVRA" elementId="AUTOGEN:::org.eclipse.jdt.debug.ui.JavaSnippetToolbarActions/org.eclipse.jdt.debug.ui.SnippetInspect" commandName="Insp&amp;ect"/>
   <commands xmi:id="_xd9y8RLxEeKLhuTFVGgVRA" elementId="AUTOGEN:::org.eclipse.ui.articles.action.contribution.editor/org.eclipse.wst.wsdl.ui.actions.ReloadDependenciesActionDelegate" commandName="Reload Dependencies"/>
+  <commands xmi:id="_HKJYcKWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.text.alignLeft" commandName="Left" description="Align left" category="_HKIKUaWjEeKUzf2EqNf1ug"/>
+  <commands xmi:id="_HKJYcaWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.text.alignRight" commandName="Right" description="Align right" category="_HKIKUaWjEeKUzf2EqNf1ug"/>
+  <commands xmi:id="_HKJ_gKWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.text.italic" commandName="Italics" description="Italicize text" category="_xQU_khLxEeKLhuTFVGgVRA"/>
+  <commands xmi:id="_HKKmkKWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.text.bold" commandName="Bold" description="Embolden text" category="_xQU_khLxEeKLhuTFVGgVRA"/>
+  <commands xmi:id="_HKLNoKWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.text.rtl" commandName="Right to Left" description="Right to Left" category="_HKIKUaWjEeKUzf2EqNf1ug"/>
+  <commands xmi:id="_HKLNoaWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.text.underline" commandName="Underline" description="Underline text" category="_xQU_khLxEeKLhuTFVGgVRA"/>
+  <commands xmi:id="_HKLNoqWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.text.alignCenter" commandName="Center" description="Align center" category="_HKIKUaWjEeKUzf2EqNf1ug"/>
+  <commands xmi:id="_HKL0sKWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.text.ltr" commandName="Left to Right" description="Left to Right" category="_HKIKUaWjEeKUzf2EqNf1ug"/>
   <addons xmi:id="_xNtwhBLxEeKLhuTFVGgVRA" elementId="org.eclipse.e4.core.commands.service" contributorURI="platform:/plugin/org.eclipse.ui.workbench" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_xNtwhRLxEeKLhuTFVGgVRA" elementId="org.eclipse.e4.ui.contexts.service" contributorURI="platform:/plugin/org.eclipse.ui.workbench" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_xNtwhhLxEeKLhuTFVGgVRA" elementId="org.eclipse.e4.ui.bindings.service" contributorURI="platform:/plugin/org.eclipse.ui.workbench" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
@@ -2670,4 +2717,5 @@
   <categories xmi:id="_xQVmpBLxEeKLhuTFVGgVRA" elementId="org.eclipse.ltk.ui.category.refactoring" name="Refactoring"/>
   <categories xmi:id="_xQVmpRLxEeKLhuTFVGgVRA" elementId="org.eclipse.ui.category.navigate" name="Navigate"/>
   <categories xmi:id="_xQVmphLxEeKLhuTFVGgVRA" elementId="org.eclipse.jdt.ui.category.refactoring" name="Refactor - Java" description="Java Refactoring Actions"/>
+  <categories xmi:id="_HKIKUaWjEeKUzf2EqNf1ug" elementId="org.eclipse.gef.category.format" name="Format" description="Format"/>
 </application:Application>

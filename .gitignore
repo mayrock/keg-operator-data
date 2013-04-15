@@ -6,3 +6,5 @@ platform_restful/build
 *.classpath
 platform/bin
 platform_restful/bin
+platform_restful/src/platform_initial.properties
+platform/config.xml

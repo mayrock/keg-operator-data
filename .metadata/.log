@@ -117,3 +117,22 @@ Contains: D:\GitHub\keg-operator-data\internetgraph overlaps the location of ano
 !MESSAGE OK
 !SUBENTRY 2 org.eclipse.core.resources 4 77 2012-10-10 23:50:10.763
 !MESSAGE D:\GitHub\keg-operator-data\internetgraph overlaps the location of another project: 'internetgraph'
+!SESSION 2013-04-15 16:03:38.504 -----------------------------------------------
+eclipse.buildId=I20120608-1400
+java.version=1.7.0_04
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=zh_CN
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.ui 4 4 2013-04-15 16:04:40.028
+!MESSAGE Unable to find Action Set: adt.actionSet.wizards
+
+!ENTRY org.eclipse.ui 4 4 2013-04-15 16:04:40.060
+!MESSAGE Unable to find Action Set: adt.actionSet.refactorings
+
+!ENTRY org.eclipse.ui 4 4 2013-04-15 16:04:40.061
+!MESSAGE Unable to find Action Set: adt.actionSet.avdManager
+
+!ENTRY org.eclipse.ui 4 4 2013-04-15 16:04:40.061
+!MESSAGE Unable to find Action Set: adt.actionSet.lint
