@@ -15,29 +15,23 @@ import edu.thu.keg.mdap.datamodel.DataField;
  */
 public class StatisticsDataSet extends DataSetFeature {
 	
-	private DataField keyField;
-	private DataField[] valueFields;
-	/**
-	 * 
-	 * @return the key DataField
-	 */
-	public DataField getKeyField() {
-		return this.keyField;
-	}
-	/**
-	 * 
-	 * @return value fields
-	 */
-	public DataField[] getValueFields() {
-		return this.valueFields;
-	}
+
+	
 	/**
 	 * Init a new StatisticsDataSet with all its fields
-	 * @param keyField the key DataField
+	 * @param keyFields the key DataFields
 	 * @param valueFields the value fields
 	 */
-	public StatisticsDataSet(DataField keyField, DataField[] valueFields) {
-		this.keyField = keyField;
-		this.valueFields = valueFields;
+	public StatisticsDataSet(DataField[] keyFields, DataField[] valueFields) {
+		super(keyFields, valueFields);
+	}
+	
+	/**
+	 * Init a new StatisticsDataSet with 1 key field and 1 value field
+	 * @param keyField the key DataField
+	 * @param valueField the value field
+	 */
+	public StatisticsDataSet(DataField keyField, DataField valueField) {
+		super(keyField, valueField);
 	}
 }

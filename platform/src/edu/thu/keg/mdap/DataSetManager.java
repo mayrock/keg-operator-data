@@ -6,6 +6,7 @@ import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
+import edu.thu.keg.mdap.provider.DataProviderException;
 
 /**
  * This object provides information
@@ -47,8 +48,9 @@ public interface DataSetManager {
 	 * its actual data from its provider.
 	 * No operation is performed if the DataSet does not exist.
 	 * @param ds The DataSet to be removed
+	 * @throws DataProviderException when removing DataSet actual data throws error
 	 */
-	public void removeDataSet(DataSet ds);
+	public void removeDataSet(DataSet ds) throws DataProviderException;
 	
 	/**
 	 * Get all datasets that supports the certain type of feature

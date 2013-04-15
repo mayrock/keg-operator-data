@@ -142,7 +142,7 @@ public class DataSetFunctions {
 				jfn.setFieldName(df.getColumnName());
 				jfn.setDescription(df.getDescription());
 				jfn.setIsKey(df.isKey());
-				jfn.setType(df.getDataType().getSimpleName());
+				jfn.setType(df.getFieldType().name());
 				all_fn.add(jfn);
 			}
 

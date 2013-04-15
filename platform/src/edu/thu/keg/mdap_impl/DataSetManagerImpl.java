@@ -6,12 +6,13 @@ package edu.thu.keg.mdap_impl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
@@ -20,7 +21,9 @@ import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
+import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
+import edu.thu.keg.mdap_impl.provider.JdbcProvider;
 
 /**
  * Implementation of the interface DataSetManager
@@ -30,19 +33,33 @@ import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 public class DataSetManagerImpl implements DataSetManager {
 
 	private HashMap<String, DataSet> datasets = null;
-	private HashMap<Class<? extends DataSetFeature>, List<DataSet>> features = null;
+	private HashMap<Class<? extends DataSetFeature>, Set<DataSet>> features = null;
 	private XStream xstream;
 	
 	private XStream getXstream() {
 		if (xstream == null) {
 			xstream = new XStream(new StaxDriver());
+			xstream.alias("Jdbc", JdbcProvider.class);
+			xstream.registerConverter(new AbstractSingleValueConverter() {
+
+				@Override
+				public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {
+					return arg0.equals(JdbcProvider.class);
+				}
+
+				@Override
+				public Object fromString(String str) {
+					return new JdbcProvider(str);
+				}
+				
+			});
 		}
 		return xstream;
 	}
 	
 	public DataSetManagerImpl() {
 		datasets = new HashMap<String, DataSet>();
-		features = new HashMap<Class<? extends DataSetFeature>, List<DataSet>>();
+		features = new HashMap<Class<? extends DataSetFeature>, Set<DataSet>>();
 		try {
 			loadDataSets();
 		} catch (Exception ex) {
@@ -100,10 +117,12 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	@Override
-	public void removeDataSet(DataSet ds) {
+	public void removeDataSet(DataSet ds) throws DataProviderException {
 		if (!datasets.containsValue(ds))
 			return;
-		//TODO
+		ds.getProvider().removeContent(ds);
+		removeDSMeta(ds);
+		
 	}
 
 	@Override
@@ -116,9 +135,15 @@ public class DataSetManagerImpl implements DataSetManager {
 		for (DataSetFeature feature : ds.getFeatures()) {
 			for (Class<? extends DataSetFeature> type : feature.getAllFeatureTypes()) {
 				if (!features.containsKey(type))
-					features.put(type, new ArrayList<DataSet>());
+					features.put(type, new HashSet<DataSet>());
 				features.get(type).add(ds);
 			}
+		}
+	}
+	private void removeDSMeta(DataSet ds) {
+		datasets.remove(ds);
+		for (Set<DataSet> list : features.values()) {
+			list.remove(ds);
 		}
 	}
 }

@@ -16,8 +16,16 @@ public abstract class AbstractDataProvider implements DataProvider {
 		return connString;
 	}
 	
-	protected void init(String connString) {
+	public AbstractDataProvider(String connString) {
 		this.connString = connString;
 	}
+
+	
+	@Override
+	public String toString() {
+		return this.getConnectionString();
+	}
+	
+	
 
 }

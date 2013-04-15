@@ -13,6 +13,8 @@ package edu.thu.keg.mdap.datamodel;
  * @author Yuanchao Ma 
  */
 public interface DataField {
+	
+	public enum FieldType { Int, Double, DateTime, ShortString, LongString, Text}
 	/**
 	 * Get the column name of the field
 	 * @return The column name as a string
@@ -34,12 +36,15 @@ public interface DataField {
 	 * @return true when it is key, false otherwise
 	 */
 	public boolean isKey();
-	
-	@SuppressWarnings("rawtypes")
+	/**
+	 * 
+	 * @return whether null value is allowed for this field
+	 */
+	public boolean allowNull();
 	/**
 	 * @return the type of the field
 	 */
-	public Class getDataType();
+	public FieldType getFieldType();
 	/**
 	 * Set the DataSet which this field belongs to
 	 * @param ds the DataSet instance

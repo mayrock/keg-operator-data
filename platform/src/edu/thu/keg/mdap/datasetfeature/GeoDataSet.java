@@ -55,10 +55,17 @@ public class GeoDataSet extends DataSetFeature {
 	private DataField tagField;
 	private boolean ordered;
 	
-	
+	/**
+	 * Init a new GeoDataSet with latitude, longitude as keys, and tag as value
+	 * @param latitudeField the latitude DataField
+	 * @param longitudeField the longitude DataField
+	 * @param tagField the tag DataField
+	 * @param ordered whether the points are ordered
+	 */
 	public GeoDataSet(DataField latitudeField, DataField longitudeField,
 			DataField tagField, boolean ordered) {
-		super();
+		super(new DataField[]{latitudeField, longitudeField}, 
+				new DataField[]{tagField});
 		this.latitudeField = latitudeField;
 		this.longitudeField = longitudeField;
 		this.tagField = tagField;

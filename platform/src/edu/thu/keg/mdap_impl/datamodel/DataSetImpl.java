@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
+import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
@@ -112,5 +113,9 @@ public class DataSetImpl implements DataSet {
 				return feature;
 		}
 		return null;
+	}
+	@Override
+	public void writeData(DataContent content) throws DataProviderException {
+		this.getProvider().writeDataSetContent(this, content);
 	}
 }

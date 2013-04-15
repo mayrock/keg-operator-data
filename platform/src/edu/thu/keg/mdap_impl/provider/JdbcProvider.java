@@ -4,7 +4,6 @@
 package edu.thu.keg.mdap_impl.provider;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +14,7 @@ import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
+import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.provider.AbstractDataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.provider.IllegalQueryException;
@@ -26,11 +26,10 @@ import edu.thu.keg.mdap.provider.IllegalQueryException;
 public class JdbcProvider extends AbstractDataProvider {
 	
 	private Connection conn;
-	private String connString;
 	private HashMap<Query, ResultSet> results;
 
 	public JdbcProvider(String connString) {
-		this.connString = connString;
+		super(connString);
 		results = new HashMap<Query, ResultSet>();
 	}
 	
@@ -46,33 +45,18 @@ public class JdbcProvider extends AbstractDataProvider {
 			ResultSet rs = stmt.executeQuery(query);
 			return rs;
 		} catch (Exception ex) {
-			throw new IllegalQueryException();
-		}
-	}
-
-	public void closeResultSet(ResultSet rs) throws DataProviderException {
-		try {
-			rs.getStatement().close();
-			
-			boolean flag = true;
-			for (ResultSet r : results.values()) {
-				if (!r.isClosed()) {
-					flag = false;
-					break;
-				}
-			}
-			if (flag)
-				conn.close();
-		} catch (SQLException e) {
-			throw new DataProviderException(e.getMessage());
+			throw new IllegalQueryException(ex.getMessage());
 		}
 	}
 
 	@Override
-	public void removeDataSet(DataSet ds) {
-		//TODO
+	public void removeContent(DataSet ds) throws DataProviderException {
+		execute(getDrop(ds));
 	}
 
+	private String getDrop(DataSet ds) {
+		return "DROP TABLE " + ds.getName();
+	}
 
 	public void execute(String text) throws DataProviderException {
 		Statement stmt;
@@ -86,9 +70,73 @@ public class JdbcProvider extends AbstractDataProvider {
 	}
 
 	@Override
-	public void writeDataSetContent(DataSet ds, DataContent data) {
-		// TODO Auto-generated method stub
+	public void writeDataSetContent(DataSet ds, DataContent data) throws DataProviderException {
 		
+		removeContent(ds);
+		
+		String ddl = getDDL(ds);
+		execute(ddl);
+		
+		if (data instanceof Query) {
+			Query q = (Query)data;
+			if (q.getProvider() == ds.getProvider()) {
+				StringBuilder sb = new StringBuilder();
+				DataField[] fields = ds.getDataFields();
+				for (int i = 0; i < fields.length - 1; i++) {
+					DataField df = fields[i];
+					sb.append(df.getColumnName()).append(",");
+				}
+				sb.append(fields[fields.length - 1].getColumnName());
+				
+				String insertQueryStr = "INSERT INTO " + ds.getName() + " ( "
+						+ sb.toString() + " ) SELECT " + sb.toString()
+						+ " FROM ( " + q.getQueryString() + " ) as t0";
+				execute(insertQueryStr);
+			}
+		}
+	}
+	
+	private String getDDL(DataSet ds) {
+		StringBuilder sb = new StringBuilder("CREATE TABLE ");
+		sb.append(ds.getName());
+		sb.append(" ( ");
+		DataField[] fields = ds.getDataFields();
+		for (int i = 0; i < fields.length - 1; i++) {
+			sb.append(getDDL(fields[i])).append(",");
+		}
+		sb.append(getDDL(fields[fields.length - 1])).append(" ) ");
+		return sb.toString();
+	}
+	
+	private String getDDL(DataField field) {
+		FieldType type = field.getFieldType();
+		String typeStr = "";
+		switch (type) {
+		case ShortString:
+			typeStr = " NVARCHAR(50) ";
+			break;
+		case LongString:
+			typeStr = " NVARCHAR(200) ";
+			break;
+		case Text:
+			typeStr = " NVARCHAR(999) ";
+			break;
+		case Double:
+			typeStr = " FLOAT ";
+			break;
+		case Int:
+			typeStr = " INTEGER ";
+			break;
+		case DateTime:
+			typeStr = " DATETIME ";
+			break;
+		}
+		String nullStr = "";
+		if (field.allowNull())
+			nullStr = " NULL ";
+		else
+			nullStr = " NOT NULL ";
+		return field.getColumnName() + typeStr + nullStr;
 	}
 
 	@Override
@@ -113,13 +161,17 @@ public class JdbcProvider extends AbstractDataProvider {
 			throws DataProviderException {
 		try {
 			ResultSet rs = results.get(q);
-			if (field.getDataType() == String.class) {
+			FieldType type = field.getFieldType();
+			switch (type) {
+			case ShortString:
+			case LongString:
+			case Text:
 				return rs.getString(field.getColumnName());
-			} else if (field.getDataType() == Double.class) {
+			case Double:
 				return rs.getDouble(field.getColumnName());
-			} else if (field.getDataType() == Integer.class) {
+			case Int:
 				return rs.getInt(field.getColumnName());
-			} else if (field.getDataType() == Date.class) {
+			case DateTime:
 				return rs.getDate(field.getColumnName());
 			}
 		} catch (SQLException e) {

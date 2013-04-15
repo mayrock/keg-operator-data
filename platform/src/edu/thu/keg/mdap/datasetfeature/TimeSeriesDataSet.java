@@ -14,12 +14,23 @@ public class TimeSeriesDataSet extends StatisticsDataSet {
 	
 	/**
 	 * Init a new TimeSeriesDataSet instance with all its fields
-	 * @param keyField the key DataField
+	 * @param keyFields the key DataFields
 	 * @param timeField the time DataField
 	 * @param valueFields the value DataFields
 	 */
-	public TimeSeriesDataSet(DataField keyField, DataField timeField, DataField[] valueFields) {
-		super(keyField, valueFields);
+	public TimeSeriesDataSet(DataField[] keyFields, DataField timeField, DataField[] valueFields) {
+		super(keyFields, valueFields);
+		this.timeField = timeField;
+	}
+	
+	/**
+	 * Init a new TimeSeriesDataSet instance with 1 key field and 1 value field
+	 * @param keyField the key DataField
+	 * @param timeField the time DataField
+	 * @param valueField the value DataField
+	 */
+	public TimeSeriesDataSet(DataField keyField, DataField timeField, DataField valueField) {
+		super(keyField, valueField);
 		this.timeField = timeField;
 	}
 

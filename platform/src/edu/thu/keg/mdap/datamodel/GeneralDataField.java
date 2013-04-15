@@ -12,13 +12,13 @@ package edu.thu.keg.mdap.datamodel;
  * to form other specific-purpose fields.
  * @author Yuanchao Ma 
  */
-@SuppressWarnings("rawtypes")
 public class GeneralDataField implements DataField {
 	protected String columnName;
 	protected DataSet dataset;
 	protected String desp;
 	protected boolean isKey;
-	protected Class c;
+	protected FieldType type;
+	protected boolean allowNull;
 	@Override
 	public String getColumnName() {
 		return columnName;
@@ -38,32 +38,55 @@ public class GeneralDataField implements DataField {
 	/**
 	 * Construct a instance using the given
 	 *   name, type and description, and whether is key
+	 * Initialize the fields of the object
+	 * @param name Name of the column
+	 * @param ds DataSet which the field belongs to
+	 * @param description Description of the field
+	 * @param isKey Whether the field is key
+	 * @param allowNull Whether the field allows null value
 	 */
-	public GeneralDataField(String name, Class type, String description, boolean isKey) {
-		init(name, type, null, description, isKey);
+	public GeneralDataField(String name, FieldType type, String description,
+			boolean isKey, boolean allowNull) {
+		if (isKey == true && allowNull == true)
+			throw new IllegalArgumentException();
+		this.columnName = name;
+		this.type = type;
+		this.dataset = null;
+		this.desp = description;
+		this.isKey = isKey;
+		this.allowNull = allowNull;
 	}
+	
 	/**
+	 * Construct a instance using the given
+	 *   name, type and description, and whether is key
 	 * Initialize the fields of the object
 	 * @param name Name of the column
 	 * @param ds DataSet which the field belongs to
 	 * @param description Description of the field
 	 * @param isKey Whether the field is key
 	 */
-	protected void init(String name, Class type, DataSet ds, String description, boolean isKey) {
+	public GeneralDataField(String name, FieldType type, String description,
+			boolean isKey) {
 		this.columnName = name;
-		this.c = type;
-		this.dataset = ds;
+		this.type = type;
+		this.dataset = null;
 		this.desp = description;
 		this.isKey = isKey;
+		this.allowNull = !isKey;
 	}
-	
+		
 	@Override
-	public Class getDataType() {
-		return this.c;
+	public FieldType getFieldType() {
+		return this.type;
 	}
 
 	@Override
 	public void setDataSet(DataSet ds) {
 		this.dataset = ds;
+	}
+	@Override
+	public boolean allowNull() {
+		return this.allowNull;
 	}
 }

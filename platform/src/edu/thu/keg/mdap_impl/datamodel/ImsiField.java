@@ -22,14 +22,14 @@ public class ImsiField extends GeneralDataField {
 	 * @param description description of this field
 	 */
 	public ImsiField(String name, String description) {
-		super(name, String.class, description, true);
+		super(name, FieldType.ShortString, description, true);
 	}
 	/**
 	 * Construct a instance within a DataSet,
 	 *  using default name and description
 	 */
 	public ImsiField() {
-		super("IMSI", String.class, 
+		super("IMSI", FieldType.ShortString, 
 				"IMSI number of a user", true);
 	}
 

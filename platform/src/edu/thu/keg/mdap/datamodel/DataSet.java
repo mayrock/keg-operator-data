@@ -63,6 +63,17 @@ public interface DataSet {
 	 * @param feature describes the to-be-added feature
 	 */
 	public void addFeature(DataSetFeature feature);
-	
+	/**
+	 * Get an instance representing the feature of this dataset supporting
+	 * the specified feature type
+	 * @param type The feature type whose instance is expected
+	 * @return A instance of type or subclass of type
+	 */
 	public DataSetFeature getFeature(Class<? extends DataSetFeature> type);
+	/**
+	 * Write the actual data of this datset on its provider
+	 * @param content The DataContent to be written
+	 * @throws DataProviderException when writing the data provider
+	 */
+	public void writeData(DataContent content) throws DataProviderException;
 }

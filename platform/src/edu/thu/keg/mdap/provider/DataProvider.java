@@ -53,13 +53,15 @@ public interface DataProvider {
 	/**
 	 * Remove a dataset content from the provider
 	 * @param ds the to-be-removed dataset.
+	 * @throws DataProviderException when data provider gives an error
 	 */
-	public void removeDataSet(DataSet ds);
+	public void removeContent(DataSet ds) throws DataProviderException;
 	/**
 	 * Write to the data provider the actual data of the dataset.
 	 * Existing data would be wiped first.
 	 * @param ds the dataset whose data is to be written
 	 * @param data the data to be written
+	 * @throws DataProviderException when data provider gives an error
 	 */
-	public void writeDataSetContent(DataSet ds, DataContent data);
+	public void writeDataSetContent(DataSet ds, DataContent data) throws DataProviderException;
 }
