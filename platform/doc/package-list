@@ -1,5 +1,6 @@
 edu.thu.keg.mdap
 edu.thu.keg.mdap.datamodel
+edu.thu.keg.mdap.datasetfeature
 edu.thu.keg.mdap.provider
 edu.thu.keg.mdap_impl
 edu.thu.keg.mdap_impl.datamodel

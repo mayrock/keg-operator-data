@@ -40,7 +40,7 @@ public class GeneralDataField implements DataField {
 	 *   name, type and description, and whether is key
 	 * Initialize the fields of the object
 	 * @param name Name of the column
-	 * @param ds DataSet which the field belongs to
+	 * @param type FieldType of this field
 	 * @param description Description of the field
 	 * @param isKey Whether the field is key
 	 * @param allowNull Whether the field allows null value
@@ -62,7 +62,7 @@ public class GeneralDataField implements DataField {
 	 *   name, type and description, and whether is key
 	 * Initialize the fields of the object
 	 * @param name Name of the column
-	 * @param ds DataSet which the field belongs to
+	 * @param type FieldType of this field
 	 * @param description Description of the field
 	 * @param isKey Whether the field is key
 	 */
