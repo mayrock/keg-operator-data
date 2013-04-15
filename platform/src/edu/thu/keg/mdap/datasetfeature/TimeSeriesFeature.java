@@ -14,7 +14,7 @@ public class TimeSeriesFeature extends StatisticsFeature {
 	
 	/**
 	 * Init a new TimeSeriesDataSet instance with all its fields
-	 * @param keyFields the key DataFields
+	 * @param keyFields the key DataFields, including the time field
 	 * @param timeField the time DataField
 	 * @param valueFields the value DataFields
 	 */
@@ -41,5 +41,16 @@ public class TimeSeriesFeature extends StatisticsFeature {
 	 */
 	public DataField getTimeField() {
 		return this.timeField;
+	}
+	
+	public DataField[] getKeyFieldsExcludingTime() {
+		DataField[] keys = this.getKeyFields();
+		DataField[] out = new DataField[keys.length - 1];
+		for (int i = 0, j = 0; i < keys.length - 1; i++,j++) {
+			if (keys[i] == getTimeField())
+				i++;
+			out[j] = keys[i];
+		}
+		return out;
 	}
 }
