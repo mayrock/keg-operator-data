@@ -64,7 +64,7 @@ public interface DataSet {
 	 * @param type The feature type whose instance is expected
 	 * @return A instance of type or subclass of type
 	 */
-	public DataSetFeature getFeature(Class<? extends DataSetFeature> type);
+	public <T extends DataSetFeature> T getFeature(Class<T> type);
 	/**
 	 * Write the actual data of this datset on its provider
 	 * @param content The DataContent to be written

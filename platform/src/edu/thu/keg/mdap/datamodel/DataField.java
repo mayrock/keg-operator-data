@@ -14,7 +14,26 @@ package edu.thu.keg.mdap.datamodel;
  */
 public interface DataField {
 	
-	public enum FieldType { Int, Double, DateTime, ShortString, LongString, Text}
+	public enum FieldType { 
+		Int(true), Double(true), DateTime(false),
+		ShortString(false), LongString(false), Text(false);
+		private boolean isNumber;
+
+		/**
+		 * @param isNumber
+		 */
+		private FieldType(boolean isNumber) {
+			this.isNumber = isNumber;
+		}
+
+		/**
+		 * @return whether this is member field type
+		 */
+		public boolean isNumber() {
+			return isNumber;
+		}
+		
+	}
 	/**
 	 * Get the column name of the field
 	 * @return The column name as a string

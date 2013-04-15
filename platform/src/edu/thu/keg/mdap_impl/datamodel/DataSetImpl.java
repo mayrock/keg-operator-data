@@ -12,7 +12,6 @@ import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
-import edu.thu.keg.mdap.datamodel.SimpleQuery;
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
@@ -31,18 +30,7 @@ public class DataSetImpl implements DataSet {
 	private DataField[] fields;
 	private HashSet<DataSetFeature> features;
 
-	private String defaultStmt(DataField[] fields) {
-		StringBuffer sb = new StringBuffer("SELECT ");
-
-		for (int i = 0; i < fields.length - 1; i++) {
-			DataField df = fields[i];
-			sb.append(df.getColumnName()).append(",");
-		}
-		sb.append(fields[fields.length - 1].getColumnName());
-
-		sb.append(" FROM ").append(getName()).append(" ");
-		return sb.toString();
-	}
+	
 	public DataSetImpl(){
 		features = new HashSet<DataSetFeature>();
 	}
@@ -92,8 +80,7 @@ public class DataSetImpl implements DataSet {
 	@Override
 	public Query getQuery() throws OperationNotSupportedException,
 			DataProviderException {
-		Query q = new SimpleQuery(getDataFields(),
-				defaultStmt(getDataFields()));
+		Query q = new QueryImpl(this);
 		q.setProvider(this.getProvider());
 		return q;
 	}
@@ -105,11 +92,12 @@ public class DataSetImpl implements DataSet {
 	public String getDescription() {
 		return this.description;
 	}
+	@SuppressWarnings("unchecked")
 	@Override
-	public DataSetFeature getFeature(Class<? extends DataSetFeature> type) {
+	public <T extends DataSetFeature> T getFeature(Class<T> type) {
 		for (DataSetFeature feature : features) {
 			if (feature.hasFeatureType(type))
-				return feature;
+				return (T) feature;
 		}
 		return null;
 	}

@@ -9,12 +9,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
+import edu.thu.keg.mdap.datamodel.Query.WhereClause;
 import edu.thu.keg.mdap.provider.AbstractDataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.provider.IllegalQueryException;
@@ -39,6 +41,43 @@ public class JdbcProvider extends AbstractDataProvider {
 		return this.conn;
 	}
 
+	private String getQueryString(Query q) {
+		DataField[] fields = q.getFields();
+		StringBuffer sb = new StringBuffer("SELECT ");
+
+		for (int i = 0; i < fields.length - 1; i++) {
+			DataField df = fields[i];
+			sb.append(df.getColumnName()).append(",");
+		}
+		sb.append(fields[fields.length - 1].getColumnName());
+		//TODO
+		sb.append(" FROM ").append(fields[0].getDataSet().getName());
+		List<WhereClause> wheres = q.getWhereClauses();
+		if (wheres.size() > 0) {
+			sb.append(" WHERE ");
+			for (int i = 0; i < wheres.size() - 1; i++) {
+				WhereClause where = wheres.get(i);
+				sb.append(whereToSB(where));
+				sb.append(" AND ");
+			}
+			sb.append(whereToSB(wheres.get(wheres.size() - 1)));
+		}
+		
+		
+		return sb.toString();
+	}
+	private StringBuilder whereToSB(WhereClause where) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(where.getField().getColumnName())
+			.append(where.getOperator().getStr());
+		if (where.getField().getFieldType().isNumber())
+			sb.append(where.getValue().toString());
+		else
+			sb.append("'") 
+				.append(where.getValue().toString())
+				.append("'");
+		return sb;
+	}
 	private ResultSet executeQuery(String query) throws IllegalQueryException {
 		try {
 			Statement stmt = getConnection().createStatement();
@@ -90,7 +129,7 @@ public class JdbcProvider extends AbstractDataProvider {
 				
 				String insertQueryStr = "INSERT INTO " + ds.getName() + " ( "
 						+ sb.toString() + " ) SELECT " + sb.toString()
-						+ " FROM ( " + q.getQueryString() + " ) as t0";
+						+ " FROM ( " + q.toString() + " ) as t0";
 				execute(insertQueryStr);
 			}
 		}
@@ -142,7 +181,7 @@ public class JdbcProvider extends AbstractDataProvider {
 	@Override
 	public void openQuery(Query query) throws DataProviderException {
 		if (!results.containsKey(query)) {
-			ResultSet rs = executeQuery(query.getQueryString());
+			ResultSet rs = executeQuery(getQueryString(query));
 			results.put(query, rs);
 		}
 	}

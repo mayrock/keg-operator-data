@@ -15,6 +15,7 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
+import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.datasetfeature.GeoFeature;
 import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
@@ -53,7 +54,7 @@ public class PlatformImpl implements Platform {
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main0(String[] args) {
 		Platform p = new PlatformImpl(
 				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
 //		Platform p = new PlatformImpl(
@@ -132,8 +133,27 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+
+		//remove a dataset
+		try {
+			p.getDataSetManager().removeDataSet(tds2);
+		} catch (DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			p.getDataSetManager().saveChanges();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void main(String[] args) {
 		
-		
+		Platform p = new PlatformImpl(
+				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
+
 		//Get a dataset
 		for (DataSet ds : p.getDataSetManager().getDataSetList(GeoFeature.class)) {		
 			//Read data from a dataset
@@ -156,12 +176,13 @@ public class PlatformImpl implements Platform {
 				ex.printStackTrace();
 			}
 		}
-		
 		for (DataSet ds : p.getDataSetManager().getDataSetList(StatisticsFeature.class)) {
 			try {
 				System.out.println(ds.getDescription());
+				StatisticsFeature sf =  ds.getFeature(StatisticsFeature.class);
 				int count = 0;
-				Query q = ds.getQuery();
+				Query q = ds.getQuery().where(sf.getValueFields()[0],
+						Operator.GEQ, 20);
 				q.open();
 				while (q.next()) {
 					count ++;
@@ -172,19 +193,5 @@ public class PlatformImpl implements Platform {
 				ex.printStackTrace();
 			}
 		}
-		//remove a dataset
-		try {
-			p.getDataSetManager().removeDataSet(tds2);
-		} catch (DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			p.getDataSetManager().saveChanges();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
-
 }
