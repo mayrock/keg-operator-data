@@ -112,6 +112,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		}
 		fw = new FileWriter(Config.getDataSetFile(), false);
 		getXstream().marshal(dss, new PrettyPrintWriter(fw));
+		fw.close();
 	}
 	@Override
 	public DataSet createDataSet(String name, String description, DataProvider provider,

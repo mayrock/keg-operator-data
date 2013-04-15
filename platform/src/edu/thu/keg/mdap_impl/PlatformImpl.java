@@ -66,7 +66,7 @@ public class PlatformImpl implements Platform {
 		DataField[] fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true );
 		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false );
-		DataSet tds = p.getDataSetManager().createDataSet("WebsiteId_URL", "Website info", 
+		p.getDataSetManager().createDataSet("WebsiteId_URL", "Website info", 
 				provider, fields, true);
 		
 		fields = new DataField[4];
@@ -74,7 +74,7 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("Name", FieldType.ShortString, "", false );
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false );
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false );
-		tds = p.getDataSetManager().createDataSet("RegionInfo3", "Region info 3",
+		p.getDataSetManager().createDataSet("RegionInfo3", "Region info 3",
 				provider, fields, true,
 				new GeoFeature(fields[2], fields[3], fields[1], null, false));
 		
@@ -82,7 +82,7 @@ public class PlatformImpl implements Platform {
 		fields[0] = new GeneralDataField("SiteName", FieldType.ShortString, "", false );
 		fields[1] = new GeneralDataField("Latitude", FieldType.Double, "", false );
 		fields[2] = new GeneralDataField("Longitude", FieldType.Double, "", false );
-		tds = p.getDataSetManager().createDataSet("RegionInfo2", "Region info 2",
+		p.getDataSetManager().createDataSet("RegionInfo2", "Region info 2",
 				provider, fields, true,
 				new GeoFeature(fields[1], fields[2], fields[0], null, false));
 		
@@ -103,7 +103,7 @@ public class PlatformImpl implements Platform {
 				new DataField[]{fields[0]},
 				new DataField[]
 						{fields[1],fields[2],fields[3],fields[4],fields[5]});
-		tds = p.getDataSetManager().createDataSet("FilteredByCT_Domain", 
+		p.getDataSetManager().createDataSet("FilteredByCT_Domain", 
 				"Domain statistics", provider, fields, false, feature);
 		
 		fields = new DataField[2];
@@ -111,7 +111,7 @@ public class PlatformImpl implements Platform {
 				"Content Type of websites", true);
 		fields[1] = new GeneralDataField("times", FieldType.Int, 
 				"appear times of the ContentType", false);
-		tds = p.getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", 
+		p.getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", 
 				"Top 90% Content Type distribution", provider, fields, true,
 				new StatisticsFeature(fields[0], fields[1]));
 		
@@ -129,7 +129,7 @@ public class PlatformImpl implements Platform {
 				new DataField[]
 						{fields[1],fields[2],fields[3]});
 		
-		tds = p.getDataSetManager().createDataSet("slot_Imsi_All", 
+		p.getDataSetManager().createDataSet("slot_Imsi_All", 
 				"User statistics by time slot", provider, fields, true,
 				feature);
 		
