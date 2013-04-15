@@ -157,6 +157,7 @@ public class DataSetFunctions {
 						+ " "
 						+ rs.getValue(ds.getDataFields()[1]).toString());
 				JStatistic statistic = new JStatistic();
+<<<<<<< HEAD
 				ArrayList<String> keys=new ArrayList<>();
 				for(DataField key: gds.getKeyFields())
 				{
@@ -164,6 +165,15 @@ public class DataSetFunctions {
 				}
 				statistic.setKey(keys);
 				statistic.setValue(rs.getValue(gds.getValueFields()[0]).toString());
+=======
+				ArrayList<Object> keys=new ArrayList<>();
+				for(DataField key: gds.getValueFields())
+				{
+					keys.add(rs.getValue(key));
+				}
+				statistic.setKey(keys);
+				statistic.setValue( rs.getValue(gds.getKeyFields()[0]));
+>>>>>>> 54a5b7515e61df579fe48cb8e37c052fa7e92e60
 				al_rs.add(statistic);
 			}
 			rs.close();
