@@ -128,7 +128,7 @@ public class DataSetFunctions {
 	 * get the location fields form the dataset
 	 * 
 	 * @param dataset
-	 * @return a json or xml format location array
+	 * @return a json or xml format statistics array
 	 */
 	@GET
 	@Path("/getstatistic/{datasetname}")
@@ -156,7 +156,12 @@ public class DataSetFunctions {
 						+ " "
 						+ rs.getValue(ds.getDataFields()[1]).toString());
 				JStatistic statistic = new JStatistic();
-				statistic.setKey((String) rs.getValue(gds.getValueFields()[0]));
+				ArrayList<String> keys=new ArrayList<>();
+				for(DataField key: gds.getValueFields())
+				{
+					keys.add((String)rs.getValue(key));
+				}
+				statistic.setKey(keys);
 				statistic.setValue((String) rs.getValue(gds.getKeyFields()[0]));
 				al_rs.add(statistic);
 			}
