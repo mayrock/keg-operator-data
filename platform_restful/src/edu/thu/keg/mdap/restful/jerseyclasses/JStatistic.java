@@ -6,29 +6,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class JStatistic {
-	private List<Object> keys;
-	private List<String> names;
-	private List<Object> values;
+	private List<String> keys;
+	private List<Double> values;
 	
-	public void setKey(List<Object> keys) {
+	public void setKey(List<String> keys) {
 		this.keys=keys;
 	}
 
-	public List<Object> getKey() {
+	public List<String> getKey() {
 		return this.keys;
 	}
-	public void setName(List<String> names) {
-		this.names = names;
-	}
-
-	public List<String> getName() {
-		return this.names;
-	}
-	public void setValue(List<Object> values) {
+	public void setValue(List<Double> values) {
 		this.values = values;
 	}
 
-	public List<Object> getValue() {
+	public List<Double> getValue() {
 		return this.values;
 	}
 	

@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.ws.rs.core.Context;
 
 import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap_impl.PlatformImpl;
@@ -30,11 +31,11 @@ public class ServerInitial implements ServletContextListener{
 		System.out.println("destroy");
 	}
 	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
+	public void contextInitialized(ServletContextEvent arg0 ) {
 		ServletContext sc=arg0.getServletContext();
 		String P_Config = ResourceBundle.getBundle("platform_initial")
 				.getString("PlatformImpl_CONFIG");
-		Platform p = new PlatformImpl(P_Config);
+		Platform p = new PlatformImpl(arg0.getServletContext().getRealPath("/WEB-INF/"+P_Config));
 		sc.setAttribute("platform", p);
 		System.out.println("Æô¶¯·þÎñÆ÷");
 		

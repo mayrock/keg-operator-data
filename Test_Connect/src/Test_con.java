@@ -27,7 +27,13 @@ public class Test_con {
 //		
 		System.out.println(service.path("rest").path("ds").path("/getstatistic/FilteredByCT_Domain")
 		        .accept(MediaType.APPLICATION_JSON).get(String.class));
-		
+		System.out.println(service.path("rest").path("ds").path("/getlocation/RegionInfo2")
+		        .accept(MediaType.APPLICATION_JSON).get(String.class));
+		System.out.println(service.path("rest").path("ds").path("getstadatasets")
+		        .accept(MediaType.APPLICATION_JSON).get(String.class));
+		System.out.println(service.path("rest").path("ds").path("getgeodatasets")
+		        .accept(MediaType.APPLICATION_JSON).get(String.class));
+	
 //		System.out.println(service.path("dataset").path("getdatasets")
 //		        .accept(MediaType.TEXT_PLAIN).get(String.class));
 //		

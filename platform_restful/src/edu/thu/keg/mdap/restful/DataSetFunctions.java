@@ -15,14 +15,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.crypto.Data;
 
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datasetfeature.GeoFeature;
 import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
+import edu.thu.keg.mdap.datasetfeature.TimeSeriesFeature;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
@@ -51,7 +54,7 @@ public class DataSetFunctions {
 	@GET
 	@Path("/getdatasets")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getAllDataSetsNames_list(
+	public List<JDatasetName> getAllDataSetsNames(
 			@Context ServletContext sc) {
 		String result = "";
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
@@ -60,12 +63,89 @@ public class DataSetFunctions {
 			Platform p = (Platform) sc.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
-			Iterator<DataSet> dataset_it = datasets.iterator();
-			DataSet dt_it;
-			while (dataset_it.hasNext()) {
+			for (DataSet dataset : datasets) {
 				JDatasetName dname = new JDatasetName();
-				dt_it = dataset_it.next();
-				dname.setDatasetName(dt_it.getName());
+				dname.setDatasetName(dataset.getName());
+				dname.setDescription(dataset.getDescription());
+				ArrayList<String> schema=new ArrayList<>();
+				ArrayList<Class> type=new ArrayList<>();
+				for(DataField df:dataset.getDataFields())
+				{
+					schema.add(df.getColumnName());
+				}
+				dname.setSchema(schema);
+				datasetsName.add(dname);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return datasetsName;
+	}
+
+	/**
+	 * get all dataset names list
+	 * 
+	 * @return a list including dataset Geo names
+	 */
+	@GET
+	@Path("/getgeodatasets")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<JDatasetName> getGeoDataSetsNames(@Context ServletContext sc) {
+		String result = "";
+		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		try {
+
+			Platform p = (Platform) sc.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			Collection<DataSet> datasets = datasetManager
+					.getDataSetList(GeoFeature.class);
+			for (DataSet dataset : datasets) {
+				JDatasetName dname = new JDatasetName();
+				dname.setDatasetName(dataset.getName());
+				dname.setDescription(dataset.getDescription());
+				ArrayList<String> schema=new ArrayList<>();
+				for(DataField df:dataset.getDataFields())
+				{
+					schema.add(df.getColumnName());
+				}
+				dname.setSchema(schema);
+				datasetsName.add(dname);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return datasetsName;
+	}
+
+	/**
+	 * get all dataset names list
+	 * 
+	 * @return a list including dataset Sta names
+	 */
+	@GET
+	@Path("/getstadatasets")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<JDatasetName> getStaDataSetsNames(@Context ServletContext sc) {
+		String result = "";
+		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		try {
+
+			Platform p = (Platform) sc.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			Collection<DataSet> datasets = datasetManager
+					.getDataSetList(StatisticsFeature.class);
+			for (DataSet dataset : datasets) {
+				JDatasetName dname = new JDatasetName();
+				dname.setDatasetName(dataset.getName());
+				dname.setDescription(dataset.getDescription());
+				ArrayList<String> schema=new ArrayList<>();
+				for(DataField df:dataset.getDataFields())
+				{
+					schema.add(df.getColumnName());
+				}
+				dname.setSchema(schema);
 				datasetsName.add(dname);
 			}
 
@@ -99,7 +179,12 @@ public class DataSetFunctions {
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery();
 			GeoFeature gds = (GeoFeature) ds.getFeature(GeoFeature.class);
+			if (gds == null)
+				throw new OperationNotSupportedException(
+						"can't find the geograph Exception");
+
 			rs.open();
+			int i = 0;
 			while (rs.next()) {
 				System.out.println(rs.getValue(ds.getDataFields()[0])
 						.toString()
@@ -107,8 +192,9 @@ public class DataSetFunctions {
 						+ rs.getValue(ds.getDataFields()[1]).toString());
 
 				JLocation location = new JLocation();
-				location.setTag((String) rs.getValue(gds.getValueFields()[0]));
-				location.setWeight((double) rs.getValue(gds.getValueFields()[1]));
+				location.setTag(rs.getValue(gds.getTagField()).toString());
+				// location.setWeight((double)
+				// rs.getValue(gds.getValueFields()[1]));
 				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
 				location.setLongitude((double) rs.getValue(gds.getKeyFields()[1]));
 				// location.setTag((String)rs.getValue(gds.getTagField()));
@@ -149,26 +235,83 @@ public class DataSetFunctions {
 			rs = ds.getQuery();
 			StatisticsFeature gds = (StatisticsFeature) ds
 					.getFeature(StatisticsFeature.class);
+			if (gds == null)
+				throw new OperationNotSupportedException(
+						"can't find the statistic Exception");
 			rs.open();
 			int i = 0;
-			while (rs.next() && i++ < 2) {
+			while (rs.next() && i++ < 20) {
 				System.out.println(rs.getValue(ds.getDataFields()[0])
 						.toString()
 						+ " "
 						+ rs.getValue(ds.getDataFields()[1]).toString());
 				JStatistic statistic = new JStatistic();
-				ArrayList<Object> keys = new ArrayList<>();
+				ArrayList<String> keys = new ArrayList<>();
 				for (DataField key : gds.getKeyFields()) {
-					keys.add(rs.getValue(key));
+					keys.add(rs.getValue(key).toString());
 				}
-				ArrayList<Object> values = new ArrayList<>();
-				ArrayList<String> names = new ArrayList<>();
+				ArrayList<Double> values = new ArrayList<>();
 				for (DataField value : gds.getValueFields()) {
-					values.add(rs.getValue(value));
-					names.add(value.getColumnName());
+					values.add(Double.valueOf(rs.getValue(value).toString()));
 				}
 				statistic.setKey(keys);
-				statistic.setName(names);
+				statistic.setValue(values);
+				al_rs.add(statistic);
+			}
+			rs.close();
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return al_rs;
+	}
+
+	/**
+	 * get the location fields form the dataset
+	 * 
+	 * @param dataset
+	 * @return a json or xml format statistics array
+	 */
+	@GET
+	@Path("/getstatistictime/{datasetname}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<JStatistic> getDataSetStatisticTime(
+			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
+		String result = "";
+		System.out.println("½øÀ´ÁË" + dataset);
+		List<JStatistic> al_rs = new ArrayList<JStatistic>();
+		DataSet ds = null;
+		DataContent rs = null;
+		try {
+
+			Platform p = (Platform) sc.getAttribute("platform");
+
+			DataSetManager datasetManager = p.getDataSetManager();
+			ds = datasetManager.getDataSet(dataset);
+			rs = ds.getQuery();
+			TimeSeriesFeature gds = (TimeSeriesFeature) ds
+					.getFeature(TimeSeriesFeature.class);
+			if (gds == null)
+				throw new OperationNotSupportedException(
+						"can't find the statisticTime Exception");
+			rs.open();
+			int i = 0;
+			while (rs.next() && i++ < 5) {
+				System.out.println(rs.getValue(ds.getDataFields()[0])
+						.toString()
+						+ " "
+						+ rs.getValue(ds.getDataFields()[1]).toString());
+				JStatistic statistic = new JStatistic();
+				ArrayList<String> keys = new ArrayList<>();
+				for (DataField key : gds.getKeyFields()) {
+					keys.add(rs.getValue(key).toString());
+				}
+				ArrayList<Double> values = new ArrayList<>();
+				ArrayList<String> names = new ArrayList<>();
+				for (DataField value : gds.getValueFields()) {
+					values.add(Double.valueOf(rs.getValue(value).toString()));
+				}
+				statistic.setKey(keys);
 				statistic.setValue(values);
 				al_rs.add(statistic);
 			}
