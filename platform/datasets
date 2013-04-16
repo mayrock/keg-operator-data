@@ -192,7 +192,7 @@
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>RegionInfo2</name>
     <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
-    <description>Region info 2</description>
+    <description>Tower Site Information</description>
     <loadable>true</loadable>
     <fields>
       <edu.thu.keg.mdap.datamodel.GeneralDataField>
@@ -261,7 +261,7 @@
   <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <name>RegionInfo3</name>
     <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
-    <description>Region info 3</description>
+    <description>Region Information</description>
     <loadable>true</loadable>
     <fields>
       <edu.thu.keg.mdap.datamodel.GeneralDataField>
