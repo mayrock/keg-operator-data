@@ -54,8 +54,7 @@ public class DataSetFunctions {
 	@GET
 	@Path("/getdatasets")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getAllDataSetsNames(
-			@Context ServletContext sc) {
+	public List<JDatasetName> getAllDataSetsNames(@Context ServletContext sc) {
 		String result = "";
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
@@ -67,10 +66,9 @@ public class DataSetFunctions {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
-				ArrayList<String> schema=new ArrayList<>();
-				ArrayList<Class> type=new ArrayList<>();
-				for(DataField df:dataset.getDataFields())
-				{
+				ArrayList<String> schema = new ArrayList<>();
+				ArrayList<Class> type = new ArrayList<>();
+				for (DataField df : dataset.getDataFields()) {
 					schema.add(df.getColumnName());
 				}
 				dname.setSchema(schema);
@@ -104,9 +102,8 @@ public class DataSetFunctions {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
-				ArrayList<String> schema=new ArrayList<>();
-				for(DataField df:dataset.getDataFields())
-				{
+				ArrayList<String> schema = new ArrayList<>();
+				for (DataField df : dataset.getDataFields()) {
 					schema.add(df.getColumnName());
 				}
 				dname.setSchema(schema);
@@ -140,9 +137,8 @@ public class DataSetFunctions {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
-				ArrayList<String> schema=new ArrayList<>();
-				for(DataField df:dataset.getDataFields())
-				{
+				ArrayList<String> schema = new ArrayList<>();
+				for (DataField df : dataset.getDataFields()) {
 					schema.add(df.getColumnName());
 				}
 				dname.setSchema(schema);
@@ -374,23 +370,35 @@ public class DataSetFunctions {
 		DataSet ds = null;
 		String result = "";
 		System.out.println("½øÀ´¶öÁË");
+		DataContent rs = null;
 		List<JField> all_jf = new ArrayList<JField>();
 		try {
 
 			Platform p = (Platform) sc.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
-			ResultSet rs = null;
-			int column = rs.findColumn(fieldname);
+			rs = ds.getQuery();
+			rs.open();
+			DataField[] dfs = rs.getFields();
+			DataField df_needed = null;
+			for (DataField df : dfs) {
+				if (df.getColumnName().equals(fieldname)) {
+					df_needed = df;
+					break;
+				}
+			}
 			while (rs.next()) {
 				JField jf = new JField();
-				jf.setField(rs.getObject(column));
+				jf.setField(rs.getValue(df_needed));
 				all_jf.add(jf);
 			}
-		} catch (SQLException e) {
+			rs.close();
+		} catch (OperationNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+		} catch (DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 
 		}
