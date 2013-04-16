@@ -60,9 +60,9 @@ public interface DataSet {
 	public Set<DataSetFeature> getFeatures();
 	/**
 	 * Get an instance representing the feature of this dataset supporting
-	 * the specified feature type
+	 * the specified feature type.
 	 * @param type The feature type whose instance is expected
-	 * @return A instance of type or subclass of type
+	 * @return A instance of type or subclass of type. Return null if the type is not supported
 	 */
 	public <T extends DataSetFeature> T getFeature(Class<T> type);
 	/**

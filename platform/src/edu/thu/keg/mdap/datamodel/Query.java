@@ -95,8 +95,14 @@ public interface Query extends DataContent {
 	 * @return String representation of this query.
 	 */
 	public String toString();
-	
+	/**
+	 * 
+	 * @return data fields in this query
+	 */
 	public DataField[] getDataFields();
-	
+	/**
+	 * 
+	 * @return the where clauses contained in this query
+	 */
 	public List<WhereClause> getWhereClauses();
 }
