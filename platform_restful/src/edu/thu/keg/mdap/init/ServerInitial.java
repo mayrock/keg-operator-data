@@ -20,7 +20,7 @@ import edu.thu.keg.mdap_impl.PlatformImpl;
 
 /**
  * 启动服务器时候的初始化server
- * @author Law
+ * @author Yuan Bozhi
  *
  */
 @WebListener("Socket Init")

@@ -1,7 +1,11 @@
 package edu.thu.keg.mdap.restful.jerseyclasses;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
+/**
+ * Jersey class for dataset's location info
+ * @author Law
+ *
+ */
 @XmlRootElement
 public class JLocation {
 	private String tag;

@@ -3,7 +3,11 @@ package edu.thu.keg.mdap.restful.jerseyclasses;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
+/**
+ * Jersey class for dataset's name
+ * @author Law
+ *
+ */
 @XmlRootElement
 public class JDatasetName {
 	private String datasetName;

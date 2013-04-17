@@ -1,7 +1,11 @@
 package edu.thu.keg.mdap.restful.jerseyclasses;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
+/**
+ * Jersey class for dataset's name of field
+ * @author Law
+ *
+ */
 @XmlRootElement
 public class JFieldName {
 	private String fieldName;

@@ -3,7 +3,11 @@ package edu.thu.keg.mdap.restful.jerseyclasses;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
+/**
+ * Jersey class for dataset's statistic info
+ * @author Law
+ *
+ */
 @XmlRootElement
 public class JStatistic {
 	private List<String> keys;

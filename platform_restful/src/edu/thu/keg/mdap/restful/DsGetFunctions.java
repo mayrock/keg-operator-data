@@ -27,6 +27,7 @@ import edu.thu.keg.mdap.datasetfeature.GeoFeature;
 import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
 import edu.thu.keg.mdap.datasetfeature.TimeSeriesFeature;
 import edu.thu.keg.mdap.provider.DataProviderException;
+import edu.thu.keg.mdap.restful.jerseyclasses.JDataset;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
 import edu.thu.keg.mdap.restful.jerseyclasses.JFieldName;
@@ -34,13 +35,13 @@ import edu.thu.keg.mdap.restful.jerseyclasses.JLocation;
 import edu.thu.keg.mdap.restful.jerseyclasses.JStatistic;
 
 /**
- * the functions of dataset's operation
+ * the functions of dataset's get operations
  * 
- * @author Law
+ * @author Yuan Bozhi
  * 
  */
-@Path("/ds")
-public class DataSetFunctions {
+@Path("/dsg")
+public class DsGetFunctions {
 	/**
 	 * 
 	 */
@@ -52,7 +53,7 @@ public class DataSetFunctions {
 	 * @return a list including dataset names
 	 */
 	@GET
-	@Path("/getdatasets")
+	@Path("/gstdss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<JDatasetName> getAllDataSetsNames(@Context ServletContext sc) {
 		String result = "";
@@ -87,7 +88,7 @@ public class DataSetFunctions {
 	 * @return a list including dataset Geo names
 	 */
 	@GET
-	@Path("/getgeodatasets")
+	@Path("/getdeodss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<JDatasetName> getGeoDataSetsNames(@Context ServletContext sc) {
 		String result = "";
@@ -122,13 +123,11 @@ public class DataSetFunctions {
 	 * @return a list including dataset Sta names
 	 */
 	@GET
-	@Path("/getstadatasets")
+	@Path("/getstadss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<JDatasetName> getStaDataSetsNames(@Context ServletContext sc) {
-		String result = "";
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
-
 			Platform p = (Platform) sc.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
@@ -155,22 +154,61 @@ public class DataSetFunctions {
 	 * get the location fields form the dataset
 	 * 
 	 * @param dataset
+	 * @return a json or xml format all rs array of JDataset
+	 */
+	@GET
+	@Path("/get/{datasetname}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<JDataset> getDataSet(@PathParam("datasetname") String dataset,
+			@Context ServletContext sc) {
+		System.out.println("getDataSet " + dataset);
+		List<JDataset> datasetList = new ArrayList<>();
+		DataSet ds = null;
+		DataContent rs = null;
+		try {
+			Platform p = (Platform) sc.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			ds = datasetManager.getDataSet(dataset);
+			rs = ds.getQuery();
+			rs.open();
+			int i = 0;
+			while (rs.next()) {
+				JDataset jdataset = new JDataset();
+				List<JField> fields = new ArrayList<>();
+				DataField[] dfs = ds.getDataFields();
+				for (DataField df : dfs) {
+					JField field = new JField();
+					field.setField(rs.getValue(df));
+					fields.add(field);
+				}
+				jdataset.setField(fields);
+				datasetList.add(jdataset);
+			}
+			rs.close();
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return datasetList;
+	}
+
+	/**
+	 * get the location fields form the dataset
+	 * 
+	 * @param dataset
 	 * @return a json or xml format location array
 	 */
 	@GET
-	@Path("/getlocation/{datasetname}")
+	@Path("/getloc/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JLocation> getDataSetLocation(
 			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
-		String result = "";
-		System.out.println("进来了" + dataset);
+		System.out.println("getDataSetLocation " + dataset);
 		List<JLocation> al_rs = new ArrayList<JLocation>();
 		DataSet ds = null;
 		DataContent rs = null;
 		try {
-
 			Platform p = (Platform) sc.getAttribute("platform");
-
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery();
@@ -178,24 +216,13 @@ public class DataSetFunctions {
 			if (gds == null)
 				throw new OperationNotSupportedException(
 						"can't find the geograph Exception");
-
 			rs.open();
 			int i = 0;
 			while (rs.next()) {
-				System.out.println(rs.getValue(ds.getDataFields()[0])
-						.toString()
-						+ " "
-						+ rs.getValue(ds.getDataFields()[1]).toString());
-
 				JLocation location = new JLocation();
 				location.setTag(rs.getValue(gds.getTagField()).toString());
-				// location.setWeight((double)
-				// rs.getValue(gds.getValueFields()[1]));
 				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
 				location.setLongitude((double) rs.getValue(gds.getKeyFields()[1]));
-				// location.setTag((String)rs.getValue(gds.getTagField()));
-				// location.setLatitude((double)rs.getValue(gds.getLatitudeField()));
-				// location.setLongitude((double)rs.getValue(gds.getLongitudeField()));
 				al_rs.add(location);
 			}
 			rs.close();
@@ -213,12 +240,11 @@ public class DataSetFunctions {
 	 * @return a json or xml format statistics array
 	 */
 	@GET
-	@Path("/getstatistic/{datasetname}")
+	@Path("/getsta/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JStatistic> getDataSetStatistic(
 			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
-		String result = "";
-		System.out.println("进来了" + dataset);
+		System.out.println("getDataSetStatistic " + dataset);
 		List<JStatistic> al_rs = new ArrayList<JStatistic>();
 		DataSet ds = null;
 		DataContent rs = null;
@@ -269,12 +295,12 @@ public class DataSetFunctions {
 	 * @return a json or xml format statistics array
 	 */
 	@GET
-	@Path("/getstatistictime/{datasetname}")
+	@Path("/getstatime/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JStatistic> getDataSetStatisticTime(
 			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
 		String result = "";
-		System.out.println("进来了" + dataset);
+		System.out.println("getDataSetStatisticTime" + dataset);
 		List<JStatistic> al_rs = new ArrayList<JStatistic>();
 		DataSet ds = null;
 		DataContent rs = null;
@@ -326,7 +352,7 @@ public class DataSetFunctions {
 	 * @return a list of all fields name
 	 */
 	@GET
-	@Path("/getdatasetfields/{datasetname}")
+	@Path("/getdsfields/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JFieldName> getFieldNames(
 			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
@@ -363,7 +389,7 @@ public class DataSetFunctions {
 	 * @return
 	 */
 	@GET
-	@Path("/getdataset/{datasetname}/{fieldname}")
+	@Path("/getds/{datasetname}/{fieldname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JField> getField(@PathParam("datasetname") String dataset,
 			@PathParam("fieldname") String fieldname, @Context ServletContext sc) {
@@ -379,17 +405,9 @@ public class DataSetFunctions {
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery();
 			rs.open();
-			DataField[] dfs = rs.getFields();
-			DataField df_needed = null;
-			for (DataField df : dfs) {
-				if (df.getColumnName().equals(fieldname)) {
-					df_needed = df;
-					break;
-				}
-			}
 			while (rs.next()) {
 				JField jf = new JField();
-				jf.setField(rs.getValue(df_needed));
+				jf.setField(rs.getValue(ds.getField(fieldname)));
 				all_jf.add(jf);
 			}
 			rs.close();
@@ -406,12 +424,50 @@ public class DataSetFunctions {
 	}
 
 	@GET
+	@Path("/getds/{datasetname}/{fieldname}/{opr}/{value}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<JDataset> getValueOfOpr(
+			@PathParam("datasetname") String dataset,
+			@PathParam("fieldname") String fieldname,
+			@PathParam("opr") String opr, @PathParam("value") String value,
+			@Context ServletContext sc) {
+		System.out.println("getValueOfOpr " + dataset);
+		List<JDataset> datasetList = new ArrayList<>();
+		DataSet ds = null;
+		DataContent rs = null;
+		try {
+			Platform p = (Platform) sc.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			ds = datasetManager.getDataSet(dataset);
+			rs = ds.getQuery().where(ds.getField(fieldname),
+					Operator.parse(opr), value);
+			rs.open();
+			int i = 0;
+			while (rs.next()) {
+				JDataset jdataset = new JDataset();
+				List<JField> fields = new ArrayList<>();
+				DataField[] dfs = ds.getDataFields();
+				for (DataField df : dfs) {
+					JField field = new JField();
+					field.setField(rs.getValue(df));
+					fields.add(field);
+				}
+				jdataset.setField(fields);
+				datasetList.add(jdataset);
+			}
+			rs.close();
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return datasetList;
+	}
+
+	@GET
 	@Path("/hello")
 	@Produces({ MediaType.TEXT_PLAIN })
 	public String getString() {
-
 		String a = "{\"city\":\"helloworld_json\"}";
-
 		System.out.println(a);
 		return a;
 	}

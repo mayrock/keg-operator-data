@@ -3,6 +3,8 @@
 	<name>Test_Connect</name>
 	<comment></comment>
 	<projects>
+		<project>platform</project>
+		<project>platform_restful</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
