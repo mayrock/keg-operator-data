@@ -17,8 +17,8 @@ public interface DataField {
 	public enum FieldType { 
 		Int(true), Double(true), DateTime(false),
 		ShortString(false), LongString(false), Text(false);
+		
 		private boolean isNumber;
-
 		/**
 		 * @param isNumber
 		 */
@@ -33,6 +33,19 @@ public interface DataField {
 			return isNumber;
 		}
 		
+		@Override
+		public String toString() {
+			return this.name();
+		}
+		/**
+		 * Get a FieldType from its string representation
+		 * Exception is throwed is the string is illegal
+		 * @param str String representation
+		 * @return the FieldType constant
+		 */
+		public static FieldType parse(String str) {
+			return FieldType.valueOf(str.trim());
+		}
 	}
 	/**
 	 * Get the column name of the field
