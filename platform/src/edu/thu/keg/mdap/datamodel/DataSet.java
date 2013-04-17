@@ -33,6 +33,8 @@ public interface DataSet {
 	public Query getQuery() throws OperationNotSupportedException, DataProviderException;
 	/**
 	 * Return a Query for querying data of the specific feature supported by this dataset.
+	 * The returned query only contains fields related to the feature, and is by default 
+	 * ordered by the first value field (if there is any) descending.
 	 * @param featureType type of the expected feature
 	 * @return a Query against the provider of this dataset. 
 	 * @throws OperationNotSupportedException when dataset is not loadable
@@ -61,6 +63,12 @@ public interface DataSet {
 	 * @return an array containing all the fields in the schema
 	 */
 	public DataField[] getDataFields();
+	/**
+	 * 
+	 * @param columnName name of this field
+	 * @return the DataField instance
+	 */
+	public DataField getField(String columnName);
 	/**
 	 * @return a map containing all features of this dataset
 	 */

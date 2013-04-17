@@ -118,4 +118,14 @@ public class DataSetImpl implements DataSet {
 		}
 		return q;
 	}
+
+
+	@Override
+	public DataField getField(String columnName) {
+		for (DataField f : this.fields) {
+			if (f.getColumnName() == columnName) 
+				return f;
+		}
+		throw new IllegalArgumentException(); 
+	}
 }
