@@ -218,7 +218,9 @@ public class PlatformImpl implements Platform {
 			ex.printStackTrace();
 		}
 		ds = getDataSetManager().getDataSet("RegionInfo2");
-		System.out.println(ds.getField("SiteName"));
+		System.out.println("ss".equals(new String("ss")));
+		
+		
 		
 	}
 }
