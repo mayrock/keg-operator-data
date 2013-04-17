@@ -217,5 +217,8 @@ public class PlatformImpl implements Platform {
 		} catch (DataProviderException | OperationNotSupportedException ex) {
 			ex.printStackTrace();
 		}
+		ds = getDataSetManager().getDataSet("RegionInfo2");
+		System.out.println(ds.getField("SiteName"));
+		
 	}
 }

@@ -123,9 +123,11 @@ public class DataSetImpl implements DataSet {
 	@Override
 	public DataField getField(String columnName) {
 		for (DataField f : this.fields) {
-			if (f.getColumnName() == columnName) 
+			if (f.getColumnName().equals(columnName) )
 				return f;
 		}
-		throw new IllegalArgumentException(); 
+		throw new IllegalArgumentException("Field with name " 
+				+ columnName + " does not exist in DataSet "
+				+ this.getName()); 
 	}
 }
