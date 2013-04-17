@@ -44,6 +44,20 @@ public abstract class DataSetFeature {
 		return this.valueFields;
 	}
 	/**
+	 * 
+	 * @return All DataField's including keys and values
+	 */
+	public DataField[] getAllFields() {
+		DataField[] all = new DataField[this.keyFields.length + this.valueFields.length];
+		for (int i = 0; i < this.keyFields.length; i++) {
+			all[i] = this.keyFields[i];
+		}
+		for (int i = 0; i < this.valueFields.length; i++) {
+			all[this.keyFields.length + i] = this.valueFields[i];
+		}
+		return all;
+	}
+	/**
 	 * Get the unique type standing for type of this feature.
 	 * @return A subclass of DataSetFeature, which uniquely identifies
 	 * the type of this feature.

@@ -18,19 +18,23 @@ import edu.thu.keg.mdap.provider.DataProviderException;
 public class QueryImpl implements Query {
 	
 		
-	public QueryImpl(DataSet ds) {
+	QueryImpl(DataSet ds) {
 		this.fields = ds.getDataFields();
 		this.wheres = new ArrayList<WhereClause>();
+		this.orders = new ArrayList<OrderClause>();
+		this.setProvider(ds.getProvider());
 	}
-	public QueryImpl(DataField[] fields, List<WhereClause> wheres,
-			DataProvider provider) {
+	QueryImpl(DataField[] fields, List<WhereClause> wheres,
+			List<OrderClause> orders, DataProvider provider) {
 		this.fields = fields;
 		this.wheres = wheres;
+		this.orders = orders;
 		this.provider = provider;
 	}
 
 	private DataField[] fields;
 	private List<WhereClause> wheres;
+	private List<OrderClause> orders;
 	@Override
 	public DataField[] getFields() {
 		return fields;
@@ -64,14 +68,14 @@ public class QueryImpl implements Query {
 	}
 	@Override
 	public Query select(DataField[] fields) {
-		return new QueryImpl(fields, this.wheres, this.provider);
+		return new QueryImpl(fields, this.wheres, this.orders, this.provider);
 	}
 	@Override
 	public Query where(DataField field, Operator op, Object value) {
 		List<WhereClause> wheres = new ArrayList<WhereClause>();
 		wheres.addAll(this.wheres);
 		wheres.add(new WhereClause(field, op, value));
-		return new QueryImpl(this.fields, wheres, this.provider);
+		return new QueryImpl(this.fields, wheres, this.orders, this.provider);
 	}
 	@Override
 	public Query join(Query q2, DataField f1, DataField f2) {
@@ -85,6 +89,17 @@ public class QueryImpl implements Query {
 	@Override
 	public List<WhereClause> getWhereClauses() {
 		return this.wheres;
+	}
+	@Override
+	public Query orderBy(DataField field, Order order) {
+		List<OrderClause> orders = new ArrayList<OrderClause>();
+		orders.addAll(this.orders);
+		orders.add(new OrderClause(field, order));
+		return new QueryImpl(this.fields, this.wheres, orders, this.provider);
+	}
+	@Override
+	public List<OrderClause> getOrderClauses() {
+		return this.orders;
 	}
 
 }

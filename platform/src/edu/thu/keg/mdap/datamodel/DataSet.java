@@ -24,15 +24,22 @@ public interface DataSet {
 	 */
 	public String getName();
 	/**
-	 * Return a connected ResultSet
-	 *  containing the records of this dataset, if it is loadable.
-	 * @return a JDBC ResultSet. The ResultSet is generated when the 
-	 * method is called for the first time. 
+	 * Return a Query for querying actual data of this dataset, if it is loadable.
+	 * @return a Query against the provider of this dataset. 
 	 * @throws OperationNotSupportedException when dataset is not loadable
 	 * @throws DataProviderException when actual data of the DataSet does not
 	 * exist on the DataProvider
 	 */
 	public Query getQuery() throws OperationNotSupportedException, DataProviderException;
+	/**
+	 * Return a Query for querying data of the specific feature supported by this dataset.
+	 * @param featureType type of the expected feature
+	 * @return a Query against the provider of this dataset. 
+	 * @throws OperationNotSupportedException when dataset is not loadable
+	 * @throws DataProviderException when actual data of the DataSet does not
+	 * exist on the DataProvider
+	 */
+	public Query getQuery(Class<? extends DataSetFeature> featureType) throws OperationNotSupportedException, DataProviderException;
 	
 	/**
 	 * Get the provider of this DataSet

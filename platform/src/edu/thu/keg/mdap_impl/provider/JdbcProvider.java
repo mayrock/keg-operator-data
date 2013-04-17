@@ -16,6 +16,7 @@ import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
+import edu.thu.keg.mdap.datamodel.Query.OrderClause;
 import edu.thu.keg.mdap.datamodel.Query.WhereClause;
 import edu.thu.keg.mdap.provider.AbstractDataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
@@ -63,13 +64,26 @@ public class JdbcProvider extends AbstractDataProvider {
 			sb.append(whereToSB(wheres.get(wheres.size() - 1)));
 		}
 		
+		List<OrderClause> orders = q.getOrderClauses();
+		if (orders.size() > 0) {
+			sb.append(" ORDER BY ");
+			for (int i = 0; i < wheres.size() - 1; i++) {
+				OrderClause order = orders.get(i);
+				sb.append(order.getField().getColumnName())
+					.append(" ").append(order.getOrder().toString());
+				sb.append(", ");
+			}
+			sb.append(orders.get(orders.size() - 1).getField().getColumnName())
+			.append(" ").append(orders.get(orders.size() - 1).getOrder().toString());
+		}
+		
 		
 		return sb.toString();
 	}
 	private StringBuilder whereToSB(WhereClause where) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(where.getField().getColumnName())
-			.append(where.getOperator().getStr());
+			.append(where.getOperator().toString());
 		if (where.getField().getFieldType().isNumber())
 			sb.append(where.getValue().toString());
 		else

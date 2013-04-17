@@ -16,6 +16,7 @@ import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.Query.Operator;
+import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.datasetfeature.GeoFeature;
 import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
@@ -54,19 +55,17 @@ public class PlatformImpl implements Platform {
 	}
 	
 	
-	public static void main(String[] args) {
+	public void crud() {
 //		Platform p = new PlatformImpl(
 //				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
-		Platform p = new PlatformImpl(
-				"C:\\Users\\myc\\git\\mayrock\\keg-operator-data\\platform\\config.xml");
 		// Construct a new dataset
-		DataProvider provider = p.getDataProviderManager().getDefaultSQLProvider("BeijingData");
+		DataProvider provider = getDataProviderManager().getDefaultSQLProvider("BeijingData");
 		
 		
 		DataField[] fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true );
 		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false );
-		p.getDataSetManager().createDataSet("WebsiteId_URL", "Website info", 
+		getDataSetManager().createDataSet("WebsiteId_URL", "Website info", 
 				provider, fields, true);
 		
 		fields = new DataField[4];
@@ -74,7 +73,7 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("Name", FieldType.ShortString, "", false );
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false );
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false );
-		p.getDataSetManager().createDataSet("RegionInfo3", "Region info 3",
+		getDataSetManager().createDataSet("RegionInfo3", "Region info 3",
 				provider, fields, true,
 				new GeoFeature(fields[2], fields[3], fields[1], null, false));
 		
@@ -82,7 +81,7 @@ public class PlatformImpl implements Platform {
 		fields[0] = new GeneralDataField("SiteName", FieldType.ShortString, "", false );
 		fields[1] = new GeneralDataField("Latitude", FieldType.Double, "", false );
 		fields[2] = new GeneralDataField("Longitude", FieldType.Double, "", false );
-		p.getDataSetManager().createDataSet("RegionInfo2", "Region info 2",
+		getDataSetManager().createDataSet("RegionInfo2", "Region info 2",
 				provider, fields, true,
 				new GeoFeature(fields[1], fields[2], fields[0], null, false));
 		
@@ -103,7 +102,7 @@ public class PlatformImpl implements Platform {
 				new DataField[]{fields[0]},
 				new DataField[]
 						{fields[1],fields[2],fields[3],fields[4],fields[5]});
-		p.getDataSetManager().createDataSet("FilteredByCT_Domain", 
+		getDataSetManager().createDataSet("FilteredByCT_Domain", 
 				"Domain statistics", provider, fields, false, feature);
 		
 		fields = new DataField[2];
@@ -111,7 +110,7 @@ public class PlatformImpl implements Platform {
 				"Content Type of websites", true);
 		fields[1] = new GeneralDataField("times", FieldType.Int, 
 				"appear times of the ContentType", false);
-		p.getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", 
+		getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", 
 				"Top 90% Content Type distribution", provider, fields, true,
 				new StatisticsFeature(fields[0], fields[1]));
 		
@@ -129,7 +128,7 @@ public class PlatformImpl implements Platform {
 				new DataField[]
 						{fields[1],fields[2],fields[3]});
 		
-		p.getDataSetManager().createDataSet("slot_Imsi_All", 
+		getDataSetManager().createDataSet("slot_Imsi_All", 
 				"User statistics by time slot", provider, fields, true,
 				feature);
 		
@@ -162,22 +161,24 @@ public class PlatformImpl implements Platform {
 //		}
 		
 		try {
-			p.getDataSetManager().saveChanges();
+			getDataSetManager().saveChanges();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (DataSet ds : p.getDataSetManager().getDataSetList()) {
+		for (DataSet ds : getDataSetManager().getDataSetList()) {
 			System.out.println(ds.getName() + " " + ds.getDescription());
 		}
 	}
-	public static void main2(String[] args) {
+	public static void main(String[] args) {
 		
-		Platform p = new PlatformImpl(
+		PlatformImpl p = new PlatformImpl(
 				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
-
+		p.query();
+	}
+	private void query() {
 		//Get a dataset
-		for (DataSet ds : p.getDataSetManager().getDataSetList(GeoFeature.class)) {		
+		for (DataSet ds : getDataSetManager().getDataSetList()) {		
 			//Read data from a dataset
 			try {
 				System.out.println(ds.getDescription());
@@ -198,28 +199,23 @@ public class PlatformImpl implements Platform {
 				ex.printStackTrace();
 			}
 		}
-		for (DataSet ds : p.getDataSetManager().getDataSetList(StatisticsFeature.class)) {
-			try {
-				System.out.println(ds.getDescription());
-				StatisticsFeature sf =  ds.getFeature(StatisticsFeature.class);
-				int count = 0;
-				Query q = ds.getQuery().where(sf.getValueFields()[0],
-						Operator.GEQ, 50000).select(new DataField[]
-								{ sf.getKeyField(), sf.getValueFields()[0]});
-				q.open();
-				while (q.next()) {
-					count++;
-					DataField[] fields = q.getDataFields();
-					for (DataField field : fields) {
-						System.out.print(q.getValue(field).toString() + " ");
-					}
-					System.out.println();
-				}
-				q.close();
-				System.out.println(count);
-			} catch (DataProviderException | OperationNotSupportedException ex) {
-				ex.printStackTrace();
+		DataSet ds = getDataSetManager().getDataSet("DataAggr_ContentTypes_Up90");
+		try {
+			System.out.println(ds.getDescription());
+			DataContent q = ds.getQuery(StatisticsFeature.class);
+//			GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
+			q.open();
+			int count = 0;
+			while (q.next()) {
+				count ++;
+				System.out.println(
+						q.getValue(ds.getDataFields()[0]).toString()
+						+ " " + q.getValue(ds.getDataFields()[1]).toString());
 			}
+			q.close();
+			System.out.println(count);
+		} catch (DataProviderException | OperationNotSupportedException ex) {
+			ex.printStackTrace();
 		}
 	}
 }

@@ -12,6 +12,7 @@ import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
+import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
@@ -81,7 +82,6 @@ public class DataSetImpl implements DataSet {
 	public Query getQuery() throws OperationNotSupportedException,
 			DataProviderException {
 		Query q = new QueryImpl(this);
-		q.setProvider(this.getProvider());
 		return q;
 	}
 	@Override
@@ -104,5 +104,18 @@ public class DataSetImpl implements DataSet {
 	@Override
 	public void writeData(DataContent content) throws DataProviderException {
 		this.getProvider().writeDataSetContent(this, content);
+	}
+
+
+	@Override
+	public Query getQuery(Class<? extends DataSetFeature> featureType)
+			throws OperationNotSupportedException, DataProviderException {
+		DataSetFeature feature = this.getFeature(featureType);
+		Query q = this.getQuery();
+		q = q.select(feature.getAllFields());
+		if (feature.getValueFields() != null) {
+			q = q.orderBy(feature.getValueFields()[0], Order.DESC);
+		}
+		return q;
 	}
 }
