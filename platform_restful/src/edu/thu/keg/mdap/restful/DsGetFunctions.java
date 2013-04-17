@@ -445,7 +445,7 @@ public class DsGetFunctions {
 			int i = 0;
 			while (rs.next()) {
 				JDataset jdataset = new JDataset();
-				List<JField> fields = new ArrayList<>();
+				List<JField> fields = new ArrayList<JField>();
 				DataField[] dfs = ds.getDataFields();
 				for (DataField df : dfs) {
 					JField field = new JField();
