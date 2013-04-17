@@ -157,7 +157,7 @@ public class DsGetFunctions {
 	 * @return a json or xml format all rs array of JDataset
 	 */
 	@GET
-	@Path("/get/{datasetname}")
+	@Path("/getds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JDataset> getDataSet(@PathParam("datasetname") String dataset,
 			@Context ServletContext sc) {
@@ -172,7 +172,7 @@ public class DsGetFunctions {
 			rs = ds.getQuery();
 			rs.open();
 			int i = 0;
-			while (rs.next()) {
+			while (rs.next() && i++<20) {
 				JDataset jdataset = new JDataset();
 				List<JField> fields = new ArrayList<>();
 				DataField[] dfs = ds.getDataFields();
@@ -199,7 +199,7 @@ public class DsGetFunctions {
 	 * @return a json or xml format location array
 	 */
 	@GET
-	@Path("/getloc/{datasetname}")
+	@Path("/getlocds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JLocation> getDataSetLocation(
 			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
@@ -240,7 +240,7 @@ public class DsGetFunctions {
 	 * @return a json or xml format statistics array
 	 */
 	@GET
-	@Path("/getsta/{datasetname}")
+	@Path("/getstads/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JStatistic> getDataSetStatistic(
 			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
@@ -395,7 +395,7 @@ public class DsGetFunctions {
 			@PathParam("fieldname") String fieldname, @Context ServletContext sc) {
 		DataSet ds = null;
 		String result = "";
-		System.out.println("½øÀ´¶öÁË");
+		System.out.println("getField "+dataset);
 		DataContent rs = null;
 		List<JField> all_jf = new ArrayList<JField>();
 		try {
@@ -403,11 +403,12 @@ public class DsGetFunctions {
 			Platform p = (Platform) sc.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
+			DataField df=ds.getField(fieldname);
 			rs = ds.getQuery();
 			rs.open();
 			while (rs.next()) {
 				JField jf = new JField();
-				jf.setField(rs.getValue(ds.getField(fieldname)));
+				jf.setField(rs.getValue(df));
 				all_jf.add(jf);
 			}
 			rs.close();

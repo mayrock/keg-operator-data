@@ -112,13 +112,15 @@ public interface Query extends DataContent {
 		 * Get a Operator from its String representation
 		 * @param str the String representation
 		 * @return the Operator constant
+		 * @throws IllegalArgumentException when the string cannot be parsed
 		 */
-		public static Operator parse(String s) {
+		public static Operator parse(String s) throws IllegalArgumentException {
 			for (Operator op : Operator.values()) {
-				if (s.trim() == op.toString().trim())
+				if (s.trim().equals(op.toString().trim()))
 					return op;
 			}
-			return null;
+			throw new IllegalArgumentException("Cannot parse " + s
+					+ " to a Operator");
 		}
 	}
 	/**
