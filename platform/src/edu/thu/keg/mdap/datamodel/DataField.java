@@ -3,6 +3,8 @@
  */
 package edu.thu.keg.mdap.datamodel;
 
+import java.sql.Date;
+
 
 
 /**
@@ -13,29 +15,38 @@ package edu.thu.keg.mdap.datamodel;
  * @author Yuanchao Ma 
  */
 public interface DataField {
-	
+
+	@SuppressWarnings("rawtypes")
 	public enum FieldType { 
-		Int(true), Double(true), DateTime(false),
-		ShortString(false), LongString(false), Text(false);
-		
-		private boolean isNumber;
+		Int(Integer.class), Double(Double.class), DateTime(Date.class),
+		ShortString(String.class), 
+		LongString(String.class), Text(String.class);
+
+		private Class c;
 		/**
 		 * @param isNumber
 		 */
-		private FieldType(boolean isNumber) {
-			this.isNumber = isNumber;
+		private FieldType(Class c) {
+			this.c = c;
 		}
 
 		/**
 		 * @return whether this is member field type
 		 */
 		public boolean isNumber() {
-			return isNumber;
+			return this.c == Integer.class || this.c == Double.class;
 		}
 		
 		@Override
 		public String toString() {
 			return this.name();
+		}
+		/**
+		 * 
+		 * @return The Java Class of this type
+		 */
+		public Class getJavaClass() {
+			return this.c;
 		}
 		/**
 		 * Get a FieldType from its string representation
