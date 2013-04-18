@@ -15,6 +15,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.crypto.Data;
 
 import edu.thu.keg.mdap.DataSetManager;
@@ -46,6 +48,12 @@ public class DsGetFunctions {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@Context
+	UriInfo uriInfo;
+	@Context
+	Request request;
+	@Context
+	ServletContext servletcontext;
 
 	/**
 	 * get all dataset names list
@@ -53,14 +61,15 @@ public class DsGetFunctions {
 	 * @return a list including dataset names
 	 */
 	@GET
-	@Path("/gstdss")
+	@Path("/getdss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getAllDataSetsNames(@Context ServletContext sc) {
+	public List<JDatasetName> getDatasetsNames() {
+		System.out.println("getDatasetsNames " + uriInfo.getAbsolutePath());
 		String result = "";
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
 
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
 			for (DataSet dataset : datasets) {
@@ -88,14 +97,14 @@ public class DsGetFunctions {
 	 * @return a list including dataset Geo names
 	 */
 	@GET
-	@Path("/getdeodss")
+	@Path("/getgeodss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getGeoDataSetsNames(@Context ServletContext sc) {
-		String result = "";
+	public List<JDatasetName> getGeoDatasetsNames() {
+		System.out.println("getGeoDatasetsNames " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
 
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
 					.getDataSetList(GeoFeature.class);
@@ -125,10 +134,11 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getstadss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getStaDataSetsNames(@Context ServletContext sc) {
+	public List<JDatasetName> getStaDatasetsNames() {
+		System.out.println("getStaDatasetsNames " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
 					.getDataSetList(StatisticsFeature.class);
@@ -159,20 +169,20 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JDataset> getDataSet(@PathParam("datasetname") String dataset,
-			@Context ServletContext sc) {
-		System.out.println("getDataSet " + dataset);
+	public List<JDataset> getDataset(@PathParam("datasetname") String dataset) {
+		System.out.println("getDataset " + dataset + " "
+				+ uriInfo.getAbsolutePath());
 		List<JDataset> datasetList = new ArrayList<>();
 		DataSet ds = null;
 		DataContent rs = null;
 		try {
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery();
 			rs.open();
 			int i = 0;
-			while (rs.next() && i++<20) {
+			while (rs.next() && i++ < 20) {
 				JDataset jdataset = new JDataset();
 				List<JField> fields = new ArrayList<>();
 				DataField[] dfs = ds.getDataFields();
@@ -201,14 +211,16 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getlocds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JLocation> getDataSetLocation(
-			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
+	public List<JLocation> getLocDataset(
+			@PathParam("datasetname") String dataset) {
+		System.out.println("getLocDataset " + dataset + " "
+				+ uriInfo.getAbsolutePath());
 		System.out.println("getDataSetLocation " + dataset);
 		List<JLocation> al_rs = new ArrayList<JLocation>();
 		DataSet ds = null;
 		DataContent rs = null;
 		try {
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery();
@@ -242,15 +254,16 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getstads/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JStatistic> getDataSetStatistic(
-			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
-		System.out.println("getDataSetStatistic " + dataset);
+	public List<JStatistic> getStaDataset(
+			@PathParam("datasetname") String dataset) {
+		System.out.println("getStaDataset " + dataset + " "
+				+ uriInfo.getAbsolutePath());
 		List<JStatistic> al_rs = new ArrayList<JStatistic>();
 		DataSet ds = null;
 		DataContent rs = null;
 		try {
 
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
@@ -295,19 +308,17 @@ public class DsGetFunctions {
 	 * @return a json or xml format statistics array
 	 */
 	@GET
-	@Path("/getstatime/{datasetname}")
+	@Path("/getstatds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JStatistic> getDataSetStatisticTime(
-			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
-		String result = "";
-		System.out.println("getDataSetStatisticTime" + dataset);
+	public List<JStatistic> getStaTimeDataset(
+			@PathParam("datasetname") String dataset) {
+		System.out.println("getStaTimeDataset " + dataset + " "
+				+ uriInfo.getAbsolutePath());
 		List<JStatistic> al_rs = new ArrayList<JStatistic>();
 		DataSet ds = null;
 		DataContent rs = null;
 		try {
-
-			Platform p = (Platform) sc.getAttribute("platform");
-
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery();
@@ -352,15 +363,17 @@ public class DsGetFunctions {
 	 * @return a list of all fields name
 	 */
 	@GET
-	@Path("/getdsfields/{datasetname}")
+	@Path("/getdsfds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JFieldName> getFieldNames(
-			@PathParam("datasetname") String dataset, @Context ServletContext sc) {
+	public List<JFieldName> getDatasetFieldsNames(
+			@PathParam("datasetname") String dataset) {
+		System.out.println("getDatasetFieldsNames " + dataset + " "
+				+ uriInfo.getAbsolutePath());
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
 		DataSet ds = null;
 		try {
 
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
 			DataField[] dfs = ds.getDataFields();
@@ -391,19 +404,21 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getds/{datasetname}/{fieldname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JField> getField(@PathParam("datasetname") String dataset,
-			@PathParam("fieldname") String fieldname, @Context ServletContext sc) {
+	public List<JField> getDatasetField(
+			@PathParam("datasetname") String dataset,
+			@PathParam("fieldname") String fieldname) {
+		System.out.println("getDatasetField " + dataset + " " + fieldname + " "
+				+ uriInfo.getAbsolutePath());
 		DataSet ds = null;
-		String result = "";
-		System.out.println("getField "+dataset);
+		System.out.println("getField " + dataset);
 		DataContent rs = null;
 		List<JField> all_jf = new ArrayList<JField>();
 		try {
 
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
-			DataField df=ds.getField(fieldname);
+			DataField df = ds.getField(fieldname);
 			rs = ds.getQuery();
 			rs.open();
 			while (rs.next()) {
@@ -427,17 +442,17 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getds/{datasetname}/{fieldname}/{opr}/{value}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JDataset> getValueOfOpr(
+	public List<JDataset> getDatasetValueOfOpr(
 			@PathParam("datasetname") String dataset,
 			@PathParam("fieldname") String fieldname,
-			@PathParam("opr") String opr, @PathParam("value") String value,
-			@Context ServletContext sc) {
-		System.out.println("getValueOfOpr " + dataset);
+			@PathParam("opr") String opr, @PathParam("value") String value) {
+		System.out.println("getDatasetValueOfOpr " + dataset + " " + fieldname
+				+ " " + opr + " " + value + " " + uriInfo.getAbsolutePath());
 		List<JDataset> datasetList = new ArrayList<>();
 		DataSet ds = null;
 		DataContent rs = null;
 		try {
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			ds = datasetManager.getDataSet(dataset);
 			rs = ds.getQuery().where(ds.getField(fieldname),

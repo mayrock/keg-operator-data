@@ -4,10 +4,12 @@ import java.net.URI;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -31,20 +33,20 @@ import edu.thu.keg.mdap.provider.DataProvider;
  */
 @Path("/dsp")
 public class DsPostFunctions {
-	UriInfo uriInfo; // actual uri info
+	@Context
+	UriInfo uriInfo;
+	@Context
+	Request request;
+	@Context
+	ServletContext servletcontext;
 
-	public DsPostFunctions(UriInfo uriInfo) {
-		this.uriInfo = uriInfo;
-
-	}
-
+	@POST
 	@Path("/adds/{connstr}/{datasetname}")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public Response createDataset(@PathParam("connstr") String connstr,
-			@PathParam("datasetname") String dataset,
-			@Context ServletContext sc, JSONObject JContent) {
+			@PathParam("datasetname") String dataset, JSONObject JContent) {
 		try {
-			Platform p = (Platform) sc.getAttribute("platform");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataProvider provider = p.getDataProviderManager()
 					.getDefaultSQLProvider(connstr);
 			if ((provider == null)) {
@@ -80,7 +82,6 @@ public class DsPostFunctions {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		URI Uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.created(Uri).build();
+		return Response.created(uriInfo.getAbsolutePath()).build();
 	}
 }
