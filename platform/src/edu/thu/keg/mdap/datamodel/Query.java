@@ -110,7 +110,7 @@ public interface Query extends DataContent {
 		}
 		/**
 		 * Get a Operator from its String representation
-		 * @param str the String representation
+		 * @param s the String representation
 		 * @return the Operator constant
 		 * @throws IllegalArgumentException when the string cannot be parsed
 		 */
