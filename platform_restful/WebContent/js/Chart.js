@@ -6,21 +6,20 @@ staValue = new Array();
 function getStatisticsInfo(name){
 	url = getStatisticsUrl + name;
 	staKey = new Array();
-staName = new Array();
-staValue = new Array();
+	staName = new Array();
+	staValue = new Array();
 	$.getJSON(url,function(data){
 		staData = data.jStatistic;
 		l = staData.length;
 		for(i = 0; i < l; i++){
 			staKey[i] = staData[i].key;
-			//TODO
 			if (name == "FilteredByCT_Domain")
 				staValue[i] = staData[i].value[4];
 			else
 				staValue[i] = staData[i].value[0];
 		}
 		google.load("visualization","1",{packages:["corechart"],"callback":drawPieChart});
-		function drawPieChart() {
+		function drawPieChart(){
 			arr = "[";
 			arr += "[\"" + "key" + "\",\"" + "value" + "\"],";
 			for(i = 0; i < l-1; i++){
@@ -40,4 +39,3 @@ staValue = new Array();
 		alert("Oops, we got an error...");
 	});
 }
-

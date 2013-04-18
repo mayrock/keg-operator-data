@@ -9,15 +9,20 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.crypto.Data;
+
+import com.sun.jersey.api.json.JSONWithPadding;
 
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
@@ -63,7 +68,8 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getdss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getDatasetsNames() {
+	public JSONWithPadding getDatasetsNames(
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDatasetsNames " + uriInfo.getAbsolutePath());
 		String result = "";
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
@@ -88,7 +94,10 @@ public class DsGetFunctions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return datasetsName;
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
+		}, callback);
+
 	}
 
 	/**
@@ -481,7 +490,7 @@ public class DsGetFunctions {
 
 	@GET
 	@Path("/hello")
-	@Produces({ MediaType.TEXT_PLAIN })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public String getString() {
 		String a = "{\"city\":\"helloworld_json\"}";
 		System.out.println(a);
@@ -490,9 +499,23 @@ public class DsGetFunctions {
 
 	@GET
 	@Path("/hello")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.TEXT_PLAIN })
 	public String getString2() {
 		System.out.println("{helloworld_json}");
-		return "{\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025}";
+		return "{helloworld_json}";
+	}
+
+	@GET
+	@Path("/jsonp")
+	@Produces({ MediaType.TEXT_PLAIN,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public JSONWithPadding readAllP(
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
+			@QueryParam("acronym") String acronym,
+			@QueryParam("title") String title,
+			@QueryParam("competition") String competition) {
+		String a = "{\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025}";
+		System.out.println(a);
+		return new JSONWithPadding(new GenericEntity<String>(a) {
+		}, callback);
 	}
 }

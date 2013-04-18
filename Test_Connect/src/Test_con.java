@@ -25,8 +25,8 @@ public class Test_con {
 //		System.out.println(service.path("rest").path("ds").path("getdatasets")
 //		        .accept(MediaType.APPLICATION_XML).get(String.class));
 //		
-//		System.out.println(service.path("rest").path("ds").path("getdatasets")
-//		        .accept(MediaType.APPLICATION_JSON).get(String.class));
+		System.out.println(service.path("rest").path("dsg").path("getdss")
+		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 		
 //		System.out.println(service.path("rest").path("ds").path("getlocation/RegionInfo3")
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));
@@ -39,7 +39,7 @@ public class Test_con {
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 //		System.out.println(service.path("rest").path("ds").path("getgeodatasets")
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));
-//		System.out.println(service.path("rest").path("dsg").path("/getdsfields/RegionInfo2")
+//		System.out.println(service.path("rest").path("dsg").path("/getdsfds/RegionInfo2")
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 //		System.out.println(service.path("rest").path("dsg").path("/getds/RegionInfo2/SiteName")
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));
@@ -47,26 +47,28 @@ public class Test_con {
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));		
 //		System.out.println(service.path("rest").path("dsg").path("/getds/RegionInfo2/SiteName/=/”—“Í“Ω‘∫")
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));	
-//		System.out.println(service.path("dataset").path("getdatasets")
-//		        .accept(MediaType.TEXT_PLAIN).get(String.class));
+//			System.out.println(service.path("rest").path("dsg").path("hello")
+//			        .accept(MediaType.APPLICATION_JSON).get(String.class));
+		    System.out.println(service.path("rest").path("dsg").path("jsonp")
+		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 //		
-		JSONObject job= new JSONObject();
-		try {
-			job.put("name", "asd");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		    service.path("rest").path("dsd").path("/rmds/sa").delete();
-		    ClientResponse response = service.path("rest").path("dsu").path("/upds/a/b")
-		        .accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, job);
-System.out.println(response.getStatus());
+//		JSONObject job= new JSONObject();
+//		try {
+//			job.put("name", "asd");
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		    service.path("rest").path("dsd").path("/rmds/sa").delete();
+//		    ClientResponse response = service.path("rest").path("dsu").path("/upds/a/b")
+//		        .accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, job);
+//System.out.println(response.getStatus());
 		
 //		System.out.println(service.path("rest").path("dsd").path("/rmds/a")
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 	}
 	  private static URI getBaseURI() {
-		    return UriBuilder.fromUri("http://localhost:8080/mdap").build();
+		    return UriBuilder.fromUri("http://10.1.1.55:8081/mdap").build();
 		  }
 
 }

@@ -4,7 +4,6 @@ getLocationUrl = "http://10.1.1.55:8081/mdap/rest/ds/getlocation/";
 
 function initialize(){
 	mapInitialize();
-
 	width = document.documentElement.clientWidth;
 	url = getDatasetUrl;
 	$.getJSON(url,function(data){
