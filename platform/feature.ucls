@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.2" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="edu.thu.keg.mdap.datasetfeature.StatisticsFeature" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datasetfeature/StatisticsFeature.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="218" x="83" y="367"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="edu.thu.keg.mdap.datasetfeature.TimeSeriesFeature" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datasetfeature/TimeSeriesFeature.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="274" x="83" y="650"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="edu.thu.keg.mdap.datasetfeature.GeoFeature" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datasetfeature/GeoFeature.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="323" x="341" y="367"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="edu.thu.keg.mdap.datasetfeature.DataSetFeature" project="platform" 
+    file="/platform/src/edu/thu/keg/mdap/datasetfeature/DataSetFeature.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="323" x="212" y="66"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <generalization id="5">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <generalization id="6">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <generalization id="7">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
