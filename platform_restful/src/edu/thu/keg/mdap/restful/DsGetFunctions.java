@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -66,7 +67,8 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdss")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ "application/x-javascript", MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML })
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDatasetsNames " + uriInfo.getAbsolutePath());
@@ -364,7 +366,7 @@ public class DsGetFunctions {
 		System.out.println("getDatasetFieldsNames " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
-			try {
+		try {
 
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
@@ -484,17 +486,25 @@ public class DsGetFunctions {
 		return "{helloworld_json}";
 	}
 
+
+
 	@GET
-	@Path("/jsonp")
-	@Produces({ MediaType.TEXT_PLAIN,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("jsonp")
+	@Produces({ "application/x-javascript", MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML })
 	public JSONWithPadding readAllP(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@QueryParam("acronym") String acronym,
 			@QueryParam("title") String title,
 			@QueryParam("competition") String competition) {
-		String a = "{\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025}";
-		System.out.println(a);
-		return new JSONWithPadding(new GenericEntity<String>(a) {
-		}, callback);
+		JDatasetName jdn= new JDatasetName();
+		jdn.setDatasetName("a");
+		jdn.setDescription("aaaa");
+		
+		Collection<JDatasetName> competitions = new HashSet<JDatasetName>();
+		competitions.add(jdn);
+		return new JSONWithPadding(
+				new GenericEntity<Collection<JDatasetName>>(competitions) {
+				}, callback);
 	}
 }
