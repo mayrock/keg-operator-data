@@ -52,7 +52,6 @@ public class DsGetFunctions {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	@Context
 	UriInfo uriInfo;
 	@Context
@@ -71,7 +70,6 @@ public class DsGetFunctions {
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDatasetsNames " + uriInfo.getAbsolutePath());
-		String result = "";
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
 
@@ -83,7 +81,6 @@ public class DsGetFunctions {
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
 				ArrayList<String> schema = new ArrayList<>();
-				ArrayList<Class> type = new ArrayList<>();
 				for (DataField df : dataset.getDataFields()) {
 					schema.add(df.getColumnName());
 				}
@@ -182,13 +179,11 @@ public class DsGetFunctions {
 		System.out.println("getDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		List<JDataset> datasetList = new ArrayList<>();
-		DataSet ds = null;
-		DataContent rs = null;
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			ds = datasetManager.getDataSet(dataset);
-			rs = ds.getQuery();
+			DataSet ds = datasetManager.getDataSet(dataset);
+			DataContent rs = ds.getQuery();
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
@@ -226,19 +221,16 @@ public class DsGetFunctions {
 				+ uriInfo.getAbsolutePath());
 		System.out.println("getDataSetLocation " + dataset);
 		List<JLocation> al_rs = new ArrayList<JLocation>();
-		DataSet ds = null;
-		DataContent rs = null;
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			ds = datasetManager.getDataSet(dataset);
-			rs = ds.getQuery();
+			DataSet ds = datasetManager.getDataSet(dataset);
+			DataContent rs = ds.getQuery();
 			GeoFeature gds = (GeoFeature) ds.getFeature(GeoFeature.class);
 			if (gds == null)
 				throw new OperationNotSupportedException(
 						"can't find the geograph Exception");
 			rs.open();
-			int i = 0;
 			while (rs.next()) {
 				JLocation location = new JLocation();
 				location.setTag(rs.getValue(gds.getTagField()).toString());
@@ -268,15 +260,11 @@ public class DsGetFunctions {
 		System.out.println("getStaDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		List<JStatistic> al_rs = new ArrayList<JStatistic>();
-		DataSet ds = null;
-		DataContent rs = null;
 		try {
-
 			Platform p = (Platform) servletcontext.getAttribute("platform");
-
 			DataSetManager datasetManager = p.getDataSetManager();
-			ds = datasetManager.getDataSet(dataset);
-			rs = ds.getQuery();
+			DataSet ds = datasetManager.getDataSet(dataset);
+			DataContent rs = ds.getQuery();
 			StatisticsFeature gds = (StatisticsFeature) ds
 					.getFeature(StatisticsFeature.class);
 			if (gds == null)
@@ -324,13 +312,11 @@ public class DsGetFunctions {
 		System.out.println("getStaTimeDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		List<JStatistic> al_rs = new ArrayList<JStatistic>();
-		DataSet ds = null;
-		DataContent rs = null;
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			ds = datasetManager.getDataSet(dataset);
-			rs = ds.getQuery();
+			DataSet ds = datasetManager.getDataSet(dataset);
+			DataContent rs = ds.getQuery();
 			TimeSeriesFeature gds = (TimeSeriesFeature) ds
 					.getFeature(TimeSeriesFeature.class);
 			if (gds == null)
@@ -349,7 +335,6 @@ public class DsGetFunctions {
 					keys.add(rs.getValue(key).toString());
 				}
 				ArrayList<Double> values = new ArrayList<>();
-				ArrayList<String> names = new ArrayList<>();
 				for (DataField value : gds.getValueFields()) {
 					values.add(Double.valueOf(rs.getValue(value).toString()));
 				}
@@ -379,12 +364,11 @@ public class DsGetFunctions {
 		System.out.println("getDatasetFieldsNames " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
-		DataSet ds = null;
-		try {
+			try {
 
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			ds = datasetManager.getDataSet(dataset);
+			DataSet ds = datasetManager.getDataSet(dataset);
 			DataField[] dfs = ds.getDataFields();
 			for (DataField df : dfs) {
 				JFieldName jfn = new JFieldName();
@@ -418,17 +402,15 @@ public class DsGetFunctions {
 			@PathParam("fieldname") String fieldname) {
 		System.out.println("getDatasetField " + dataset + " " + fieldname + " "
 				+ uriInfo.getAbsolutePath());
-		DataSet ds = null;
 		System.out.println("getField " + dataset);
-		DataContent rs = null;
 		List<JField> all_jf = new ArrayList<JField>();
 		try {
 
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			ds = datasetManager.getDataSet(dataset);
+			DataSet ds = datasetManager.getDataSet(dataset);
 			DataField df = ds.getField(fieldname);
-			rs = ds.getQuery();
+			DataContent rs = ds.getQuery();
 			rs.open();
 			while (rs.next()) {
 				JField jf = new JField();
@@ -458,16 +440,13 @@ public class DsGetFunctions {
 		System.out.println("getDatasetValueOfOpr " + dataset + " " + fieldname
 				+ " " + opr + " " + value + " " + uriInfo.getAbsolutePath());
 		List<JDataset> datasetList = new ArrayList<>();
-		DataSet ds = null;
-		DataContent rs = null;
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			ds = datasetManager.getDataSet(dataset);
-			rs = ds.getQuery().where(ds.getField(fieldname),
+			DataSet ds = datasetManager.getDataSet(dataset);
+			DataContent rs = ds.getQuery().where(ds.getField(fieldname),
 					Operator.parse(opr), value);
 			rs.open();
-			int i = 0;
 			while (rs.next()) {
 				JDataset jdataset = new JDataset();
 				List<JField> fields = new ArrayList<JField>();
