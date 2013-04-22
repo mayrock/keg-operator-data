@@ -38,7 +38,7 @@ import edu.thu.keg.mdap.restful.jerseyclasses.JDataset;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
 import edu.thu.keg.mdap.restful.jerseyclasses.JFieldName;
-import edu.thu.keg.mdap.restful.jerseyclasses.JLocation;
+import edu.thu.keg.mdap.restful.jerseyclasses.JGeograph;
 import edu.thu.keg.mdap.restful.jerseyclasses.JStatistic;
 
 /**
@@ -213,14 +213,14 @@ public class DsGetFunctions {
 	 * @return a json or xml format location array
 	 */
 	@GET
-	@Path("/getlocds/{datasetname}")
+	@Path("/getgeods/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JLocation> getLocDataset(
+	public List<JGeograph> getGeoDataset(
 			@PathParam("datasetname") String dataset) {
 		System.out.println("getLocDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		System.out.println("getDataSetLocation " + dataset);
-		List<JLocation> al_rs = new ArrayList<JLocation>();
+		List<JGeograph> al_rs = new ArrayList<JGeograph>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
@@ -232,7 +232,7 @@ public class DsGetFunctions {
 						"can't find the geograph Exception");
 			rs.open();
 			while (rs.next()) {
-				JLocation location = new JLocation();
+				JGeograph location = new JGeograph();
 				location.setTag(rs.getValue(gds.getTagField()).toString());
 				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
 				location.setLongitude((double) rs.getValue(gds.getKeyFields()[1]));

@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
-public class JLocation {
+public class JGeograph {
 	private String tag;
 	private double weight;
 	private double longitude;
