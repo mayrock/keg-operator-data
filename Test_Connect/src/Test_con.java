@@ -25,8 +25,8 @@ public class Test_con {
 //		System.out.println(service.path("rest").path("ds").path("getdatasets")
 //		        .accept(MediaType.APPLICATION_XML).get(String.class));
 //		
-		System.out.println(service.path("rest").path("dsg").path("getdss")
-		        .accept(MediaType.APPLICATION_JSON).get(String.class));
+//		System.out.println(service.path("rest").path("dsg").path("getdss")
+//		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 		
 //		System.out.println(service.path("rest").path("ds").path("getlocation/RegionInfo3")
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));
@@ -45,12 +45,12 @@ public class Test_con {
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 //		System.out.println(service.path("rest").path("dsg").path("/getds/RegionInfo2")
 //		        .accept(MediaType.APPLICATION_JSON).get(String.class));		
-//		System.out.println(service.path("rest").path("dsg").path("/getds/RegionInfo2/SiteName/=/友谊医院")
-//		        .accept(MediaType.APPLICATION_JSON).get(String.class));	
+		System.out.println(service.path("rest").path("dsg").path("/getds/RegionInfo2/SiteName/=/友谊医院")
+		        .accept(MediaType.APPLICATION_JSON).get(String.class));	
 //			System.out.println(service.path("rest").path("dsg").path("hello")
 //			        .accept(MediaType.APPLICATION_JSON).get(String.class));
-		    System.out.println(service.path("rest").path("dsg").path("jsonp")
-		        .accept(MediaType.APPLICATION_JSON).get(String.class));
+//		    System.out.println(service.path("rest").path("dsg").path("jsonp")
+//		        .accept(MediaType.APPLICATION_JSON).get(String.class));
 //		
 //		JSONObject job= new JSONObject();
 //		try {
