@@ -1,10 +1,7 @@
 package edu.thu.keg.mdap.restful;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
@@ -20,7 +17,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.crypto.Data;
 
 import com.sun.jersey.api.json.JSONWithPadding;
 
@@ -72,7 +68,6 @@ public class DsGetFunctions {
 		System.out.println("getDatasetsNames " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
-
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
