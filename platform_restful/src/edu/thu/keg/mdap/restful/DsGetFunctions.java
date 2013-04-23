@@ -100,11 +100,11 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getgeodss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getGeoDatasetsNames() {
+	public JSONWithPadding getGeoDatasetsNames(
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getGeoDatasetsNames " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
-
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
@@ -124,7 +124,9 @@ public class DsGetFunctions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return datasetsName;
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
+		}, callback);
 	}
 
 	/**
@@ -135,7 +137,8 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getstadss")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<JDatasetName> getStaDatasetsNames() {
+	public JSONWithPadding getStaDatasetsNames(
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getStaDatasetsNames " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
@@ -158,7 +161,9 @@ public class DsGetFunctions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return datasetsName;
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
+		}, callback);
 	}
 
 	/**
@@ -170,7 +175,8 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JDataset> getDataset(@PathParam("datasetname") String dataset) {
+	public JSONWithPadding getDataset(@PathParam("datasetname") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		List<JDataset> datasetList = new ArrayList<>();
@@ -198,7 +204,9 @@ public class DsGetFunctions {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return datasetList;
+		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
+				datasetList) {
+		}, callback);
 	}
 
 	/**
@@ -210,12 +218,13 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getgeods/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JGeograph> getGeoDataset(
-			@PathParam("datasetname") String dataset) {
+	public JSONWithPadding getGeoDataset(
+			@PathParam("datasetname") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getLocDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		System.out.println("getDataSetLocation " + dataset);
-		List<JGeograph> al_rs = new ArrayList<JGeograph>();
+		List<JGeograph> datasetList = new ArrayList<JGeograph>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
@@ -231,14 +240,16 @@ public class DsGetFunctions {
 				location.setTag(rs.getValue(gds.getTagField()).toString());
 				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
 				location.setLongitude((double) rs.getValue(gds.getKeyFields()[1]));
-				al_rs.add(location);
+				datasetList.add(location);
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return al_rs;
+		return new JSONWithPadding(new GenericEntity<List<JGeograph>>(
+				datasetList) {
+		}, callback);
 	}
 
 	/**
@@ -250,11 +261,12 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getstads/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JStatistic> getStaDataset(
-			@PathParam("datasetname") String dataset) {
+	public JSONWithPadding getStaDataset(
+			@PathParam("datasetname") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getStaDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
-		List<JStatistic> al_rs = new ArrayList<JStatistic>();
+		List<JStatistic> datasetList = new ArrayList<JStatistic>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
@@ -283,14 +295,16 @@ public class DsGetFunctions {
 				}
 				statistic.setKey(keys);
 				statistic.setValue(values);
-				al_rs.add(statistic);
+				datasetList.add(statistic);
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return al_rs;
+		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
+				datasetList) {
+		}, callback);
 	}
 
 	/**
@@ -302,11 +316,12 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getstatds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JStatistic> getStaTimeDataset(
-			@PathParam("datasetname") String dataset) {
+	public JSONWithPadding getStaTimeDataset(
+			@PathParam("datasetname") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getStaTimeDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
-		List<JStatistic> al_rs = new ArrayList<JStatistic>();
+		List<JStatistic> datasetList = new ArrayList<JStatistic>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
@@ -335,14 +350,16 @@ public class DsGetFunctions {
 				}
 				statistic.setKey(keys);
 				statistic.setValue(values);
-				al_rs.add(statistic);
+				datasetList.add(statistic);
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return al_rs;
+		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
+				datasetList) {
+		}, callback);
 	}
 
 	/**
@@ -354,13 +371,13 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getdsfds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JFieldName> getDatasetFieldsNames(
-			@PathParam("datasetname") String dataset) {
+	public JSONWithPadding getDatasetFieldsNames(
+			@PathParam("datasetname") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDatasetFieldsNames " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
-			try {
-
+		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
@@ -379,88 +396,10 @@ public class DsGetFunctions {
 		} finally {
 
 		}
-		return all_fn;
+		return new JSONWithPadding(new GenericEntity<List<JFieldName>>(all_fn) {
+		}, callback);
 	}
 
-	/**
-	 * get a column form the dataset
-	 * 
-	 * @param dataset
-	 * @param fieldname
-	 * @return
-	 */
-	@GET
-	@Path("/getds/{datasetname}/{fieldname}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JField> getDatasetField(
-			@PathParam("datasetname") String dataset,
-			@PathParam("fieldname") String fieldname) {
-		System.out.println("getDatasetField " + dataset + " " + fieldname + " "
-				+ uriInfo.getAbsolutePath());
-		System.out.println("getField " + dataset);
-		List<JField> all_jf = new ArrayList<JField>();
-		try {
-
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
-			DataField df = ds.getField(fieldname);
-			DataContent rs = ds.getQuery();
-			rs.open();
-			while (rs.next()) {
-				JField jf = new JField();
-				jf.setField(rs.getValue(df));
-				all_jf.add(jf);
-			}
-			rs.close();
-		} catch (OperationNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-		}
-		return all_jf;
-	}
-
-	@GET
-	@Path("/getds/{datasetname}/{fieldname}/{opr}/{value}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JDataset> getDatasetValueOfOpr(
-			@PathParam("datasetname") String dataset,
-			@PathParam("fieldname") String fieldname,
-			@PathParam("opr") String opr, @PathParam("value") String value) {
-		System.out.println("getDatasetValueOfOpr " + dataset + " " + fieldname
-				+ " " + opr + " " + value + " " + uriInfo.getAbsolutePath());
-		List<JDataset> datasetList = new ArrayList<>();
-		try {
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
-			DataContent rs = ds.getQuery().where(ds.getField(fieldname),
-					Operator.parse(opr), value);
-			rs.open();
-			while (rs.next()) {
-				JDataset jdataset = new JDataset();
-				List<JField> fields = new ArrayList<JField>();
-				DataField[] dfs = ds.getDataFields();
-				for (DataField df : dfs) {
-					JField field = new JField();
-					field.setField(rs.getValue(df));
-					fields.add(field);
-				}
-				jdataset.setField(fields);
-				datasetList.add(jdataset);
-			}
-			rs.close();
-		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return datasetList;
-	}
 
 	@GET
 	@Path("/hello")
@@ -481,7 +420,8 @@ public class DsGetFunctions {
 
 	@GET
 	@Path("/jsonp")
-	@Produces({ MediaType.TEXT_PLAIN,MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML })
 	public JSONWithPadding readAllP(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@QueryParam("acronym") String acronym,
