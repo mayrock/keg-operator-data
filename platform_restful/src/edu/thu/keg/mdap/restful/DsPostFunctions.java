@@ -115,7 +115,7 @@ public class DsPostFunctions {
 	 * @return
 	 */
 	@POST
-	@Path("/getdsf/{datasetname}")
+	@Path("/getds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<List<JField>> getDatasetField(
 			@PathParam("datasetname") String dataset, JSONObject JContent,
@@ -174,7 +174,7 @@ public class DsPostFunctions {
 	 * @return
 	 */
 	@POST
-	@Path("/getds/{datasetname}")
+	@Path("/getdsres/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<JDataset> getDatasetValueOfOpr(
 			@PathParam("datasetname") String dataset, JSONObject JContent) {
