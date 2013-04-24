@@ -223,7 +223,6 @@ public class DsGetFunctions {
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getLocDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
-		System.out.println("getDataSetLocation " + dataset);
 		List<JGeograph> datasetList = new ArrayList<JGeograph>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -280,10 +279,10 @@ public class DsGetFunctions {
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
-				System.out.println(rs.getValue(ds.getDataFields()[0])
-						.toString()
-						+ " "
-						+ rs.getValue(ds.getDataFields()[1]).toString());
+//				System.out.println(rs.getValue(ds.getDataFields()[0])
+//						.toString()
+//						+ " "
+//						+ rs.getValue(ds.getDataFields()[1]).toString());
 				JStatistic statistic = new JStatistic();
 				ArrayList<String> keys = new ArrayList<>();
 				for (DataField key : gds.getKeyFields()) {

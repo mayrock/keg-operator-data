@@ -118,11 +118,11 @@ public class DsPostFunctions {
 	@Path("/getds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<List<JField>> getDatasetField(
-			@PathParam("datasetname") String dataset, JSONObject JContent,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+			@PathParam("datasetname") String dataset, JSONObject JContent) {
 		JSONArray jsonFileds = null;
 		String fieldname = null;
 		List<List<JField>> all_dfs = null;
+		System.out.println("POST");
 		try {
 			if (JContent.has("Fields"))
 				jsonFileds = JContent.getJSONArray("Fields");
