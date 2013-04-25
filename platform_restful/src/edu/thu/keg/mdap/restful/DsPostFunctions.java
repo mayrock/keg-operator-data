@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -117,7 +118,7 @@ public class DsPostFunctions {
 	@POST
 	@Path("/getds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<List<JField>> getDatasetField(
+	public Response getDatasetField(
 			@PathParam("datasetname") String dataset, JSONObject JContent) {
 		JSONArray jsonFileds = null;
 		String fieldname = null;
@@ -161,7 +162,8 @@ public class DsPostFunctions {
 		} finally {
 
 		}
-		return all_dfs;
+		return Response.created(uriInfo.getAbsolutePath()).entity(all_dfs).build();
+//		return all_dfs;
 	}
 
 	/**
