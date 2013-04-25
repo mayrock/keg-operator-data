@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="webmodulebuilder"  default="deploy"  basedir=".">
+
+
+  <!-- set global properties for this build -->
+  
+  <!-- 发布WEB路径 -->
+  <property name="DEPLOY_PATH" value="D:/apache-tomcat-7.0.11/webapps/platform_restful/WebContent" /> 
+  
+  <!-- 源WEB路径 -->
+  <property name="WEB_PATH" value="D:/GitHub/keg-operator-data/platform_restful/WebContent" />
+  
+  
+   <!-- 源编译的jar包路径 -->
+  <property name="JAR_PATH_PLA" value="D:/GitHub/keg-operator-data/libraries" />
+  
+  <!-- 源platfrom的java文件路径 -->
+  <property name="SCR_PATH_PLA" value="D:/GitHub/keg-operator-data/platform/src" /> 
+  
+  <!-- 源platfrom的编译的jar包路径 -->
+  <property name="JAR_PATH" value="D:/GitHub/keg-operator-data/platform_restful/WebContent/WEB-INF/lib" />
+  
+  <!-- 源java文件路径 -->
+  <property name="SCR_PATH" value="D:/GitHub/keg-operator-data/platform_restful/src" /> 
+  
+  
+  <!-- 源class文件路径 -->
+  <property name="CLASS_PATH" value="D:/GitHub/keg-operator-data/platform_restful/WebContent/WEB-INF/classes" />  
+  
+  <!-- 定义classpath -->
+  <path id="LIB_CLASS_PATH">
+       <fileset file="${JAR_PATH}/*.jar" />
+       <pathelement path="${CLASS_PATH}"/>
+  </path>
+
+  <!-- 初试化 -->  
+  <target name="init">      
+    <mkdir dir="${DEPLOY_PATH}"/>
+    <mkdir dir="${DEPLOY_PATH}/WEB-INF"/>
+    <mkdir dir="${DEPLOY_PATH}/WEB-INF/classes"/>
+    <mkdir dir="${DEPLOY_PATH}/WEB-INF/lib"/>  
+  </target>
+
+  <target name="compile_pla" depends="init" description="compile the source files2">
+      <mkdir dir="${CLASS_PATH}"/>
+      <javac srcdir="${SCR_PATH_PLA}" destdir="${CLASS_PATH}">
+           <classpath refid="LIB_CLASS_PATH"/>
+      </javac>
+  </target>
+  <!-- 编译类 -->
+  <target name="compile" depends="init" description="compile the source files">
+      <!-- mkdir dir="${CLASS_PATH}"-->
+      <javac srcdir="${SCR_PATH}" destdir="${CLASS_PATH}">
+           <classpath refid="LIB_CLASS_PATH"/>
+      </javac>
+  </target>
+  
+  
+  <!-- Copy发布-->
+  <target name="deploy" depends="init,compile_pla,compile" >
+    <copy todir="${DEPLOY_PATH}">
+      <fileset dir="${WEB_PATH}">
+        <include name="**/*.*"/>
+        <exclude name="**/jsp_servlet/*.class"/>
+        <exclude name="**/build.xml"/>
+        <exclude name="**/deploy.xml"/>
+        <exclude name="**/build.properties"/>
+        <exclude name="**/servers.xml"/>
+        <exclude name="**/targets.xml"/>
+        <exclude name="**/*.war"/>
+      </fileset>
+    </copy>     
+  </target>  
+  
+</project>
+
