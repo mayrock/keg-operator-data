@@ -205,8 +205,7 @@ public class DsGetFunctions {
 			e.printStackTrace();
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
-				datasetList) {
-		}, callback);
+				datasetList) {}, callback);
 	}
 
 	/**
@@ -279,10 +278,10 @@ public class DsGetFunctions {
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
-//				System.out.println(rs.getValue(ds.getDataFields()[0])
-//						.toString()
-//						+ " "
-//						+ rs.getValue(ds.getDataFields()[1]).toString());
+				// System.out.println(rs.getValue(ds.getDataFields()[0])
+				// .toString()
+				// + " "
+				// + rs.getValue(ds.getDataFields()[1]).toString());
 				JStatistic statistic = new JStatistic();
 				ArrayList<String> keys = new ArrayList<>();
 				for (DataField key : gds.getKeyFields()) {
@@ -398,7 +397,6 @@ public class DsGetFunctions {
 		return new JSONWithPadding(new GenericEntity<List<JFieldName>>(all_fn) {
 		}, callback);
 	}
-
 
 	@GET
 	@Path("/hello")

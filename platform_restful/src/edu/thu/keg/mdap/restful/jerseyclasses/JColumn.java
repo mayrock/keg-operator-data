@@ -12,13 +12,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class JColumn {
-	private List<JField> field;
+	private List<JField> column ;
 
-	public void setField(List<JField> field) {
-		this.field = field;
+	public void setColumn(List<JField> column) {
+		this.column = column;
 	}
 
-	public List<JField> getField() {
-		return this.field;
+	public List<JField> getColumn() {
+		return this.column;
 	}
 }

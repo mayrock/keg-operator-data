@@ -1,5 +1,7 @@
 package edu.thu.keg.mdap.restful;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +17,24 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.annotate.JsonAnySetter;
+import org.codehaus.jackson.map.JsonSerializer;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.sun.jersey.api.json.JSONWithPadding;
+import com.sun.jersey.json.impl.provider.entity.JSONArrayProvider;
 import com.sun.jersey.json.impl.provider.entity.JSONObjectProvider;
 
 import edu.thu.keg.mdap.DataSetManager;
@@ -37,6 +47,7 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
+import edu.thu.keg.mdap.restful.jerseyclasses.JColumn;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDataset;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
 
@@ -117,12 +128,14 @@ public class DsPostFunctions {
 	 */
 	@POST
 	@Path("/getds/{datasetname}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response getDatasetField(
-			@PathParam("datasetname") String dataset, JSONObject JContent) {
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONWithPadding getDatasetField(
+			@PathParam("datasetname") String dataset, JSONObject JContent,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		JSONArray jsonFileds = null;
 		String fieldname = null;
-		List<List<JField>> all_dfs = null;
+		List<JColumn> all_dfs = null;
+		List<JField> list_df = null;
 		System.out.println("POST");
 		try {
 			if (JContent.has("Fields"))
@@ -133,7 +146,7 @@ public class DsPostFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
-			List<JField> list_df = null;
+
 			for (int i = 0; i < jsonFileds.length(); i++) {
 				fieldname = (String) jsonFileds.get(i);
 				System.out.println("getDatasetField " + dataset + " "
@@ -148,8 +161,19 @@ public class DsPostFunctions {
 					list_df.add(jf);
 				}
 				rs.close();
+				// ObjectMapper mapper = new ObjectMapper();
+				// StringWriter sw = new StringWriter();
+				// JsonGenerator gen = new
+				// JsonFactory().createJsonGenerator(sw);
+				// mapper.writeValue(gen, list_df);
+				// gen.close();
+				// String json = sw.toString();
+				// System.out.println("json: "+json);
+				JColumn jc = new JColumn();
+				jc.setColumn(list_df);
+				all_dfs.add(jc);
 			}
-			all_dfs.add(list_df);
+
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -162,8 +186,12 @@ public class DsPostFunctions {
 		} finally {
 
 		}
-		return Response.created(uriInfo.getAbsolutePath()).entity(all_dfs).build();
-//		return all_dfs;
+		// return all_dfs;
+		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
+		}, callback);
+		// return
+		// Response.created(uriInfo.getAbsolutePath()).entity("wowowoowo").build();
+		// return all_dfs;
 	}
 
 	/**

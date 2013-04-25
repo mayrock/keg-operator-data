@@ -48,6 +48,7 @@ public class Test_con {
 		// System.out.println(service.path("rest").path("dsg").path("jsonp")
 		// .accept(MediaType.APPLICATION_JSON).get(String.class));
 		//
+		System.out.println(".........................");
 		JSONObject job = new JSONObject();
 		JSONArray fields = new JSONArray();
 		fields.put("SiteName");
