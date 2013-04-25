@@ -43,7 +43,7 @@ public class Test_con {
 						.path("/getdsfds/RegionInfo2")
 						.accept(MediaType.APPLICATION_JSON).get(String.class));
 
-		// System.out.println(service.path("rest").path("dsg").path("hello")
+		//  System.out.println(service.path("rest").path("dsg").path("hello")
 		// .accept(MediaType.APPLICATION_JSON).get(String.class));
 		// System.out.println(service.path("rest").path("dsg").path("jsonp")
 		// .accept(MediaType.APPLICATION_JSON).get(String.class));
