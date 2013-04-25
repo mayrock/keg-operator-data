@@ -1,8 +1,5 @@
 package edu.thu.keg.mdap.restful;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +7,6 @@ import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,23 +15,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.sun.jersey.api.json.JSONWithPadding;
-import com.sun.jersey.json.impl.provider.entity.JSONArrayProvider;
-import com.sun.jersey.json.impl.provider.entity.JSONObjectProvider;
 
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
@@ -48,7 +35,6 @@ import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JColumn;
-import edu.thu.keg.mdap.restful.jerseyclasses.JDataset;
 import edu.thu.keg.mdap.restful.jerseyclasses.JField;
 
 /**

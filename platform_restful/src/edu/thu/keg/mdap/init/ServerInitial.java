@@ -1,17 +1,11 @@
 package edu.thu.keg.mdap.init;
 
-
-
-
-
-import java.lang.annotation.Target;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import javax.ws.rs.core.Context;
 
 import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap_impl.PlatformImpl;

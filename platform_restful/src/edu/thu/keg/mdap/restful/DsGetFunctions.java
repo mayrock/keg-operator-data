@@ -25,7 +25,6 @@ import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datasetfeature.GeoFeature;
 import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
 import edu.thu.keg.mdap.datasetfeature.TimeSeriesFeature;
