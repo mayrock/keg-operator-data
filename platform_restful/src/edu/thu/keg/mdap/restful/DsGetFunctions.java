@@ -71,7 +71,10 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
+			int i=0;
 			for (DataSet dataset : datasets) {
+				if(i++>=2)
+					break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
@@ -109,7 +112,10 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
 					.getDataSetList(GeoFeature.class);
+			int i=0;
 			for (DataSet dataset : datasets) {
+				if(i++>=2)
+					break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
@@ -146,7 +152,10 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
 					.getDataSetList(StatisticsFeature.class);
+			int i=0;
 			for (DataSet dataset : datasets) {
+				if(i++>=2)
+					break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
@@ -187,11 +196,14 @@ public class DsGetFunctions {
 			DataContent rs = ds.getQuery();
 			rs.open();
 			int i = 0;
-			while (rs.next() && i++ < 20) {
+			while (rs.next() && i++ < 2) {
 				JDataset jdataset = new JDataset();
 				List<JField> fields = new ArrayList<>();
 				DataField[] dfs = ds.getDataFields();
-				for (DataField df : dfs) {
+				int j=0;
+				for (DataField df : dfs ) {
+					if(j++>=2)
+						break;
 					JField field = new JField();
 					field.setField(rs.getValue(df));
 					fields.add(field);
@@ -233,7 +245,8 @@ public class DsGetFunctions {
 				throw new OperationNotSupportedException(
 						"can't find the geograph Exception");
 			rs.open();
-			while (rs.next()) {
+			int i=0;
+			while (rs.next() && i++<2) {
 				JGeograph location = new JGeograph();
 				location.setTag(rs.getValue(gds.getTagField()).toString());
 				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
@@ -276,8 +289,8 @@ public class DsGetFunctions {
 				throw new OperationNotSupportedException(
 						"can't find the statistic Exception");
 			rs.open();
-			int i = 0;
-			while (rs.next() && i++ < 20) {
+			int i=0;
+			while (rs.next() && i++<2) {
 				// System.out.println(rs.getValue(ds.getDataFields()[0])
 				// .toString()
 				// + " "

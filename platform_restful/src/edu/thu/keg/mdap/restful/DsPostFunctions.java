@@ -138,8 +138,8 @@ public class DsPostFunctions {
 		List<JField> list_df = null;
 		System.out.println("POST");
 		try {
-			if (JContent.has("Fields"))
-				jsonFileds = JContent.getJSONArray("Fields");
+			if (JContent.has("fields"))
+				jsonFileds = JContent.getJSONArray("fields");
 			else
 				throw new JSONException("have not the this Field");
 			all_dfs = new ArrayList<>();
@@ -155,7 +155,8 @@ public class DsPostFunctions {
 				DataField df = ds.getField(fieldname);
 				DataContent rs = ds.getQuery();
 				rs.open();
-				while (rs.next()) {
+				int ii = 0;
+				while (rs.next() && ii++ < 2) {
 					JField jf = new JField();
 					jf.setField(rs.getValue(df));
 					list_df.add(jf);
@@ -174,9 +175,9 @@ public class DsPostFunctions {
 				all_dfs.add(jc);
 			}
 
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (JSONException e) {
+			System.out.println("POST: Json form wrong!");
+			e.printStackTrace();
 		} catch (OperationNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -189,9 +190,6 @@ public class DsPostFunctions {
 		// return all_dfs;
 		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
 		}, callback);
-		// return
-		// Response.created(uriInfo.getAbsolutePath()).entity("wowowoowo").build();
-		// return all_dfs;
 	}
 
 	/**
@@ -206,37 +204,58 @@ public class DsPostFunctions {
 	@POST
 	@Path("/getdsres/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<JDataset> getDatasetValueOfOpr(
-			@PathParam("datasetname") String dataset, JSONObject JContent) {
-		String fieldname = null, opr = null, value = null;
-		System.out.println("getDatasetValueOfOpr " + dataset + " " + fieldname
-				+ " " + opr + " " + value + " " + uriInfo.getAbsolutePath());
-		List<JDataset> datasetList = new ArrayList<>();
+	public JSONWithPadding getDatasetValueOfOpr(
+			@PathParam("datasetname") String dataset, JSONObject JContent,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		String fieldname = null;
+		String opr = null;
+		String value = null;
+		JSONArray jsonOper = null;
+		List<JColumn> all_dfs = null;
+		List<JField> list_df = null;
 		try {
+			if (JContent.has("jsonOper"))
+				jsonOper = JContent.getJSONArray("jsonOper");
+			else
+				throw new JSONException("have not the this Operation");
+			all_dfs = new ArrayList<>();
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
-			DataContent rs = ds.getQuery().where(ds.getField(fieldname),
-					Operator.parse(opr), value);
-			rs.open();
-			while (rs.next()) {
-				JDataset jdataset = new JDataset();
-				List<JField> fields = new ArrayList<JField>();
-				DataField[] dfs = ds.getDataFields();
-				for (DataField df : dfs) {
-					JField field = new JField();
-					field.setField(rs.getValue(df));
-					fields.add(field);
+
+			for (int i = 0; i < jsonOper.length(); i++) {
+				JSONObject job = (JSONObject) jsonOper.get(i);
+				fieldname = job.getString("fieldname");
+				opr = job.getString("opr");
+				value = job.getString("value");
+				System.out.println("getDatasetValueOfOpr " + dataset + " "
+						+ fieldname + " " + opr + " " + value + " "
+						+ uriInfo.getAbsolutePath());
+				list_df = new ArrayList<JField>();
+				DataField df = ds.getField(fieldname);
+				DataContent rs = ds.getQuery().where(df, Operator.parse(opr),
+						value);
+				rs.open();
+				int ii = 0;
+				while (rs.next() && ii++ < 2) {
+					JField jf = new JField();
+					jf.setField(rs.getValue(df));
+					list_df.add(jf);
 				}
-				jdataset.setField(fields);
-				datasetList.add(jdataset);
+				rs.close();
+				JColumn jc = new JColumn();
+				jc.setColumn(list_df);
+				all_dfs.add(jc);
 			}
-			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (JSONException e) {
+			System.out.println("POST: Json form wrong!");
+			e.printStackTrace();
 		}
-		return datasetList;
+		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
+		}, callback);
 	}
 
 }
