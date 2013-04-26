@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="webmodulebuilder" default="deploy" basedir=".">
-
+	<property file="build.properties" />
 
 	<!-- set global properties for this build -->
-
-	<!-- git路径 -->
-	<property name="TOMCAT_PATH" value="D:/apache-tomcat-7.0.11" />
-	
-	<!-- git路径 -->
-	<property name="GIT_PATH" value="../" />
 
 	<!-- 发布WEB路径 -->
 	<property name="DEPLOY_PATH" value="${TOMCAT_PATH}/webapps/platform_restful/WebContent" />
@@ -44,7 +38,7 @@
 
 	<target name="compile_pla" depends="init" description="compile the source files2">
 		<mkdir dir="${CLASS_PATH}" />
-		<javac srcdir="${SCR_PATH_PLA}" destdir="${CLASS_PATH}"  includeantruntime="on">
+		<javac srcdir="${SCR_PATH_PLA}" destdir="${CLASS_PATH}" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
 	</target>
