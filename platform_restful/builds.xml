@@ -8,7 +8,7 @@
 	<property name="TOMCAT_PATH" value="D:/apache-tomcat-7.0.11" />
 	
 	<!-- git路径 -->
-	<property name="GIT_PATH" value="C:/Users/ybz/GitHub/keg-operator-data" />
+	<property name="GIT_PATH" value="../" />
 
 	<!-- 发布WEB路径 -->
 	<property name="DEPLOY_PATH" value="${TOMCAT_PATH}/webapps/platform_restful/WebContent" />
