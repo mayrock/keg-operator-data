@@ -5,7 +5,7 @@
 	<!-- set global properties for this build -->
 
 	<!-- 发布WEB路径 -->
-	<property name="DEPLOY_PATH" value="${TOMCAT_PATH}/webapps/platform_restful/WebContent" />
+	<property name="DEPLOY_PATH" value="${TOMCAT_PATH}/webapps/platform_restful" />
 
 	<!-- 源WEB路径 -->
 	<property name="WEB_PATH" value="${GIT_PATH}/platform_restful/WebContent" />
@@ -29,15 +29,19 @@
 	</path>
 
 	<!-- 初试化 -->
-	<target name="init">
+	<target name="init" description="init the Tomcat folders">
+		<echo message="init the Tomcat folders..." />
+		<delete dir="${DEPLOY_PATH}" />
 		<mkdir dir="${DEPLOY_PATH}" />
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF" />
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF/classes" />
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF/lib" />
+		<mkdir dir="${CLASS_PATH}" />
 	</target>
 
 	<target name="compile_pla" depends="init" description="compile the source files2">
-		<mkdir dir="${CLASS_PATH}" />
+		<echo message="compiling platform..." />
+
 		<javac srcdir="${SCR_PATH_PLA}" destdir="${CLASS_PATH}" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
@@ -45,6 +49,7 @@
 	<!-- 编译类 -->
 	<target name="compile" depends="init" description="compile the source files">
 		<!-- mkdir dir="${CLASS_PATH}"-->
+		<echo message="compiling platform_restful..." />
 		<javac srcdir="${SCR_PATH}" destdir="${CLASS_PATH}" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
@@ -53,6 +58,7 @@
 
 	<!-- Copy发布-->
 	<target name="deploy" depends="init,compile_pla,compile">
+		<echo message="copy to Tomcat.." />
 		<copy todir="${DEPLOY_PATH}">
 			<fileset dir="${WEB_PATH}">
 				<include name="**/*.*" />
