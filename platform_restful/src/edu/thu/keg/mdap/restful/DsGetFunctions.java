@@ -64,7 +64,7 @@ public class DsGetFunctions {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
-		System.out.println("getDatasetsNames " + uriInfo.getAbsolutePath());
+		System.out.println("getDatasetsNames4 " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -93,8 +93,7 @@ public class DsGetFunctions {
 		}, callback);
 
 	}
-
-	/**
+/**
 	 * get all dataset names list
 	 * 
 	 * @return a list including dataset Geo names

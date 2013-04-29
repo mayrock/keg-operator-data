@@ -51,11 +51,11 @@ public class Test_con {
 		System.out.println(".........................");
 		JSONObject job = new JSONObject();
 		JSONArray fields = new JSONArray();
-		fields.put("SiteName");
-		fields.put("Latitude");
-		fields.put("Longitude");
+		fields.put("siteName");
+		fields.put("latitude");
+		fields.put("longitude");
 		try {
-			job.put("Fields", fields);
+			job.put("fields", fields);
 			ClientResponse response =service.path("rest").path("dsp").path("getds/RegionInfo2")
 					 .accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, job);
 					System.out.println(response.getEntity(String.class));

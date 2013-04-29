@@ -5,7 +5,7 @@
 	<!-- set global properties for this build -->
 
 	<!-- 发布WEB路径 -->
-	<property name="DEPLOY_PATH" value="${TOMCAT_PATH}/webapps/platform_restful/WebContent" />
+	<property name="DEPLOY_PATH" value="${TOMCAT_PATH}/webapps/platform_restful" />
 
 	<!-- 源WEB路径 -->
 	<property name="WEB_PATH" value="${GIT_PATH}/platform_restful/WebContent" />
@@ -36,11 +36,12 @@
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF" />
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF/classes" />
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF/lib" />
+		<mkdir dir="${CLASS_PATH}" />
 	</target>
 
 	<target name="compile_pla" depends="init" description="compile the source files2">
 		<echo message="compiling platform..." />
-		<mkdir dir="${CLASS_PATH}" />
+
 		<javac srcdir="${SCR_PATH_PLA}" destdir="${CLASS_PATH}" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>

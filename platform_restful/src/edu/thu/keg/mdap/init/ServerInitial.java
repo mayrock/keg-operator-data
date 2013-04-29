@@ -31,7 +31,7 @@ public class ServerInitial implements ServletContextListener{
 				.getString("PlatformImpl_CONFIG");
 		Platform p = new PlatformImpl(arg0.getServletContext().getRealPath("/WEB-INF/"+P_Config));
 		sc.setAttribute("platform", p);
-		System.out.println("启动服务器");
+		System.out.println("启动服务器2");
 		
 	}
 }
