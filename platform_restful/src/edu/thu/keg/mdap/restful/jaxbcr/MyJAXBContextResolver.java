@@ -32,9 +32,10 @@ public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 	@Override
 	public JAXBContext getContext(Class<?> objectType) {
 
-		System.out.println("用到小弟了");
+		
 		for (Class<?> c : types) {
 			if (c.equals(objectType)) {
+				System.out.println("用到小弟了");
 				return context;
 			}
 		}

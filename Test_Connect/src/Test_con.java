@@ -51,9 +51,9 @@ public class Test_con {
 		System.out.println(".........................");
 		JSONObject job = new JSONObject();
 		JSONArray fields = new JSONArray();
-		fields.put("siteName");
-		fields.put("latitude");
-		fields.put("longitude");
+		fields.put("SiteName");
+		fields.put("Latitude");
+		fields.put("Longitude");
 		try {
 			job.put("fields", fields);
 			ClientResponse response =service.path("rest").path("dsp").path("getds/RegionInfo2")

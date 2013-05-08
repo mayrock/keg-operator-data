@@ -1,4 +1,4 @@
-package edu.thu.keg.mdap.restful;
+package edu.thu.keg.mdap.restful.dataset;
 
 import java.util.ArrayList;
 import java.util.Collection;

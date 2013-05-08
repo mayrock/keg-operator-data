@@ -21,10 +21,16 @@
 
 	<!-- 源class文件路径 -->
 	<property name="CLASS_PATH" value="${GIT_PATH}/platform_restful/WebContent/WEB-INF/classes" />
+	<!-- tomcat class文件路径 -->
+	<property name="CLASS_PATH_TOM" value="${TOMCAT_PATH}/lib" />
 
 	<!-- 定义classpath -->
 	<path id="LIB_CLASS_PATH">
 		<fileset file="${JAR_PATH}/*.jar" />
+		<pathelement path="${CLASS_PATH}" />
+	</path>
+	<path id="LIB_CLASS_PATH_TOM">
+		<fileset file="${CLASS_PATH_TOM}/*.jar" />
 		<pathelement path="${CLASS_PATH}" />
 	</path>
 
@@ -52,6 +58,7 @@
 		<echo message="compiling platform_restful..." />
 		<javac srcdir="${SCR_PATH}" destdir="${CLASS_PATH}" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
+			<classpath refid="LIB_CLASS_PATH_TOM" />
 		</javac>
 	</target>
 
