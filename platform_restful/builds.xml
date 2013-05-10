@@ -38,6 +38,7 @@
 	<target name="init" description="init the Tomcat folders">
 		<echo message="init the Tomcat folders..." />
 		<delete dir="${DEPLOY_PATH}" />
+		<delete dir="${CLASS_PATH}" />
 		<mkdir dir="${DEPLOY_PATH}" />
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF" />
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF/classes" />
