@@ -3,11 +3,14 @@
  */
 package edu.thu.keg.mdap.datamodel;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -41,7 +44,7 @@ public interface DataSet {
 	 * @throws DataProviderException when actual data of the DataSet does not
 	 * exist on the DataProvider
 	 */
-	public Query getQuery(Class<? extends DataSetFeature> featureType) throws OperationNotSupportedException, DataProviderException;
+	public Query getQuery(DataSetFeatureType featureType) throws OperationNotSupportedException, DataProviderException;
 	
 	/**
 	 * Get the provider of this DataSet
@@ -62,28 +65,40 @@ public interface DataSet {
 	 * Get an array of the fields contained in the dataset
 	 * @return an array containing all the fields in the schema
 	 */
-	public DataField[] getDataFields();
+	public List<DataField> getDataFields();
 	/**
-	 * 
+	 * Get a DataField reference according to its name
 	 * @param columnName name of this field
 	 * @return the DataField instance
 	 */
 	public DataField getField(String columnName);
 	/**
-	 * @return a map containing all features of this dataset
+	 * Get a map containing all features of this dataset
 	 */
 	public Set<DataSetFeature> getFeatures();
 	/**
 	 * Get an instance representing the feature of this dataset supporting
 	 * the specified feature type.
 	 * @param type The feature type whose instance is expected
-	 * @return A instance of type or subclass of type. Return null if the type is not supported
+	 * @return A instance of DataSetFeature. Return null if the type is not supported
 	 */
-	public <T extends DataSetFeature> T getFeature(Class<T> type);
+	public DataSetFeature getFeature(DataSetFeatureType type);
 	/**
 	 * Write the actual data of this datset on its provider
 	 * @param content The DataContent to be written
 	 * @throws DataProviderException when writing the data provider
 	 */
 	public void writeData(DataContent content) throws DataProviderException;
+	/**
+	 * Get the key DataFields of this dataset
+	 */
+	public Collection<DataField> getKeyFields();
+	/**
+	 * Get the value fields of this dataset
+	 */
+	public Collection<DataField> getValueFields();
+	/**
+	 * Get the name of the owner of this dataset
+	 */
+	public String getOwner();
 }

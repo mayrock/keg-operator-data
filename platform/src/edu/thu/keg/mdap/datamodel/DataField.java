@@ -58,11 +58,33 @@ public interface DataField {
 			return FieldType.valueOf(str.trim());
 		}
 	}
+	public enum FieldFunctionality {
+		Latitude(true), Longitude(true), ID(true), TimeStamp(true),
+		Count(false), Value(false), Other(false);
+		private boolean key;
+		public boolean isKey() {
+			return this.key;
+		}
+		FieldFunctionality(boolean isKey) {
+			this.key = isKey;
+		}
+	}
 	/**
-	 * Get the column name of the field
+	 * 
+	 * @return Functionality of this field. E.g., whether it's a key field, timestamp 
+	 * field, or a value field that can be aggregated
+	 */
+	public FieldFunctionality getFunction();
+	/**
+	 * Get the name identifying the field
 	 * @return The column name as a string
 	 */
-	public String getColumnName();
+	public String getName();
+	/**
+	 * 
+	 * @return name used for querying data in this field
+	 */
+	public String getQueryName();
 	/**
 	 * Get the dataset which the field belongs
 	 * @return Reference of the dataset

@@ -150,26 +150,30 @@ public interface Query extends DataContent {
 			return Order.valueOf(str.trim());
 		}
 	}
+	
+	
+
+	
 	/**
 	 * Select a sub-set of fields from this query and construct a new query
 	 * @param fields the DataFields to select
 	 * @return A new Query containing fields
 	 */
-	public Query select(DataField[] fields);
+	public Query select(DataField ... fields);
 	/**
 	 * Filter records of the query 
-	 * @param field the DataField to be filtered by
+	 * @param fieldName name of the DataField to be filtered by
 	 * @param op the comparison operation type
 	 * @param value the value to be compared with 
 	 * @return a new filtered Query
 	 */
-	public Query where(DataField field, Operator op, Object value);
+	public Query where(String fieldName, Operator op, Object value);
 	/**
 	 * Order the query according to a DataField
-	 * @param field the DataField to order on
+	 * @param fieldName name of the DataField to order on
 	 * @return a new Query obeying the order
 	 */
-	public Query orderBy(DataField field, Order order);
+	public Query orderBy(String fieldName, Order order);
 	/**
 	 * Join two queries to form a new query. Join constraint is the equality of two fields.
 	 * @param q2 to second Query for join
@@ -184,27 +188,35 @@ public interface Query extends DataContent {
 	 */
 	public void setProvider(DataProvider provider);
 	/**
-	 * @return The provider used for executing this query and getting data. 
+	 * Get the provider used for executing this query and getting data. 
 	 */
 	public DataProvider getProvider();
 	/**
-	 *
-	 * @return String representation of this query.
+	 * Get the string representation of this query.
 	 */
 	public String toString();
 	/**
-	 * 
+	 * Get all DataFields in the return structure of the query.
 	 * @return data fields in this query
 	 */
 	public DataField[] getDataFields();
 	/**
-	 * 
-	 * @return the where clauses contained in this query
+	 * Get the inner query of this query. 
+	 * @return Return null if there is 
+	 * no inner query
+	 */
+	public Query getInnerQuery();
+	
+	/**
+	 * Get the where clauses contained in this query, if any
 	 */
 	public List<WhereClause> getWhereClauses();
 	/**
-	 * 
-	 * @return the orderBy clauses contained in this query
+	 * Get the orderBy clauses contained in this query, if any
 	 */
 	public List<OrderClause> getOrderClauses(); 
+	/**
+	 * Get the groupBy key fields of this query, if any
+	 */
+	public List<DataField> getGroupByFields();
 }

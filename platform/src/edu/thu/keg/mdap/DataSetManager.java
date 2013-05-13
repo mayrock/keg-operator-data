@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -34,34 +34,15 @@ public interface DataSetManager {
 	 * Create a new DataSet instance, using the given name, connection string
 	 * data fields, and a single features
 	 * @param name The unique name of the DataSet
+	 * @param owner name of the owner of the dataset
+	 * @param description description of the dataset
 	 * @param provider its DataProvider
-	 * @param fields DataField set
-	 * @param features DataSetFeature's supported by this DataSet
-	 * @return A new DataSet instance
-	 */
-	public DataSet createDataSet(String name, String description, DataProvider provider, 
-			DataField[] fields, boolean loadable, DataSetFeature[] features);
-	/**
-	 * Create a new DataSet instance, using the given name, connection string
-	 * data fields, and a single feature
-	 * @param name The unique name of the DataSet
-	 * @param provider its DataProvider
-	 * @param fields DataField set
-	 * @param feature the DataSetFeature supported by this DataSet
-	 * @return A new DataSet instance
-	 */
-	public DataSet createDataSet(String name, String description, DataProvider provider, 
-			DataField[] fields, boolean loadable, DataSetFeature feature);
-	/**
-	 * Create a new DataSet instance, using the given name, connection string
-	 * data fields, and no feature
-	 * @param name The unique name of the DataSet
-	 * @param provider its DataProvider
+	 * @param loadable if this dataset can be loaded into memory
 	 * @param fields DataField set
 	 * @return A new DataSet instance
 	 */
-	public DataSet createDataSet(String name, String description, DataProvider provider, 
-			DataField[] fields, boolean loadable);
+	public DataSet createDataSet(String name, String owner, String description, DataProvider provider, 
+			boolean loadable, DataField ... fields);
 	/**
 	 * Remove a DataSet from the platform, as well as remove 
 	 * its actual data from its provider.
@@ -73,10 +54,10 @@ public interface DataSetManager {
 	
 	/**
 	 * Get all datasets that supports the certain type of feature
-	 * @param feature A Class instance that represents the demanded feature type
-	 * @return A collection of DataSet's
+	 * @param type the feature type demanded
+	 * @return all datasets that supports the certain type of feature
 	 */
-	public Collection<DataSet> getDataSetList(Class<? extends DataSetFeature> feature);
+	public Collection<DataSet> getDataSetList(DataSetFeatureType type);
 	/**
 	 * Save current DataSet list to disk
 	 * @throws IOException

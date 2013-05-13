@@ -41,18 +41,31 @@ public class JdbcProvider extends AbstractDataProvider {
 			this.conn = DriverManager.getConnection(connString);
 		return this.conn;
 	}
+	
+	@Override 
+	public String getQueryString(Query q) {
+		return this.getQueryString(q, 0);
+	}
 
-	private String getQueryString(Query q) {
+	private String getQueryString(Query q, int level) {
 		DataField[] fields = q.getFields();
 		StringBuffer sb = new StringBuffer("SELECT ");
 
 		for (int i = 0; i < fields.length - 1; i++) {
 			DataField df = fields[i];
-			sb.append(df.getColumnName()).append(",");
+			sb.append(df.getQueryName()).append(" AS ")
+			.append(df.getName()).append(",");
 		}
-		sb.append(fields[fields.length - 1].getColumnName());
-		//TODO
-		sb.append(" FROM ").append(fields[0].getDataSet().getName());
+		sb.append(fields[fields.length - 1].getQueryName()).append(" AS ")
+			.append(fields[fields.length - 1].getName());
+		
+		
+		if (q.getInnerQuery() == null)
+			sb.append(" FROM ").append(fields[0].getDataSet().getName());
+		else
+			sb.append(" FROM ( ")
+			.append(getQueryString(q.getInnerQuery(), level+1))
+			.append(" ) as t_").append(level);
 		List<WhereClause> wheres = q.getWhereClauses();
 		if (wheres.size() > 0) {
 			sb.append(" WHERE ");
@@ -64,17 +77,28 @@ public class JdbcProvider extends AbstractDataProvider {
 			sb.append(whereToSB(wheres.get(wheres.size() - 1)));
 		}
 		
-		List<OrderClause> orders = q.getOrderClauses();
-		if (orders.size() > 0) {
-			sb.append(" ORDER BY ");
-			for (int i = 0; i < wheres.size() - 1; i++) {
-				OrderClause order = orders.get(i);
-				sb.append(order.getField().getColumnName())
-					.append(" ").append(order.getOrder().toString());
-				sb.append(", ");
+		List<DataField> gb = q.getGroupByFields();
+		if (gb != null && gb.size() > 0) {
+			sb.append(" GROUP BY ");
+			for (int i = 0; i < gb.size() - 1; i++) {
+				sb.append(gb.get(i).getName()).append(", ");
 			}
-			sb.append(orders.get(orders.size() - 1).getField().getColumnName())
-			.append(" ").append(orders.get(orders.size() - 1).getOrder().toString());
+			sb.append(gb.get(gb.size() - 1).getName());
+		}
+		
+		if (level == 0) {
+			List<OrderClause> orders = q.getOrderClauses();
+			if (orders.size() > 0) {
+				sb.append(" ORDER BY ");
+				for (int i = 0; i < orders.size() - 1; i++) {
+					OrderClause order = orders.get(i);
+					sb.append(order.getField().getName())
+						.append(" ").append(order.getOrder().toString());
+					sb.append(", ");
+				}
+				sb.append(orders.get(orders.size() - 1).getField().getName())
+				.append(" ").append(orders.get(orders.size() - 1).getOrder().toString());
+			}
 		}
 		
 		
@@ -82,7 +106,7 @@ public class JdbcProvider extends AbstractDataProvider {
 	}
 	private StringBuilder whereToSB(WhereClause where) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(where.getField().getColumnName())
+		sb.append(where.getField().getName())
 			.append(where.getOperator().toString());
 		if (where.getField().getFieldType().isNumber())
 			sb.append(where.getValue().toString());
@@ -134,16 +158,13 @@ public class JdbcProvider extends AbstractDataProvider {
 			Query q = (Query)data;
 			if (q.getProvider() == ds.getProvider()) {
 				StringBuilder sb = new StringBuilder();
-				DataField[] fields = ds.getDataFields();
-				for (int i = 0; i < fields.length - 1; i++) {
-					DataField df = fields[i];
-					sb.append(df.getColumnName()).append(",");
+				for (DataField df : ds.getDataFields()) {
+					sb.append(df.getName()).append(",");
 				}
-				sb.append(fields[fields.length - 1].getColumnName());
 				
 				String insertQueryStr = "INSERT INTO " + ds.getName() + " ( "
-						+ sb.toString() + " ) SELECT " + sb.toString()
-						+ " FROM ( " + q.toString() + " ) as t0";
+						+ sb.toString() + " ) SELECT " + sb.substring(0, sb.length() - 1)
+						+ " FROM ( " + q.toString() + " ) as in0";
 				execute(insertQueryStr);
 			}
 		}
@@ -153,11 +174,11 @@ public class JdbcProvider extends AbstractDataProvider {
 		StringBuilder sb = new StringBuilder("CREATE TABLE ");
 		sb.append(ds.getName());
 		sb.append(" ( ");
-		DataField[] fields = ds.getDataFields();
-		for (int i = 0; i < fields.length - 1; i++) {
-			sb.append(getDDL(fields[i])).append(",");
+		List<DataField> fields = ds.getDataFields();
+		for (int i = 0; i < fields.size() - 1; i++) {
+			sb.append(getDDL(fields.get(i))).append(",");
 		}
-		sb.append(getDDL(fields[fields.length - 1])).append(" ) ");
+		sb.append(getDDL(fields.get(fields.size() - 1)) ).append(" ) ");
 		return sb.toString();
 	}
 	
@@ -189,13 +210,13 @@ public class JdbcProvider extends AbstractDataProvider {
 			nullStr = " NULL ";
 		else
 			nullStr = " NOT NULL ";
-		return field.getColumnName() + typeStr + nullStr;
+		return field.getName() + typeStr + nullStr;
 	}
 
 	@Override
 	public void openQuery(Query query) throws DataProviderException {
 		if (!results.containsKey(query)) {
-			ResultSet rs = executeQuery(getQueryString(query));
+			ResultSet rs = executeQuery(getQueryString(query, 0));
 			results.put(query, rs);
 		}
 	}
@@ -219,13 +240,13 @@ public class JdbcProvider extends AbstractDataProvider {
 			case ShortString:
 			case LongString:
 			case Text:
-				return rs.getString(field.getColumnName());
+				return rs.getString(field.getName());
 			case Double:
-				return rs.getDouble(field.getColumnName());
+				return rs.getDouble(field.getName());
 			case Int:
-				return rs.getInt(field.getColumnName());
+				return rs.getInt(field.getName());
 			case DateTime:
-				return rs.getDate(field.getColumnName());
+				return rs.getDate(field.getName());
 			}
 		} catch (SQLException e) {
 			throw new DataProviderException(e.getMessage());

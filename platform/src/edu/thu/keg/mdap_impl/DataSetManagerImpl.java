@@ -20,6 +20,7 @@ import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
@@ -41,7 +42,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 	
 	private HashMap<String, DataSet> datasets = null;
-	private HashMap<Class<? extends DataSetFeature>, Set<DataSet>> features = null;
+	private HashMap<DataSetFeatureType, Set<DataSet>> features = null;
 	private XStream xstream;
 	
 	private XStream getXstream() {
@@ -67,7 +68,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	
 	private DataSetManagerImpl() {
 		datasets = new HashMap<String, DataSet>();
-		features = new HashMap<Class<? extends DataSetFeature>, Set<DataSet>>();
+		features = new HashMap<DataSetFeatureType, Set<DataSet>>();
 		try {
 			loadDataSets();
 		} catch (Exception ex) {
@@ -114,26 +115,6 @@ public class DataSetManagerImpl implements DataSetManager {
 		getXstream().marshal(dss, new PrettyPrintWriter(fw));
 		fw.close();
 	}
-	@Override
-	public DataSet createDataSet(String name, String description, DataProvider provider,
-			DataField[] fields, boolean loadable, DataSetFeature[] features) {
-		DataSet ds = new DataSetImpl(name, description, provider, 
-				loadable, fields, features);
-		addDataSet(ds);
-		return ds;
-	}
-	@Override
-	public DataSet createDataSet(String name, String description, DataProvider provider,
-			DataField[] fields, boolean loadable, DataSetFeature feature) {
-		DataSetFeature[] features = new DataSetFeature[]{feature};
-		return createDataSet(name, description, provider, fields, loadable, features);
-	}
-	@Override
-	public DataSet createDataSet(String name, String description, DataProvider provider,
-			DataField[] fields, boolean loadable) {
-		DataSetFeature[] features = new DataSetFeature[]{};
-		return createDataSet(name, description, provider, fields, loadable, features);
-	}
 
 	@Override
 	public void removeDataSet(DataSet ds) throws DataProviderException {
@@ -144,18 +125,16 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	@Override
-	public Collection<DataSet> getDataSetList(
-			Class<? extends DataSetFeature> feature) {
-		return features.get(feature);	
+	public Collection<DataSet> getDataSetList(DataSetFeatureType type) {
+		return features.get(type);	
 	}
 	private void addDataSet(DataSet ds) {
 		datasets.put(ds.getName(), ds);
 		for (DataSetFeature feature : ds.getFeatures()) {
-			for (Class<? extends DataSetFeature> type : feature.getAllFeatureTypes()) {
+			DataSetFeatureType type = feature.getFeatureType();
 				if (!features.containsKey(type))
 					features.put(type, new HashSet<DataSet>());
 				features.get(type).add(ds);
-			}
 		}
 	}
 	private void removeDSMeta(DataSet ds) {
@@ -163,5 +142,14 @@ public class DataSetManagerImpl implements DataSetManager {
 		for (Set<DataSet> list : features.values()) {
 			list.remove(ds);
 		}
+	}
+
+	@Override
+	public DataSet createDataSet(String name, String owner, String description,
+			DataProvider provider, boolean loadable, DataField... fields) {
+		DataSet ds = new DataSetImpl(name, owner, description, provider, 
+				loadable, fields);
+		addDataSet(ds);
+		return ds;
 	}
 }

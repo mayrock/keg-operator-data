@@ -25,8 +25,7 @@ public interface DataProvider {
 	 */
 	public void openQuery(Query query) throws DataProviderException;
 	/**
-	 * 
-	 * @return The connection string of this DataProvider
+	 * Get the connection string of this DataProvider
 	 */
 	public String getConnectionString();
 	/**
@@ -51,6 +50,12 @@ public interface DataProvider {
 	 */
 	public void closeQuery(Query q) throws DataProviderException;
 	/**
+	 * Get a string representation of a Query on this provider
+	 * @param q the Query to be parsed
+	 * @return A string that represent the Query and can be understand by the provider
+	 */
+	public String getQueryString(Query q);
+	/**
 	 * Remove a dataset content from the provider
 	 * @param ds the to-be-removed dataset.
 	 * @throws DataProviderException when data provider gives an error
@@ -64,4 +69,5 @@ public interface DataProvider {
 	 * @throws DataProviderException when data provider gives an error
 	 */
 	public void writeDataSetContent(DataSet ds, DataContent data) throws DataProviderException;
+
 }

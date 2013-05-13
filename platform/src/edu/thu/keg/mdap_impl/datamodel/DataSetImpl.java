@@ -3,17 +3,22 @@
  */
 package edu.thu.keg.mdap_impl.datamodel;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -25,36 +30,44 @@ import edu.thu.keg.mdap.provider.DataProviderException;
 public class DataSetImpl implements DataSet {
 
 	private String name = null;
+	private String owner = null;
 	private DataProvider provider = null;
 	private String description = null;
 	private boolean loadable;
-	private DataField[] fields;
-	private HashSet<DataSetFeature> features;
-
+	private HashMap<FieldFunctionality, List<DataField>> fieldsMap;
+	private List<DataField> fields;
 	
 	public DataSetImpl(){
-		features = new HashSet<DataSetFeature>();
+		fieldsMap = new HashMap<FieldFunctionality, List<DataField>>();
+		fields = new ArrayList<DataField>();
 	}
 
 
-	public DataSetImpl(String name, String description, DataProvider provider,
-			 boolean loadable, DataField[] fields, DataSetFeature[] features) {
+	public DataSetImpl(String name, String owner, String description, DataProvider provider,
+			 boolean loadable, DataField... fields) {
 		super();
 		this.name = name;
+		this.owner = owner;
 		this.provider = provider;
 		this.loadable = loadable;
 		this.description = description;
+		
+		this.fieldsMap = new HashMap<FieldFunctionality, List<DataField>>();
+		this.fields = new ArrayList<DataField>();
+		
 		setDataFields(fields);
-		this.features = new HashSet<DataSetFeature>();
-		for (DataSetFeature feature : features) {
-			this.features.add(feature);
-		}
 	}
 	
 	private void setDataFields(DataField[] fields) {
-		this.fields = fields;
 		for (DataField field : fields) {
 			field.setDataSet(this);
+			this.fields.add(field);
+			
+			FieldFunctionality func = field.getFunction();
+			if (!this.fieldsMap.containsKey(func)) {
+				this.fieldsMap.put(func, new ArrayList<DataField>());
+			}
+			this.fieldsMap.get(func).add(field);
 		}
 	}
 
@@ -70,7 +83,7 @@ public class DataSetImpl implements DataSet {
 		return this.loadable;
 	}
 	@Override
-	public DataField[] getDataFields() {
+	public List<DataField> getDataFields() {
 		return this.fields;
 	}
 	@Override
@@ -85,21 +98,28 @@ public class DataSetImpl implements DataSet {
 		return q;
 	}
 	@Override
-	public Set<DataSetFeature> getFeatures() {
-		return features;
-	}
-	@Override
 	public String getDescription() {
 		return this.description;
 	}
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends DataSetFeature> T getFeature(Class<T> type) {
-		for (DataSetFeature feature : features) {
-			if (feature.hasFeatureType(type))
-				return (T) feature;
+	public DataSetFeature getFeature(DataSetFeatureType type) {
+		DataField[] keys = new DataField[type.getFuncs().length];
+		boolean flag = true;
+		int i = 0;
+		for (FieldFunctionality func : type.getFuncs()) {
+			if (!fieldsMap.containsKey(func)) {
+				flag = false;
+				break;
+			} else {
+				keys[i++] = fieldsMap.get(func).get(0);
+			}
 		}
-		return null;
+		if (flag) {
+			return new DataSetFeatureImpl(type, keys, 
+					this.getValueFields().toArray(new DataField[0]));
+		} else {
+			return null;
+		}
 	}
 	@Override
 	public void writeData(DataContent content) throws DataProviderException {
@@ -108,13 +128,13 @@ public class DataSetImpl implements DataSet {
 
 
 	@Override
-	public Query getQuery(Class<? extends DataSetFeature> featureType)
+	public Query getQuery(DataSetFeatureType featureType)
 			throws OperationNotSupportedException, DataProviderException {
 		DataSetFeature feature = this.getFeature(featureType);
 		Query q = this.getQuery();
 		q = q.select(feature.getAllFields());
 		if (feature.getValueFields() != null) {
-			q = q.orderBy(feature.getValueFields()[0], Order.DESC);
+			q = q.orderBy(feature.getValueFields()[0].getName(), Order.DESC);
 		}
 		return q;
 	}
@@ -123,11 +143,54 @@ public class DataSetImpl implements DataSet {
 	@Override
 	public DataField getField(String columnName) {
 		for (DataField f : this.fields) {
-			if (f.getColumnName().equals(columnName) )
+			if (f.getName().equals(columnName) )
 				return f;
 		}
 		throw new IllegalArgumentException("Field with name " 
 				+ columnName + " does not exist in DataSet "
 				+ this.getName()); 
+	}
+
+
+	@Override
+	public Set<DataSetFeature> getFeatures() {
+		Set<DataSetFeature> features = new HashSet<DataSetFeature>();
+		for (DataSetFeatureType type : DataSetFeatureType.values()) {
+			DataSetFeature f = this.getFeature(type);
+			if (f != null) {
+				features.add(f);
+			}
+		}
+		return features;
+	}
+
+
+	@Override
+	public List<DataField> getKeyFields() {
+		List<DataField> ret = new ArrayList<DataField>();
+		for (DataField field : fields) {
+			if (field.isKey()) {
+				ret.add(field);
+			}
+		}
+		return ret;
+	}
+
+
+	@Override
+	public List<DataField> getValueFields() {
+		List<DataField> ret = new ArrayList<DataField>();
+		for (DataField field : fields) {
+			if (!field.isKey()) {
+				ret.add(field);
+			}
+		}
+		return ret;
+	}
+
+
+	@Override
+	public String getOwner() {
+		return this.owner;
 	}
 }

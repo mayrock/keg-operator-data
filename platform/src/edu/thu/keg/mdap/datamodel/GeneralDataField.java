@@ -13,15 +13,17 @@ package edu.thu.keg.mdap.datamodel;
  * @author Yuanchao Ma 
  */
 public class GeneralDataField implements DataField {
-	protected String columnName;
+	protected String name;
+	protected String queryName;
 	protected DataSet dataset;
 	protected String desp;
 	protected boolean isKey;
 	protected FieldType type;
 	protected boolean allowNull;
+	protected FieldFunctionality func;
 	@Override
-	public String getColumnName() {
-		return columnName;
+	public String getQueryName() {
+		return this.queryName;
 	}
 	@Override
 	public DataSet getDataSet() {
@@ -46,15 +48,17 @@ public class GeneralDataField implements DataField {
 	 * @param allowNull Whether the field allows null value
 	 */
 	public GeneralDataField(String name, FieldType type, String description,
-			boolean isKey, boolean allowNull) {
+			boolean isKey, boolean allowNull, FieldFunctionality func) {
 		if (isKey == true && allowNull == true)
 			throw new IllegalArgumentException();
-		this.columnName = name;
+		this.name = name;
+		this.queryName = name;
 		this.type = type;
 		this.dataset = null;
 		this.desp = description;
 		this.isKey = isKey;
 		this.allowNull = allowNull;
+		this.func = func;
 	}
 	
 	/**
@@ -64,16 +68,18 @@ public class GeneralDataField implements DataField {
 	 * @param name Name of the column
 	 * @param type FieldType of this field
 	 * @param description Description of the field
-	 * @param isKey Whether the field is key
+	 * @param func Functionality of the field
 	 */
 	public GeneralDataField(String name, FieldType type, String description,
-			boolean isKey) {
-		this.columnName = name;
+			FieldFunctionality func) {
+		this.name = name;
+		this.queryName = name;
 		this.type = type;
 		this.dataset = null;
 		this.desp = description;
-		this.isKey = isKey;
+		this.isKey = func.isKey();
 		this.allowNull = !isKey;
+		this.func = func;
 	}
 		
 	@Override
@@ -88,5 +94,13 @@ public class GeneralDataField implements DataField {
 	@Override
 	public boolean allowNull() {
 		return this.allowNull;
+	}
+	@Override
+	public String getName() {
+		return this.name;
+	}
+	@Override
+	public FieldFunctionality getFunction() {
+		return this.func;
 	}
 }
