@@ -20,7 +20,8 @@ import edu.thu.keg.mdap.restful.jerseyclasses.JStatistic;
 public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 
 	private JAXBContext context;
-	private Class<?>[] types = { Object.class, ArrayList.class,JDatasetName.class,
+	private Class<?>[] types = { String.class,Object.class, ArrayList.class,
+			JDatasetName.class,
 			JDataset.class, JGeograph.class, JStatistic.class, JFieldName.class,JColumn.class };
 
 	public MyJAXBContextResolver() throws Exception {

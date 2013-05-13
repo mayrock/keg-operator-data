@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -53,7 +54,7 @@ public class DsGetFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
-
+	
 	/**
 	 * get all dataset names list
 	 * 
@@ -61,18 +62,21 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdss")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON ,MediaType.TEXT_PLAIN})
+	
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDatasetsNames4 " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		JDatasetName datasetName = new JDatasetName();
+		
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
 			int i=0;
 			for (DataSet dataset : datasets) {
-				if(i++>=2)
+				if(i++>=1)
 					break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
@@ -88,6 +92,7 @@ public class DsGetFunctions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
 		}, callback);
@@ -428,16 +433,15 @@ public class DsGetFunctions {
 
 	@GET
 	@Path("/jsonp")
-	@Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,
-			MediaType.APPLICATION_XML })
+	@Produces("application/x-javascript")
+	@Consumes({MediaType.APPLICATION_JSON})
 	public JSONWithPadding readAllP(
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
+			@QueryParam("jsoncallback") String callback,
 			@QueryParam("acronym") String acronym,
 			@QueryParam("title") String title,
 			@QueryParam("competition") String competition) {
 		String a = "{\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025}";
 		System.out.println(a);
-		return new JSONWithPadding(new GenericEntity<String>(a) {
-		}, callback);
+		return new JSONWithPadding(a,callback);
 	}
 }

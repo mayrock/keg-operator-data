@@ -75,7 +75,7 @@ public class Test_con {
 	}
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://10.1.1.55:8081/mdap").build();
+		return UriBuilder.fromUri("http://10.1.1.55:8080/mdap").build();
 	}
 
 }
