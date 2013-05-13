@@ -1,103 +1,110 @@
 tabNum = 0;
+tabCount = 0;
+limit = 7;
 getDatasetUrl = "http://10.1.1.55:8081/mdap/rest/dsg/get";
 
 function addNewTab(tabName){
-	limit = 7;
-	if(tabNum == limit){
-		alert("Tabs cann't more than " + limit + "!");
+	if(!((tabName == "geo") || (tabName == "sta"))){
+		alert("Oops, we got an error...");
 		return;
 	}
-	content = document.getElementById("content");
-	for(i = 0; i < tabNum; i++){
-		tab = document.getElementById("tab" + i);
-		tab.setAttribute("style","display: none");
+	$("#extendedTab").css("display","none");
+	//限制标签页个数
+	if(tabCount == limit){
+		alert("Tabs cann't be more than " + limit + "!");
+		return;
 	}
-	if((tabName == "geo") || (tabName == "sta")){
-		ul = document.getElementById("tab");
-		l = ul.childNodes.length;
-		$("ul").find("a").removeClass();
-		li = document.createElement("li");
-		if(tabName == "geo"){
-			li.innerHTML = "<a href = 'javascript:void(0);' class = 'here' onclick = 'changeTab(" + tabNum + ",this)'>Geographic data</a>";
-		}
-		else{
-			li.innerHTML = "<a href = 'javascript:void(0);' class = 'here' onclick = 'changeTab(" + tabNum + ",this)'>Statistical data</a>";
-		}
-		$("<img src = 'image/close.png' alt = 'close icon'/>")
-			.appendTo(li)
-			.hover(function(){
-				var img = $(this);
-				img.attr('src','image/close_hover.png');
+	//添加一个标签页
+	main = $("#main").tabs();
+	ul = main.find("ul");
+	li = document.createElement("li");
+	li.innerHTML = "<a href='#tab" + tabNum + "'>" + tabName + " data</a>";
+	$("<img src = 'css/images/close.png'/>")
+		.appendTo(li)
+		.hover(
+			function(){
+				$(this).attr("src","css/images/close_hover.png");
 			},function(){
-				var img = $(this);
-				img.attr('src','image/close.png');
-			})
-			.click(closeTab);
-		ul.insertBefore(li,ul.childNodes[l]);
-		div = document.createElement("div");
-		div.setAttribute("id","tab" + tabNum);
-		tabOption = document.createElement("div");
-		tabContent = document.createElement("div");
-		tabOption.setAttribute("class","option");
-		tabContent.setAttribute("id","content" + tabNum);
-		tabContent.setAttribute("class","content");
-		div.appendChild(tabOption);
-		div.appendChild(tabContent);
-		content.appendChild(div);
-		setTabOption(tabName,tabOption,tabNum);
-		setTabContent(tabName,tabContent);
-		tabNum ++;
-	}
-	else{
-		alert("Oops, we got an error...");
-	}
+				$(this).attr("src","css/images/close.png");
+			}
+		).click(
+			//点击关闭按钮删除标签页
+			function(){
+				$(this).parent().remove();
+				contentName = $(this).parent().children("a").attr("href");
+				$(contentName).remove();
+				tabCount --;
+				main.tabs("refresh");
+			}
+		);
+	$(li).appendTo(ul);
+	content = document.createElement("div");
+	content.setAttribute("id","tab" + tabNum);
+	option = document.createElement("div");
+	view = document.createElement("div");
+	option.setAttribute("class","option");
+	view.setAttribute("id","view" + tabNum);
+	view.setAttribute("class","view");
+	$(option).appendTo(content);
+	$(view).appendTo(content);
+	$(content).appendTo(main);
+	main.tabs("refresh");
+	main.tabs("option","active",tabCount);
+	//设置标签页内容
+	setOption(tabName,option);
+	setView(tabName);
+	tabNum ++;
+	tabCount ++;
 }
 
-function setTabOption(tabName,option,num){
-	option.innerHTML = "";
+function setOption(tabName,option){
+//	url = getDatasetUrl + tabName + "dss?jsoncallback=?";
 	url = getDatasetUrl + tabName + "dss";
+	checkbox = document.createElement("div");
+	checkbox.setAttribute("id","checkbox" + tabNum);
 	$.getJSON(url,function(data){
 		for(i = 0; i < data.length; i++){
 			des = data[i].description;
 			name = data[i].datasetName;
-			option.innerHTML += "<input type = 'checkbox' onClick = \"" + tabName + "Information('" + name + "'," + num + ");\">" + des + "<br/>";
+			if(tabName == "geo"){
+				checkbox.innerHTML += "<input type = 'checkbox' onClick = \"" + tabName + "Information('" + name + "');\">" + des + "<br/>";
+			}else{
+				checkbox.innerHTML += "<input type = 'checkbox' onClick = \"" + tabName + "Information('" + name + "'," + tabNum + ");\">" + des + "<br/>";
+			}
 		}
 	}).error(function(){
 		alert("Oops, we got an error...");
 	});
 	select = document.createElement("div");
 	select.setAttribute("class","select");
-	select.innerHTML = "<input type = 'button' value = 'selectAll' onClick = \"selectAll();\">" +
-		"<input type = 'button' value = 'unselectAll' onClick = \"unselectAll();\">";
-	option.appendChild(select);
+	select.innerHTML = "<input type = 'button' value = 'selectAll' onClick = \"selectAll(" + tabNum + ");\">" +
+		"<input type = 'button' value = 'unselectAll' onClick = \"unselectAll(" + tabNum + ");\">";
+	$(checkbox).appendTo(option);
+	$(select).appendTo(option);
 }
 
-function setTabContent(tabName,content){
+function setView(tabName){
 	if(tabName == "geo"){
 		mapInitialize(tabNum);
 	}
 }
 
-function changeTab(num,tab){
-	if($(tab).hasClass("here")){
-		return;
+function selectAll(num){
+	input = document.getElementById("checkbox" + num).getElementsByTagName("input");
+	for(i = 0; i < input.length; i++){
+		if(input[i].checked == false){
+			input[i].checked = true;
+		}
 	}
-	$(tab).addClass("here");
-	$(tab).parent().siblings().children("a").removeClass();
-	ul = document.getElementById("tab");
-	for(i = 0; i < tabNum; i++){
-		tab = document.getElementById("tab" + i);
-		tab.setAttribute("style","display: none");
+}
+
+function unselectAll(num){
+	input = document.getElementById("checkbox" + num).getElementsByTagName("input");
+	for(i = 0; i < input.length; i++){
+		if(input[i].checked == false){
+			input[i].checked = true;
+		}else{
+			input[i].checked = false;
+		}
 	}
-	tab = document.getElementById("tab" + num);
-	tab.setAttribute("style","display: block");
-}
-
-function closeTab(){
-}
-
-function selectAll(){
-}
-
-function unselectAll(){
 }

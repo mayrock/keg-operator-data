@@ -3,7 +3,7 @@ getLocationUrl = "http://10.1.1.55:8081/mdap/rest/dsg/getgeods/";
 var map;
 var locinfo;
 
-function mapInitialize(num){
+function mapInitialize(tabNum){
 	mapOptions = {
 		center: new google.maps.LatLng(39.90960456049752,116.3972282409668),
 		zoom: 15,
@@ -13,10 +13,11 @@ function mapInitialize(num){
 		},
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	map = new google.maps.Map(document.getElementById("content" + num),mapOptions);
+	map = new google.maps.Map(document.getElementById("view" + tabNum),mapOptions);
 }
 
-function geoInformation(name,num){
+function geoInformation(name){
+//	url = getLocationUrl + name + "?jsoncallback=?";
 	url = getLocationUrl + name;
 	pinIcon = new google.maps.MarkerImage(
 		"http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF0000",
@@ -27,7 +28,7 @@ function geoInformation(name,num){
 	);
 	$.getJSON(url,function(data){
 		for(i = 0; i < data.length; i++){
-			mrkrArr = new google.maps.Marker({
+			mrkr = new google.maps.Marker({
 				position : new google.maps.LatLng(data[i].latitude,data[i].longitude),
 				title : data[i].tag,
 				icon : pinIcon
@@ -66,7 +67,7 @@ function hideTrace(){
 	trace.setMap(null);
 }
 */
-//瀵逛簬姣忕粍鍖哄煙閲岀殑鐐�鐢诲渾灏監K浜�
+//对于每组区域里的点,画圆就OK了
 function setRegion(){
 	
 }

@@ -22,16 +22,16 @@
 	<!-- 源class文件路径 -->
 	<property name="CLASS_PATH" value="${GIT_PATH}/platform_restful/WebContent/WEB-INF/classes" />
 	<!-- tomcat class文件路径 -->
-	<property name="CLASS_PATH_TOM" value="${TOMCAT_PATH}/lib" />
+	<property name="JAR_PATH_TOM" value="${TOMCAT_PATH}/lib" />
 
 	<!-- 定义classpath -->
 	<path id="LIB_CLASS_PATH">
 		<fileset file="${JAR_PATH}/*.jar" />
-		<pathelement path="${CLASS_PATH}" />
+	
 	</path>
 	<path id="LIB_CLASS_PATH_TOM">
-		<fileset file="${CLASS_PATH_TOM}/*.jar" />
-		<pathelement path="${CLASS_PATH}" />
+		<fileset file="${JAR_PATH_TOM}/*.jar" />
+		<!--pathelement path="${CLASS_PATH}" -->
 	</path>
 
 	<!-- 初试化 -->
@@ -63,9 +63,17 @@
 		</javac>
 	</target>
 
+	<target name="copy_properties" depends="init,compile_pla,compile">
+		<echo message="copy_properties" />
+		<copy todir="${WEB_PATH}/WEB-INF/classes/">
+			<fileset dir="${SCR_PATH}">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+	</target>
 
 	<!-- Copy发布-->
-	<target name="deploy" depends="init,compile_pla,compile">
+	<target name="deploy" depends="init,compile_pla,compile,copy_properties">
 		<echo message="copy to Tomcat.." />
 		<copy todir="${DEPLOY_PATH}">
 			<fileset dir="${WEB_PATH}">

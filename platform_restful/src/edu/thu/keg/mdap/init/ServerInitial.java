@@ -31,6 +31,12 @@ public class ServerInitial implements ServletContextListener{
 				.getString("PlatformImpl_CONFIG");
 		Platform p = new PlatformImpl(arg0.getServletContext().getRealPath("/WEB-INF/"+P_Config));
 		sc.setAttribute("platform", p);
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 		System.out.println("Æô¶¯·þÎñÆ÷2\n"+P_Config);
 		
 	}

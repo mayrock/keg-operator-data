@@ -62,7 +62,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdss")
-	@Produces({ MediaType.APPLICATION_JSON ,MediaType.TEXT_PLAIN})
+	@Produces({ MediaType.APPLICATION_JSON })
 	
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -76,8 +76,8 @@ public class DsGetFunctions {
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
 			int i=0;
 			for (DataSet dataset : datasets) {
-				if(i++>=1)
-					break;
+//				if(i++>=1)
+//					break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
@@ -105,7 +105,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getgeodss")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getGeoDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getGeoDatasetsNames " + uriInfo.getAbsolutePath());
@@ -117,8 +117,8 @@ public class DsGetFunctions {
 					.getDataSetList(GeoFeature.class);
 			int i=0;
 			for (DataSet dataset : datasets) {
-				if(i++>=2)
-					break;
+//				if(i++>=2)
+//					break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
@@ -145,7 +145,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getstadss")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getStaDatasetsNames " + uriInfo.getAbsolutePath());
@@ -157,8 +157,8 @@ public class DsGetFunctions {
 					.getDataSetList(StatisticsFeature.class);
 			int i=0;
 			for (DataSet dataset : datasets) {
-				if(i++>=2)
-					break;
+//				if(i++>=2)
+//					break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
@@ -186,7 +186,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getds/{datasetname}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDataset(@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDataset " + dataset + " "
@@ -199,14 +199,14 @@ public class DsGetFunctions {
 			DataContent rs = ds.getQuery();
 			rs.open();
 			int i = 0;
-			while (rs.next() && i++ < 2) {
+			while (rs.next() && i++ < 20) {
 				JDataset jdataset = new JDataset();
 				List<JField> fields = new ArrayList<>();
 				DataField[] dfs = ds.getDataFields();
 				int j=0;
 				for (DataField df : dfs ) {
-					if(j++>=2)
-						break;
+//					if(j++>=2)
+//						break;
 					JField field = new JField();
 					field.setField(rs.getValue(df));
 					fields.add(field);
@@ -231,7 +231,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getgeods/{datasetname}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({  MediaType.APPLICATION_JSON })
 	public JSONWithPadding getGeoDataset(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -249,7 +249,7 @@ public class DsGetFunctions {
 						"can't find the geograph Exception");
 			rs.open();
 			int i=0;
-			while (rs.next() && i++<2) {
+			while (rs.next() && i++<20) {
 				JGeograph location = new JGeograph();
 				location.setTag(rs.getValue(gds.getTagField()).toString());
 				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
@@ -274,7 +274,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getstads/{datasetname}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaDataset(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -293,7 +293,7 @@ public class DsGetFunctions {
 						"can't find the statistic Exception");
 			rs.open();
 			int i=0;
-			while (rs.next() && i++<2) {
+			while (rs.next() && i++<20) {
 				// System.out.println(rs.getValue(ds.getDataFields()[0])
 				// .toString()
 				// + " "
@@ -329,7 +329,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getstatds/{datasetname}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({  MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaTimeDataset(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -348,7 +348,7 @@ public class DsGetFunctions {
 						"can't find the statisticTime Exception");
 			rs.open();
 			int i = 0;
-			while (rs.next() && i++ < 5) {
+			while (rs.next() && i++ < 20) {
 				System.out.println(rs.getValue(ds.getDataFields()[0])
 						.toString()
 						+ " "
@@ -384,7 +384,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdsfds/{datasetname}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({  MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetFieldsNames(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
