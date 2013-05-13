@@ -62,11 +62,23 @@ public interface DataField {
 		Latitude(true), Longitude(true), ID(true), TimeStamp(true),
 		Count(false), Value(false), Other(false);
 		private boolean key;
+		/**
+		 * Whether this func act as a key field
+		 * @return boolean of whether is key
+		 */
 		public boolean isKey() {
 			return this.key;
 		}
 		FieldFunctionality(boolean isKey) {
 			this.key = isKey;
+		}
+		/**
+		 * Get a FieldFunctionality instance from its string representation
+		 * @param str The string representation 
+		 * @return a FieldFunctionality object
+		 */
+		public FieldFunctionality parse(String str) {
+			return FieldFunctionality.valueOf(str);
 		}
 	}
 	/**
