@@ -26,9 +26,10 @@ import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datasetfeature.GeoFeature;
-import edu.thu.keg.mdap.datasetfeature.StatisticsFeature;
-import edu.thu.keg.mdap.datasetfeature.TimeSeriesFeature;
+import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
+import edu.thu.keg.mdap.datamodel.DataField.FieldType;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
+import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDataset;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
@@ -54,7 +55,7 @@ public class DsGetFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
-	
+
 	/**
 	 * get all dataset names list
 	 * 
@@ -63,27 +64,26 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getdss")
 	@Produces({ MediaType.APPLICATION_JSON })
-	
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDatasetsNames4 " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		JDatasetName datasetName = new JDatasetName();
-		
+
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
-			int i=0;
+			int i = 0;
 			for (DataSet dataset : datasets) {
-//				if(i++>=1)
-//					break;
+				// if(i++>=1)
+				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
 				ArrayList<String> schema = new ArrayList<>();
 				for (DataField df : dataset.getDataFields()) {
-					schema.add(df.getColumnName());
+					schema.add(df.getName());
 				}
 				dname.setSchema(schema);
 				datasetsName.add(dname);
@@ -98,7 +98,8 @@ public class DsGetFunctions {
 		}, callback);
 
 	}
-/**
+
+	/**
 	 * get all dataset names list
 	 * 
 	 * @return a list including dataset Geo names
@@ -114,17 +115,17 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
-					.getDataSetList(GeoFeature.class);
-			int i=0;
+					.getDataSetList(DataSetFeatureType.GeoFeature);
+			int i = 0;
 			for (DataSet dataset : datasets) {
-//				if(i++>=2)
-//					break;
+				// if(i++>=2)
+				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
 				ArrayList<String> schema = new ArrayList<>();
 				for (DataField df : dataset.getDataFields()) {
-					schema.add(df.getColumnName());
+					schema.add(df.getName());
 				}
 				dname.setSchema(schema);
 				datasetsName.add(dname);
@@ -154,17 +155,17 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
-					.getDataSetList(StatisticsFeature.class);
-			int i=0;
+					.getDataSetList(DataSetFeatureType.DistributionFeature);
+			int i = 0;
 			for (DataSet dataset : datasets) {
-//				if(i++>=2)
-//					break;
+				// if(i++>=2)
+				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
 				ArrayList<String> schema = new ArrayList<>();
 				for (DataField df : dataset.getDataFields()) {
-					schema.add(df.getColumnName());
+					schema.add(df.getName());
 				}
 				dname.setSchema(schema);
 				datasetsName.add(dname);
@@ -202,11 +203,11 @@ public class DsGetFunctions {
 			while (rs.next() && i++ < 20) {
 				JDataset jdataset = new JDataset();
 				List<JField> fields = new ArrayList<>();
-				DataField[] dfs = ds.getDataFields();
-				int j=0;
-				for (DataField df : dfs ) {
-//					if(j++>=2)
-//						break;
+				DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
+				int j = 0;
+				for (DataField df : dfs) {
+					// if(j++>=2)
+					// break;
 					JField field = new JField();
 					field.setField(rs.getValue(df));
 					fields.add(field);
@@ -220,7 +221,8 @@ public class DsGetFunctions {
 			e.printStackTrace();
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
-				datasetList) {}, callback);
+				datasetList) {
+		}, callback);
 	}
 
 	/**
@@ -231,7 +233,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getgeods/{datasetname}")
-	@Produces({  MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getGeoDataset(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -243,15 +245,14 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
 			DataContent rs = ds.getQuery();
-			GeoFeature gds = (GeoFeature) ds.getFeature(GeoFeature.class);
+			DataSetFeature gds = ds.getFeature(DataSetFeatureType.GeoFeature);
 			if (gds == null)
 				throw new OperationNotSupportedException(
 						"can't find the geograph Exception");
 			rs.open();
-			int i=0;
-			while (rs.next() && i++<20) {
+			int i = 0;
+			while (rs.next() && i++ < 20) {
 				JGeograph location = new JGeograph();
-				location.setTag(rs.getValue(gds.getTagField()).toString());
 				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
 				location.setLongitude((double) rs.getValue(gds.getKeyFields()[1]));
 				datasetList.add(location);
@@ -286,14 +287,14 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
 			DataContent rs = ds.getQuery();
-			StatisticsFeature gds = (StatisticsFeature) ds
-					.getFeature(StatisticsFeature.class);
+			DataSetFeature gds = ds
+					.getFeature(DataSetFeatureType.DistributionFeature);
 			if (gds == null)
 				throw new OperationNotSupportedException(
 						"can't find the statistic Exception");
 			rs.open();
-			int i=0;
-			while (rs.next() && i++<20) {
+			int i = 0;
+			while (rs.next() && i++ < 20) {
 				// System.out.println(rs.getValue(ds.getDataFields()[0])
 				// .toString()
 				// + " "
@@ -329,7 +330,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getstatds/{datasetname}")
-	@Produces({  MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaTimeDataset(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -341,18 +342,20 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
 			DataContent rs = ds.getQuery();
-			TimeSeriesFeature gds = (TimeSeriesFeature) ds
-					.getFeature(TimeSeriesFeature.class);
+			DataSetFeature gds = ds
+					.getFeature(DataSetFeatureType.TimeSeriesFeature);
+			// TimeSeriesFeature gds = (TimeSeriesFeature) ds
+			// .getFeature(TimeSeriesFeature.class);
 			if (gds == null)
 				throw new OperationNotSupportedException(
 						"can't find the statisticTime Exception");
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
-				System.out.println(rs.getValue(ds.getDataFields()[0])
+				System.out.println(rs.getValue(ds.getDataFields().get(0))
 						.toString()
 						+ " "
-						+ rs.getValue(ds.getDataFields()[1]).toString());
+						+ rs.getValue(ds.getDataFields().get(1)).toString());
 				JStatistic statistic = new JStatistic();
 				ArrayList<String> keys = new ArrayList<>();
 				for (DataField key : gds.getKeyFields()) {
@@ -384,7 +387,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdsfds/{datasetname}")
-	@Produces({  MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetFieldsNames(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -395,10 +398,10 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
-			DataField[] dfs = ds.getDataFields();
+			DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
 			for (DataField df : dfs) {
 				JFieldName jfn = new JFieldName();
-				jfn.setFieldName(df.getColumnName());
+				jfn.setFieldName(df.getName());
 				jfn.setDescription(df.getDescription());
 				jfn.setIsKey(df.isKey());
 				jfn.setType(df.getFieldType().name());
@@ -434,7 +437,7 @@ public class DsGetFunctions {
 	@GET
 	@Path("/jsonp")
 	@Produces("application/x-javascript")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding readAllP(
 			@QueryParam("jsoncallback") String callback,
 			@QueryParam("acronym") String acronym,
@@ -442,6 +445,6 @@ public class DsGetFunctions {
 			@QueryParam("competition") String competition) {
 		String a = "{\"city\":\"Beijing\",\"street\":\" Chaoyang Road \",\"postcode\":100025}";
 		System.out.println(a);
-		return new JSONWithPadding(a,callback);
+		return new JSONWithPadding(a, callback);
 	}
 }

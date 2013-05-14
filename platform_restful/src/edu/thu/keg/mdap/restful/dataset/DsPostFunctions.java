@@ -30,8 +30,10 @@ import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
+import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.Query.Operator;
+import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JColumn;
@@ -65,6 +67,10 @@ public class DsPostFunctions {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public Response createDataset(@PathParam("connstr") String connstr,
 			@PathParam("datasetname") String dataset, JSONObject JContent) {
+		/**
+		 * description 数据集描述 loadable 是否可以加载 dsFields 数据域的jsonarray fieldName
+		 * fieldType description isKey
+		 */
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataProvider provider = p.getDataProviderManager()
@@ -76,9 +82,14 @@ public class DsPostFunctions {
 			String ds_description = "";
 			if (JContent.has("description"))
 				ds_description = JContent.getString("description");
-			boolean loadable = false;
+			boolean loadable = false, allowNull = false;
+			String owner = "owner";
 			if (JContent.has("loadable"))
 				loadable = JContent.getBoolean("loadable");
+			if (JContent.has("allowNull"))
+				allowNull = JContent.getBoolean("allowNull");
+			if (JContent.has("owner"))
+				owner = JContent.getString("owner");
 			JSONArray datafields = JContent.getJSONArray("dsFields");
 			String fieldname = null;
 			FieldType fieldtype = null;
@@ -93,10 +104,10 @@ public class DsPostFunctions {
 				description = field.getString("description");
 				isKey = field.getBoolean("isKey");
 				fields[i] = new GeneralDataField(fieldname, fieldtype,
-						description, isKey);
+						description, isKey, allowNull, FieldFunctionality.ID);
 			}
-			p.getDataSetManager().createDataSet(dataset, ds_description,
-					provider, fields, loadable);
+			p.getDataSetManager().createDataSet(dataset, owner, ds_description,
+					provider, loadable, fields);
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -119,30 +130,40 @@ public class DsPostFunctions {
 			@PathParam("datasetname") String dataset, JSONObject JContent,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		JSONArray jsonFileds = null;
+		String orderby = null;
 		String fieldname = null;
 		List<JColumn> all_dfs = null;
 		List<JField> list_df = null;
 		System.out.println("POST");
+		/**
+		 * fields 存储列名的参数jsonarray orderby 排序的域名
+		 */
 		try {
 			if (JContent.has("fields"))
 				jsonFileds = JContent.getJSONArray("fields");
 			else
 				throw new JSONException("have not the this Field");
+			if (JContent.has("orderby"))
+				orderby = (String) JContent.get("orderby");
 			all_dfs = new ArrayList<>();
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
-
+			DataContent rs;
+			if (orderby != null)
+				rs = ds.getQuery().orderBy(orderby, Order.parse("DESC"));
+			else
+				rs = ds.getQuery();
 			for (int i = 0; i < jsonFileds.length(); i++) {
 				fieldname = (String) jsonFileds.get(i);
 				System.out.println("getDatasetField " + dataset + " "
 						+ fieldname + " " + uriInfo.getAbsolutePath());
 				list_df = new ArrayList<JField>();
 				DataField df = ds.getField(fieldname);
-				DataContent rs = ds.getQuery();
+
 				rs.open();
 				int ii = 0;
-				while (rs.next() && ii++ < 2) {
+				while (rs.next() && ii++ < 20) {
 					JField jf = new JField();
 					jf.setField(rs.getValue(df));
 					list_df.add(jf);
@@ -199,6 +220,9 @@ public class DsPostFunctions {
 		JSONArray jsonOper = null;
 		List<JColumn> all_dfs = null;
 		List<JField> list_df = null;
+		/**
+		 * jsonOper 操作参数jsonarray fieldname 域名 opr 操作符号 value 值
+		 */
 		try {
 			if (JContent.has("jsonOper"))
 				jsonOper = JContent.getJSONArray("jsonOper");
@@ -219,8 +243,8 @@ public class DsPostFunctions {
 						+ uriInfo.getAbsolutePath());
 				list_df = new ArrayList<JField>();
 				DataField df = ds.getField(fieldname);
-				DataContent rs = ds.getQuery().where(df, Operator.parse(opr),
-						value);
+				DataContent rs = ds.getQuery().where(fieldname,
+						Operator.parse(opr), value);
 				rs.open();
 				int ii = 0;
 				while (rs.next() && ii++ < 2) {
