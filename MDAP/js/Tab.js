@@ -1,7 +1,7 @@
 tabNum = 0;
 tabCount = 0;
 limit = 7;
-getDatasetUrl = "http://10.1.1.55:8081/mdap/rest/dsg/get";
+getDatasetUrl = "http://10.1.1.55:8088/platform_restful/rest/dsg/get";
 
 function addNewTab(tabName){
 	if(!((tabName == "geo") || (tabName == "sta"))){
@@ -52,59 +52,66 @@ function addNewTab(tabName){
 	main.tabs("option","active",tabCount);
 	//设置标签页内容
 	setOption(tabName,option);
-	setView(tabName);
 	tabNum ++;
 	tabCount ++;
 }
 
 function setOption(tabName,option){
-//	url = getDatasetUrl + tabName + "dss?jsoncallback=?";
-	url = getDatasetUrl + tabName + "dss";
 	checkbox = document.createElement("div");
 	checkbox.setAttribute("id","checkbox" + tabNum);
+	url = getDatasetUrl + tabName + "dss";
+	$.ajaxSettings.async = false;
 	$.getJSON(url,function(data){
-		for(i = 0; i < data.length; i++){
+		len = data.length;
+		if(tabName == "geo"){
+			mapInitialize(tabNum,len);
+		}
+		for(i = 0; i < len; i++){
 			des = data[i].description;
-			name = data[i].datasetName;
-			if(tabName == "geo"){
-				checkbox.innerHTML += "<input type = 'checkbox' onClick = \"" + tabName + "Information('" + name + "');\">" + des + "<br/>";
-			}else{
-				checkbox.innerHTML += "<input type = 'checkbox' onClick = \"" + tabName + "Information('" + name + "'," + tabNum + ");\">" + des + "<br/>";
-			}
+			checkbox.innerHTML += "<input type = 'checkbox' onClick = \"" + tabName + "Information('" + tabName + "'," + tabNum + "," + i + ");\"/>" + des + "<br/>";
 		}
 	}).error(function(){
 		alert("Oops, we got an error...");
 	});
 	select = document.createElement("div");
 	select.setAttribute("class","select");
-	select.innerHTML = "<input type = 'button' value = 'selectAll' onClick = \"selectAll(" + tabNum + ");\">" +
-		"<input type = 'button' value = 'unselectAll' onClick = \"unselectAll(" + tabNum + ");\">";
+	select.innerHTML = "<input type = 'button' value = 'selectAll' onClick = \"selectAll('" + tabName + "'," + tabNum + ");\"/>" +
+		"<input type = 'button' value = 'unselectAll' onClick = \"unselectAll('" + tabName + "'," + tabNum + ");\"/>";
 	$(checkbox).appendTo(option);
 	$(select).appendTo(option);
 }
 
-function setView(tabName){
-	if(tabName == "geo"){
-		mapInitialize(tabNum);
-	}
-}
-
-function selectAll(num){
-	input = document.getElementById("checkbox" + num).getElementsByTagName("input");
+function selectAll(tabName,tabNum){
+	input = document.getElementById("checkbox" + tabNum).getElementsByTagName("input");
 	for(i = 0; i < input.length; i++){
 		if(input[i].checked == false){
 			input[i].checked = true;
+			if(tabName == "geo"){
+				setGeoChecked(tabName,i);
+			}else{
+				setStaChecked(tabName,tabNum,i);
+			}
 		}
 	}
 }
 
-function unselectAll(num){
-	input = document.getElementById("checkbox" + num).getElementsByTagName("input");
+function unselectAll(tabName,tabNum){
+	input = document.getElementById("checkbox" + tabNum).getElementsByTagName("input");
 	for(i = 0; i < input.length; i++){
 		if(input[i].checked == false){
 			input[i].checked = true;
+			if(tabName == "geo"){
+				setGeoChecked(tabName,i);
+			}else{
+				setStaChecked(tabName,tabNum,i);
+			}
 		}else{
 			input[i].checked = false;
+			if(tabName == "geo"){
+				setGeoUnchecked(i);
+			}else{
+				setStaUnchecked(tabNum,i);
+			}
 		}
 	}
 }
