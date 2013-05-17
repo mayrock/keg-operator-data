@@ -1,11 +1,12 @@
 $(document).ready(function(){
-	hegiht = $(document).height();
+	height = $(document).height();
 	width = $(document).width();
-	account_height = 270;
-	account_width = 400;
+	account_height = 240;
+	account_width = 360;
+	table_width = 320;
 	$("#account_bg").css({
 		"position": "absolute",
-		"height": hegiht,
+		"height": height,
 		"width": width,
 		"filter": "alpha(opacity = 60)",
 		"opacity": "0.6",
@@ -15,9 +16,9 @@ $(document).ready(function(){
 	});
 	$("#account").css({
 		"position": "absolute",
-		"margin-top": (hegiht - account_height) / 2,
+		"margin-top": (height - account_height) / 2,
 		"margin-right": (width - account_width) / 2,
-		"margin-bottom": (hegiht - account_height) / 2,
+		"margin-bottom": (height - account_height) / 2,
 		"margin-left": (width - account_width) / 2,
 		"border": "1px solid #000000",
 		"height": account_height,
@@ -27,11 +28,11 @@ $(document).ready(function(){
 		"display": "none"
 	});
 	$("#account table").attr({
-		"width": "350px",
+		"width": table_width,
 		"style": "margin: auto"
 	});
 	$("#account").tabs();
-	$("#checkbox_a").attr("checked",true);
+	$("#checkbox_l").attr("checked",true);
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo("#account")
 		.css({
@@ -47,7 +48,7 @@ $(document).ready(function(){
 	if(($.cookie("username") != null) && ($.cookie("password") != null)){
 		Account.upperRightMenu("login","saved");
 	}else{
-		Account.upperRightMenu("logout","");
+		Account.upperRightMenu("logout","init");
 	}
 });
 

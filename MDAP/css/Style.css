@@ -50,7 +50,7 @@ a:hover	鼠标悬停在链接上*/
 
 #extended{
 	position: absolute;
-	left: 50px;
+	right: 200px;
 	width: 75px;
 	border: 1px solid #efefef;
 	background-color: white;
