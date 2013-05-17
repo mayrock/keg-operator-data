@@ -36,7 +36,7 @@ public class UserPostFunctions {
 		System.out.println(JContent.toString());
 		try {
 			job = new JSONObject();
-			job.append("status", true);
+			job.put("status", true);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

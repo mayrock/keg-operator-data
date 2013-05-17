@@ -6,6 +6,8 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 
+import org.codehaus.jettison.json.JSONObject;
+
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
 
@@ -20,7 +22,7 @@ import edu.thu.keg.mdap.restful.jerseyclasses.JStatistic;
 public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 
 	private JAXBContext context;
-	private Class<?>[] types = { String.class,Object.class, ArrayList.class,
+	private Class<?>[] types = { JSONObject.class,String.class,Object.class, ArrayList.class,
 			JDatasetName.class,
 			JDataset.class, JGeograph.class, JStatistic.class, JFieldName.class,JColumn.class };
 

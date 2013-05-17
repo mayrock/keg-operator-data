@@ -34,18 +34,19 @@ public class UserGetFunctions {
 
 	@GET
 	@Path("/verifyuser/{userid}/{pw}")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding verifyUser(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		JSONObject job = null;
 		try {
 			job = new JSONObject();
-			job.append("status", true);
+			job.put("status", true);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.print(job.toString());
+		System.out.println(job.toString());
 		// return Response.created(uriInfo.getAbsolutePath()).build();
 		return new JSONWithPadding(new GenericEntity<String>(job.toString()) {
 		}, callback);
