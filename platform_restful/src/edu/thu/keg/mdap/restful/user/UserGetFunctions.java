@@ -51,22 +51,4 @@ public class UserGetFunctions {
 		}, callback);
 	}
 
-	@GET
-	@Path("/adduser")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public JSONWithPadding addUser(
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
-		JSONObject job = null;
-		try {
-			job = new JSONObject();
-			job.append("status", true);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.print(job.toString());
-		// return Response.created(uriInfo.getAbsolutePath()).build();
-		return new JSONWithPadding(new GenericEntity<String>(job.toString()) {
-		}, callback);
-	}
 }

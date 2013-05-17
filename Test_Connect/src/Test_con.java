@@ -43,7 +43,7 @@ public class Test_con {
 						.path("/getdsfds/RegionInfo2")
 						.accept(MediaType.APPLICATION_JSON).get(String.class));
 
-		//  System.out.println(service.path("rest").path("dsg").path("hello")
+		// System.out.println(service.path("rest").path("dsg").path("hello")
 		// .accept(MediaType.APPLICATION_JSON).get(String.class));
 		// System.out.println(service.path("rest").path("dsg").path("jsonp")
 		// .accept(MediaType.APPLICATION_JSON).get(String.class));
@@ -56,12 +56,19 @@ public class Test_con {
 		fields.put("Longitude");
 		try {
 			job.put("fields", fields);
-			ClientResponse response =service.path("rest").path("dsp").path("getds/RegionInfo2")
-					 .accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, job);
-					System.out.println(response.getEntity(String.class));
+			ClientResponse response = service.path("rest").path("dsp")
+					.path("getds/RegionInfo2")
+					.accept(MediaType.APPLICATION_JSON)
+					.post(ClientResponse.class, job);
+			System.out.println(response.getEntity(String.class));
+
+			ClientResponse response2 = service.path("rest").path("up")
+					.path("adduser")
+					.accept(MediaType.APPLICATION_JSON)
+					.post(ClientResponse.class, job);
+			System.out.println(response2.getEntity(String.class));
 		} catch (JSONException e) {
-			
-			
+
 			e.printStackTrace();
 		}
 		// service.path("rest").path("dsd").path("/rmds/sa").delete();
@@ -75,7 +82,7 @@ public class Test_con {
 	}
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://10.1.1.55:8080/mdap").build();
+		return UriBuilder.fromUri("http://10.1.1.55:8081/mdap").build();
 	}
 
 }
