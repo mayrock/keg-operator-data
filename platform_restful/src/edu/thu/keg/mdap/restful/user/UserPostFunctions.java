@@ -2,6 +2,7 @@ package edu.thu.keg.mdap.restful.user;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -31,9 +32,10 @@ public class UserPostFunctions {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding addUser(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
-			JSONObject JContent) {
+			@FormParam("username") String username,
+			@FormParam("password") String password) {
+		System.out.println("POST");
 		JSONObject job = null;
-		System.out.println(JContent.toString());
 		try {
 			job = new JSONObject();
 			job.put("status", true);
@@ -44,5 +46,6 @@ public class UserPostFunctions {
 		System.out.print(job.toString());
 		return new JSONWithPadding(new GenericEntity<String>(job.toString()) {
 		}, callback);
+
 	}
 }

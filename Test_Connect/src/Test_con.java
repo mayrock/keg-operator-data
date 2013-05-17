@@ -20,7 +20,7 @@ public class Test_con {
 		WebResource service = client.resource(getBaseURI());
 
 		System.out.println("getdss "
-				+ service.path("rest").path("dsg").path("getdss")
+				+ service.path("rest").path("dsg").path("getdss?jsoncallback=?")
 						.accept(MediaType.APPLICATION_JSON).get(String.class));
 		System.out.println("getgeodss "
 				+ service.path("rest").path("dsg").path("getgeodss")
@@ -56,11 +56,11 @@ public class Test_con {
 		fields.put("Longitude");
 		try {
 			job.put("fields", fields);
-			ClientResponse response = service.path("rest").path("dsp")
-					.path("getds/RegionInfo2")
-					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class, job);
-			System.out.println(response.getEntity(String.class));
+//			ClientResponse response = service.path("rest").path("dsp")
+//					.path("getds/RegionInfo2")
+//					.accept(MediaType.APPLICATION_JSON)
+//					.post(ClientResponse.class, job);
+//			System.out.println(response.getEntity(String.class));
 
 			ClientResponse response2 = service.path("rest").path("up")
 					.path("adduser")
