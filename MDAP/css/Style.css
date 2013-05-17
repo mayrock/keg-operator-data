@@ -15,28 +15,32 @@
 	color : #8b0000;/*#8b0000: darkred*/
 }
 
-#topMenu{
+#account{
+	text-align: center;
+	font-family: Times New Roman;
+}
+
+#upperRightMenu{
 	position: absolute;
 	right: 10px;
 	text-align: center;/*文本的水平对齐方式*/
-	padding-right: 0.4em;/*em: 字体高,浏览器的默认值为16px*/
 	font-family: Times New Roman;
-	z-index: 10;/*z-index:	元素的堆叠顺序,拥有更高堆叠顺序的元素总是会处于堆叠顺序较低的元素的前面;z-index仅能在定位元素上奏效(e.g. position:absolute)*/
+	z-index: 100;/*z-index:	元素的堆叠顺序,拥有更高堆叠顺序的元素总是会处于堆叠顺序较低的元素的前面;z-index仅能在定位元素上奏效(e.g. position:absolute)*/
 }
 
-#topmenu a{
+#upperRightMenu a{
 	text-decoration: underline;/*添加到文本的修饰*/
-	padding: 0em 0.1em 0em 0.1em;/*顺序: 上 右 下 左*/
+	padding: 0 5px;/*顺序: 上 右 下 左*/
 }
 
 /*a:link	未访问的链接
 a:visited	已访问的链接
 a:hover	鼠标悬停在链接上*/
-#topmenu a:link,#topmenu a:visited{
+#upperRightMenu a:link,#upperRightMenu a:visited{
 	color: #000000;/*#000000: black*/
 }
 
-#topMenu a:hover{
+#upperRightMenu a:hover{
 	color: #008000;/*#008000: green*/
 }
 
@@ -44,7 +48,7 @@ a:hover	鼠标悬停在链接上*/
 	background-image: url(images/down_arrow.png);
 }
 
-#extendedTab{
+#extended{
 	position: absolute;
 	left: 50px;
 	width: 75px;
