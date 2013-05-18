@@ -1,20 +1,3 @@
-/*#: id选择器*/
-#header{
-	vertical-align: top;/*垂直对齐方式	top: 把元素的顶端与行中最高元素的顶端对齐*/
-	font-family: Times New Roman;/*字体系列*/
-	padding-bottom : 5px;/*padding: 内边距*/
-	padding-left : 10px;
-	padding-right : 10px;
-}
-
-/*.: class选择器*/
-.title{
-	font-style: italic;/*字体样式	italic: 斜体*/
-	font-weight: bold;/*字体粗细*/
-	font-size : 36px;/*字体大小*/
-	color : #8b0000;/*#8b0000: darkred*/
-}
-
 #account{
 	text-align: center;
 	font-family: Times New Roman;
@@ -56,14 +39,21 @@ a:hover	鼠标悬停在链接上*/
 	background-color: white;
 }
 
-#footer{
-	float: left;
-	width: 100%;
-	padding-top: 5px;
-	text-align: center;
-	font-family: Times New Roman;
-	font-weight: lighter;
-	color: #cccccc;
+/*#: id选择器*/
+#header{
+	vertical-align: top;/*垂直对齐方式	top: 把元素的顶端与行中最高元素的顶端对齐*/
+	font-family: Times New Roman;/*字体系列*/
+	padding-bottom : 5px;/*padding: 内边距*/
+	padding-left : 10px;
+	padding-right : 10px;
+}
+
+/*.: class选择器*/
+.title{
+	font-style: italic;/*字体样式	italic: 斜体*/
+	font-weight: bold;/*字体粗细*/
+	font-size : 36px;/*字体大小*/
+	color : #8b0000;/*#8b0000: darkred*/
 }
 
 .option{
@@ -74,6 +64,14 @@ a:hover	鼠标悬停在链接上*/
 	border: 1px solid #000000;
 	font-family: Times New Roman;
 	font-size : 12px;
+}
+
+.select{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	text-align: center;
 }
 
 .view{
@@ -99,10 +97,14 @@ a:hover	鼠标悬停在链接上*/
 	margin: auto 2px 2px 2px;
 }
 
-.select{
+#footer{
 	position: absolute;
-	right: 0;
 	bottom: 0;
-	left: 0;
+	float: left;
+	width: 100%;
+	padding-top: 5px;
 	text-align: center;
+	font-family: Times New Roman;
+	font-weight: lighter;
+	color: #cccccc;
 }

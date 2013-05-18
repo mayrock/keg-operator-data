@@ -36,7 +36,7 @@ function setGeoChecked(tabName,index){
 	url = getDatasetUrl + tabName + "dss";
 	$.ajaxSettings.async = false;
 	$.getJSON(url,function(data){
-		name = data[index].datasetName;
+		
 	}).error(function(){
 		alert("Oops, we got an error...");
 	});

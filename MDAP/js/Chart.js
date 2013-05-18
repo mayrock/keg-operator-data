@@ -20,7 +20,7 @@ function setStaChecked(tabName,tabNum,index){
 	$.getJSON(url,function(data){
 		name = data[index].datasetName;
 		des = data[index].description;
-		staSchema = data[index].schema;
+		
 	}).error(function(){
 		alert("Oops, we got an error...");
 	});

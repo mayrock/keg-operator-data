@@ -1,23 +1,23 @@
-tabNum = 0;
-tabCount = 0;
-limit = 7;
-getDatasetUrl = "http://10.1.1.55:8088/platform_restful/rest/dsg/get";
+Tab = {};
 
-function addNewTab(tabName){
+Tab.createFrame = function(tabName){
 	if(!((tabName == "geo") || (tabName == "sta"))){
 		alert("Oops, we got an error...");
 		return;
 	}
-	$("#extendedTab").css("display","none");
+	$("#extended").css("display","none");
+	tabNum = Common.tabNum;
+	tabCount = Common.tabCount;
 	//限制标签页个数
-	if(tabCount == limit){
-		alert("Tabs cann't be more than " + limit + "!");
+	if(tabCount == Common.tabLimit()){
+		alert("Tabs cann't be more than " + Tab.limit + "!");
 		return;
 	}
+	Common.tabNum ++;
+	Common.tabCount ++;
 	//添加一个标签页
-	main = $("#main").tabs();
-	ul = main.find("ul");
 	li = document.createElement("li");
+	$(li).appendTo("#tabs_ul");
 	li.innerHTML = "<a href='#tab" + tabNum + "'>" + tabName + " data</a>";
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo(li)
@@ -31,56 +31,75 @@ function addNewTab(tabName){
 			//点击关闭按钮删除标签页
 			function(){
 				$(this).parent().remove();
-				contentName = $(this).parent().children("a").attr("href");
-				$(contentName).remove();
-				tabCount --;
-				main.tabs("refresh");
+				divName = $(this).parent().children("a").attr("href");
+				$(divName).remove();
+				Common.tabCount --;
+				$("#tabs").tabs("refresh");
 			}
 		);
-	$(li).appendTo(ul);
-	content = document.createElement("div");
-	content.setAttribute("id","tab" + tabNum);
+	tab = document.createElement("div");
+	tab.setAttribute("id","tab" + tabNum);
+	tab.setAttribute("class","tab");
+	$(tab).appendTo("#tabs");
 	option = document.createElement("div");
-	view = document.createElement("div");
+	option.setAttribute("id","option" + tabNum);
 	option.setAttribute("class","option");
+	$(option).appendTo(tab);
+	view = document.createElement("div");
 	view.setAttribute("id","view" + tabNum);
 	view.setAttribute("class","view");
-	$(option).appendTo(content);
-	$(view).appendTo(content);
-	$(content).appendTo(main);
-	main.tabs("refresh");
-	main.tabs("option","active",tabCount);
+	$(view).appendTo(tab);
 	//设置标签页内容
-	setOption(tabName,option);
-	tabNum ++;
-	tabCount ++;
-}
-
-function setOption(tabName,option){
-	checkbox = document.createElement("div");
-	checkbox.setAttribute("id","checkbox" + tabNum);
-	url = getDatasetUrl + tabName + "dss";
-	$.ajaxSettings.async = false;
-	$.getJSON(url,function(data){
-		len = data.length;
-		if(tabName == "geo"){
-			mapInitialize(tabNum,len);
-		}
-		for(i = 0; i < len; i++){
-			des = data[i].description;
-			checkbox.innerHTML += "<input type = 'checkbox' onClick = \"" + tabName + "Information('" + tabName + "'," + tabNum + "," + i + ");\"/>" + des + "<br/>";
-		}
-	}).error(function(){
-		alert("Oops, we got an error...");
+	setTab();
+	$("#tabs").tabs("refresh");
+	$("#tabs").tabs("option","active",tabCount);
+	$("#checkbox" + tabNum).jstree({
+		"plugins": ["themes","html_data","checkbox","sort","ui"]
 	});
-	select = document.createElement("div");
-	select.setAttribute("class","select");
-	select.innerHTML = "<input type = 'button' value = 'selectAll' onClick = \"selectAll('" + tabName + "'," + tabNum + ");\"/>" +
-		"<input type = 'button' value = 'unselectAll' onClick = \"unselectAll('" + tabName + "'," + tabNum + ");\"/>";
-	$(checkbox).appendTo(option);
-	$(select).appendTo(option);
+	
+	function setTab(){
+//		if(tabName == "geo"){
+//			mapInitialize(Common.tabNum);
+//		}
+		checkbox = document.createElement("div");
+		checkbox.setAttribute("id","checkbox" + tabNum);
+		checkbox.setAttribute("class","checkbox");
+		$(checkbox).appendTo("#option" + tabNum);
+		ul_lv1 = document.createElement("ul");
+		$(ul_lv1).appendTo(checkbox);
+//		url = getDatasetUrl + tabName + "dss";
+//		$.ajaxSettings.async = false;
+//		$.getJSON(url,function(data){
+//			len = data.length;
+			len = 3;
+			for(i = 0; i < len; i++){
+//				des = data[i].description;
+				des = i;
+//				name = data[i].datasetName;
+//				schema = data[i].schema;
+//				len_sub = schema.length;
+				len_sub = 3;
+				li_lv1 = document.createElement("li");
+				li_lv1.setAttribute("id","jstree" + tabNum + "_" + i);
+				$(li_lv1).appendTo(ul_lv1);
+				li_lv1.innerHTML = "<a href='#'>" + des + "</a>";
+				ul_lv2 = document.createElement("ul");
+				$(ul_lv2).appendTo(li_lv1);
+				for(j = 0; j < len_sub; j++){
+//					des_sub = schema[i];
+					des_sub = j;
+					li_lv2 = document.createElement("li");
+					li_lv2.setAttribute("id","jstree" + tabNum + "_" + i + "_" + j);
+					$(li_lv2).appendTo(ul_lv2);
+					li_lv2.innerHTML = "<a href='#'>" + des_sub + "</a>";
+				}
+			}
+//		}).error(function(){
+//			alert("Oops, we got an error...");
+//		});
+	}
 }
-
+/*
 function selectAll(tabName,tabNum){
 	input = document.getElementById("checkbox" + tabNum).getElementsByTagName("input");
 	for(i = 0; i < input.length; i++){
@@ -114,4 +133,4 @@ function unselectAll(tabName,tabNum){
 			}
 		}
 	}
-}
+}*/

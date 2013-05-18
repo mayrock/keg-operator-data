@@ -1,10 +1,4 @@
-IP = "http://10.1.1.55:8088/platform_restful/rest/";
-
 Account = {};
-
-Account.registerUrl = IP + "up/adduser";
-
-Account.loginUrl = IP + "ug/verifyuser/";
 
 Account.createFrame = function(){
 	$("#account_bg").css("display","block");
@@ -24,7 +18,7 @@ Account.closeFrame = function(){
 
 Account.upperRightMenu = function(status,info){
 	if(status == "login"){
-		if(info = "saved"){
+		if(info == "saved"){
 			username = $.cookie("username");
 		}else{
 			username = info;
@@ -63,7 +57,8 @@ Account.register = function(){
 		alert("The two passwords you input don't match!");
 		return;
 	}
-	$.post(Account.registerUrl,{
+	$.ajaxSettings.async = false;
+	$.post(Common.registerUrl(),{
 		username: username,
 		password: password
 	},function(data){
@@ -76,6 +71,8 @@ Account.register = function(){
 			alert("This username has been registered!");
 			return;
 		}
+	}).error(function(){
+		alert("Oops, we got an error...");
 	});
 };
 
@@ -90,8 +87,8 @@ Account.login = function(){
 		alert("Password cann't be empty!");
 		return;
 	}
-	Account.loginUrl += username + "/" + password;
-	$.getJSON(Account.loginUrl,function(data){
+	$.ajaxSettings.async = false;
+	$.getJSON(Common.loginUrl() + username + "/" + password,function(data){
 		if(data.status == true){
 			if($("#checkbox_l").is(":checked") == true){
 				$.cookie("username",username,{expires: 7,path: "/"});

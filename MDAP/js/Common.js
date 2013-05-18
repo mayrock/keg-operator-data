@@ -4,16 +4,6 @@ $(document).ready(function(){
 	account_height = 240;
 	account_width = 360;
 	table_width = 320;
-	$("#account_bg").css({
-		"position": "absolute",
-		"height": height,
-		"width": width,
-		"filter": "alpha(opacity = 60)",
-		"opacity": "0.6",
-		"z-index": "999",
-		"background-color": "gray",
-		"display": "none"
-	});
 	$("#account").css({
 		"position": "absolute",
 		"margin-top": (height - account_height) / 2,
@@ -31,7 +21,23 @@ $(document).ready(function(){
 		"width": table_width,
 		"style": "margin: auto"
 	});
+	$("#account_bg").css({
+		"position": "absolute",
+		"height": height,
+		"width": width,
+		"filter": "alpha(opacity = 60)",
+		"opacity": "0.6",
+		"z-index": "999",
+		"background-color": "gray",
+		"display": "none"
+	});
+	$("#main").css({
+		"position": "absolute",
+		"height": height,
+		"width": width
+	});
 	$("#account").tabs();
+	$("#tabs").tabs();
 	$("#checkbox_l").attr("checked",true);
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo("#account")
@@ -45,14 +51,39 @@ $(document).ready(function(){
 		).click(
 			function(){Account.closeFrame();}
 		);
-	if(($.cookie("username") != null) && ($.cookie("password") != null)){
+/*	if(($.cookie("username") != null) && ($.cookie("password") != null)){
 		Account.upperRightMenu("login","saved");
 	}else{
 		Account.upperRightMenu("logout","init");
-	}
+	}*/
+	Account.upperRightMenu("login","Ariesnix");
 });
 
 Common = {};
+
+Common.ip = function(){
+	return "http://10.1.1.55:8088/platform_restful/rest/";
+};
+
+Common.registerUrl = function(){
+	return Common.ip() + "up/adduser";
+};
+
+Common.loginUrl = function(){
+	return Common.ip() + "ug/verifyuser/";
+};
+
+Common.datasetUrl = function(){
+	return Common.ip() + "dsg/get";
+};
+
+Common.tabNum = 0;
+
+Common.tabCount = 0;
+
+Common.tabLimit = function(){
+	return 7;
+}
 
 Common.advanced = function(){
 	if($("#extended").css("display") == "none"){
