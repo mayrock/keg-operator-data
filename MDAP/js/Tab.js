@@ -53,50 +53,55 @@ Tab.createFrame = function(tabName){
 	setTab();
 	$("#tabs").tabs("refresh");
 	$("#tabs").tabs("option","active",tabCount);
-	$("#checkbox" + tabNum).jstree({
-		"plugins": ["themes","html_data","checkbox","sort","ui"]
+/*	$("#checkbox" + tabNum).jstree({
+		"plugins": ["checkbox"]
 	});
-	
+	$("#checkbox" + tabNum).jstree("hide_dots");
+	$("#checkbox" + tabNum).jstree("hide_icons");*/
+
 	function setTab(){
-//		if(tabName == "geo"){
-//			mapInitialize(Common.tabNum);
-//		}
+		if(tabName == "geo"){
+			map = Map.initialize(tabNum);
+		}
 		checkbox = document.createElement("div");
 		checkbox.setAttribute("id","checkbox" + tabNum);
 		checkbox.setAttribute("class","checkbox");
 		$(checkbox).appendTo("#option" + tabNum);
-		ul_lv1 = document.createElement("ul");
-		$(ul_lv1).appendTo(checkbox);
-//		url = getDatasetUrl + tabName + "dss";
-//		$.ajaxSettings.async = false;
-//		$.getJSON(url,function(data){
-//			len = data.length;
-			len = 3;
+/*		ul_lv1 = document.createElement("ul");
+		$(ul_lv1).appendTo(checkbox);*/
+		url = getDatasetUrl + tabName + "dss";
+		$.ajaxSettings.async = false;
+		$.getJSON(url,function(data){
+			len = data.length;
 			for(i = 0; i < len; i++){
-//				des = data[i].description;
-				des = i;
-//				name = data[i].datasetName;
-//				schema = data[i].schema;
-//				len_sub = schema.length;
-				len_sub = 3;
-				li_lv1 = document.createElement("li");
+				des = data[i].description;
+				if(tabName == "geo"){
+					name = data[i].datasetName;
+					type = "";
+					schema = data[i].schema;
+					type = "points";
+					Map.loadData(tabNum,i,type);
+					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = 'Map.clickEvent(" + tabNum + "," + i + "," + map + "," + type + ");'/>" + des).appendTo(checkbox);
+				}else if(tabName == "sta"){
+					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = 'Chart.clickEvent(" + tabNum + "," + i + ");'/>" + des).appendTo(checkbox);
+				}
+/*				li_lv1 = document.createElement("li");
 				li_lv1.setAttribute("id","jstree" + tabNum + "_" + i);
 				$(li_lv1).appendTo(ul_lv1);
 				li_lv1.innerHTML = "<a href='#'>" + des + "</a>";
 				ul_lv2 = document.createElement("ul");
 				$(ul_lv2).appendTo(li_lv1);
 				for(j = 0; j < len_sub; j++){
-//					des_sub = schema[i];
-					des_sub = j;
+					des_sub = schema[i];
 					li_lv2 = document.createElement("li");
 					li_lv2.setAttribute("id","jstree" + tabNum + "_" + i + "_" + j);
 					$(li_lv2).appendTo(ul_lv2);
 					li_lv2.innerHTML = "<a href='#'>" + des_sub + "</a>";
-				}
+				}*/
 			}
-//		}).error(function(){
-//			alert("Oops, we got an error...");
-//		});
+		}).error(function(){
+			alert("Oops, we got an error...");
+		});
 	}
 }
 /*

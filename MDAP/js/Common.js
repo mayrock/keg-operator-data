@@ -1,15 +1,13 @@
 $(document).ready(function(){
-	height = $(document).height();
-	width = $(document).width();
 	account_height = 240;
 	account_width = 360;
 	table_width = 320;
 	$("#account").css({
 		"position": "absolute",
-		"margin-top": (height - account_height) / 2,
-		"margin-right": (width - account_width) / 2,
-		"margin-bottom": (height - account_height) / 2,
-		"margin-left": (width - account_width) / 2,
+		"margin-top": (Common.height() - account_height) / 2,
+		"margin-right": (Common.width() - account_width) / 2,
+		"margin-bottom": (Common.height() - account_height) / 2,
+		"margin-left": (Common.width() - account_width) / 2,
 		"border": "1px solid #000000",
 		"height": account_height,
 		"width": account_width,
@@ -61,6 +59,14 @@ $(document).ready(function(){
 
 Common = {};
 
+Common.height = function(){
+	return $(document).height();
+}
+
+Common.width = function(){
+	return $(document).width();
+}
+
 Common.ip = function(){
 	return "http://10.1.1.55:8088/platform_restful/rest/";
 };
@@ -77,9 +83,19 @@ Common.datasetUrl = function(){
 	return Common.ip() + "dsg/get";
 };
 
+Common.latlngUrl = function(){
+	return Common.ip() + "dsg/getgeods/";
+};
+
+Common.staDataUrl = function(){
+	return Common.ip() + "dsg/getstads/";
+}
+
 Common.tabNum = 0;
 
 Common.tabCount = 0;
+
+Common.mrkrArr = new Array();
 
 Common.tabLimit = function(){
 	return 7;
