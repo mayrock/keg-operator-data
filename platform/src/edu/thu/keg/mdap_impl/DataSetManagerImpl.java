@@ -19,11 +19,14 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
+import edu.thu.keg.mdap.datamodel.Query;
+import edu.thu.keg.mdap.datafeature.DataFeature;
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
+import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
+import edu.thu.keg.mdap_impl.datafeature.DataViewImpl;
 import edu.thu.keg.mdap_impl.provider.JdbcProvider;
 
 /**
@@ -42,7 +45,8 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 	
 	private HashMap<String, DataSet> datasets = null;
-	private HashMap<DataSetFeatureType, Set<DataSet>> features = null;
+	private HashMap<DataFeatureType, Set<DataSet>> features = null;
+	private HashMap<DataFeatureType, Set<DataView>> views = null;
 	private XStream xstream;
 	
 	private XStream getXstream() {
@@ -68,7 +72,9 @@ public class DataSetManagerImpl implements DataSetManager {
 	
 	private DataSetManagerImpl() {
 		datasets = new HashMap<String, DataSet>();
-		features = new HashMap<DataSetFeatureType, Set<DataSet>>();
+		features = new HashMap<DataFeatureType, Set<DataSet>>();
+		views = new HashMap<DataFeatureType, Set<DataView>>();
+		
 		try {
 			loadDataSets();
 		} catch (Exception ex) {
@@ -125,13 +131,13 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	@Override
-	public Collection<DataSet> getDataSetList(DataSetFeatureType type) {
+	public Collection<DataSet> getDataSetList(DataFeatureType type) {
 		return features.get(type);	
 	}
 	private void addDataSet(DataSet ds) {
 		datasets.put(ds.getName(), ds);
-		for (DataSetFeature feature : ds.getFeatures()) {
-			DataSetFeatureType type = feature.getFeatureType();
+		for (DataFeature feature : ds.getFeatures()) {
+			DataFeatureType type = feature.getFeatureType();
 				if (!features.containsKey(type))
 					features.put(type, new HashSet<DataSet>());
 				features.get(type).add(ds);
@@ -152,4 +158,26 @@ public class DataSetManagerImpl implements DataSetManager {
 		addDataSet(ds);
 		return ds;
 	}
+	@Override
+	public DataView defineView(String name, String description
+			, DataFeatureType type, Query q) {
+		DataView v = new DataViewImpl(name, description, type, q);
+		if (!views.containsKey(v.getFeatureType()) ) {
+			views.put(type, new HashSet<DataView>() );
+		}
+		views.get(type).add(v);
+		return v;
+	}
+
+	@Override
+	public Collection<DataView> getDataViewList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<DataView> getDataViewList(DataFeatureType type) {
+		return views.get(type);
+	}
+
 }

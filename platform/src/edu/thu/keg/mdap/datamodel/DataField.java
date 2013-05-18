@@ -59,19 +59,8 @@ public interface DataField {
 		}
 	}
 	public enum FieldFunctionality {
-		Latitude(true), Longitude(true), ID(true), TimeStamp(true),
-		Count(false), Value(false), Other(false);
-		private boolean key;
-		/**
-		 * Whether this func act as a key field
-		 * @return boolean of whether is key
-		 */
-		public boolean isKey() {
-			return this.key;
-		}
-		FieldFunctionality(boolean isKey) {
-			this.key = isKey;
-		}
+		Latitude, Longitude, TimeStamp, Value, Identifier, Other;
+
 		/**
 		 * Get a FieldFunctionality instance from its string representation
 		 * @param str The string representation 
@@ -113,6 +102,8 @@ public interface DataField {
 	 * @return true when it is key, false otherwise
 	 */
 	public boolean isKey();
+	
+	public boolean isDim();
 	/**
 	 * 
 	 * @return whether null value is allowed for this field

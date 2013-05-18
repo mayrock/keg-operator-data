@@ -11,16 +11,17 @@ import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
+import edu.thu.keg.mdap.datafeature.DataFeature;
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.Query.Order;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
+import edu.thu.keg.mdap_impl.datafeature.DataFeatureImpl;
 
 /**
  * A general implementation of the interface DataSet
@@ -102,7 +103,7 @@ public class DataSetImpl implements DataSet {
 		return this.description;
 	}
 	@Override
-	public DataSetFeature getFeature(DataSetFeatureType type) {
+	public DataFeature getFeature(DataFeatureType type) {
 		DataField[] keys = new DataField[type.getFuncs().length];
 		boolean flag = true;
 		int i = 0;
@@ -115,7 +116,7 @@ public class DataSetImpl implements DataSet {
 			}
 		}
 		if (flag) {
-			return new DataSetFeatureImpl(type, keys, 
+			return new DataFeatureImpl(type, keys, 
 					this.getValueFields().toArray(new DataField[0]));
 		} else {
 			return null;
@@ -128,9 +129,9 @@ public class DataSetImpl implements DataSet {
 
 
 	@Override
-	public Query getQuery(DataSetFeatureType featureType)
+	public Query getQuery(DataFeatureType featureType)
 			throws OperationNotSupportedException, DataProviderException {
-		DataSetFeature feature = this.getFeature(featureType);
+		DataFeature feature = this.getFeature(featureType);
 		Query q = this.getQuery();
 		q = q.select(feature.getAllFields());
 		if (feature.getValueFields() != null) {
@@ -153,10 +154,10 @@ public class DataSetImpl implements DataSet {
 
 
 	@Override
-	public Set<DataSetFeature> getFeatures() {
-		Set<DataSetFeature> features = new HashSet<DataSetFeature>();
-		for (DataSetFeatureType type : DataSetFeatureType.values()) {
-			DataSetFeature f = this.getFeature(type);
+	public Set<DataFeature> getFeatures() {
+		Set<DataFeature> features = new HashSet<DataFeature>();
+		for (DataFeatureType type : DataFeatureType.values()) {
+			DataFeature f = this.getFeature(type);
 			if (f != null) {
 				features.add(f);
 			}

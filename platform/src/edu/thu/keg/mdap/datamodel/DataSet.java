@@ -9,8 +9,8 @@ import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
-import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
+import edu.thu.keg.mdap.datafeature.DataFeature;
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -19,22 +19,8 @@ import edu.thu.keg.mdap.provider.DataProviderException;
  * @author Yuanchao Ma
  *
  */
-public interface DataSet {
-	/**
-	 * Get the name (unique identifier) of the dataset,
-	 * like a table name in SQL or HIVE.
-	 * @return the unique name. 
-	 */
-	public String getName();
-	/**
-	 * Return a Query for querying actual data of this dataset, if it is loadable.
-	 * @return a Query against the provider of this dataset. 
-	 * @throws OperationNotSupportedException when dataset is not loadable
-	 * @throws DataProviderException when actual data of the DataSet does not
-	 * exist on the DataProvider
-	 */
-	public Query getQuery() throws OperationNotSupportedException, DataProviderException;
-	/**
+public interface DataSet extends TableStructure {
+/**
 	 * Return a Query for querying data of the specific feature supported by this dataset.
 	 * The returned query only contains fields related to the feature, and is by default 
 	 * ordered by the first value field (if there is any) descending.
@@ -44,7 +30,7 @@ public interface DataSet {
 	 * @throws DataProviderException when actual data of the DataSet does not
 	 * exist on the DataProvider
 	 */
-	public Query getQuery(DataSetFeatureType featureType) throws OperationNotSupportedException, DataProviderException;
+	public Query getQuery(DataFeatureType featureType) throws OperationNotSupportedException, DataProviderException;
 	
 	/**
 	 * Get the provider of this DataSet
@@ -56,11 +42,7 @@ public interface DataSet {
 	 * @return a boolean indicates whether this dataset is small enough to be loaded into memory
 	 */
 	public boolean isLoadable();
-	/**
-	 * Get description of this dataset.
-	 * @return Human-friendly description.
-	 */
-	public String getDescription();
+
 	/**
 	 * Get an array of the fields contained in the dataset
 	 * @return an array containing all the fields in the schema
@@ -75,14 +57,14 @@ public interface DataSet {
 	/**
 	 * Get a map containing all features of this dataset
 	 */
-	public Set<DataSetFeature> getFeatures();
+	public Set<DataFeature> getFeatures();
 	/**
 	 * Get an instance representing the feature of this dataset supporting
 	 * the specified feature type.
 	 * @param type The feature type whose instance is expected
 	 * @return A instance of DataSetFeature. Return null if the type is not supported
 	 */
-	public DataSetFeature getFeature(DataSetFeatureType type);
+	public DataFeature getFeature(DataFeatureType type);
 	/**
 	 * Write the actual data of this datset on its provider
 	 * @param content The DataContent to be written

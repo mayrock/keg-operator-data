@@ -160,7 +160,8 @@ public class QueryImpl implements Query {
 			DataField df = dataFields[i];
 			if (df instanceof AggregatedDataField) {
 				DataField ndf = new GeneralDataField(df.getName(), df.getFieldType(),
-						df.getDescription(), df.getFunction());
+						df.getDescription(), df.isKey(),df.allowNull(), df.isDim(),
+						df.getFunction());
 				nfs[i] = ndf;
 			} else {
 				nfs[i] = df;

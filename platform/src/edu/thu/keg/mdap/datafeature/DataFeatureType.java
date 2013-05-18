@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.datasetfeature;
+package edu.thu.keg.mdap.datafeature;
 
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 
@@ -9,13 +9,14 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
  * @author myc
  *
  */
-public enum DataSetFeatureType {
+public enum DataFeatureType {
 	GeoFeature(FieldFunctionality.Latitude, FieldFunctionality.Longitude),
 	DistributionFeature, 
-	TimeSeriesFeature(FieldFunctionality.TimeStamp);
+	TimeSeriesFeature(FieldFunctionality.TimeStamp),
+	ValueFeature(FieldFunctionality.Value);
 	
 	private FieldFunctionality[] funcs;
-	DataSetFeatureType(FieldFunctionality ... funcs) {
+	DataFeatureType(FieldFunctionality ... funcs) {
 		this.funcs = funcs;
 	}
 	public FieldFunctionality[] getFuncs() {

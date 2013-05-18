@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.datasetfeature;
+package edu.thu.keg.mdap.datafeature;
 
 import edu.thu.keg.mdap.datamodel.DataField;
 
@@ -12,7 +12,7 @@ import edu.thu.keg.mdap.datamodel.DataField;
  * @author Yuanchao Ma
  *
  */
-public interface DataSetFeature {
+public interface DataFeature {
 	
 	/**
 	 * 
@@ -39,5 +39,5 @@ public interface DataSetFeature {
 	 * @return A subclass of DataSetFeature, which uniquely identifies
 	 * the type of this feature.
 	 */
-	public DataSetFeatureType getFeatureType();
+	public DataFeatureType getFeatureType();
 }

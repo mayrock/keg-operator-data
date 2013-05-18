@@ -1,18 +1,18 @@
 /**
  * 
  */
-package edu.thu.keg.mdap_impl.datamodel;
+package edu.thu.keg.mdap_impl.datafeature;
 
+import edu.thu.keg.mdap.datafeature.DataFeature;
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datamodel.DataField;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
 
 /**
  * @author Yuanchao Ma
  *
  */
-public class DataSetFeatureImpl implements DataSetFeature {
-	private DataSetFeatureType type;
+public class DataFeatureImpl implements DataFeature {
+	private DataFeatureType type;
 	private DataField[] keyFields;
 	private DataField[] valueFields;
 	
@@ -42,7 +42,7 @@ public class DataSetFeatureImpl implements DataSetFeature {
 		return all;
 	}
 	@Override
-	public DataSetFeatureType getFeatureType() {
+	public DataFeatureType getFeatureType() {
 		return this.type;
 	}
 	/**
@@ -50,7 +50,7 @@ public class DataSetFeatureImpl implements DataSetFeature {
 	 * @param keyFields the key DataFields
 	 * @param valueFields the value DataFields
 	 */
-	public DataSetFeatureImpl(DataSetFeatureType type, DataField[] keyFields, DataField ...valueFields) {
+	public DataFeatureImpl(DataFeatureType type, DataField[] keyFields, DataField ...valueFields) {
 		this.type = type;
 		this.keyFields = keyFields;
 		this.valueFields = valueFields;
@@ -61,7 +61,7 @@ public class DataSetFeatureImpl implements DataSetFeature {
 	 * @param keyField the key DataField
 	 * @param valueFields the value fields
 	 */
-	public DataSetFeatureImpl(DataSetFeatureType type, DataField keyField, DataField... valueFields) {
+	public DataFeatureImpl(DataFeatureType type, DataField keyField, DataField... valueFields) {
 		this.type = type;
 		this.keyFields = new DataField[]{keyField };
 		this.valueFields = valueFields;

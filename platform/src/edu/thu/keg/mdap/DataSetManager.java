@@ -3,9 +3,11 @@ package edu.thu.keg.mdap;
 import java.io.IOException;
 import java.util.Collection;
 
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
+import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
+import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -31,6 +33,11 @@ public interface DataSetManager {
 	 */
 	public Collection<DataSet> getDataSetList();
 	/**
+	 * 
+	 * @return
+	 */
+	public Collection<DataView> getDataViewList();
+	/**
 	 * Create a new DataSet instance, using the given name, connection string
 	 * data fields, and a single features
 	 * @param name The unique name of the DataSet
@@ -43,6 +50,10 @@ public interface DataSetManager {
 	 */
 	public DataSet createDataSet(String name, String owner, String description, DataProvider provider, 
 			boolean loadable, DataField ... fields);
+	
+	
+	public DataView defineView(String name, String description, DataFeatureType type,
+			Query q);
 	/**
 	 * Remove a DataSet from the platform, as well as remove 
 	 * its actual data from its provider.
@@ -57,10 +68,17 @@ public interface DataSetManager {
 	 * @param type the feature type demanded
 	 * @return all datasets that supports the certain type of feature
 	 */
-	public Collection<DataSet> getDataSetList(DataSetFeatureType type);
+	public Collection<DataSet> getDataSetList(DataFeatureType type);
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public Collection<DataView> getDataViewList(DataFeatureType type);
 	/**
 	 * Save current DataSet list to disk
 	 * @throws IOException
 	 */
 	public void saveChanges() throws IOException;
+
 }

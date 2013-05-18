@@ -124,4 +124,9 @@ public class AggregatedDataField implements DataField {
 		return FieldFunctionality.Value;
 	}
 
+	@Override
+	public boolean isDim() {
+		return false;
+	}
+
 }

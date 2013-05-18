@@ -9,6 +9,9 @@ import javax.naming.OperationNotSupportedException;
 import edu.thu.keg.mdap.DataProviderManager;
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
+import edu.thu.keg.mdap.datafeature.DataFeature;
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
+import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.AggregatedDataField;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
@@ -20,8 +23,6 @@ import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -65,64 +66,75 @@ public class PlatformImpl implements Platform {
 		
 		
 		DataField[] fields = new DataField[2];
-		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", FieldFunctionality.ID );
-		fields[1] = new GeneralDataField("URL", FieldType.Double, "", FieldFunctionality.Value );
+		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true, FieldFunctionality.Identifier );
+		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false, FieldFunctionality.Other );
 		getDataSetManager().createDataSet("WebsiteId_URL","myc", "Website info", 
 				provider, true, fields);
 		
 		fields = new DataField[4];
-		fields[0] = new GeneralDataField("Region", FieldType.Int, "", FieldFunctionality.ID );
-		fields[1] = new GeneralDataField("Name", FieldType.ShortString, "", FieldFunctionality.Value );
-		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", FieldFunctionality.Latitude );
-		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", FieldFunctionality.Longitude );
+		fields[0] = new GeneralDataField("Region", FieldType.Int, "", true, FieldFunctionality.Other );
+		fields[1] = new GeneralDataField("Name", FieldType.ShortString, "", false, FieldFunctionality.Other );
+		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false, FieldFunctionality.Latitude );
+		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false, FieldFunctionality.Longitude );
 		getDataSetManager().createDataSet("RegionInfo3","myc", "Region info 3",
 				provider, true, fields);
 		
 		fields = new DataField[5];
-		fields[0] = new GeneralDataField("SiteId", FieldType.Int, "", FieldFunctionality.ID );
-		fields[1] = new GeneralDataField("SiteName", FieldType.ShortString, "", FieldFunctionality.Value );
-		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", FieldFunctionality.Latitude );
-		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", FieldFunctionality.Longitude );
-		fields[4] = new GeneralDataField("Region", FieldType.Int, "", FieldFunctionality.Value );
-		getDataSetManager().createDataSet("RegionInfo2","myc", "Region info 2",
+		fields[0] = new GeneralDataField("SiteId", FieldType.Int, "", true, FieldFunctionality.Identifier );
+		fields[1] = new GeneralDataField("SiteName", FieldType.ShortString, "", false, FieldFunctionality.Identifier );
+		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false, FieldFunctionality.Latitude );
+		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false, FieldFunctionality.Longitude );
+		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false, false, true, FieldFunctionality.Other );
+		DataSet dsSite = getDataSetManager().createDataSet("RegionInfo2","myc", "Region info 2",
 				provider, true, fields);
 		
 		fields = new DataField[6];
 		fields[0] = new GeneralDataField("Domain", FieldType.LongString, 
-				"Domain", FieldFunctionality.ID);
+				"Domain", true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("DayCount", FieldType.Int, 
-				"appear days of this domain", FieldFunctionality.Count);
+				"appear days of this domain", false, FieldFunctionality.Value);
 		fields[2] = new GeneralDataField("HourCount", FieldType.Int, 
-				"appear hours of this domain", FieldFunctionality.Count);
+				"appear hours of this domain", false, FieldFunctionality.Value);
 		fields[3] = new GeneralDataField("LocCount", FieldType.Int, 
-				"appear locations of this domain", FieldFunctionality.Count);
+				"appear locations of this domain", false, FieldFunctionality.Value);
 		fields[4] = new GeneralDataField("UserCount", FieldType.Int, 
-				"number of users visiting this domain", FieldFunctionality.Count);
+				"number of users visiting this domain", false, FieldFunctionality.Value);
 		fields[5] = new GeneralDataField("TotalCount", FieldType.Int, 
-				"total visits of this domain", FieldFunctionality.Count);
+				"total visits of this domain", false, FieldFunctionality.Value);
 		getDataSetManager().createDataSet("FilteredByCT_Domain", "myc",
 				"Domain statistics", provider, false, fields);
 		
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
-				"Content Type of websites", FieldFunctionality.ID);
+				"Content Type of websites", false, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("times", FieldType.Int, 
-				"appear times of the ContentType", FieldFunctionality.Count);
+				"appear times of the ContentType", false, FieldFunctionality.Value);
 		getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", "myc",
 				"Top 90% Content Type distribution", provider, true, fields);
 		
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("Imsi", FieldType.ShortString, 
-				"User IMSI", FieldFunctionality.ID);
+				"User IMSI", true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("WebsiteCount", FieldType.Int, 
-				"Total count of visited websites", FieldFunctionality.Count);
+				"Total count of visited websites", false, FieldFunctionality.Value);
 		fields[2] = new GeneralDataField("RegionCount", FieldType.Int, 
-				"Total count of appeared regions", FieldFunctionality.Count);
+				"Total count of appeared regions", false, FieldFunctionality.Value);
 		fields[3] = new GeneralDataField("TotalCount", FieldType.Int, 
-				"Total count of requests", FieldFunctionality.Count);
+				"Total count of requests", false, FieldFunctionality.Value);
 		
 		getDataSetManager().createDataSet("slot_Imsi_All", "myc",
 				"User statistics by time slot", provider, true, fields);
+		
+		Query q = null;
+		try {
+			q = dsSite.getQuery().select(dsSite.getField("Region"),
+					new AggregatedDataField(dsSite.getField("SiteId"), AggrFunction.COUNT, "SiteCount") );
+		} catch (OperationNotSupportedException | DataProviderException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		getDataSetManager().defineView("RegionSta", "Region Statistics",
+				DataFeatureType.ValueFeature, q);
 		
 //		fields = new DataField[2];
 //		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
@@ -161,6 +173,7 @@ public class PlatformImpl implements Platform {
 		for (DataSet ds : getDataSetManager().getDataSetList()) {
 			System.out.println(ds.getName() + " " + ds.getDescription());
 		}
+		System.out.println();
 	}
 	public static void main(String[] args) {
 		
@@ -171,7 +184,19 @@ public class PlatformImpl implements Platform {
 	}
 	private void query() {
 		//Get a dataset
-		for (DataSet ds : getDataSetManager().getDataSetList(DataSetFeatureType.GeoFeature)) {		
+		for (DataView v : getDataSetManager().getDataViewList(
+				DataFeatureType.ValueFeature) ) {
+			System.out.println(v.getName());
+			System.out.println(v.getFeatureType());
+			try {
+				System.out.println(v.getQuery().toString());
+			} catch (OperationNotSupportedException | DataProviderException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+		
+		for (DataSet ds : getDataSetManager().getDataSetList(DataFeatureType.GeoFeature)) {		
 			//Read data from a dataset
 			try {
 				System.out.println(ds.getDescription());
@@ -179,7 +204,7 @@ public class PlatformImpl implements Platform {
 //				GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
 				q.open();
 				int count = 0;
-				DataSetFeature feature = ds.getFeature(DataSetFeatureType.GeoFeature);
+				DataFeature feature = ds.getFeature(DataFeatureType.GeoFeature);
 				while (q.next()) {
 					count ++;
 					System.out.println(
