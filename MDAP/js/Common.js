@@ -1,6 +1,8 @@
 $(document).ready(function(){
 	account_height = 240;
 	account_width = 360;
+	chart_height = 400;
+	chart_width = 600;
 	table_width = 320;
 	$("#account").css({
 		"position": "absolute",
@@ -21,18 +23,39 @@ $(document).ready(function(){
 	});
 	$("#account_bg").css({
 		"position": "absolute",
-		"height": height,
-		"width": width,
+		"height": Common.height(),
+		"width": Common.width(),
 		"filter": "alpha(opacity = 60)",
 		"opacity": "0.6",
 		"z-index": "999",
 		"background-color": "gray",
 		"display": "none"
 	});
+	$("#largeChart").css({
+		"position": "absolute",
+		"margin-top": (Common.height() - chart_height) / 2,
+		"margin-right": (Common.width() - chart_width) / 2,
+		"margin-bottom": (Common.height() - chart_height) / 2,
+		"margin-left": (Common.width() - chart_width) / 2,
+		"border": "1px solid #000000",
+		"height": chart_height,
+		"width": chart_width,
+		"z-index": "1000",
+		"background-color": "white",
+		"display": "none"
+	});
+	$("#lcContainer").css({
+		"position": "absolute",
+		"top": "10px",
+		"left": "10px",
+		"height": "360px",
+		"width": "360px",
+		"border": "1px solid #FF0000"
+	});
 	$("#main").css({
 		"position": "absolute",
-		"height": height,
-		"width": width
+		"height": Common.height(),
+		"width": Common.width()
 	});
 	$("#account").tabs();
 	$("#tabs").tabs();
@@ -48,6 +71,18 @@ $(document).ready(function(){
 			function(){$(this).attr("src","css/images/close.png");}
 		).click(
 			function(){Account.closeFrame();}
+		);
+	$("<img src = 'css/images/close.png'/>")
+		.appendTo("#largeChart")
+		.css({
+			"position": "absolute",
+			"top": "5px",
+			"right": "5px"
+		}).hover(
+			function(){$(this).attr("src","css/images/close_hover.png");},
+			function(){$(this).attr("src","css/images/close.png");}
+		).click(
+			function(){Chart.closeFrame();}
 		);
 /*	if(($.cookie("username") != null) && ($.cookie("password") != null)){
 		Account.upperRightMenu("login","saved");
@@ -89,17 +124,23 @@ Common.latlngUrl = function(){
 
 Common.staDataUrl = function(){
 	return Common.ip() + "dsg/getstads/";
-}
+};
 
 Common.tabNum = 0;
 
 Common.tabCount = 0;
 
-Common.mrkrArr = new Array();
-
 Common.tabLimit = function(){
 	return 7;
-}
+};
+
+Common.mapArr = new Array();
+
+Common.mrkrArr = new Array();
+
+Common.staKey = new Array();
+
+Common.staValue = new Array();
 
 Common.advanced = function(){
 	if($("#extended").css("display") == "none"){

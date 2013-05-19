@@ -1,8 +1,9 @@
 Map = {};
 
+/**********initialize map in a tab**********/
 Map.initialize = function(tabNum){
-	$("#view" + tabNum).css("width",Common.width());
-	$("#view" + tabNum).css("height",Common.height());
+	$("#view" + tabNum).css("width",Common.width() - 320);
+	$("#view" + tabNum).css("height","400px");
 	$("#view" + tabNum).css("border","1px solid #000000");
 	mapOptions = {
 		center: new google.maps.LatLng(39.90960456049752,116.3972282409668),
@@ -13,21 +14,23 @@ Map.initialize = function(tabNum){
 		},
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	map = new google.maps.Map(document.getElementById("view" + tabNum),mapOptions);
+	Common.mapArr[tabNum] = new google.maps.Map(document.getElementById("view" + tabNum),mapOptions);
 	Common.mrkrArr[tabNum] = new Array();
-	return map;
 }
 
-Map.loadData = function(tabNum,dsIndex,type){
+/**********load data of all datasets in a tab**********/
+Map.loadData = function(tabNum,dsIndex,name,type){
 	Common.mrkrArr[tabNum][dsIndex] = new Array();
 	$.ajaxSettings.async = false;
-	$.getJSON(Common.latlngUrl + name,function(data){
+	$.getJSON(Common.latlngUrl() + name,function(data){
 		if(type == "points"){
-			for(i = 0; i < data.length; i++){
-				mrkrArr[tabNum][dsIndex][i] = new google.maps.Marker({
+			for(var i = 0; i < data.length; i++){
+				Common.mrkrArr[tabNum][dsIndex][i] = new google.maps.Marker({
 					position : new google.maps.LatLng(data[i].latitude,data[i].longitude),
-					title : data[i].tag,
-					icon : "css/images/tower.png";
+					title : data[i].tag
+					/**********need to do**********/
+					/**********get a good icon image**********/
+//					icon : "css/images/tower.png"
 				});
 			}
 		}
@@ -36,20 +39,21 @@ Map.loadData = function(tabNum,dsIndex,type){
 	});
 }
 
-Map.clickEvent = function(tabNum,dsIndex,map,type){
+/**********what to do when click a dataset**********/
+Map.clickEvent = function(tabNum,dsIndex,type){
 	if($("#checkbox" + tabNum + "_" + dsIndex).is(":checked") == true){
 		if(type == "points"){
-			for(i = 0; i < mrkrArr.length; i++){
-				mrkrArr[tabNum][dsIndex][i].setMap(map);
+			for(var i = 0; i < Common.mrkrArr[tabNum][dsIndex].length; i++){
+				Common.mrkrArr[tabNum][dsIndex][i].setMap(Common.mapArr[tabNum]);
 			}
 		}else{
-			for(i = 0; i < mrkrArr.length; i++){
-				mrkrArr[tabNum][dsIndex][i].setMap(null);
-			}
+			showRegions();
 		}
 	}else{
 		if(type == "points"){
-			hidePoints();
+			for(var i = 0; i < Common.mrkrArr[tabNum][dsIndex].length; i++){
+				Common.mrkrArr[tabNum][dsIndex][i].setMap(null);
+			}
 		}else{
 			hideRegions();
 		}

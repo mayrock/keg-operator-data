@@ -8,14 +8,14 @@ Tab.createFrame = function(tabName){
 	$("#extended").css("display","none");
 	tabNum = Common.tabNum;
 	tabCount = Common.tabCount;
-	//限制标签页个数
+	/**********limit the number of tab**********/
 	if(tabCount == Common.tabLimit()){
 		alert("Tabs cann't be more than " + Tab.limit + "!");
 		return;
 	}
 	Common.tabNum ++;
 	Common.tabCount ++;
-	//添加一个标签页
+	/**********add a tab**********/
 	li = document.createElement("li");
 	$(li).appendTo("#tabs_ul");
 	li.innerHTML = "<a href='#tab" + tabNum + "'>" + tabName + " data</a>";
@@ -28,7 +28,7 @@ Tab.createFrame = function(tabName){
 				$(this).attr("src","css/images/close.png");
 			}
 		).click(
-			//点击关闭按钮删除标签页
+			/**********close a tab**********/
 			function(){
 				$(this).parent().remove();
 				divName = $(this).parent().children("a").attr("href");
@@ -49,10 +49,12 @@ Tab.createFrame = function(tabName){
 	view.setAttribute("id","view" + tabNum);
 	view.setAttribute("class","view");
 	$(view).appendTo(tab);
-	//设置标签页内容
+	/**********initialize a tab**********/
 	setTab();
 	$("#tabs").tabs("refresh");
 	$("#tabs").tabs("option","active",tabCount);
+	/**********need to do**********/
+	/**********how to deal with checkbox tree**********/
 /*	$("#checkbox" + tabNum).jstree({
 		"plugins": ["checkbox"]
 	});
@@ -61,30 +63,37 @@ Tab.createFrame = function(tabName){
 
 	function setTab(){
 		if(tabName == "geo"){
-			map = Map.initialize(tabNum);
+			Map.initialize(tabNum);
 		}
 		checkbox = document.createElement("div");
 		checkbox.setAttribute("id","checkbox" + tabNum);
 		checkbox.setAttribute("class","checkbox");
 		$(checkbox).appendTo("#option" + tabNum);
+		/**********need to do**********/
+		/**********how to deal with checkbox tree**********/
 /*		ul_lv1 = document.createElement("ul");
 		$(ul_lv1).appendTo(checkbox);*/
-		url = getDatasetUrl + tabName + "dss";
 		$.ajaxSettings.async = false;
-		$.getJSON(url,function(data){
+		$.getJSON(Common.datasetUrl() + tabName + "dss",function(data){
 			len = data.length;
-			for(i = 0; i < len; i++){
+			for(var i = 0; i < len; i++){
 				des = data[i].description;
 				if(tabName == "geo"){
 					name = data[i].datasetName;
 					type = "";
 					schema = data[i].schema;
+					/**********need to do**********/
+					/**********which type should be set to this dataset**********/
 					type = "points";
-					Map.loadData(tabNum,i,type);
-					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = 'Map.clickEvent(" + tabNum + "," + i + "," + map + "," + type + ");'/>" + des).appendTo(checkbox);
+					Map.loadData(tabNum,i,name,type);
+					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = \"Map.clickEvent(" + tabNum + "," + i + ",'" + type + "');\"/>" + des + "<br/>").appendTo(checkbox);
 				}else if(tabName == "sta"){
-					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = 'Chart.clickEvent(" + tabNum + "," + i + ");'/>" + des).appendTo(checkbox);
+					Common.staKey[tabNum] = new Array();
+					Common.staValue[tabNum] = new Array();
+					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = \"Chart.clickEvent(" + tabNum + "," + i + ");\"/>" + des + "<br/>").appendTo(checkbox);
 				}
+				/**********need to do**********/
+				/**********how to deal with checkbox tree**********/
 /*				li_lv1 = document.createElement("li");
 				li_lv1.setAttribute("id","jstree" + tabNum + "_" + i);
 				$(li_lv1).appendTo(ul_lv1);

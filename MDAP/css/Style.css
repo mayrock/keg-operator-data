@@ -76,25 +76,39 @@ a:hover	鼠标悬停在链接上*/
 
 .view{
 	float: left;
-	border-top: 1px solid #000000;
-	border-right: 1px solid #000000;
-	border-left: 1px solid #000000;
+	border: 1px solid #FF0000;
 	margin-left: 5px;
 	text-align: center;
 	font-family: Times New Roman;
 	font-size : 16px;
 }
 
-.subView{
-	height: 240px;
-	border-bottom: 1px solid #000000;
+.view_ds{
+	border: 1px solid #00FF00;
+	margin: 2px;
 }
 
-.chartContainer{
+.view_chart{
 	float: left;
-	width: 200px;
+	border: 1px solid #0000FF;
+	margin: 2px;
+}
+
+.pieContainer{
+	position: relative;
+	float: left;
+	height: 120px;
+	width: 150px;
 	border: 1px solid #000000;
-	margin: auto 2px 2px 2px;
+	margin: 2px;
+}
+
+.view_pie{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 120px;
+	width: 120px;
 }
 
 #footer{
