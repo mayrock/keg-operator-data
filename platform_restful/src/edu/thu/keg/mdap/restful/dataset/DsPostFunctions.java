@@ -7,6 +7,7 @@ import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -66,7 +67,11 @@ public class DsPostFunctions {
 	@Path("/adds/{connstr}/{datasetname}")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public Response createDataset(@PathParam("connstr") String connstr,
-			@PathParam("datasetname") String dataset, JSONObject JContent) {
+			@PathParam("datasetname") String dataset,
+			@FormParam("description") String description,
+			@FormParam("loadable") boolean loadable,
+			@FormParam("owner") String owner,
+			@FormParam("dsFields") JSONArray datafields) {
 		/**
 		 * description 数据集描述 loadable 是否可以加载 dsFields 数据域的jsonarray fieldName
 		 * fieldType description isKey
@@ -79,34 +84,30 @@ public class DsPostFunctions {
 				return Response.status(409).entity("provider not found!\n")
 						.build();
 			}
-			String ds_description = "";
-			if (JContent.has("description"))
-				ds_description = JContent.getString("description");
-			boolean loadable = false, allowNull = false;
-			String owner = "owner";
-			if (JContent.has("loadable"))
-				loadable = JContent.getBoolean("loadable");
-			if (JContent.has("allowNull"))
-				allowNull = JContent.getBoolean("allowNull");
-			if (JContent.has("owner"))
-				owner = JContent.getString("owner");
-			JSONArray datafields = JContent.getJSONArray("dsFields");
+			// JSONArray datafields = JContent.getJSONArray("dsFields");
 			String fieldname = null;
 			FieldType fieldtype = null;
-			String description = null;
+			String df_description = null;
 			boolean isKey = false;
+			boolean allowNull = false;
+			boolean isDim = false;
+			String func;
 			DataField[] fields = new DataField[datafields.length()];
 			for (int i = 0; i < datafields.length(); i++) {
 				JSONObject field = datafields.getJSONObject(i);
 				fieldname = field.getString("fieldName");
 				fieldtype = DataField.FieldType.parse(field
 						.getString("fieldType"));
-				description = field.getString("description");
+				df_description = field.getString("description");
 				isKey = field.getBoolean("isKey");
+				allowNull = field.getBoolean("allownull");
+				isDim = field.getBoolean("isdim");
+				func = field.getString("func");
 				fields[i] = new GeneralDataField(fieldname, fieldtype,
-						description, isKey, allowNull, FieldFunctionality.ID);
+						df_description, isKey, allowNull, isDim,
+						FieldFunctionality.parse(func));
 			}
-			p.getDataSetManager().createDataSet(dataset, owner, ds_description,
+			p.getDataSetManager().createDataSet(dataset, owner, description,
 					provider, loadable, fields);
 
 		} catch (JSONException e) {

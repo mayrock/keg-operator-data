@@ -23,13 +23,14 @@ import com.sun.jersey.api.json.JSONWithPadding;
 
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
+import edu.thu.keg.mdap.datafeature.DataFeature;
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeature;
-import edu.thu.keg.mdap.datasetfeature.DataSetFeatureType;
+
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDataset;
 import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
@@ -115,7 +116,7 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
-					.getDataSetList(DataSetFeatureType.GeoFeature);
+					.getDataSetList(DataFeatureType.GeoFeature);
 			int i = 0;
 			for (DataSet dataset : datasets) {
 				// if(i++>=2)
@@ -155,7 +156,7 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
-					.getDataSetList(DataSetFeatureType.DistributionFeature);
+					.getDataSetList(DataFeatureType.DistributionFeature);
 			int i = 0;
 			for (DataSet dataset : datasets) {
 				// if(i++>=2)
@@ -245,7 +246,7 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
 			DataContent rs = ds.getQuery();
-			DataSetFeature gds = ds.getFeature(DataSetFeatureType.GeoFeature);
+			DataFeature gds = ds.getFeature(DataFeatureType.GeoFeature);
 			if (gds == null)
 				throw new OperationNotSupportedException(
 						"can't find the geograph Exception");
@@ -287,8 +288,8 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
 			DataContent rs = ds.getQuery();
-			DataSetFeature gds = ds
-					.getFeature(DataSetFeatureType.DistributionFeature);
+			DataFeature gds = ds
+					.getFeature(DataFeatureType.DistributionFeature);
 			if (gds == null)
 				throw new OperationNotSupportedException(
 						"can't find the statistic Exception");
@@ -342,8 +343,8 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
 			DataContent rs = ds.getQuery();
-			DataSetFeature gds = ds
-					.getFeature(DataSetFeatureType.TimeSeriesFeature);
+			DataFeature gds = ds
+					.getFeature(DataFeatureType.TimeSeriesFeature);
 			// TimeSeriesFeature gds = (TimeSeriesFeature) ds
 			// .getFeature(TimeSeriesFeature.class);
 			if (gds == null)

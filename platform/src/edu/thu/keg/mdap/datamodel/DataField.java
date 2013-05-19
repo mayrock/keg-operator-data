@@ -66,7 +66,7 @@ public interface DataField {
 		 * @param str The string representation 
 		 * @return a FieldFunctionality object
 		 */
-		public FieldFunctionality parse(String str) {
+		public static FieldFunctionality parse(String str) {
 			return FieldFunctionality.valueOf(str);
 		}
 	}
