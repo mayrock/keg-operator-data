@@ -25,6 +25,7 @@ import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap.datafeature.DataFeature;
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
+import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
@@ -117,10 +118,7 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
 					.getDataSetList(DataFeatureType.GeoFeature);
-			int i = 0;
 			for (DataSet dataset : datasets) {
-				// if(i++>=2)
-				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
@@ -343,8 +341,7 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
 			DataContent rs = ds.getQuery();
-			DataFeature gds = ds
-					.getFeature(DataFeatureType.TimeSeriesFeature);
+			DataFeature gds = ds.getFeature(DataFeatureType.TimeSeriesFeature);
 			// TimeSeriesFeature gds = (TimeSeriesFeature) ds
 			// .getFeature(TimeSeriesFeature.class);
 			if (gds == null)
@@ -418,6 +415,171 @@ public class DsGetFunctions {
 		}, callback);
 	}
 
+	/**
+	 * get all dataviews
+	 * 
+	 * @param callback
+	 * @return
+	 */
+	@GET
+	@Path("/getdvs")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONWithPadding getDatasetViewsNames(
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		System.out.println("getDatasetViewsNames " + uriInfo.getAbsolutePath());
+		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		JDatasetName datasetName = new JDatasetName();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			Collection<DataView> datasets = datasetManager.getDataViewList();
+			int i = 0;
+			for (DataView dataset : datasets) {
+				// if(i++>=1)
+				// break;
+				JDatasetName dname = new JDatasetName();
+				dname.setDatasetName(dataset.getName());
+				dname.setDescription(dataset.getDescription());
+				ArrayList<String> schema = new ArrayList<>();
+				for (DataField df : dataset.getAllFields()) {
+					schema.add(df.getName());
+				}
+				dname.setSchema(schema);
+				datasetsName.add(dname);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
+		}, callback);
+
+	}
+
+	/**
+	 * get Statistic dataview
+	 * 
+	 * @param callback
+	 * @return
+	 */
+	@GET
+	@Path("/getstadvs")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONWithPadding getStaDatasetViewsNames(
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		System.out.println("getStaDatasetViewsNames "
+				+ uriInfo.getAbsolutePath());
+		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		JDatasetName datasetName = new JDatasetName();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			Collection<DataView> datasets = datasetManager
+					.getDataViewList(DataFeatureType.DistributionFeature);
+			int i = 0;
+			for (DataView dataset : datasets) {
+				// if(i++>=1)
+				// break;
+				JDatasetName dname = new JDatasetName();
+				dname.setDatasetName(dataset.getName());
+				dname.setDescription(dataset.getDescription());
+				ArrayList<String> schema = new ArrayList<>();
+				for (DataField df : dataset.getAllFields()) {
+					schema.add(df.getName());
+				}
+				dname.setSchema(schema);
+				datasetsName.add(dname);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
+		}, callback);
+
+	}
+
+	/**
+	 * get all geo dataviews
+	 * 
+	 * @param callback
+	 * @return
+	 */
+	@GET
+	@Path("/getgeodvs")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONWithPadding getGeoDatasetViewsNames(
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		System.out.println("getGeoDatasetViewsNames "
+				+ uriInfo.getAbsolutePath());
+		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		JDatasetName datasetName = new JDatasetName();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			Collection<DataView> datasets = datasetManager
+					.getDataViewList(DataFeatureType.GeoFeature);
+			int i = 0;
+			for (DataView dataset : datasets) {
+				// if(i++>=1)
+				// break;
+				JDatasetName dname = new JDatasetName();
+				dname.setDatasetName(dataset.getName());
+				dname.setDescription(dataset.getDescription());
+				ArrayList<String> schema = new ArrayList<>();
+				for (DataField df : dataset.getAllFields()) {
+					schema.add(df.getName());
+				}
+				dname.setSchema(schema);
+				datasetsName.add(dname);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
+		}, callback);
+
+	}
+	@GET
+	@Path("/getdv/{dataviewname}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONWithPadding getDataview(@PathParam("dataviewname") String dataview,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		System.out.println("getDataset " + dataview + " "
+				+ uriInfo.getAbsolutePath());
+		List<JDataset> datasetList = new ArrayList<>();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			DataSet ds = datasetManager.getDataSet(dataview);
+			DataContent rs = ds.getQuery();
+			rs.open();
+			int i = 0;
+			while (rs.next() && i++ < 20) {
+				JDataset jdataset = new JDataset();
+				List<JField> fields = new ArrayList<>();
+				DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
+				int j = 0;
+				for (DataField df : dfs) {
+					// if(j++>=2)
+					// break;
+					JField field = new JField();
+					field.setField(rs.getValue(df));
+					fields.add(field);
+				}
+				jdataset.setField(fields);
+				datasetList.add(jdataset);
+			}
+			rs.close();
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
+				datasetList) {
+		}, callback);
+	}
 	@GET
 	@Path("/hello")
 	@Produces({ MediaType.APPLICATION_JSON })

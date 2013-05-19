@@ -128,10 +128,11 @@ public class DsPostFunctions {
 	@Path("/getds/{datasetname}")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetField(
-			@PathParam("datasetname") String dataset, JSONObject JContent,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
-		JSONArray jsonFileds = null;
-		String orderby = null;
+			@PathParam("datasetname") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
+			@FormParam("fields") JSONArray jsonFileds,
+			@FormParam("orderby") String orderby) {
+
 		String fieldname = null;
 		List<JColumn> all_dfs = null;
 		List<JField> list_df = null;
@@ -140,19 +141,15 @@ public class DsPostFunctions {
 		 * fields 存储列名的参数jsonarray orderby 排序的域名
 		 */
 		try {
-			if (JContent.has("fields"))
-				jsonFileds = JContent.getJSONArray("fields");
-			else
+			if (jsonFileds == null)
 				throw new JSONException("have not the this Field");
-			if (JContent.has("orderby"))
-				orderby = (String) JContent.get("orderby");
 			all_dfs = new ArrayList<>();
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
 			DataContent rs;
 			if (orderby != null)
-				rs = ds.getQuery().orderBy(orderby, Order.parse("DESC"));
+				rs = ds.getQuery().orderBy(orderby, Order.parse(orderby));
 			else
 				rs = ds.getQuery();
 			for (int i = 0; i < jsonFileds.length(); i++) {
@@ -213,21 +210,19 @@ public class DsPostFunctions {
 	@Path("/getdsres/{datasetname}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetValueOfOpr(
-			@PathParam("datasetname") String dataset, JSONObject JContent,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+			@PathParam("datasetname") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
+			@FormParam("jsonoper") JSONArray jsonOper) {
 		String fieldname = null;
 		String opr = null;
 		String value = null;
-		JSONArray jsonOper = null;
 		List<JColumn> all_dfs = null;
 		List<JField> list_df = null;
 		/**
 		 * jsonOper 操作参数jsonarray fieldname 域名 opr 操作符号 value 值
 		 */
 		try {
-			if (JContent.has("jsonOper"))
-				jsonOper = JContent.getJSONArray("jsonOper");
-			else
+			if (jsonOper == null)
 				throw new JSONException("have not the this Operation");
 			all_dfs = new ArrayList<>();
 			Platform p = (Platform) servletcontext.getAttribute("platform");
