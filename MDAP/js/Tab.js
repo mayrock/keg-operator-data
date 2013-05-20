@@ -64,6 +64,11 @@ Tab.createFrame = function(tabName){
 	function setTab(){
 		if(tabName == "geo"){
 			Map.initialize(tabNum);
+		}else{
+			Common.staKey[tabNum] = new Array();
+			Common.staValue[tabNum] = new Array();
+			Common.staSchema[tabNum] = new Array();
+			Common.staControl[tabNum] = new Array();
 		}
 		checkbox = document.createElement("div");
 		checkbox.setAttribute("id","checkbox" + tabNum);
@@ -88,8 +93,6 @@ Tab.createFrame = function(tabName){
 					Map.loadData(tabNum,i,name,type);
 					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = \"Map.clickEvent(" + tabNum + "," + i + ",'" + type + "');\"/>" + des + "<br/>").appendTo(checkbox);
 				}else if(tabName == "sta"){
-					Common.staKey[tabNum] = new Array();
-					Common.staValue[tabNum] = new Array();
 					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = \"Chart.clickEvent(" + tabNum + "," + i + ");\"/>" + des + "<br/>").appendTo(checkbox);
 				}
 				/**********need to do**********/

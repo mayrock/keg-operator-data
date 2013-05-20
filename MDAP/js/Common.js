@@ -2,7 +2,8 @@ $(document).ready(function(){
 	account_height = 240;
 	account_width = 360;
 	chart_height = 400;
-	chart_width = 600;
+	chart_width = 750;
+	lcContainer_width = 600;
 	table_width = 320;
 	$("#account").css({
 		"position": "absolute",
@@ -46,11 +47,17 @@ $(document).ready(function(){
 	});
 	$("#lcContainer").css({
 		"position": "absolute",
-		"top": "10px",
-		"left": "10px",
-		"height": "360px",
-		"width": "360px",
-		"border": "1px solid #FF0000"
+		"top": 0,
+		"left": 0,
+		"height": chart_height,
+		"width": lcContainer_width
+	});
+	$("#lcCheckbox").css({
+		"position": "absolute",
+		"right": 0,
+		"bottom": 0,
+		"height": chart_height - 25,
+		"width": chart_width - lcContainer_width
 	});
 	$("#main").css({
 		"position": "absolute",
@@ -84,12 +91,11 @@ $(document).ready(function(){
 		).click(
 			function(){Chart.closeFrame();}
 		);
-/*	if(($.cookie("username") != null) && ($.cookie("password") != null)){
+	if(($.cookie("username") != null) && ($.cookie("password") != null)){
 		Account.upperRightMenu("login","saved");
 	}else{
 		Account.upperRightMenu("logout","init");
-	}*/
-	Account.upperRightMenu("login","Ariesnix");
+	}
 });
 
 Common = {};
@@ -141,6 +147,10 @@ Common.mrkrArr = new Array();
 Common.staKey = new Array();
 
 Common.staValue = new Array();
+
+Common.staSchema = new Array();
+
+Common.staControl = new Array();
 
 Common.advanced = function(){
 	if($("#extended").css("display") == "none"){
