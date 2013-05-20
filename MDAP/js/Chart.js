@@ -140,6 +140,13 @@ Chart.pie = function(containerName,tabNum,dsIndex,chartIndex,pieIndex){
 //			title: staSchema[pieIndex + 1] + " / " + staSchema[0]
 		};
 		if(containerName == "lcContainer"){
+			$("<img src = 'css/images/switch.png' onclick = \"Chart.change('" + containerName + "'," + tabNum + "," + dsIndex + "," + chartIndex + ",'column');\"/>")
+			.appendTo("#switchIcon")
+			.css({
+				"position": "absolute",
+				"top": "5px",
+				"right": "25px"
+			});
 			Chart.createFrame();
 			view = document.getElementById(containerName);
 		}else{
@@ -261,13 +268,22 @@ Chart.largeColumn = function(containerName,tabNum,dsIndex,chartIndex){
 
 Chart.largeLine = function(containerName,tabNum,dsIndex,chartIndex){
 	var len = Common.staControl[tabNum][dsIndex].length;
+	var count = 0;
+	var pieIndex;
 	for(var i = 0; i < len; i++){
 		$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + dsIndex + "_" + i + "' onclick = \"Chart.controlLine('lcContainer'," + tabNum + "," + dsIndex + "," + 0 + "," + i + ");\"/>" + Common.staSchema[tabNum][dsIndex][i + 1] + "<br/>").appendTo("#lcCheckbox");
 		if(Common.staControl[tabNum][dsIndex][i] == true){
 			$("#checkbox" + tabNum + "_" + dsIndex + "_" + i).attr("checked",true);
+			pieIndex = i;
+			count ++;
 		}
 	}
-	$("<img src = 'css/images/switch.png' onclick = \"Chart.change('" + containerName + "'," + tabNum + "," + dsIndex + "," + chartIndex + ",'column');\"/>")
+	if(count == 1){
+		changeType = pieIndex;
+	}else{
+		changeType = "column";
+	}
+	$("<img src = 'css/images/switch.png' onclick = \"Chart.change('" + containerName + "'," + tabNum + "," + dsIndex + "," + chartIndex + ",'" + changeType + "');\"/>")
 		.appendTo("#switchIcon")
 		.css({
 			"position": "absolute",
@@ -317,5 +333,8 @@ Chart.change = function(containerName,tabNum,dsIndex,chartIndex,changeType){
 		Chart.largeColumn(containerName,tabNum,dsIndex,chartIndex);
 	}else if(changeType == "line"){
 		Chart.largeLine(containerName,tabNum,dsIndex,chartIndex);
+	}else{
+		pieIndex = parseInt(changeType);
+		Chart.pie(containerName,tabNum,dsIndex,chartIndex,pieIndex);
 	}
 };
