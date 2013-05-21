@@ -7,7 +7,7 @@ Map.initialize = function(tabNum){
 	$("#view" + tabNum).css("border","1px solid #000000");
 	mapOptions = {
 		center: new google.maps.LatLng(39.90960456049752,116.3972282409668),
-		zoom: 15,
+		zoom: 12,
 		scaleControl: true,
 		scaleControlOptions: {
 			position: google.maps.ControlPosition.BOTTOM_LEFT
@@ -16,14 +16,15 @@ Map.initialize = function(tabNum){
 	};
 	Common.mapArr[tabNum] = new google.maps.Map(document.getElementById("view" + tabNum),mapOptions);
 	Common.mrkrArr[tabNum] = new Array();
+	Common.regionArr[tabNum] = new Array();
 }
 
 /**********load data of all datasets in a tab**********/
 Map.loadData = function(tabNum,dsIndex,name,type){
-	Common.mrkrArr[tabNum][dsIndex] = new Array();
 	$.ajaxSettings.async = false;
 	$.getJSON(Common.latlngUrl() + name,function(data){
 		if(type == "points"){
+			Common.mrkrArr[tabNum][dsIndex] = new Array();
 			for(var i = 0; i < data.length; i++){
 				Common.mrkrArr[tabNum][dsIndex][i] = new google.maps.Marker({
 					position : new google.maps.LatLng(data[i].latitude,data[i].longitude),
@@ -31,6 +32,19 @@ Map.loadData = function(tabNum,dsIndex,name,type){
 					/**********need to do**********/
 					/**********get a good icon image**********/
 //					icon : "css/images/tower.png"
+				});
+			}
+		}else if(type == "regions"){
+			Common.regionArr[tabNum][dsIndex] = new Array();
+			for(var i = 0; i < data.length; i++){
+				Common.regionArr[tabNum][dsIndex][i] = new google.maps.Circle({
+					strokeColor: "gray",
+					strokeOpacity: 1.0,
+					strokeWeight: 2,
+					fillColor: "gray",
+					fillOpacity: 1.0,
+					center: new google.maps.LatLng(data[i].latitude,data[i].longitude),
+					radius: 250
 				});
 			}
 		}
@@ -47,7 +61,9 @@ Map.clickEvent = function(tabNum,dsIndex,type){
 				Common.mrkrArr[tabNum][dsIndex][i].setMap(Common.mapArr[tabNum]);
 			}
 		}else{
-			showRegions();
+			for(var i = 0; i < Common.regionArr[tabNum][dsIndex].length; i++){
+				Common.regionArr[tabNum][dsIndex][i].setMap(Common.mapArr[tabNum]);
+			}
 		}
 	}else{
 		if(type == "points"){
@@ -55,12 +71,9 @@ Map.clickEvent = function(tabNum,dsIndex,type){
 				Common.mrkrArr[tabNum][dsIndex][i].setMap(null);
 			}
 		}else{
-			hideRegions();
+			for(var i = 0; i < Common.regionArr[tabNum][dsIndex].length; i++){
+				Common.regionArr[tabNum][dsIndex][i].setMap(null);
+			}
 		}
 	}
-	
-	//对于每组区域里的点,画圆就OK了
-	function showRegions(){}
-	
-	function hideRegions(){}
 }
