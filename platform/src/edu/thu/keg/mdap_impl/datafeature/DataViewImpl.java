@@ -1,6 +1,8 @@
 package edu.thu.keg.mdap_impl.datafeature;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datafeature.DataView;
@@ -14,6 +16,8 @@ public class DataViewImpl implements DataView {
 	private String name;
 	private String desp;
 	private DataFeatureType type;
+	private List<DataField> keyFields;
+	private List<DataField> valueFields;
 
 
 	/**
@@ -27,20 +31,44 @@ public class DataViewImpl implements DataView {
 		this.name = name;
 		this.desp = desp;
 		this.type = type;
+		initKeyValueFields();
+	}
+	
+	public DataViewImpl(String name, String desp, DataFeatureType type, Query q, 
+			DataField[] keyFields, DataField[] valueFields) {
+		super();
+		this.q = q;
+		this.name = name;
+		this.desp = desp;
+		this.type = type;
+		this.keyFields = Arrays.asList(keyFields);
+		this.valueFields = Arrays.asList(valueFields);
+	}
+
+	private void initKeyValueFields() {
+		this.keyFields = new ArrayList<DataField>();
+		this.valueFields = new ArrayList<DataField>();
+		for (DataField f : q.getDataFields()) {
+			if (isKeyField(f) ) {
+				keyFields.add(f);
+			} else {
+				valueFields.add(f);
+			}
+		}
 	}
 
 	@Override
 	public DataField[] getKeyFields() {
-		ArrayList<DataField> fs = new ArrayList<DataField>();
-		for (DataField f : q.getDataFields()) {
-			if (isKeyField(f) ) {
-				fs.add(f);
-			}
-		}
-		return fs.toArray(new DataField[0]);
+		return keyFields.toArray(new DataField[0]);
 	}
 	private boolean isKeyField(DataField f) {
-		return f.isDim();
+		//TODO: not right!
+		if (this.type.equals(DataFeatureType.GeoFeature)) {
+			return f.getFunction().equals(FieldFunctionality.Latitude)
+					|| f.getFunction().equals(FieldFunctionality.Longitude);
+		} else {
+			return !f.getFunction().equals(FieldFunctionality.Value);
+		}
 	}
 
 	@Override
@@ -54,13 +82,7 @@ public class DataViewImpl implements DataView {
 
 	@Override
 	public DataField[] getValueFields() {
-		ArrayList<DataField> fs = new ArrayList<DataField>();
-		for (DataField f : q.getDataFields()) {
-			if (!isKeyField(f) ) {
-				fs.add(f);
-			}
-		}
-		return fs.toArray(new DataField[0]);
+		return valueFields.toArray(new DataField[0]);
 	}
 
 	@Override

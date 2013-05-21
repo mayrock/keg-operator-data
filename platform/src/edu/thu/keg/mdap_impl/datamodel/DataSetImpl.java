@@ -104,19 +104,20 @@ public class DataSetImpl implements DataSet {
 	}
 	@Override
 	public DataFeature getFeature(DataFeatureType type) {
-		DataField[] keys = new DataField[type.getFuncs().length];
+		List<DataField> keys = new ArrayList<DataField>();
 		boolean flag = true;
-		int i = 0;
+
 		for (FieldFunctionality func : type.getFuncs()) {
 			if (!fieldsMap.containsKey(func)) {
 				flag = false;
 				break;
-			} else {
-				keys[i++] = fieldsMap.get(func).get(0);
-			}
+			} 
 		}
+		
+		keys = this.getKeyFields();
+		
 		if (flag) {
-			return new DataFeatureImpl(type, keys, 
+			return new DataFeatureImpl(type, keys.toArray(new DataField[0]), 
 					this.getValueFields().toArray(new DataField[0]));
 		} else {
 			return null;

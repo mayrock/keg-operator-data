@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 
  */
 package edu.thu.keg.mdap_impl;
@@ -63,9 +63,12 @@ public class PlatformImpl implements Platform {
 //				"C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
 		// Construct a new dataset
 		DataProvider provider = getDataProviderManager().getDefaultSQLProvider("BeijingData");
+
+		Query q = null;
+		DataField[] fields = null;
+		DataSet dsSite = null;
 		
-		
-		DataField[] fields = new DataField[2];
+		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true, FieldFunctionality.Identifier );
 		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false, FieldFunctionality.Other );
 		getDataSetManager().createDataSet("WebsiteId_URL","myc", "Website info", 
@@ -85,8 +88,19 @@ public class PlatformImpl implements Platform {
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false, FieldFunctionality.Latitude );
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false, FieldFunctionality.Longitude );
 		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false, false, true, FieldFunctionality.Other );
-		DataSet dsSite = getDataSetManager().createDataSet("RegionInfo2","myc", "Region info 2",
+		dsSite = getDataSetManager().createDataSet("RegionInfo2","myc", "Region info 2",
 				provider, true, fields);
+		
+		
+		try {
+			q = dsSite.getQuery().select(dsSite.getField("Region"),
+					new AggregatedDataField(dsSite.getField("SiteId"), AggrFunction.COUNT, "SiteCount") );
+		} catch (OperationNotSupportedException | DataProviderException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		getDataSetManager().defineView("RegionSta", "区域内基站数统计",
+				DataFeatureType.ValueFeature, q);
 		
 		fields = new DataField[6];
 		fields[0] = new GeneralDataField("Domain", FieldType.LongString, 
@@ -109,8 +123,17 @@ public class PlatformImpl implements Platform {
 				"Content Type of websites", false, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("times", FieldType.Int, 
 				"appear times of the ContentType", false, FieldFunctionality.Value);
-		getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", "myc",
+		dsSite = getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", "myc",
 				"Top 90% Content Type distribution", provider, true, fields);
+		
+		try {
+			q = dsSite.getQuery();
+		} catch (OperationNotSupportedException | DataProviderException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		getDataSetManager().defineView("ContentTypeView", "ContentType分布",
+				DataFeatureType.DistributionFeature, q);
 		
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("Imsi", FieldType.ShortString, 
@@ -125,16 +148,32 @@ public class PlatformImpl implements Platform {
 		getDataSetManager().createDataSet("slot_Imsi_All", "myc",
 				"User statistics by time slot", provider, true, fields);
 		
-		Query q = null;
+		
+
+		
+		fields = new DataField[3];
+		fields[0] = new GeneralDataField("SiteId", FieldType.ShortString, 
+				"基站ID", true, FieldFunctionality.Identifier);
+		fields[1] = new GeneralDataField("ConnHour", FieldType.Int, 
+				"时间段(小时)", false, FieldFunctionality.Identifier);
+		fields[2] = new GeneralDataField("TotalCount", FieldType.Int, 
+				"连接数", false, FieldFunctionality.Value);
+		
+		dsSite = getDataSetManager().createDataSet("SiteId_ConnHour", "myc",
+				"每小时每基站连接数", provider, true, fields);
+		
+		
 		try {
-			q = dsSite.getQuery().select(dsSite.getField("Region"),
-					new AggregatedDataField(dsSite.getField("SiteId"), AggrFunction.COUNT, "SiteCount") );
+			q = dsSite.getQuery().select(dsSite.getField("ConnHour"),
+					new AggregatedDataField(dsSite.getField("TotalCount"), AggrFunction.MAX, "TotalCount") );
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		getDataSetManager().defineView("RegionSta", "Region Statistics",
+		getDataSetManager().defineView("ConnHourView", "每小时连接数统计",
 				DataFeatureType.ValueFeature, q);
+		
+		
 		
 //		fields = new DataField[2];
 //		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
@@ -204,7 +243,7 @@ public class PlatformImpl implements Platform {
 //				GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
 				q.open();
 				int count = 0;
-				DataFeature feature = ds.getFeature(DataFeatureType.GeoFeature);
+				DataFeature feature = ds.getFeature(DataFeatureType.DistributionFeature);
 				while (q.next()) {
 					count ++;
 					System.out.println(
