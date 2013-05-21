@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import edu.thu.keg.mdap.provider.AbsSqlServerProvider;
-import edu.thu.keg.mdap.provider.DatabaseProviderException;
 import edu.thu.keg.mdap.user.User;
 import edu.thu.keg.mdap.user.IUserManager;
 import edu.thu.keg.mdap_impl.provider.SqlServerProviderImpl;
@@ -28,7 +27,6 @@ public class UserManagerImpl implements IUserManager {
 		AbsSqlServerProvider ssp = null;
 		try {
 			ssp = SqlServerProviderImpl.getInstance();
-
 			PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
 					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, user.getUserid());
