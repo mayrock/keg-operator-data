@@ -75,6 +75,8 @@ public interface DataSetManager {
 	 * @return
 	 */
 	public Collection<DataView> getDataViewList(DataFeatureType type);
+	
+	public DataView getDataView(String name);
 	/**
 	 * Save current DataSet list to disk
 	 * @throws IOException

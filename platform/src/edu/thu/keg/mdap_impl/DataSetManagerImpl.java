@@ -6,7 +6,6 @@ package edu.thu.keg.mdap_impl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +36,22 @@ import edu.thu.keg.mdap_impl.provider.JdbcProvider;
  */
 public class DataSetManagerImpl implements DataSetManager {
 
+	public static class Storage {
+		DataSet[] datasets;
+		DataView[] views;
+		/**
+		 * @param datasets
+		 * @param views
+		 */
+		private Storage(DataSet[] datasets, DataView[] views) {
+			super();
+			this.datasets = datasets;
+			this.views = views;
+		}
+		
+		
+	}
+	
 	private static DataSetManagerImpl instance;
 	public static DataSetManagerImpl getInstance() {
 		//TODO multi-thread
@@ -47,7 +62,8 @@ public class DataSetManagerImpl implements DataSetManager {
 	
 	private HashMap<String, DataSet> datasets = null;
 	private HashMap<DataFeatureType, Set<DataSet>> features = null;
-	private HashMap<DataFeatureType, Set<DataView>> views = null;
+	private HashMap<String, DataView> views = null;
+	private HashMap<DataFeatureType, Set<DataView>> viewsMap = null;
 	private XStream xstream;
 	
 	private XStream getXstream() {
@@ -74,7 +90,8 @@ public class DataSetManagerImpl implements DataSetManager {
 	private DataSetManagerImpl() {
 		datasets = new HashMap<String, DataSet>();
 		features = new HashMap<DataFeatureType, Set<DataSet>>();
-		views = new HashMap<DataFeatureType, Set<DataView>>();
+		views = new HashMap<String, DataView>();
+		viewsMap = new HashMap<DataFeatureType, Set<DataView>>();
 		
 		try {
 			loadDataSets();
@@ -104,22 +121,23 @@ public class DataSetManagerImpl implements DataSetManager {
 	
 	private void loadDataSets() {
 		String f = Config.getDataSetFile();
-		DataSet[] sets = (DataSet[])getXstream().fromXML(new File(f));
-		for (DataSet ds : sets) {
+		Storage sto = (Storage)getXstream().fromXML(new File(f));
+		for (DataSet ds : sto.datasets) {
 			addDataSet(ds);
+		}
+		for (DataView ds : sto.views) {
+			addDataView(ds);
 		}
 	}
 
 	@Override
 	public void saveChanges() throws IOException {
 		FileWriter fw;
-		DataSet[] dss = new DataSet[datasets.size()];
-		int i = 0;
-		for (DataSet d : datasets.values()) {
-			dss[i++] = d;
-		}
+		Storage sto = new Storage(datasets.values().toArray(new DataSet[0]),
+				views.values().toArray(new DataView[0]));
+
 		fw = new FileWriter(Config.getDataSetFile(), false);
-		getXstream().marshal(dss, new PrettyPrintWriter(fw));
+		getXstream().marshal(sto, new PrettyPrintWriter(fw));
 		fw.close();
 	}
 
@@ -163,26 +181,35 @@ public class DataSetManagerImpl implements DataSetManager {
 	public DataView defineView(String name, String description
 			, DataFeatureType type, Query q) {
 		DataView v = new DataViewImpl(name, description, type, q);
-		if (!views.containsKey(v.getFeatureType()) ) {
-			views.put(type, new HashSet<DataView>() );
-		}
-		views.get(type).add(v);
+		addDataView(v);
 		return v;
+	}
+	private void addDataView(DataView v) {
+		views.put(v.getName(), v);
+		DataFeatureType type = v.getFeatureType();
+		if (!viewsMap.containsKey(v.getFeatureType()) ) {
+			viewsMap.put(type, new HashSet<DataView>() );
+		}
+		viewsMap.get(type).add(v);
 	}
 
 	@Override
 	public Collection<DataView> getDataViewList() {
-		Collection<DataView> vvs = new ArrayList<DataView>();
-		
-		for (Collection<DataView> cs : views.values()) {
-			vvs.addAll(cs);
-		}
-		return vvs;
+		return views.values();
 	}
 
 	@Override
 	public Collection<DataView> getDataViewList(DataFeatureType type) {
-		return views.get(type);
+		return viewsMap.get(type);
+	}
+
+	@Override
+	public DataView getDataView(String name) {
+		DataView ds = views.get(name);
+		if (ds == null) {
+			throw new IllegalArgumentException("the dataview \"" + name + "\" does not exist.");
+		}
+		return ds;
 	}
 
 }

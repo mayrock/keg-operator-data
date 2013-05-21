@@ -71,7 +71,7 @@ public class PlatformImpl implements Platform {
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true, FieldFunctionality.Identifier );
 		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false, FieldFunctionality.Other );
-		getDataSetManager().createDataSet("WebsiteId_URL","myc", "Website info", 
+		getDataSetManager().createDataSet("WebsiteId_URL","myc", "网站信息", 
 				provider, true, fields);
 		
 		fields = new DataField[4];
@@ -79,7 +79,7 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("Name", FieldType.ShortString, "", false, FieldFunctionality.Other );
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false, FieldFunctionality.Latitude );
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false, FieldFunctionality.Longitude );
-		getDataSetManager().createDataSet("RegionInfo3","myc", "Region info 3",
+		getDataSetManager().createDataSet("RegionInfo3","myc", "地理区域",
 				provider, true, fields);
 		
 		fields = new DataField[5];
@@ -88,7 +88,7 @@ public class PlatformImpl implements Platform {
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false, FieldFunctionality.Latitude );
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false, FieldFunctionality.Longitude );
 		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false, false, true, FieldFunctionality.Other );
-		dsSite = getDataSetManager().createDataSet("RegionInfo2","myc", "Region info 2",
+		dsSite = getDataSetManager().createDataSet("RegionInfo2","myc", "基站信息",
 				provider, true, fields);
 		
 		
@@ -129,7 +129,6 @@ public class PlatformImpl implements Platform {
 		try {
 			q = dsSite.getQuery();
 		} catch (OperationNotSupportedException | DataProviderException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		getDataSetManager().defineView("ContentTypeView", "ContentType分布",
@@ -218,7 +217,7 @@ public class PlatformImpl implements Platform {
 		
 		PlatformImpl p = new PlatformImpl(
 				"config.xml");
-		p.crud();
+		//p.crud();
 		p.query();
 	}
 	private void query() {
