@@ -235,54 +235,54 @@ public class PlatformImpl implements Platform {
 			}
 		}	
 		
-		for (DataSet ds : getDataSetManager().getDataSetList(DataFeatureType.GeoFeature)) {		
-			//Read data from a dataset
-			try {
-				System.out.println(ds.getDescription());
-				DataContent q = ds.getQuery();
-//				GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
-				q.open();
-				int count = 0;
-				DataFeature feature = ds.getFeature(DataFeatureType.DistributionFeature);
-				while (q.next()) {
-					count ++;
-					System.out.println(
-							q.getValue(feature.getKeyFields()[0]).toString()
-							+ " " + q.getValue(feature.getValueFields()[0]).toString());
-				}
-				q.close();
-				System.out.println(count);
-			} catch (DataProviderException | OperationNotSupportedException ex) {
-				ex.printStackTrace();
-			}
-		}
-		DataSet ds = getDataSetManager().getDataSet("RegionInfo2");
-		try {
-			System.out.println(ds.getDescription());
-			DataField aggr = new AggregatedDataField(ds.getField("SiteId"), 
-					AggrFunction.COUNT, "TotalCount");
-			DataContent q = ds.getQuery()
-					.select(aggr,  ds.getField("Region")).orderBy("TotalCount", Order.ASC)
-					.where("Region", Operator.GT,100).where("TotalCount", Operator.GT, 1);
-//			GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
-//			System.out.println(q.ge)
-			Query qq = (Query)q;
-			System.out.println(qq.getProvider().getQueryString(qq));
-			q.open();
-			int count = 0;
-			while (q.next()) {
-				count ++;
-				System.out.println(
-						q.getValue(q.getFields()[0]).toString()
-						+ " " + q.getValue(q.getFields()[1]).toString());
-			}
-			q.close();
-			System.out.println(count);
-		} catch (DataProviderException | OperationNotSupportedException ex) {
-			ex.printStackTrace();
-		}
-		ds = getDataSetManager().getDataSet("RegionInfo2");
-		System.out.println("ss".equals(new String("ss")));
+//		for (DataSet ds : getDataSetManager().getDataSetList(DataFeatureType.GeoFeature)) {		
+//			//Read data from a dataset
+//			try {
+//				System.out.println(ds.getDescription());
+//				DataContent q = ds.getQuery();
+////				GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
+//				q.open();
+//				int count = 0;
+//				DataFeature feature = ds.getFeature(DataFeatureType.DistributionFeature);
+//				while (q.next()) {
+//					count ++;
+//					System.out.println(
+//							q.getValue(feature.getKeyFields()[0]).toString()
+//							+ " " + q.getValue(feature.getValueFields()[0]).toString());
+//				}
+//				q.close();
+//				System.out.println(count);
+//			} catch (DataProviderException | OperationNotSupportedException ex) {
+//				ex.printStackTrace();
+//			}
+//		}
+//		DataSet ds = getDataSetManager().getDataSet("RegionInfo2");
+//		try {
+//			System.out.println(ds.getDescription());
+//			DataField aggr = new AggregatedDataField(ds.getField("SiteId"), 
+//					AggrFunction.COUNT, "TotalCount");
+//			DataContent q = ds.getQuery()
+//					.select(aggr,  ds.getField("Region")).orderBy("TotalCount", Order.ASC)
+//					.where("Region", Operator.GT,100).where("TotalCount", Operator.GT, 1);
+////			GeoDataSet gds = (GeoDataSet)ds.getFeature(GeoDataSet.class);
+////			System.out.println(q.ge)
+//			Query qq = (Query)q;
+//			System.out.println(qq.getProvider().getQueryString(qq));
+//			q.open();
+//			int count = 0;
+//			while (q.next()) {
+//				count ++;
+//				System.out.println(
+//						q.getValue(q.getFields()[0]).toString()
+//						+ " " + q.getValue(q.getFields()[1]).toString());
+//			}
+//			q.close();
+//			System.out.println(count);
+//		} catch (DataProviderException | OperationNotSupportedException ex) {
+//			ex.printStackTrace();
+//		}
+//		ds = getDataSetManager().getDataSet("RegionInfo2");
+//		System.out.println("ss".equals(new String("ss")));
 		
 		
 		
