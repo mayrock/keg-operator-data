@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>platform</project>
+		<project>platform_management</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
