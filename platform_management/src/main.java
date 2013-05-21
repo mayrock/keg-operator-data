@@ -3,12 +3,12 @@ import java.sql.SQLException;
 
 import edu.thu.keg.mdap.provider.AbsSqlServerProvider;
 import edu.thu.keg.mdap.provider.IllegalQueryException;
-import edu.thu.keg.mdap_impl.provider.DbSqlServerProviderImpl;
+import edu.thu.keg.mdap_impl.provider.SqlServerProviderImpl;
 
 public class main {
 
 	public static void main(String[] law) {
-		AbsSqlServerProvider dp = DbSqlServerProviderImpl.getInstance();
+		AbsSqlServerProvider dp = SqlServerProviderImpl.getInstance();
 		try {
 			ResultSet rs = dp.executeQuery(dp.SelectFrom("*", "User"));
 

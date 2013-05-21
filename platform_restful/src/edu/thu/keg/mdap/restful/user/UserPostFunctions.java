@@ -1,5 +1,7 @@
 package edu.thu.keg.mdap.restful.user;
 
+import java.sql.SQLException;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -45,7 +47,7 @@ public class UserPostFunctions {
 			boolean status = UserManagerImpl.getInstance().addUser(user);
 			job = new JSONObject();
 			job.put("status", status);
-		} catch (JSONException e) {
+		} catch (JSONException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

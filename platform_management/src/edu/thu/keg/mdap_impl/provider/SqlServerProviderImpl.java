@@ -8,24 +8,24 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 
 import edu.thu.keg.mdap.provider.AbsSqlServerProvider;
-import edu.thu.keg.mdap.provider.IDbSqlServerProvider;
+import edu.thu.keg.mdap.provider.IDatabaseProvider;
 import edu.thu.keg.mdap.provider.DatabaseProviderException;
 import edu.thu.keg.mdap.provider.IllegalQueryException;
 
-public class DbSqlServerProviderImpl extends AbsSqlServerProvider {
-	private static DbSqlServerProviderImpl instance;
+public class SqlServerProviderImpl extends AbsSqlServerProvider {
+	private static SqlServerProviderImpl instance;
 
-	public static DbSqlServerProviderImpl getInstance() {
+	public static SqlServerProviderImpl getInstance() {
 		// TODO multi-thread
 		if (instance == null)
-			instance = new DbSqlServerProviderImpl();
+			instance = new SqlServerProviderImpl();
 		return instance;
 	}
 
 	private Connection conn;
 	private String connString;
 
-	private DbSqlServerProviderImpl() {
+	private SqlServerProviderImpl() {
 
 		this.setDefaultSQLProvider();
 	}
