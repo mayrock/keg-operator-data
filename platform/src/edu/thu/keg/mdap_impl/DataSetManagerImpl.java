@@ -6,6 +6,7 @@ package edu.thu.keg.mdap_impl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -171,8 +172,12 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	@Override
 	public Collection<DataView> getDataViewList() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<DataView> vvs = new ArrayList<DataView>();
+		
+		for (Collection<DataView> cs : views.values()) {
+			vvs.addAll(cs);
+		}
+		return vvs;
 	}
 
 	@Override

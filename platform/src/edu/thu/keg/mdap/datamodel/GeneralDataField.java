@@ -78,6 +78,7 @@ public class GeneralDataField implements DataField {
 		this.type = type;
 		this.dataset = null;
 		this.desp = description;
+		this.isKey = isKey;
 		this.allowNull = !isKey;
 		this.func = func;
 		this.isDim = !func.equals(FieldFunctionality.Value);

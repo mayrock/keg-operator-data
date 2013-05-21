@@ -120,7 +120,7 @@ public class PlatformImpl implements Platform {
 		
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("ContentType", FieldType.LongString, 
-				"Content Type of websites", false, FieldFunctionality.Identifier);
+				"Content Type of websites", true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("times", FieldType.Int, 
 				"appear times of the ContentType", false, FieldFunctionality.Value);
 		dsSite = getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", "myc",
@@ -248,7 +248,6 @@ public class PlatformImpl implements Platform {
 					count ++;
 					System.out.println(
 							q.getValue(feature.getKeyFields()[0]).toString()
-							+ " " + q.getValue(feature.getKeyFields()[1]).toString()
 							+ " " + q.getValue(feature.getValueFields()[0]).toString());
 				}
 				q.close();
