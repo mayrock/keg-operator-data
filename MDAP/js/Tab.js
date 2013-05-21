@@ -83,16 +83,20 @@ Tab.createFrame = function(tabName){
 			len = data.length;
 			for(var i = 0; i < len; i++){
 				des = data[i].description;
+				name = data[i].datasetName;
 				if(tabName == "geo"){
-					name = data[i].datasetName;
 					type = "";
 					schema = data[i].schema;
-					/**********need to do**********/
-					/**********which type should be set to this dataset**********/
 					type = "points";
+					if(schema[0] == "Region"){
+						type = "regions";
+					}
 					Map.loadData(tabNum,i,name,type);
 					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = \"Map.clickEvent(" + tabNum + "," + i + ",'" + type + "');\"/>" + des + "<br/>").appendTo(checkbox);
 				}else if(tabName == "sta"){
+					if((name == "RegionInfo2") || (name == "RegionInfo3") || (name == "WebsiteId_URL")){
+						continue;
+					}
 					$("<input type = 'checkbox' id = 'checkbox" + tabNum + "_" + i + "' onclick = \"Chart.clickEvent(" + tabNum + "," + i + ");\"/>" + des + "<br/>").appendTo(checkbox);
 				}
 				/**********need to do**********/

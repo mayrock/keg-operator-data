@@ -144,6 +144,8 @@ Common.mapArr = new Array();
 
 Common.mrkrArr = new Array();
 
+Common.regionArr = new Array();
+
 Common.staKey = new Array();
 
 Common.staValue = new Array();

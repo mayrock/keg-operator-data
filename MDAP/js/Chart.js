@@ -16,7 +16,7 @@ Chart.clickEvent = function(tabNum,dsIndex){
 			Common.staSchema[tabNum][dsIndex] = data[dsIndex].schema;
 			/**********need to do**********/
 			/**********which type should be set to this dataset**********/
-			type = "lineChart";
+			type = "columnChart";
 		}).error(function(){
 			alert("Oops, we got an error...");
 		});
@@ -140,14 +140,14 @@ Chart.pie = function(containerName,tabNum,dsIndex,chartIndex,pieIndex){
 //			title: staSchema[pieIndex + 1] + " / " + staSchema[0]
 		};
 		if(containerName == "lcContainer"){
-			$("<img src = 'css/images/switch.png' onclick = \"Chart.change('" + containerName + "'," + tabNum + "," + dsIndex + "," + chartIndex + ",'column');\"/>")
-			.appendTo("#switchIcon")
-			.css({
-				"position": "absolute",
-				"top": "5px",
-				"right": "25px"
-			});
 			Chart.createFrame();
+			$("<img src = 'css/images/switch.png' onclick = \"Chart.change('" + containerName + "'," + tabNum + "," + dsIndex + "," + chartIndex + ",'column');\"/>")
+		.appendTo("#switchIcon")
+		.css({
+			"position": "absolute",
+			"top": "5px",
+			"right": "25px"
+		});
 			view = document.getElementById(containerName);
 		}else{
 			view = document.getElementById(containerName + tabNum + "_" + dsIndex + "_" + chartIndex + "_" + pieIndex);
