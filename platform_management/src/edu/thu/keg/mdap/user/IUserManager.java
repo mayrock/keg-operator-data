@@ -43,11 +43,24 @@ public interface IUserManager {
 	public boolean checkUserid(String userid) throws SQLException;
 
 	/**
-	 * remove the user from the database
+	 * check the user password
 	 * 
 	 * @param userid
+	 * @param password
 	 * @return
 	 * @throws SQLException
 	 */
-	public boolean removeUser(String userid) throws SQLException;
+	public boolean checkPassword(String userid, String password)
+			throws SQLException;
+
+	/**
+	 * remove the user from the database
+	 * 
+	 * @param userid
+	 * @param password
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean removeUser(String userid, String password)
+			throws SQLException;
 }

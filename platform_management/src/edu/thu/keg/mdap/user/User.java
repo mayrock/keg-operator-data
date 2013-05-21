@@ -18,7 +18,7 @@ public class User {
 
 	}
 
-	public void setUerid(String userid) {
+	public void setUserid(String userid) {
 		this.userid = userid;
 	}
 
