@@ -56,7 +56,7 @@ Tab.createFrame = function(tabType){
 	
 	function setTab(){
 		if(tabType == "geo"){
-			Geo.init(tabIndex);
+			Geo.initMap(tabIndex);
 			checkbox = document.createElement("div");
 			checkbox.setAttribute("id","checkbox" + tabIndex);
 			checkbox.setAttribute("class","checkbox");
@@ -69,10 +69,10 @@ Tab.createFrame = function(tabType){
 			$.getJSON(Common.datasetUrl() + tabType + "dss",function(data){
 				var len = data.length;
 				for(var i = 0; i < len; i++){
-					des = data[i].description;
-					name = data[i].datasetName;
-					schema = data[i].schema;
-					type = "points";
+					var des = data[i].description;
+					var name = data[i].datasetName;
+					var schema = data[i].schema;
+					var type = "points";
 					if(schema[0] == "Region"){
 						type = "regions";
 					}
@@ -83,9 +83,36 @@ Tab.createFrame = function(tabType){
 				$("<input type = 'button' value = 'invertAll' onclick = \"Geo.invertAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
 			}).error(function(){
 				alert("Oops, we got an error...");
+				return;
 			});
 		}else if(tabType == "sta"){
+			Common.chartCount[tabIndex] = new Array();
+			Common.chartIndex[tabIndex] = new Array();
 			Common.staControl[tabIndex] = new Array();
+			$.ajaxSettings.async = false;
+			$.getJSON(Common.datasetUrl() + tabType + "dss",function(data){
+				var len = data.length;
+				for(var i = 0; i < len; i++){
+					Common.chartCount[tabIndex][i] = 0;
+					Common.chartIndex[tabIndex][i] = 0;
+					Common.staControl[tabIndex][i] = new Array();
+					var des = data[i].description;
+					var name = data[i].datasetName;
+					if((name == "RegionInfo2") || (name == "RegionInfo3") || (name == "WebsiteId_URL")){
+						continue;
+					}
+					$("<a href = 'javascript:void(0);' onClick = \"Sta.createChart(" + tabIndex + "," + i + ");\">" + des + "<img src = 'css/images/add.png'/></a><br/>").appendTo("#option" + tabIndex);
+					view_ds = document.createElement("div");
+					view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
+					view_ds.setAttribute("class","view_ds");
+					$(view_ds).appendTo("#view" + tabIndex);
+					$("<div id = 'special" + tabIndex + "_" + i + "' style = 'clear:both;'></div>").appendTo(view_ds);
+					$(view_ds).css("display","none");
+				}
+			}).error(function(){
+				alert("Oops, we got an error...");
+				return;
+			});
 		}else{
 			/**********need to do**********/
 		}

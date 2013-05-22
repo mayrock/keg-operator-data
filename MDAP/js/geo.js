@@ -1,7 +1,7 @@
 Geo = {};
 
 /**********initialize map in a tab**********/
-Geo.init = function(tabIndex){
+Geo.initMap = function(tabIndex){
 	$("#view" + tabIndex).css("width",Common.width() - 320);
 	$("#view" + tabIndex).css("height","400px");
 	$("#view" + tabIndex).css("border","1px solid #000000");
@@ -48,6 +48,7 @@ Geo.loadData = function(tabIndex,dsIndex,name,type){
 		}
 	}).error(function(){
 		alert("Oops, we got an error...");
+		return;
 	});
 }
 
@@ -66,7 +67,7 @@ Geo.clickEvent = function(tabIndex,dsIndex){
 	}
 }
 
-/**********select all the checkboxs**********/
+/**********select all the datasets**********/
 Geo.selectAll = function(tabIndex,len){
 	for(var i = 0; i < len; i++){
 		if($("#checkbox" + tabIndex + "_" + i).is(":checked") == false){
@@ -76,7 +77,7 @@ Geo.selectAll = function(tabIndex,len){
 	}
 }
 
-/**********invert all the checkboxs**********/
+/**********invert all the datasets**********/
 Geo.invertAll = function(tabIndex,len){
 	for(var i = 0; i < len; i++){
 		if($("#checkbox" + tabIndex + "_" + i).is(":checked") == false){

@@ -1,8 +1,6 @@
 $(document).ready(function(){
-	chart_height = 400;
-	chart_width = 750;
-	lcContainer_width = 600;
 	User.init();
+	Sta.init();
 	$("#background").css({
 		"position": "absolute",
 		"height": Common.height(),
@@ -13,51 +11,12 @@ $(document).ready(function(){
 		"background-color": "gray",
 		"display": "none"
 	});
-	$("#largeChart").css({
-		"position": "absolute",
-		"margin-top": (Common.height() - chart_height) / 2,
-		"margin-right": (Common.width() - chart_width) / 2,
-		"margin-bottom": (Common.height() - chart_height) / 2,
-		"margin-left": (Common.width() - chart_width) / 2,
-		"border": "1px solid #000000",
-		"height": chart_height,
-		"width": chart_width,
-		"z-index": "1000",
-		"background-color": "white",
-		"display": "none"
-	});
-	$("#lcContainer").css({
-		"position": "absolute",
-		"top": 0,
-		"left": 0,
-		"height": chart_height,
-		"width": lcContainer_width
-	});
-	$("#lcCheckbox").css({
-		"position": "absolute",
-		"right": 0,
-		"bottom": 0,
-		"height": chart_height - 25,
-		"width": chart_width - lcContainer_width
-	});
 	$("#main").css({
 		"position": "absolute",
 		"height": Common.height(),
 		"width": Common.width()
 	});
 	$("#tabs").tabs();
-	$("<img src = 'css/images/close.png'/>")
-		.appendTo("#largeChart")
-		.css({
-			"position": "absolute",
-			"top": "5px",
-			"right": "5px"
-		}).hover(
-			function(){$(this).attr("src","css/images/close_hover.png");},
-			function(){$(this).attr("src","css/images/close.png");}
-		).click(
-			function(){Chart.closeFrame();}
-		);
 	if(($.cookie("username") != null) && ($.cookie("password") != null)){
 		User.upperRightMenu("login","saved");
 	}else{
@@ -110,6 +69,10 @@ Common.tabIndex = 0;
 Common.mapArr = new Array();
 
 Common.mapInfoArr = new Array();
+
+Common.chartCount = new Array();
+
+Common.chartIndex = new Array();
 
 Common.staControl = new Array();
 

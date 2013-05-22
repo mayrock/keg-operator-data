@@ -49,17 +49,29 @@ a:hover	鼠标悬停在链接上*/
 	font-style: italic;/*字体样式	italic: 斜体*/
 	font-weight: bold;/*字体粗细*/
 	font-size : 36px;/*字体大小*/
-	color : #8b0000;/*#8b0000: darkred*/
+	color : #8B0000;/*#8B0000: darkred*/
 }
 
 .option{
-	float: left;
-	position: relative;/*父div的position是一定要指定的,不然子div的position: absolute就会相对于整个文档定位了,而不是相对于父div定位*/
-	width: 160px;
+	position: absolute;/*父div的position是一定要指定的,不然子div的position: absolute就会相对于整个文档定位了,而不是相对于父div定位*/
+	left: 20px;
 	height: 400px;
+	width: 225px;
 	border: 1px solid #000000;
 	font-family: Times New Roman;
-	font-size: 12px;
+	font-size: 15px;
+}
+
+.option a{
+	text-decoration: underline;
+}
+
+.option a:link,.option a:visited{
+	color: #000000;/*#000000: black*/
+}
+
+.option a:hover{
+	color: #008000;/*#008000: green*/
 }
 
 .select{
@@ -71,9 +83,9 @@ a:hover	鼠标悬停在链接上*/
 }
 
 .view{
-	float: left;
+	position: absolute;
+	left: 250px;
 	border: 1px solid #FF0000;
-	margin-left: 5px;
 	text-align: center;
 	font-family: Times New Roman;
 	font-size: 16px;
@@ -84,36 +96,19 @@ a:hover	鼠标悬停在链接上*/
 	margin: 2px;
 }
 
-.chartContainer{
-	float: left;
-	border-top: 1px solid #0000FF;
-	border-bottom: 1px solid #0000FF;
-	border-left: 1px solid #0000FF;
-	margin: 2px;
-}
-
-.pieContainer{
-	position: relative;
-	float: left;
-	height: 120px;
-	width: 150px;
-	border-right: 1px solid #000000;
-}
-
-.view_pie{
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 120px;
-	width: 120px;
-}
-
 .view_chart{
+	float: left;
+	position: relative;
+	height: 240px;
+	width: 300px;
+	margin: 2px;
+	border: 1px solid #0000FF;
+}
+
+.chartContainer{
 	position: absolute;
-	top: 0;
-	left: 0;
-	height: 120px;
-	width: 200px;
+	height: 240px;
+	width: 270px;
 }
 
 #footer{

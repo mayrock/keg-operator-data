@@ -38,14 +38,14 @@ User.init = function(){
 	$("#checkbox_l").attr("checked",true);
 }
 
-/**********show register/login window**********/
+/**********open register/login window**********/
 User.createFrame = function(){
 	$("#background").css("display","block");
 	$("#user").css("display","block");
 	$("#user").tabs("option","active",1);
 }
 
-/**********close register/login window**********/
+/**********close window**********/
 User.closeFrame = function(){
 	$("#username_r").val("");
 	$("#password_r").val("");
