@@ -4,6 +4,11 @@
 	font-family: Times New Roman;/*字体系列*/
 }
 
+#myFavInfo{
+	text-align: center;/*文本的水平对齐方式*/
+	font-family: Times New Roman;/*字体系列*/
+}
+
 #upperRightMenu{
 	position: absolute;
 	right: 10px;
@@ -13,24 +18,12 @@
 }
 
 #upperRightMenu a{
-	text-decoration: underline;/*添加到文本的修饰*/
 	padding: 0 5px;/*padding: 内边距	顺序: 上 右 下 左*/
-}
-
-/*a:link	未访问的链接
-a:visited	已访问的链接
-a:hover	鼠标悬停在链接上*/
-#upperRightMenu a:link,#upperRightMenu a:visited{
-	color: #000000;/*#000000: black*/
-}
-
-#upperRightMenu a:hover{
-	color: #008000;/*#008000: green*/
 }
 
 #extraMenu{
 	position: absolute;
-	right: 200px;
+	right: 120px;
 	width: 75px;
 	border: 1px solid #efefef;
 	background-color: white;
@@ -42,6 +35,18 @@ a:hover	鼠标悬停在链接上*/
 	padding-bottom : 5px;
 	padding-left : 10px;
 	padding-right : 10px;
+}
+
+#footer{
+	position: absolute;
+	bottom: 0;
+	float: left;
+	width: 100%;
+	padding-top: 5px;
+	text-align: center;
+	font-family: Times New Roman;
+	font-weight: lighter;
+	color: #cccccc;
 }
 
 /*.: class选择器*/
@@ -56,22 +61,10 @@ a:hover	鼠标悬停在链接上*/
 	position: absolute;/*父div的position是一定要指定的,不然子div的position: absolute就会相对于整个文档定位了,而不是相对于父div定位*/
 	left: 20px;
 	height: 400px;
-	width: 225px;
-	border: 1px solid #000000;
+	width: 175px;
+	border: 1px solid #000000;/*#000000: black*/
+	font-size: 16px;
 	font-family: Times New Roman;
-	font-size: 15px;
-}
-
-.option a{
-	text-decoration: underline;
-}
-
-.option a:link,.option a:visited{
-	color: #000000;/*#000000: black*/
-}
-
-.option a:hover{
-	color: #008000;/*#008000: green*/
 }
 
 .select{
@@ -84,15 +77,16 @@ a:hover	鼠标悬停在链接上*/
 
 .view{
 	position: absolute;
-	left: 250px;
-	border: 1px solid #FF0000;
+	left: 200px;
+	border: 1px solid #8B0000;
 	text-align: center;
 	font-family: Times New Roman;
 	font-size: 16px;
 }
 
 .view_ds{
-	border: 1px solid #00FF00;
+	border: 1px solid #808080;/*#808080: gray*/
+	height: 246px;
 	margin: 2px;
 }
 
@@ -102,7 +96,7 @@ a:hover	鼠标悬停在链接上*/
 	height: 240px;
 	width: 300px;
 	margin: 2px;
-	border: 1px solid #0000FF;
+	border: 1px solid #8B0000;
 }
 
 .chartContainer{
@@ -111,14 +105,25 @@ a:hover	鼠标悬停在链接上*/
 	width: 270px;
 }
 
-#footer{
+.favorite{
 	position: absolute;
-	bottom: 0;
-	float: left;
-	width: 100%;
-	padding-top: 5px;
-	text-align: center;
+	left: 20px;
+	font-size: 16px;
 	font-family: Times New Roman;
-	font-weight: lighter;
-	color: #cccccc;
+	text-align: center;
+}
+
+a{
+	text-decoration: underline;/*添加到文本的修饰*/
+}
+
+/*a:link 未访问的链接
+a:visited 已访问的链接
+a:hover 鼠标悬停在链接上*/
+a:link,a:visited{
+	color: #000000;
+}
+
+a:hover{
+	color: #008000;/*#008000: green*/
 }

@@ -32,10 +32,24 @@ Sta.init = function(){
 		"height": lchart_h - 40,
 		"width": lchart_w - lcContainer_w
 	});
-}
+	$("#lcBackground").css({
+		"position": "absolute",
+		"margin-top": (Common.height() - lchart_h) / 2,
+		"margin-right": (Common.width() - lchart_w) / 2,
+		"margin-bottom": (Common.height() - lchart_h) / 2,
+		"margin-left": (Common.width() - lchart_w) / 2,
+		"height": lchart_h,
+		"width": lchart_w,
+		"filter": "alpha(opacity = 60)",
+		"opacity": "0.6",
+		"z-index": "1001",
+		"background-color": "gray",
+		"display": "none"
+	});
+};
 
 /**********create one chart container of a dataset**********/
-Sta.createChart = function(tabIndex,dsIndex){
+Sta.createChart = function(tabIndex,dsIndex,chartType){
 	var chartIndex = Common.chartIndex[tabIndex][dsIndex];
 	if(Common.chartCount[tabIndex][dsIndex] == 0){
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("display","block");
@@ -57,6 +71,10 @@ Sta.createChart = function(tabIndex,dsIndex){
 	$(view_chart).appendTo("#view_ds" + tabIndex + "_" + dsIndex);
 	$("#special" + tabIndex + "_" + dsIndex).remove();
 	$("<div id = 'special" + tabIndex + "_" + dsIndex + "' style = 'clear:both;'></div>").appendTo("#view_ds" + tabIndex + "_" + dsIndex);
+	if($("#view_ds" + tabIndex + "_" + dsIndex).width() > (Common.width() - 345)){
+		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - 345);
+		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","auto");
+	}
 	chartContainer = document.createElement("div");
 	chartContainer.setAttribute("id","chartContainer" + tabIndex + "_" + dsIndex + "_" + chartIndex);
 	chartContainer.setAttribute("class","chartContainer");
@@ -71,23 +89,28 @@ Sta.createChart = function(tabIndex,dsIndex){
 			function(){$(this).attr("src","css/images/close_hover.png");},
 			function(){$(this).attr("src","css/images/close.png");}
 		);
-	chartType = "lineChart";
-	var len = schema.length;
-	Common.staControl[tabIndex][dsIndex][chartIndex] = new Array();
-	for(var i = 0; i < len - 1; i++){
-		Common.staControl[tabIndex][dsIndex][chartIndex][i] = true;
+	if(chartIndex != 0){
+		var len = schema.length;
+		Common.staControl[tabIndex][dsIndex][chartIndex] = new Array();
+		for(var i = 0; i < len - 1; i++){
+			Common.staControl[tabIndex][dsIndex][chartIndex][i] = true;
+		}
 	}
 	Sta.showChart(tabIndex,dsIndex,chartIndex,chartType,"chartContainer");
-}
+};
 
 /**********close one chart container**********/
 Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
 	$("#view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex).remove();
 	Common.chartCount[tabIndex][dsIndex] --;
+	if($("#view_ds" + tabIndex + "_" + dsIndex).width() <= (Common.width() - 320)){
+		$("#view_ds" + tabIndex + "_" + dsIndex).css("width","auto");
+		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","visible");
+	}
 	if(Common.chartCount[tabIndex][dsIndex] == 0){
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("display","none");
 	}
-}
+};
 
 /**********magnify one chart**********/
 Sta.magnifier = function(tabIndex,dsIndex,chartIndex,chartType){
@@ -125,6 +148,13 @@ Sta.magnifier = function(tabIndex,dsIndex,chartIndex,chartType){
 	}else{
 		nextType = "columnChart"
 	}
+	$("<img src = 'css/images/save.png' onclick = \"Sta.save(" + tabIndex + "," + dsIndex + "," + chartIndex + ",'" + chartType + "');\"/>")
+		.appendTo("#icon_lc")
+		.css({
+			"position": "absolute",
+			"top": "5px",
+			"right": "45px"
+		});
 	$("<img src = 'css/images/switch.png' onclick = \"Sta.magnifier(" + tabIndex + "," + dsIndex + "," + chartIndex + ",'" + nextType + "');\"/>")
 		.appendTo("#icon_lc")
 		.css({
@@ -145,6 +175,48 @@ Sta.magnifier = function(tabIndex,dsIndex,chartIndex,chartType){
 	Sta.showChart(tabIndex,dsIndex,chartIndex,chartType,"lcContainer");
 };
 
+/**********save one chart into my favorite**********/
+Sta.save = function(tabIndex,dsIndex,chartIndex,chartType){
+	var count;
+	if($.cookie("fav_count") == null){
+		count = 0;
+	}else{
+		count = parseInt($.cookie("fav_count"));
+	}
+	$.cookie("fav_count",count + 1,{expires: 7,path: "/"});
+	var data = "{";
+	data += "\"dsIndex\":" + dsIndex + ",";
+	data += "\"chartType\":\"" + chartType + "\",";
+	data += "\"staControl\":[";
+	var len = Common.staControl[tabIndex][dsIndex][chartIndex].length;
+	for(var i = 0; i < len; i++){
+		data += Common.staControl[tabIndex][dsIndex][chartIndex][i];
+		if(i == len - 1){
+			data += "]";
+		}else{
+			data += ",";
+		}
+	}
+	data += "}";
+	$.cookie("fav_data" + count,JSON.stringify(data),{expires: 7,path: "/"});
+	$("#myFavInfo").css("display","block");
+	$("#lcBackground").css("display","block");
+};
+
+/**********save the name of chart**********/
+Sta.confirm = function(){
+	name = $("#name_fav").val();
+	des = $("#des_fav").val();
+	var count;
+	count = parseInt($.cookie("fav_count"));
+	count --;
+	$.cookie("fav_name" + count,name,{expires: 7,path: "/"});
+	$.cookie("fav_des" + count,des,{expires: 7,path: "/"});
+	$("#name_fav").val("my favorite");
+	$("#myFavInfo").css("display","none");
+	$("#lcBackground").css("display","none");
+};
+
 /**********change chart by y axis**********/
 Sta.yAxis = function(tabIndex,dsIndex,chartIndex,index,chartType){
 	if(Common.staControl[tabIndex][dsIndex][chartIndex][index] == true){
@@ -154,7 +226,7 @@ Sta.yAxis = function(tabIndex,dsIndex,chartIndex,index,chartType){
 	}
 	$("#lcContainer").empty();
 	Sta.showChart(tabIndex,dsIndex,chartIndex,chartType,"lcContainer");
-}
+};
 
 /**********open window for a magnified chart**********/
 Sta.createFrame = function(){

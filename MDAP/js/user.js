@@ -20,7 +20,8 @@ User.init = function(){
 	});
 	$("#user table").attr({
 		"width": user_tw,
-		"style": "margin: auto"
+		"style": "margin: auto",
+		"border": "1px"
 	});
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo("#user")
@@ -36,14 +37,14 @@ User.init = function(){
 		);
 	$("#user").tabs();
 	$("#checkbox_l").attr("checked",true);
-}
+};
 
 /**********open register/login window**********/
 User.createFrame = function(){
 	$("#background").css("display","block");
 	$("#user").css("display","block");
 	$("#user").tabs("option","active",1);
-}
+};
 
 /**********close window**********/
 User.closeFrame = function(){
@@ -54,7 +55,7 @@ User.closeFrame = function(){
 	$("#checkbox_l").attr("checked",true);
 	$("#background").css("display","none");
 	$("#user").css("display","none");
-}
+};
 
 /**********change info in the upper-right page**********/
 User.upperRightMenu = function(status,info){
@@ -66,20 +67,28 @@ User.upperRightMenu = function(status,info){
 		}
 		htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
 			"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">new<img src = 'css/images/down_arrow.png'/></a>" +
-			"<a href = 'javascript:void(0);'>my favorite</a>" +
-			"<a href = 'javascript:void(0);'>my history</a>" +
+			"<a href = 'javascript:void(0);' onClick = \"Tab.createFrame('fav');\">my favorite</a>" +
 			"<a href = 'javascript:void(0);' onclick = \"User.logout();\">logout</a>";
 	}else if(status == "logout"){
 		if(info == ""){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});
+			if($.cookie("fav_count") != null){
+				var count = parseInt($.cookie("fav_count"));
+				$.removeCookie("fav_count",{path: "/"});
+				for(var i = 0; i < count; i++){
+					$.removeCookie("fav_name" + i,{path: "/"});
+					$.removeCookie("fav_des" + i,{path: "/"});
+					$.removeCookie("fav_data" + i,{path: "/"});
+				}
+			}
 		}
 		htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">register/login</a>";
 	}else{
 		/**********need to do**********/
 	}
 	$("#userInfo").html(htmlString);
-}
+};
 
 /**********register**********/
 User.register = function(){

@@ -1,6 +1,7 @@
 $(document).ready(function(){
 	User.init();
 	Sta.init();
+	Fav.init();
 	$("#background").css({
 		"position": "absolute",
 		"height": Common.height(),

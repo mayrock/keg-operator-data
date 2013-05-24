@@ -16,7 +16,7 @@ Geo.initMap = function(tabIndex){
 	};
 	Common.mapArr[tabIndex] = new google.maps.Map(document.getElementById("view" + tabIndex),mapOptions);
 	Common.mapInfoArr[tabIndex] = new Array();
-}
+};
 
 /**********load data of a dataset**********/
 Geo.loadData = function(tabIndex,dsIndex,name,type){
@@ -50,7 +50,7 @@ Geo.loadData = function(tabIndex,dsIndex,name,type){
 		alert("Oops, we got an error...");
 		return;
 	});
-}
+};
 
 /**********choose a dataset**********/
 Geo.clickEvent = function(tabIndex,dsIndex){
@@ -65,7 +65,7 @@ Geo.clickEvent = function(tabIndex,dsIndex){
 	}else{
 		/**********need to do**********/
 	}
-}
+};
 
 /**********select all the datasets**********/
 Geo.selectAll = function(tabIndex,len){
@@ -75,7 +75,7 @@ Geo.selectAll = function(tabIndex,len){
 			Geo.clickEvent(tabIndex,i);
 		}
 	}
-}
+};
 
 /**********invert all the datasets**********/
 Geo.invertAll = function(tabIndex,len){
@@ -89,4 +89,4 @@ Geo.invertAll = function(tabIndex,len){
 		}
 		Geo.clickEvent(tabIndex,i);
 	}
-}
+};

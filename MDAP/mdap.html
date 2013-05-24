@@ -13,8 +13,9 @@
 		<script type = "text/javascript" src = "js/common.js"></script>
 		<script type = "text/javascript" src = "js/user.js"></script>
 		<script type = "text/javascript" src = "js/tab.js"></script>
-		<script type = "text/javascript" src = "js/geo.js"></script>
-		<script type = "text/javascript" src = "js/sta.js"></script>
+		<script type = "text/javascript" src = "js/geography.js"></script>
+		<script type = "text/javascript" src = "js/statistics.js"></script>
+		<script type = "text/javascript" src = "js/favorite.js"></script>
 	</head>
 	<body>
 		<div id = "user">
@@ -77,6 +78,17 @@
 		<div id = "background">
 		</div>
 		
+		<div id = "myFavInfo">
+			Input a name of this chart:<br/>
+			<input type = "text" value = "my favorite" id = "name_fav" maxlength = "36"/><br/>
+			Input a short description of this chart:<br/>
+			<textarea cols = "36" rows = "6" id = "des_fav">description</textarea><br/>
+			<input type = "button" value = "confirm" onclick = "Sta.confirm();"/>
+		</div>
+		
+		<div id = "lcBackground">
+		</div>
+		
 		<div id = "main">
 			<div id = "upperRightMenu">
 				<div id = "userInfo">
@@ -93,9 +105,11 @@
 				<ul id = "tabs_ul">
 				</ul>
 			</div>
+			<!--
 			<div id = "footer">
 				&copy; 2013 MDAP Project. Design by Ariesnix
 			</div>
+			-->
 		</div>
 	</body>
 </html>
