@@ -49,6 +49,13 @@ public class DataProviderManagerImpl implements DataProviderManager {
 				+ dbName + ";integratedSecurity=true;";
 		return getProvider(conn);
 	}
+	@Override
+	public DataProvider getDefaultOracleProvider(String dbName) {
+		String address = Config.getProperty(Config.OracleAddress);
+		String conn = "jdbc:" + address + ";databaseName="
+				+ dbName + ";integratedSecurity=true;";
+		return getProvider(conn);
+	}
 
 	@Override
 	public DataProvider getDefaultHiveProvider() {

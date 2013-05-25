@@ -3,4 +3,5 @@
 <properties>
 <entry key="DataSetFile">C:\Users\myc\git\mayrock\keg-operator-data\platform\datasets</entry>
 <entry key="SqlAddress">sqlserver://10.1.1.55:1433</entry>
+<entry key="OracleAddress">oracle://10.1.1.55:1433</entry>
 </properties>

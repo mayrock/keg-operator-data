@@ -35,4 +35,6 @@ public interface DataProviderManager {
 	 * @return the instance for the default hive provider.
 	 */
 	public DataProvider getDefaultHiveProvider();
+
+	public DataProvider getDefaultOracleProvider(String dbName);
 }
