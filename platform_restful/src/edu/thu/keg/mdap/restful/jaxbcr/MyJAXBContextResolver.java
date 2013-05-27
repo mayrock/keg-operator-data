@@ -29,7 +29,7 @@ public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 	public MyJAXBContextResolver() throws Exception {
 		this.context = new JSONJAXBContext(JSONConfiguration.natural().build(),
 				types);
-		System.out.println("²»Òª½ĞÎÒÅ®Íõ,Òª½ĞÎÒÅ®Íõ´óÈË!");
+		System.out.println("ä¸è¦å«æˆ‘å¥³ç‹,è¦å«æˆ‘å¥³ç‹å¤§äºº!");
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 		
 		for (Class<?> c : types) {
 			if (c.equals(objectType)) {
-				System.out.println("ÓÃµ½Ğ¡µÜÁË");
+				System.out.println("ç”¨åˆ°å°å¼Ÿäº†");
 				return context;
 			}
 		}

@@ -13,7 +13,7 @@ import edu.thu.keg.mdap_impl.PlatformImpl;
 
 
 /**
- * Æô¶¯·şÎñÆ÷Ê±ºòµÄ³õÊ¼»¯server
+ * å¯åŠ¨æœåŠ¡å™¨æ—¶å€™çš„åˆå§‹åŒ–server
  * @author Yuan Bozhi
  *
  */
@@ -37,7 +37,7 @@ public class ServerInitial implements ServletContextListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		System.out.println("Æô¶¯·şÎñÆ÷2\n"+P_Config);
+		System.out.println("å¯åŠ¨æœåŠ¡å™¨2\n"+P_Config);
 		
 	}
 }

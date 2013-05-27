@@ -12,6 +12,9 @@
 
 	<!-- 源platfrom的java文件路径 -->
 	<property name="SCR_PATH_PLA" value="${GIT_PATH}/platform/src" />
+	
+	<!-- 源platfrom的java文件路径 -->
+	<property name="SCR_PATH_MANAGER" value="${GIT_PATH}/platform_management/src" />
 
 	<!-- 源platfrom的编译的jar包路径 -->
 	<property name="JAR_PATH" value="${GIT_PATH}/platform_restful/WebContent/WEB-INF/lib" />
@@ -49,15 +52,23 @@
 	<target name="compile_pla" depends="init" description="compile the source files2">
 		<echo message="compiling platform..." />
 
-		<javac srcdir="${SCR_PATH_PLA}" destdir="${CLASS_PATH}" includeantruntime="on">
+		<javac  encoding="UTF-8" srcdir="${SCR_PATH_PLA}" destdir="${CLASS_PATH}" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
 	</target>
+	
+	<target name="compile_management" depends="init" description="compile the source files management">
+			<echo message="compiling platform_management..." />
+
+			<javac encoding="UTF-8" srcdir="${SCR_PATH_MANAGER}" destdir="${CLASS_PATH}" includeantruntime="on">
+				<classpath refid="LIB_CLASS_PATH" />
+			</javac>
+		</target>
 	<!-- 编译类 -->
-	<target name="compile" depends="init" description="compile the source files">
+	<target name="compile" depends="init,compile_management" description="compile the source files">
 		<!-- mkdir dir="${CLASS_PATH}"-->
 		<echo message="compiling platform_restful..." />
-		<javac srcdir="${SCR_PATH}" destdir="${CLASS_PATH}" includeantruntime="on">
+		<javac  encoding="UTF-8" srcdir="${SCR_PATH}" destdir="${CLASS_PATH}" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 			<classpath refid="LIB_CLASS_PATH_TOM" />
 		</javac>

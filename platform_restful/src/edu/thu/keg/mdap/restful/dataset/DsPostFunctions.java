@@ -73,7 +73,7 @@ public class DsPostFunctions {
 			@FormParam("owner") String owner,
 			@FormParam("dsFields") JSONArray datafields) {
 		/**
-		 * description Êı¾İ¼¯ÃèÊö loadable ÊÇ·ñ¿ÉÒÔ¼ÓÔØ dsFields Êı¾İÓòµÄjsonarray fieldName
+		 * description æ•°æ®é›†æè¿° loadable æ˜¯å¦å¯ä»¥åŠ è½½ dsFields æ•°æ®åŸŸçš„jsonarray fieldName
 		 * fieldType description isKey
 		 */
 		try {
@@ -138,7 +138,7 @@ public class DsPostFunctions {
 		List<JField> list_df = null;
 		System.out.println("POST");
 		/**
-		 * fields ´æ´¢ÁĞÃûµÄ²ÎÊıjsonarray orderby ÅÅĞòµÄÓòÃû
+		 * fields å­˜å‚¨åˆ—åçš„å‚æ•°jsonarray orderby æ’åºçš„åŸŸå
 		 */
 		try {
 			if (jsonFileds == null)
@@ -219,7 +219,7 @@ public class DsPostFunctions {
 		List<JColumn> all_dfs = null;
 		List<JField> list_df = null;
 		/**
-		 * jsonOper ²Ù×÷²ÎÊıjsonarray fieldname ÓòÃû opr ²Ù×÷·ûºÅ value Öµ
+		 * jsonOper æ“ä½œå‚æ•°jsonarray fieldname åŸŸå opr æ“ä½œç¬¦å· value å€¼
 		 */
 		try {
 			if (jsonOper == null)
