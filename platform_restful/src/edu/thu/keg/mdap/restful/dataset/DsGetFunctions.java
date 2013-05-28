@@ -83,11 +83,16 @@ public class DsGetFunctions {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
-				ArrayList<String> schema = new ArrayList<>();
-				for (DataField df : dataset.getDataFields()) {
-					schema.add(df.getName());
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
 				}
-				dname.setSchema(schema);
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
 				datasetsName.add(dname);
 			}
 
@@ -122,11 +127,21 @@ public class DsGetFunctions {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
-				ArrayList<String> schema = new ArrayList<>();
-				for (DataField df : dataset.getDataFields()) {
-					schema.add(df.getName());
+				// ArrayList<String> schema = new ArrayList<>();
+				// for (DataField df : dataset.getDataFields()) {
+				// schema.add(df.getName());
+				// }
+				// dname.setSchema(schema);
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
 				}
-				dname.setSchema(schema);
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
 				datasetsName.add(dname);
 			}
 
@@ -163,10 +178,20 @@ public class DsGetFunctions {
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
 				ArrayList<String> schema = new ArrayList<>();
-				for (DataField df : dataset.getDataFields()) {
-					schema.add(df.getName());
+				// for (DataField df : dataset.getDataFields()) {
+				// schema.add(df.getName());
+				// }
+				// dname.setSchema(schema);
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
 				}
-				dname.setSchema(schema);
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
 				datasetsName.add(dname);
 			}
 
@@ -442,10 +467,20 @@ public class DsGetFunctions {
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
 				ArrayList<String> schema = new ArrayList<>();
-				for (DataField df : dataset.getAllFields()) {
-					schema.add(df.getName());
+				// for (DataField df : dataset.getAllFields()) {
+				// schema.add(df.getName());
+				// }
+				// dname.setSchema(schema);
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
 				}
-				dname.setSchema(schema);
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
@@ -475,8 +510,7 @@ public class DsGetFunctions {
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			Collection<DataView> datasets = datasetManager
-					.getDataViewList(DataFeatureType.DistributionFeature);
+			Collection<DataView> datasets = datasetManager.getDataViewList();
 			int i = 0;
 			for (DataView dataset : datasets) {
 				// if(i++>=1)
@@ -485,10 +519,20 @@ public class DsGetFunctions {
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
 				ArrayList<String> schema = new ArrayList<>();
-				for (DataField df : dataset.getAllFields()) {
-					schema.add(df.getName());
+				// for (DataField df : dataset.getAllFields()) {
+				// schema.add(df.getName());
+				// }
+				// dname.setSchema(schema);
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
 				}
-				dname.setSchema(schema);
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
@@ -527,11 +571,21 @@ public class DsGetFunctions {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setDescription(dataset.getDescription());
-				ArrayList<String> schema = new ArrayList<>();
-				for (DataField df : dataset.getAllFields()) {
-					schema.add(df.getName());
+				// ArrayList<String> schema = new ArrayList<>();
+				// for (DataField df : dataset.getAllFields()) {
+				// schema.add(df.getName());
+				// }
+				// dname.setSchema(schema);
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
 				}
-				dname.setSchema(schema);
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
