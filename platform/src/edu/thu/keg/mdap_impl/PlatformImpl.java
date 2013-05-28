@@ -145,10 +145,18 @@ public class PlatformImpl implements Platform {
 		fields[3] = new GeneralDataField("TotalCount", FieldType.Int, 
 				"Total count of requests", false, FieldFunctionality.Value);
 		
-		getDataSetManager().createDataSet("slot_Imsi_All", "myc",
+		dsSite = getDataSetManager().createDataSet("slot_Imsi_All", "myc",
 				"User statistics by time slot", provider, true, fields);
 		
-		
+		try {
+			q = dsSite.getQuery().select(dsSite.getField("WebsiteCount"),
+					new AggregatedDataField(dsSite.getField("Imsi"), AggrFunction.COUNT, "UserCount") )
+					.orderBy("WebsiteCount", Order.ASC);
+		} catch (OperationNotSupportedException | DataProviderException e1) {
+			e1.printStackTrace();
+		}
+		getDataSetManager().defineView("UserWebsiteCountView", "用户网站访问数分布",
+				DataFeatureType.ValueFeature, q);
 
 		
 		fields = new DataField[3];

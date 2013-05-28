@@ -8,22 +8,6 @@
       <loadable>true</loadable>
       <fieldsMap>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Imsi</name>
-              <queryName>Imsi</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desp>User IMSI</desp>
-              <isKey>true</isKey>
-              <type>ShortString</type>
-              <allowNull>false</allowNull>
-              <func>Identifier</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
@@ -61,12 +45,28 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>Imsi</name>
+              <queryName>Imsi</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desp>User IMSI</desp>
+              <isKey>true</isKey>
+              <type>ShortString</type>
+              <allowNull>false</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
       </fieldsMap>
       <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
       </fields>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
@@ -76,6 +76,22 @@
       <description>每小时每基站连接数</description>
       <loadable>true</loadable>
       <fieldsMap>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>TotalCount</name>
+              <queryName>TotalCount</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desp>连接数</desp>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Value</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
         <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
@@ -103,27 +119,11 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>TotalCount</name>
-              <queryName>TotalCount</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desp>连接数</desp>
-              <isKey>false</isKey>
-              <type>Int</type>
-              <allowNull>true</allowNull>
-              <func>Value</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
       </fieldsMap>
       <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </fields>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
@@ -133,22 +133,6 @@
       <description>ContentType分布集</description>
       <loadable>true</loadable>
       <fieldsMap>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>ContentType</name>
-              <queryName>ContentType</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desp>Content Type of websites</desp>
-              <isKey>true</isKey>
-              <type>LongString</type>
-              <allowNull>false</allowNull>
-              <func>Identifier</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
         <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
@@ -165,10 +149,26 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>ContentType</name>
+              <queryName>ContentType</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desp>Content Type of websites</desp>
+              <isKey>true</isKey>
+              <type>LongString</type>
+              <allowNull>false</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
       </fieldsMap>
       <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </fields>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
@@ -178,22 +178,6 @@
       <description>Domain statistics</description>
       <loadable>false</loadable>
       <fieldsMap>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Domain</name>
-              <queryName>Domain</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desp>Domain</desp>
-              <isKey>true</isKey>
-              <type>LongString</type>
-              <allowNull>false</allowNull>
-              <func>Identifier</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
         <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
@@ -254,14 +238,30 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>Domain</name>
+              <queryName>Domain</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desp>Domain</desp>
+              <isKey>true</isKey>
+              <type>LongString</type>
+              <allowNull>false</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
       </fieldsMap>
       <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[4]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[5]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[4]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[5]"/>
       </fields>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
@@ -315,22 +315,6 @@
           </list>
         </entry>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Longitude</name>
-              <queryName>Longitude</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desp></desp>
-              <isKey>false</isKey>
-              <type>Double</type>
-              <allowNull>true</allowNull>
-              <func>Longitude</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Other</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
@@ -346,13 +330,29 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>Longitude</name>
+              <queryName>Longitude</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desp></desp>
+              <isKey>false</isKey>
+              <type>Double</type>
+              <allowNull>true</allowNull>
+              <func>Longitude</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
       </fieldsMap>
       <fields>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </fields>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
@@ -424,22 +424,6 @@
           </list>
         </entry>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Longitude</name>
-              <queryName>Longitude</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desp></desp>
-              <isKey>false</isKey>
-              <type>Double</type>
-              <allowNull>true</allowNull>
-              <func>Longitude</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Other</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
@@ -466,12 +450,28 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>Longitude</name>
+              <queryName>Longitude</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desp></desp>
+              <isKey>false</isKey>
+              <type>Double</type>
+              <allowNull>true</allowNull>
+              <func>Longitude</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
       </fieldsMap>
       <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </fields>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   </datasets>
@@ -479,9 +479,9 @@
     <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
       <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
         <fields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
           <edu.thu.keg.mdap.datamodel.AggregatedDataField>
-            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
             <func>MAX</func>
             <name>TotalCount</name>
           </edu.thu.keg.mdap.datamodel.AggregatedDataField>
@@ -489,7 +489,7 @@
         <wheres/>
         <orders>
           <edu.thu.keg.mdap.datamodel.Query_-OrderClause>
-            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
             <order>ASC</order>
           </edu.thu.keg.mdap.datamodel.Query_-OrderClause>
         </orders>
@@ -499,7 +499,7 @@
       <desp>每小时连接数统计</desp>
       <type>ValueFeature</type>
       <keyFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
       </keyFields>
       <valueFields>
         <edu.thu.keg.mdap.datamodel.AggregatedDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.AggregatedDataField"/>
@@ -508,13 +508,41 @@
     <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
       <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
         <fields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.AggregatedDataField>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <func>COUNT</func>
+            <name>UserCount</name>
+          </edu.thu.keg.mdap.datamodel.AggregatedDataField>
         </fields>
         <wheres/>
         <orders>
           <edu.thu.keg.mdap.datamodel.Query_-OrderClause>
-            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <order>ASC</order>
+          </edu.thu.keg.mdap.datamodel.Query_-OrderClause>
+        </orders>
+        <provider class="Jdbc" reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
+      </q>
+      <name>UserWebsiteCountView</name>
+      <desp>用户网站访问数分布</desp>
+      <type>ValueFeature</type>
+      <keyFields/>
+      <valueFields>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.AggregatedDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.AggregatedDataField"/>
+      </valueFields>
+    </edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
+    <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
+      <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+        <fields>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        </fields>
+        <wheres/>
+        <orders>
+          <edu.thu.keg.mdap.datamodel.Query_-OrderClause>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
             <order>DESC</order>
           </edu.thu.keg.mdap.datamodel.Query_-OrderClause>
         </orders>
@@ -524,16 +552,16 @@
       <desp>ContentType分布</desp>
       <type>DistributionFeature</type>
       <keyFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </keyFields>
       <valueFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </valueFields>
     </edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
     <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
       <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
         <fields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
           <edu.thu.keg.mdap.datamodel.AggregatedDataField>
             <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
             <func>COUNT</func>
@@ -553,7 +581,7 @@
       <desp>区域内基站数统计</desp>
       <type>ValueFeature</type>
       <keyFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </keyFields>
       <valueFields>
         <edu.thu.keg.mdap.datamodel.AggregatedDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.AggregatedDataField"/>
