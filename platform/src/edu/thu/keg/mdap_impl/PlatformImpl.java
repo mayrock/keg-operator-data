@@ -149,14 +149,17 @@ public class PlatformImpl implements Platform {
 				"User statistics by time slot", provider, true, fields);
 		
 		try {
-			q = dsSite.getQuery().select(dsSite.getField("WebsiteCount"),
-					new AggregatedDataField(dsSite.getField("Imsi"), AggrFunction.COUNT, "UserCount") )
+			DataField va = new AggregatedDataField(dsSite.getField("Imsi"), AggrFunction.COUNT, "UserCount");
+			q = dsSite.getQuery().select(dsSite.getField("WebsiteCount"),va
+					 )
 					.orderBy("WebsiteCount", Order.ASC);
+			DataField[] vas = {va};
+			getDataSetManager().defineView("UserWebsiteCountView", "用户网站访问数分布",
+					DataFeatureType.ValueFeature, q, dsSite.getField("WebsiteCount"), vas);
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
 		}
-		getDataSetManager().defineView("UserWebsiteCountView", "用户网站访问数分布",
-				DataFeatureType.ValueFeature, q);
+		
 
 		
 		fields = new DataField[3];
@@ -242,6 +245,24 @@ public class PlatformImpl implements Platform {
 				e.printStackTrace();
 			}
 		}	
+		DataView dv = getDataSetManager().getDataView("UserWebsiteCountView");
+		Query q;
+		try {
+			q = dv.getQuery();
+	
+			q.open();
+			while (q.next()) {
+				System.out.println(q.getValue(dv.getKeyField()) + " "
+						+ q.getValue(dv.getValueFields()[0]));
+			}
+			q.close();
+		} catch (OperationNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 //		for (DataSet ds : getDataSetManager().getDataSetList(DataFeatureType.GeoFeature)) {		
 //			//Read data from a dataset

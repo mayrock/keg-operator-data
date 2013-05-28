@@ -184,6 +184,14 @@ public class DataSetManagerImpl implements DataSetManager {
 		addDataView(v);
 		return v;
 	}
+	@Override
+	public DataView defineView(String name, String description
+			, DataFeatureType type, Query q, DataField key, DataField...values) {
+		DataField[] keys = {key};
+		DataView v = new DataViewImpl(name, description, type, q, keys, values);
+		addDataView(v);
+		return v;
+	}
 	private void addDataView(DataView v) {
 		views.put(v.getName(), v);
 		DataFeatureType type = v.getFeatureType();

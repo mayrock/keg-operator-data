@@ -82,5 +82,7 @@ public interface DataSetManager {
 	 * @throws IOException
 	 */
 	public void saveChanges() throws IOException;
+	DataView defineView(String name, String description, DataFeatureType type,
+			Query q, DataField key, DataField[] values);
 
 }
