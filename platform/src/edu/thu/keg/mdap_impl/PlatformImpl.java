@@ -124,10 +124,10 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("times", FieldType.Int, 
 				"appear times of the ContentType", false, FieldFunctionality.Value);
 		dsSite = getDataSetManager().createDataSet("DataAggr_ContentTypes_Up90", "myc",
-				"Top 90% Content Type distribution", provider, true, fields);
+				"ContentType分布集", provider, true, fields);
 		
 		try {
-			q = dsSite.getQuery();
+			q = dsSite.getQuery().orderBy("times", Order.DESC);
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
 		}
@@ -164,9 +164,9 @@ public class PlatformImpl implements Platform {
 		
 		try {
 			q = dsSite.getQuery().select(dsSite.getField("ConnHour"),
-					new AggregatedDataField(dsSite.getField("TotalCount"), AggrFunction.MAX, "TotalCount") );
+					new AggregatedDataField(dsSite.getField("TotalCount"), AggrFunction.MAX, "TotalCount") )
+					.orderBy("TotalCount", Order.DESC);
 		} catch (OperationNotSupportedException | DataProviderException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		getDataSetManager().defineView("ConnHourView", "每小时连接数统计",
