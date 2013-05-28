@@ -541,10 +541,56 @@ public class DsGetFunctions {
 		}, callback);
 
 	}
+
+	@GET
+	@Path("/getstadv/{datasetname}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONWithPadding getStaDataview(
+			@PathParam("datasetname") String dataview,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		System.out.println("getStaDataset " + dataview + " "
+				+ uriInfo.getAbsolutePath());
+		List<JStatistic> datasetList = new ArrayList<JStatistic>();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			DataView dv = datasetManager.getDataView(dataview);
+			DataContent rs = dv.getQuery();
+			rs.open();
+			int i = 0;
+			while (rs.next() && i++ < 20) {
+				// System.out.println(rs.getValue(ds.getDataFields()[0])
+				// .toString()
+				// + " "
+				// + rs.getValue(ds.getDataFields()[1]).toString());
+				JStatistic statistic = new JStatistic();
+				ArrayList<String> keys = new ArrayList<>();
+				for (DataField key : dv.getKeyFields()) {
+					keys.add(rs.getValue(key).toString());
+				}
+				ArrayList<Double> values = new ArrayList<>();
+				for (DataField df : dv.getValueFields()) {
+					values.add(Double.valueOf(rs.getValue(df).toString()));
+				}
+				statistic.setKey(keys);
+				statistic.setValue(values);
+				datasetList.add(statistic);
+			}
+			rs.close();
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
+				datasetList) {
+		}, callback);
+	}
+
 	@GET
 	@Path("/getdv/{dataviewname}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataview(@PathParam("dataviewname") String dataview,
+	public JSONWithPadding getDataview(
+			@PathParam("dataviewname") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDataset " + dataview + " "
 				+ uriInfo.getAbsolutePath());
@@ -552,14 +598,14 @@ public class DsGetFunctions {
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataview);
-			DataContent rs = ds.getQuery();
+			DataView dv = datasetManager.getDataView(dataview);
+			DataContent rs = dv.getQuery();
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
 				JDataset jdataset = new JDataset();
 				List<JField> fields = new ArrayList<>();
-				DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
+				DataField[] dfs = dv.getAllFields();
 				int j = 0;
 				for (DataField df : dfs) {
 					// if(j++>=2)
@@ -580,6 +626,7 @@ public class DsGetFunctions {
 				datasetList) {
 		}, callback);
 	}
+
 	@GET
 	@Path("/hello")
 	@Produces({ MediaType.APPLICATION_JSON })
