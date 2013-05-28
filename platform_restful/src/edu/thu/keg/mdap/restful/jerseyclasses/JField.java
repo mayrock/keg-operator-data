@@ -10,13 +10,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class JField {
-	private Object field;
+	private String value;
+	private String type;
 
-	public Object getField() {
-		return this.field;
+	public String getValue() {
+		return this.value;
 	}
 
-	public void setField(Object field) {
-		this.field = field;
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

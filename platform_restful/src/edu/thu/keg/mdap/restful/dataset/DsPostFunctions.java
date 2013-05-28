@@ -162,9 +162,10 @@ public class DsPostFunctions {
 				rs.open();
 				int ii = 0;
 				while (rs.next() && ii++ < 20) {
-					JField jf = new JField();
-					jf.setField(rs.getValue(df));
-					list_df.add(jf);
+					JField field = new JField();
+					field.setValue(rs.getValue(df).toString());
+					field.setType(rs.getValue(df).getClass().getSimpleName());
+					list_df.add(field);
 				}
 				rs.close();
 				// ObjectMapper mapper = new ObjectMapper();
@@ -244,9 +245,10 @@ public class DsPostFunctions {
 				rs.open();
 				int ii = 0;
 				while (rs.next() && ii++ < 2) {
-					JField jf = new JField();
-					jf.setField(rs.getValue(df));
-					list_df.add(jf);
+					JField field = new JField();
+					field.setValue(rs.getValue(df).toString());
+					field.setType(rs.getValue(df).getClass().getSimpleName());
+					list_df.add(field);
 				}
 				rs.close();
 				JColumn jc = new JColumn();

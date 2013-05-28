@@ -208,7 +208,8 @@ public class DsGetFunctions {
 					// if(j++>=2)
 					// break;
 					JField field = new JField();
-					field.setField(rs.getValue(df));
+					field.setValue(rs.getValue(df).toString());
+					field.setType(rs.getValue(df).getClass().getSimpleName());
 					fields.add(field);
 				}
 				jdataset.setField(fields);
@@ -611,7 +612,8 @@ public class DsGetFunctions {
 					// if(j++>=2)
 					// break;
 					JField field = new JField();
-					field.setField(rs.getValue(df));
+					field.setValue(rs.getValue(df).toString());
+					field.setType(rs.getValue(df).getClass().getSimpleName());
 					fields.add(field);
 				}
 				jdataset.setField(fields);
