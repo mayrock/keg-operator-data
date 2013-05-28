@@ -94,7 +94,8 @@ public class PlatformImpl implements Platform {
 		
 		try {
 			q = dsSite.getQuery().select(dsSite.getField("Region"),
-					new AggregatedDataField(dsSite.getField("SiteId"), AggrFunction.COUNT, "SiteCount") );
+					new AggregatedDataField(dsSite.getField("SiteId"), AggrFunction.COUNT, "SiteCount") )
+					.orderBy("SiteCount", Order.DESC);
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -165,7 +166,7 @@ public class PlatformImpl implements Platform {
 		try {
 			q = dsSite.getQuery().select(dsSite.getField("ConnHour"),
 					new AggregatedDataField(dsSite.getField("TotalCount"), AggrFunction.MAX, "TotalCount") )
-					.orderBy("TotalCount", Order.DESC);
+					.orderBy("ConnHour", Order.ASC);
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
 		}
@@ -217,7 +218,7 @@ public class PlatformImpl implements Platform {
 		
 		PlatformImpl p = new PlatformImpl(
 				"config.xml");
-		//p.crud();
+		p.crud();
 		p.query();
 	}
 	private void query() {
