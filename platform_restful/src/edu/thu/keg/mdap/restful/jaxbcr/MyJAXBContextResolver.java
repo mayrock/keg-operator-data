@@ -29,7 +29,7 @@ public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 	public MyJAXBContextResolver() throws Exception {
 		this.context = new JSONJAXBContext(JSONConfiguration.natural().build(),
 				types);
-		System.out.println("不要叫我女王,要叫我女王大人!");
+		System.out.println("不要叫我大王,要叫我女王大人!");
 	}
 
 	@Override

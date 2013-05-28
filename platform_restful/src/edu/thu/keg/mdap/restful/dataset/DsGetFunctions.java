@@ -65,7 +65,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdss")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDatasetsNames4 " + uriInfo.getAbsolutePath());
@@ -113,7 +113,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getgeodss")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getGeoDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getGeoDatasetsNames " + uriInfo.getAbsolutePath());
@@ -160,7 +160,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getstadss")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getStaDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getStaDatasetsNames " + uriInfo.getAbsolutePath());
@@ -211,7 +211,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getds/{datasetname}")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getDataset(@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDataset " + dataset + " "
@@ -258,7 +258,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getgeods/{datasetname}")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getGeoDataset(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -300,7 +300,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getstads/{datasetname}")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getStaDataset(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -355,7 +355,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getstatds/{datasetname}")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getStaTimeDataset(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -411,7 +411,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdsfds/{datasetname}")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getDatasetFieldsNames(
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -449,7 +449,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdvs")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getDatasetViewsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getDatasetViewsNames " + uriInfo.getAbsolutePath());
@@ -500,7 +500,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getstadvs")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getStaDatasetViewsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getStaDatasetViewsNames "
@@ -538,6 +538,7 @@ public class DsGetFunctions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
 		}, callback);
@@ -552,7 +553,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getgeodvs")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getGeoDatasetViewsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		System.out.println("getGeoDatasetViewsNames "
@@ -599,7 +600,7 @@ public class DsGetFunctions {
 
 	@GET
 	@Path("/getstadv/{datasetname}")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getStaDataview(
 			@PathParam("datasetname") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -643,7 +644,7 @@ public class DsGetFunctions {
 
 	@GET
 	@Path("/getdv/{dataviewname}")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON,"application/javascript"  })
 	public JSONWithPadding getDataview(
 			@PathParam("dataviewname") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -685,7 +686,7 @@ public class DsGetFunctions {
 
 	@GET
 	@Path("/hello")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON})
 	public String getString() {
 		String a = "{\"city\":\"helloworld_json\"}";
 		System.out.println(a);
