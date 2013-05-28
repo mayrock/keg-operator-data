@@ -552,14 +552,14 @@ public class DsGetFunctions {
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataview);
+			DataView ds = datasetManager.getDataView(dataview);
 			DataContent rs = ds.getQuery();
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
 				JDataset jdataset = new JDataset();
 				List<JField> fields = new ArrayList<>();
-				DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
+				DataField[] dfs = ds.getAllFields();
 				int j = 0;
 				for (DataField df : dfs) {
 					// if(j++>=2)
