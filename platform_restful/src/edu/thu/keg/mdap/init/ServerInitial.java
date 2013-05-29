@@ -33,6 +33,7 @@ public class ServerInitial implements ServletContextListener{
 		sc.setAttribute("platform", p);
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//			Class.forName("");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

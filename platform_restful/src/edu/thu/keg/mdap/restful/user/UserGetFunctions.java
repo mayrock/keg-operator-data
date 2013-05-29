@@ -33,17 +33,20 @@ public class UserGetFunctions {
 	ServletContext servletcontext;
 
 	@GET
-	@Path("/verifyuser/{userid}/{pw}")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Path("/verifyuser/{userid}/{password}")
+	@Produces({ MediaType.APPLICATION_JSON, "application/javascript" })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding verifyUser(
+	public JSONWithPadding verifyUser(@PathParam("userid") String userid,
+			@PathParam("password") String password,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		JSONObject job = null;
 		try {
 			job = new JSONObject();
 			job.put("status", true);
+			System.out.println("用户名密码正确:" + userid);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
+			System.out.println("用户名密码错误:" + userid);
 			e.printStackTrace();
 		}
 		System.out.println(job.toString());

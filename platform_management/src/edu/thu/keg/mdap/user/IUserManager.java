@@ -2,6 +2,8 @@ package edu.thu.keg.mdap.user;
 
 import java.sql.SQLException;
 
+import edu.thu.keg.mdap.provider.IllegalUserManageException;
+
 public interface IUserManager {
 	/**
 	 * create a new user
@@ -10,7 +12,8 @@ public interface IUserManager {
 	 * @return
 	 * @throws SQLException
 	 */
-	public boolean addUser(User user) throws SQLException;
+	public boolean addUser(User user) throws SQLException,
+			IllegalUserManageException;
 
 	/**
 	 * get the user instance cross the userid
@@ -19,7 +22,8 @@ public interface IUserManager {
 	 * @return
 	 * @throws SQLException
 	 */
-	public User getUser(String userid) throws SQLException;
+	public User getUser(String userid) throws SQLException,
+			IllegalUserManageException;
 
 	/**
 	 * update the password
@@ -31,7 +35,7 @@ public interface IUserManager {
 	 * @throws SQLException
 	 */
 	public boolean setNewPassword(String userid, String newpass, String oldpass)
-			throws SQLException;
+			throws SQLException, IllegalUserManageException;
 
 	/**
 	 * check the userid is used or not
@@ -40,7 +44,8 @@ public interface IUserManager {
 	 * @return
 	 * @throws SQLException
 	 */
-	public boolean checkUserid(String userid) throws SQLException;
+	public boolean isUseridExist(String userid) throws SQLException,
+			IllegalUserManageException;
 
 	/**
 	 * check the user password
@@ -51,7 +56,7 @@ public interface IUserManager {
 	 * @throws SQLException
 	 */
 	public boolean checkPassword(String userid, String password)
-			throws SQLException;
+			throws SQLException, IllegalUserManageException;
 
 	/**
 	 * remove the user from the database
@@ -62,5 +67,5 @@ public interface IUserManager {
 	 * @throws SQLException
 	 */
 	public boolean removeUser(String userid, String password)
-			throws SQLException;
+			throws SQLException, IllegalUserManageException;
 }
