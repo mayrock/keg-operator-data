@@ -7,3 +7,4 @@ platform/bin
 platform_restful/bin
 platform_management/bin
 platform_restful/src/platform_initial.properties
+Test_Connect/bin
