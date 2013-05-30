@@ -17,7 +17,7 @@ import edu.thu.keg.mdap_impl.provider.JdbcProvider;
 public class DataProviderManagerImpl implements DataProviderManager {
 
 	private static DataProviderManagerImpl instance = null;
-	public static DataProviderManagerImpl getInstance() {
+	public synchronized static DataProviderManagerImpl getInstance() {
 		//TODO multi-thread
 		if (instance == null)
 			instance = new DataProviderManagerImpl();

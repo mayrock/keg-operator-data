@@ -36,7 +36,7 @@ public class JdbcProvider extends AbstractDataProvider {
 		results = new HashMap<Query, ResultSet>();
 	}
 	
-	private Connection getConnection() throws SQLException {
+	private synchronized Connection getConnection() throws SQLException {
 		if (this.conn == null || this.conn.isClosed())
 			this.conn = DriverManager.getConnection(connString);
 		return this.conn;

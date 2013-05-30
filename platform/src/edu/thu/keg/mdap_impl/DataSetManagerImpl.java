@@ -53,7 +53,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 	
 	private static DataSetManagerImpl instance;
-	public static DataSetManagerImpl getInstance() {
+	public synchronized static DataSetManagerImpl getInstance() {
 		//TODO multi-thread
 		if (instance == null)
 			instance = new DataSetManagerImpl();
