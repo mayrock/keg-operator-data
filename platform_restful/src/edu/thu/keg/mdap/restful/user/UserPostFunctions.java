@@ -42,7 +42,7 @@ public class UserPostFunctions {
 
 	@POST
 	@Path("/adduser")
-	@Produces({ MediaType.APPLICATION_JSON, "application/javascript" })
+	@Produces({ "application/javascript",MediaType.APPLICATION_JSON  })
 	public JSONWithPadding addUser(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@FormParam("userid") String userid,

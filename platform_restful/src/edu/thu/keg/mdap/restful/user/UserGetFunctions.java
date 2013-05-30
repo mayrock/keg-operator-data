@@ -34,7 +34,7 @@ public class UserGetFunctions {
 
 	@GET
 	@Path("/verifyuser/{userid}/{password}")
-	@Produces({ MediaType.APPLICATION_JSON, "application/javascript" })
+	@Produces({"application/javascript" , MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding verifyUser(@PathParam("userid") String userid,
 			@PathParam("password") String password,
