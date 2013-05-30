@@ -20,8 +20,7 @@ User.init = function(){
 	});
 	$("#user table").attr({
 		"width": user_tw,
-		"style": "margin: auto",
-		"border": "1px"
+		"style": "margin: auto"
 	});
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo("#user")
@@ -73,15 +72,7 @@ User.upperRightMenu = function(status,info){
 		if(info == ""){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});
-			if($.cookie("fav_count") != null){
-				var count = parseInt($.cookie("fav_count"));
-				$.removeCookie("fav_count",{path: "/"});
-				for(var i = 0; i < count; i++){
-					$.removeCookie("fav_name" + i,{path: "/"});
-					$.removeCookie("fav_des" + i,{path: "/"});
-					$.removeCookie("fav_data" + i,{path: "/"});
-				}
-			}
+			$.removeCookie("favData",{path: "/"});
 		}
 		htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">register/login</a>";
 	}else{
@@ -107,7 +98,6 @@ User.register = function(){
 		alert("The two passwords you input don't match!");
 		return;
 	}
-	$.ajaxSettings.async = false;
 	$.post(Common.registerUrl(),{
 		username: username,
 		password: password
@@ -141,30 +131,31 @@ User.login = function(){
 		alert("Password cann't be empty!");
 		return;
 	}
-	$.ajaxSettings.async = false;
-	$.getJSON(Common.loginUrl() + username + "/" + password,function(data){
-		if(data.status == true){
-			if($("#checkbox_l").is(":checked") == true){
+//	$.ajaxSettings.async = false;
+//	$.getJSON(Common.loginUrl().replace("username",username).replace("password",password),function(data){
+//		if(data.status == true){
+//			if($("#checkbox_l").is(":checked") == true){
 				$.cookie("username",username,{expires: 7,path: "/"});
 				$.cookie("password",password,{expires: 7,path: "/"});
+				$.cookie("favData",JSON.stringify("[]"),{expires: 7,path: "/"});
 				User.upperRightMenu("login","saved");
 				User.closeFrame();
-			}else if($("#checkbox_l").is(":checked") == false){
-				User.upperRightMenu("login",username);
-				User.closeFrame();
-			}else{
-				/**********need to do**********/
-			}
-		}else if(data.status == false){
-			alert("Username or password error!");
-			return;
-		}else{
-			/**********need to do**********/
-		}
-	}).error(function(){
-		alert("Oops, we got an error...");
-		return;
-	});
+//			}else if($("#checkbox_l").is(":checked") == false){
+//				User.upperRightMenu("login",username);
+//				User.closeFrame();
+//			}else{
+//				/**********need to do**********/
+//			}
+//		}else if(data.status == false){
+//			alert("Username or password error!");
+//			return;
+//		}else{
+//			/**********need to do**********/
+//		}
+//	}).error(function(){
+//		alert("Oops, we got an error...");
+//		return;
+//	});
 };
 
 /**********log out**********/

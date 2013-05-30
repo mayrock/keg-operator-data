@@ -1,6 +1,6 @@
 Geo = {};
 
-/**********initialize map in a tab**********/
+/**********initialize map of a tab**********/
 Geo.initMap = function(tabIndex){
 	$("#view" + tabIndex).css("width",Common.width() - 320);
 	$("#view" + tabIndex).css("height","400px");
@@ -21,8 +21,7 @@ Geo.initMap = function(tabIndex){
 /**********load data of a dataset**********/
 Geo.loadData = function(tabIndex,dsIndex,name,type){
 	Common.mapInfoArr[tabIndex][dsIndex] = new Array();
-	$.ajaxSettings.async = false;
-	$.getJSON(Common.latlngUrl() + name,function(data){
+	$.getJSON(Common.dsDataUrl().replace("tabType","geo").replace("dsName",name),function(data){
 		for(var i = 0; i < data.length; i++){
 			if(type == "points"){
 				Common.mapInfoArr[tabIndex][dsIndex][i] = new google.maps.Marker({

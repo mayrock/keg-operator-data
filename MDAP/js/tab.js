@@ -17,11 +17,14 @@ Tab.createFrame = function(tabType){
 	Common.tabIndex ++;
 	/**********add a tab**********/
 	li = document.createElement("li");
+	li.setAttribute("id","tabs_li" + tabIndex);
 	$(li).appendTo("#tabs_ul");
-	if((tabType == "geo") || (tabType == "sta")){
-		li.innerHTML = "<a href='#tab" + tabIndex + "'>" + tabType + " data</a>";
+	if(tabType == "geo"){
+		li.innerHTML = "<a href='#tab" + tabIndex + "'>geo data</a>";
+	}else if(tabType == "sta"){
+		li.innerHTML = "<a href='#tab" + tabIndex + "'>stat data</a>";
 	}else if(tabType == "fav"){
-		li.innerHTML = "<a href='#tab" + tabIndex + "'>my " + tabType + "orite</a>";
+		li.innerHTML = "<a href='#tab" + tabIndex + "'>my favorite</a>";
 	}else{
 		/**********need to do**********/
 	}
@@ -55,6 +58,9 @@ Tab.createFrame = function(tabType){
 	}else{
 		/**********need to do**********/
 	}
+	if(tabType == "sta"){
+		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
+	}
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo(li)
 		.hover(
@@ -64,13 +70,8 @@ Tab.createFrame = function(tabType){
 				$(this).attr("src","css/images/close.png");
 			}
 		).click(
-			/**********close a tab**********/
 			function(){
-				$(this).parent().remove();
-				tabId = $(this).parent().children("a").attr("href");
-				$(tabId).remove();
-				Common.tabCount --;
-				$("#tabs").tabs("refresh");
+				Tab.close(tabType,tabIndex);
 			}
 		);
 	Tab.load(tabType,tabIndex);
@@ -90,53 +91,42 @@ Tab.load = function(tabType,tabIndex){
 		select.setAttribute("id","select" + tabIndex);
 		select.setAttribute("class","select");
 		$(select).appendTo("#option" + tabIndex);
-		$.ajaxSettings.async = false;
-		$.getJSON(Common.datasetUrl() + tabType + "dss",function(data){
+		$.getJSON(Common.datasetUrl().replace("tabType",tabType),function(data){
 			var len = data.length;
 			for(var i = 0; i < len; i++){
 				var des = data[i].description;
 				var name = data[i].datasetName;
-				var schema = data[i].schema;
+				var keys = data[i].keys;
 				var type = "points";
-				if(schema[0] == "Region"){
+				if(keys[0] == "Region"){
 					type = "regions";
 				}
 				Geo.loadData(tabIndex,i,name,type);
-				$("<input type = 'checkbox' id = 'checkbox" + tabIndex + "_" + i + "' onclick = \"Geo.clickEvent(" + tabIndex + "," + i + ",'" + type + "');\"/>" + des + "<br/>").appendTo(checkbox);
+				$("<input type = 'checkbox' id = 'checkbox" + tabIndex + "_" + i + "' " +
+					"onclick = \"Geo.clickEvent(" + tabIndex + "," + i + ",'" + type + "');\"/>" + des + "<br/>").appendTo(checkbox);
 			}
-			$("<input type = 'button' style = 'font-family: Times New Roman;font-size: 16px' value = 'selectAll' onclick = \"Geo.selectAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
-			$("<span>&nbsp;&nbsp;</span><input type = 'button' style = 'font-family: Times New Roman;font-size: 16px;' value = 'invertAll' onclick = \"Geo.invertAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
+			$("<input type = 'button' style = 'font-family: Times New Roman;font-size: 16px' value = 'selectAll' " +
+				"onclick = \"Geo.selectAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
+			$("<span>&nbsp;&nbsp;</span><input type = 'button' style = 'font-family: Times New Roman;font-size: 16px;' value = 'invertAll' " +
+				"onclick = \"Geo.invertAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
 		}).error(function(){
 			alert("Oops, we got an error...");
 			return;
 		});
 	}else if(tabType == "sta"){
-		Common.chartCount[tabIndex] = new Array();
 		Common.chartIndex[tabIndex] = new Array();
-		Common.staControl[tabIndex] = new Array();
-		$.ajaxSettings.async = false;
-		$.getJSON(Common.datasetUrl() + tabType + "dss",function(data){
+		Common.chartType[tabIndex] = new Array();
+		Common.yAxis[tabIndex] = new Array();
+		$.getJSON(Common.datasetUrl().replace("tabType",tabType),function(data){
 			var len = data.length;
 			for(var i = 0; i < len; i++){
-				Common.chartCount[tabIndex][i] = 0;
-				Common.chartIndex[tabIndex][i] = 0;
-				Common.staControl[tabIndex][i] = new Array();
+				Common.chartIndex[tabIndex][i] = new Array();
+				Common.chartIndex[tabIndex][i][0] = 0;
+				Common.chartType[tabIndex][i] = new Array();
+				Common.yAxis[tabIndex][i] = new Array();
 				var des = data[i].description;
-				var schema = data[i].schema;
-				/**********y axis information of the first chart should be initialize before chart container is created,
-				so we can easily reset it when revert from my favorite**********/
-				var chartIndex = Common.chartIndex[tabIndex][i];
-				var len = schema.length;
-				Common.staControl[tabIndex][i][chartIndex] = new Array();
-				for(var j = 0; j < len - 1; j++){
-					Common.staControl[tabIndex][i][chartIndex][j] = true;
-				}
-				var name = data[i].datasetName;
-				if((name == "RegionInfo2") || (name == "RegionInfo3") || (name == "WebsiteId_URL")){
-					continue;
-				}
-				var chartType = "lineChart";
-				$("<span>&nbsp;</span><img src = 'css/images/add.png'/><span>&nbsp;</span><a href = 'javascript:void(0);' onClick = \"Sta.createChart(" + tabIndex + "," + i + ",'" + chartType + "');\">" + des + "</a><br/>").appendTo("#option" + tabIndex);
+				$("<span>&nbsp;</span><img src = 'css/images/add.png'/><span>&nbsp;</span><a href = 'javascript:void(0);' " + 
+					"onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a><br/>").appendTo("#option" + tabIndex);
 				view_ds = document.createElement("div");
 				view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
 				view_ds.setAttribute("class","view_ds");
@@ -149,35 +139,40 @@ Tab.load = function(tabType,tabIndex){
 			return;
 		});
 	}else if(tabType == "fav"){
-		if($.cookie("fav_count") != null){
-			table = document.createElement("table");
-			$(table).appendTo("#favorite" + tabIndex);
-			$(table).attr({
-				"border": 1,
-				"cellpadding": 10
-			});
-			$("<thead><tr><th width = '50'><span>index</span></th><th width = '100'><span>name</span></th><th width = '450'><span>description</span></th><th width = '50'><span>options</span></th></tr></thead>").appendTo(table);
-			var count = $.cookie("fav_count");
-			for(var i = 0; i < count; i++){
-				var name = $.cookie("fav_name" + i);
-				var des = $.cookie("fav_des" + i);
-				tr = document.createElement("tr");
-				$(tr).appendTo(table);
-				td = document.createElement("td");
-				$("<span>" + (i + 1) + "</span>").appendTo(td);
-				$(td).appendTo(tr);
-				td = document.createElement("td");
-				$("<a herf = 'javascript:void(0);' onClick = \"Fav.revert(" + i + ");\">" + name + "</a>").appendTo(td);
-				$(td).appendTo(tr);
-				td = document.createElement("td");
-				$("<span>" + des + "</span>").appendTo(td);
-				$(td).appendTo(tr);
-				td = document.createElement("td");
-				$("<a herf = 'javascript:void(0);' onClick = \"Fav.del(" + tabIndex + "," + i + ");\">delete</a>").appendTo(td);
-				$(td).appendTo(tr);
-			}
+		table = document.createElement("table");
+		$(table).appendTo("#favorite" + tabIndex);
+		$(table).attr({
+			"border": 1,
+			"cellpadding": 10
+		});
+		$("<thead><tr><th width = '50'><span>index</span></th><th width = '100'><span>name</span></th><th width = '50'><span>options</span></th></tr></thead>").appendTo(table);
+		var favData = JSON.parse($.cookie("favData"));
+		var len = favData.length;
+		for(var i = 0; i < len; i++){
+			var tabData = favData[i];
+			var name = tabData.name;
+			var datasetData = tabData.dataset;
+			tr = document.createElement("tr");
+			$(tr).appendTo(table);
+			td = document.createElement("td");
+			$("<span>" + (i + 1) + "</span>").appendTo(td);
+			$(td).appendTo(tr);
+			td = document.createElement("td");
+			$("<a herf = 'javascript:void(0);' onClick = \"Fav.revertSta(" + i + ");\">" + name + "</a>").appendTo(td);
+			$(td).appendTo(tr);
+			td = document.createElement("td");
+			$("<a herf = 'javascript:void(0);' onClick = \"Fav.delSta(" + i + ");\">delete</a>").appendTo(td);
+			$(td).appendTo(tr);
 		}
 	}else{
 		/**********need to do**********/
 	}
+};
+
+/**********close a tab**********/
+Tab.close = function(tabType,tabIndex){
+	$("#tabs_li" + tabIndex).remove();
+	$("#tab" + tabIndex).remove();
+	Common.tabCount --;
+	$("#tabs").tabs("refresh");
 };
