@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="webmodulebuilder" default="deploy" basedir=".">
+<project name="webMDAPbuilder" default="deploy" basedir=".">
 	<property file="build.properties" />
 
 	<!-- set global properties for this build -->
@@ -9,20 +9,30 @@
 	<!-- 备份WEB路径 -->
 	<property name="BACKUP_PATH" value="${TOMCAT_PATH}/webapps/${WEBAPP_NAME}_backup/" />
 
+	<!-- 所有PROJECT的路径 -->
+	<property name="PRO_PATH_RESTFUL" value="${GIT_PATH}/platform_restful" />
+	<property name="PRO_PATH_PLA" value="${GIT_PATH}/platform" />
+	<property name="PRO_PATH_MANAGER" value="${GIT_PATH}/platform_management" />
 
+	<!-- 所有编译需要的路径 -->
 	<!-- 源WEB路径platfrom_restful -->
-	<property name="WEB_PATH" value="${GIT_PATH}/platform_restful/WebContent" />
-	<!-- 源platfrom的java文件路径 -->
-	<property name="SCR_PATH_PLA" value="${GIT_PATH}/platform/src" />
-	<!-- 源platfrom_management的java文件路径 -->
-	<property name="SCR_PATH_MANAGER" value="${GIT_PATH}/platform_management/src" />
+	<property name="WEB_PATH" value="${PRO_PATH_RESTFUL}/WebContent" />
 	<!-- 源platform_restful的java文件路径 -->
-	<property name="SCR_PATH" value="${GIT_PATH}/platform_restful/src" />
+	<property name="SCR_PATH_RESTFUL" value="${PRO_PATH_RESTFUL}/src" />
+	<!-- 源platfrom的java文件路径 -->
+	<property name="SCR_PATH_PLA" value="${PRO_PATH_PLA}/src" />
+	<!-- 源platfrom_management的java文件路径 -->
+	<property name="SCR_PATH_MANAGER" value="${PRO_PATH_MANAGER}/src" />
+
 	<!-- 源所有人的编译的jar包路径 -->
-	<property name="JAR_PATH" value="${GIT_PATH}/platform_restful/WebContent/WEB-INF/lib" />
+	<property name="JAR_PATH" value="${WEB_PATH}/WEB-INF/lib" />
+	<!-- 源MDAP前台的路径 -->
+	<property name="MDAP_PATH" value="${GIT_PATH}/MDAP" />
+
 
 	<!-- 编译好后的源class文件路径 -->
-	<property name="CLASS_PATH" value="${GIT_PATH}/platform_restful/WebContent/WEB-INF/classes" />
+	<property name="CLASS_PATH"
+		value="${GIT_PATH}/platform_restful/WebContent/WEB-INF/classes" />
 	<!-- tomcat class文件路径 -->
 	<property name="JAR_PATH_TOM" value="${TOMCAT_PATH}/lib" />
 
@@ -37,7 +47,7 @@
 	</path>
 
 
-	<!-- Copy备份gangc-->
+	<!-- Copy备份 -->
 	<target name="detect.file">
 		<condition property="DEPLOY_PATH_IsExists">
 			<and>
@@ -66,44 +76,57 @@
 		<mkdir dir="${DEPLOY_PATH}/WEB-INF/lib" />
 		<mkdir dir="${CLASS_PATH}" />
 	</target>
-	<!---编译platform-->
-	<target name="compile_pla" depends="init" description="compile the source files2">
+	<!---编译platform -->
+	<target name="compile_pla_jar" depends="init"
+		description="compile the source files2">
 		<echo message="compiling platform..." />
-
-		<javac encoding="UTF-8" srcdir="${SCR_PATH_PLA}" destdir="${CLASS_PATH}" includeantruntime="on">
+		<mkdir dir="${PRO_PATH_PLA}/bin/classes" />
+		<javac encoding="UTF-8" srcdir="${SCR_PATH_PLA}" destdir="${PRO_PATH_PLA}/bin/classes"
+			includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
+		<jar destfile="${WEB_PATH}/WEB-INF/lib/compile_platform.jar"
+			basedir="${PRO_PATH_PLA}/bin/classes" />
+		<delete dir="${PRO_PATH_PLA}/bin/classes" />
 	</target>
-	<!---编译platform_management-->
-	<target name="compile_management" depends="init" description="compile the source files management">
+
+	<!---编译platform_management -->
+	<target name="compile_management_jar" depends="init"
+		description="compile the source files management">
 		<echo message="compiling platform_management..." />
-
-		<javac encoding="UTF-8" srcdir="${SCR_PATH_MANAGER}" destdir="${CLASS_PATH}" includeantruntime="on">
+		<mkdir dir="${PRO_PATH_MANAGER}/bin/classes" />
+		<javac encoding="UTF-8" srcdir="${SCR_PATH_MANAGER}" destdir="${PRO_PATH_MANAGER}/bin/classes"
+			includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
+		<jar destfile="${WEB_PATH}/WEB-INF/lib/compile_management.jar"
+			basedir="${PRO_PATH_MANAGER}/bin/classes" />
+		<delete dir="${PRO_PATH_MANAGER}/bin/classes" />
 	</target>
-	<!-- 编译类 olatform_restful-->
-	<target name="compile" depends="init,compile_management" description="compile the source files">
-		<!-- mkdir dir="${CLASS_PATH}"-->
+	<!-- 编译类 platform_restful -->
+	<target name="compile" depends="init,compile_pla_jar,compile_management_jar"
+		description="compile the source files">
+		<!-- mkdir dir="${CLASS_PATH}" -->
 		<echo message="compiling platform_restful..." />
-		<javac encoding="UTF-8" srcdir="${SCR_PATH}" destdir="${CLASS_PATH}" includeantruntime="on">
+		<javac encoding="UTF-8" srcdir="${SCR_PATH_RESTFUL}" destdir="${CLASS_PATH}"
+			includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 			<classpath refid="LIB_CLASS_PATH_TOM" />
 		</javac>
 	</target>
 
-	<target name="copy_properties" depends="init,compile_pla,compile">
+	<target name="copy_properties" depends="init,compile_pla_jar,compile">
 		<echo message="copy_properties" />
 		<copy todir="${CLASS_PATH}">
-			<fileset dir="${SCR_PATH}">
+			<fileset dir="${SCR_PATH_RESTFUL}">
 				<include name="**/*.properties" />
 			</fileset>
 		</copy>
 	</target>
 
-	<!-- Copy发布-->
-	<target name="deploy" depends="init,compile_pla,compile,copy_properties">
-		<echo message="copy to Tomcat.." />
+	<!-- Copy所有后台的class文件 -->
+	<target name="copy_deploy" depends="copy_properties">
+		<echo message="copy .class to Tomcat.." />
 		<copy todir="${DEPLOY_PATH}">
 			<fileset dir="${WEB_PATH}">
 				<include name="**/*.*" />
@@ -116,6 +139,25 @@
 				<exclude name="**/*.war" />
 			</fileset>
 		</copy>
+	</target>
+	<!-- Copy所有后台的class文件 -->
+	<target name="copy_MDAP" depends="copy_deploy">
+		<echo message="copy MDAP to Tomcat.." />
+		<copy todir="${DEPLOY_PATH}">
+			<fileset dir="${MDAP_PATH}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+		<delete>
+			<fileset dir="${WEB_PATH}/WEB-INF/lib/">
+				<include name="compile_platform.jar" />
+				<include name="compile_management.jar" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="deploy" depends="copy_MDAP">
+		<echo message="deploying to Tomcat.." />
 	</target>
 
 </project>
