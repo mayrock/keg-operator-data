@@ -2,7 +2,6 @@
 *.txt
 *.dat
 platform_restful/build
-*.classpath
 platform/bin
 platform_restful/bin
 platform_management/bin
