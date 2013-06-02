@@ -127,14 +127,15 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		String sql = "delete from [Favorite] "
 				+ "where (userid = ? and favid = ? )";
 		AbsSqlServerProvider ssp = null;
-
-		ssp = SqlServerProviderImpl.getInstance();
-		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
-				Statement.RETURN_GENERATED_KEYS);
-		pstmt.setString(1, userid);
-		pstmt.setString(2, favid);
-		pstmt.executeUpdate();
-		ResultSet rs = pstmt.getGeneratedKeys();
+//		if (!isFavExsist(userid, favid))
+//			throw new IllegalFavManageException("the favrite don't exists!");
+//		ssp = SqlServerProviderImpl.getInstance();
+//		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
+//				Statement.RETURN_GENERATED_KEYS);
+//		pstmt.setString(1, userid);
+//		pstmt.setString(2, favid);
+//		pstmt.executeUpdate();
+//		ResultSet rs = pstmt.getGeneratedKeys();
 
 		return true;
 	}

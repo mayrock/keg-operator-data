@@ -1,7 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import edu.thu.keg.mdap.management.ManagementImpl;
+import edu.thu.keg.mdap.management.ManagementPlatform;
 import edu.thu.keg.mdap.management.favorite.Favorite;
 import edu.thu.keg.mdap.management.favorite.IFavoriteManager;
 import edu.thu.keg.mdap.management.impl.provider.SqlServerProviderImpl;
@@ -18,7 +18,7 @@ public class main {
 	public static void main(String[] law) {
 		AbsSqlServerProvider dp = SqlServerProviderImpl.getInstance();
 		try {
-			ManagementImpl mi = new ManagementImpl();
+			ManagementPlatform mi = new ManagementPlatform();
 			IUserManager ium = mi.getUserManager();
 			// boolean status = ium.addUser(null);
 			IFavoriteManager ifm = mi.getFavoriteManager();

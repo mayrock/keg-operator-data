@@ -5,7 +5,7 @@ import edu.thu.keg.mdap.management.impl.favorite.FavoriteManagerImpl;
 import edu.thu.keg.mdap.management.impl.user.UserManagerImpl;
 import edu.thu.keg.mdap.management.user.IUserManager;
 
-public class ManagementImpl {
+public class ManagementPlatform {
 
 	public IUserManager getUserManager() {
 		return UserManagerImpl.getInstance();

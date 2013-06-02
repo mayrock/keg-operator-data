@@ -1,4 +1,4 @@
-package edu.thu.keg.mdap.restful.jerseyclasses;
+package edu.thu.keg.mdap.restful.jerseyclasses.dataset;
 
 import java.util.ArrayList;
 import java.util.List;

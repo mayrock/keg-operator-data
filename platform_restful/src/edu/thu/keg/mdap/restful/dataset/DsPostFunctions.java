@@ -37,8 +37,8 @@ import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
-import edu.thu.keg.mdap.restful.jerseyclasses.JColumn;
-import edu.thu.keg.mdap.restful.jerseyclasses.JField;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JColumn;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JField;
 
 /**
  * the functions of dataset's post operations

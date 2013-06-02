@@ -1,18 +1,28 @@
-package edu.thu.keg.mdap.management.favorite;
+package edu.thu.keg.mdap.restful.jerseyclasses.management;
+
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import edu.thu.keg.mdap.management.favorite.Favorite;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JField;
+
+/**
+ * Jersey class for JFavorite
+ * 
+ * @author Law
+ * 
+ */
 @XmlRootElement
-public class Favorite {
+public class JFavorite {
 	String userid;
 	String favid;
 	String favstring;
 
-	public Favorite() {
-
+	public JFavorite() {
 	}
 
-	public Favorite(String userid, String favid, String favstring) {
+	public JFavorite(String userid, String favid, String favstring) {
 		this.userid = userid;
 		this.favid = favid;
 		this.favstring = favstring;
@@ -41,5 +51,10 @@ public class Favorite {
 	public String getFavstring() {
 		return this.favstring;
 	}
+	// public static JFavorite convertFromFav(Favorite fav)
+	// {
+	// return new JFavorite(fav.getUserid(), fav.getFavid(),
+	// fav.getFavstring());
+	// }
 
 }

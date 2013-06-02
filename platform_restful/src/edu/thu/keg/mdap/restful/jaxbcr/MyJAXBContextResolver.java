@@ -11,20 +11,23 @@ import org.codehaus.jettison.json.JSONObject;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
 
-import edu.thu.keg.mdap.restful.jerseyclasses.JColumn;
-import edu.thu.keg.mdap.restful.jerseyclasses.JDataset;
-import edu.thu.keg.mdap.restful.jerseyclasses.JDatasetName;
-import edu.thu.keg.mdap.restful.jerseyclasses.JFieldName;
-import edu.thu.keg.mdap.restful.jerseyclasses.JGeograph;
-import edu.thu.keg.mdap.restful.jerseyclasses.JStatistic;
+import edu.thu.keg.mdap.management.favorite.Favorite;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JColumn;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDataset;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetName;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JFieldName;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JGeograph;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JStatistic;
+import edu.thu.keg.mdap.restful.jerseyclasses.management.JFavorite;
 
 @Provider
 public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 
 	private JAXBContext context;
-	private Class<?>[] types = { JSONObject.class,String.class,Object.class, ArrayList.class,
-			JDatasetName.class,
-			JDataset.class, JGeograph.class, JStatistic.class, JFieldName.class,JColumn.class };
+	private Class<?>[] types = { JSONObject.class, String.class, Object.class,Boolean.class,
+			ArrayList.class, JDatasetName.class, JDataset.class,
+			JGeograph.class, JStatistic.class, JFieldName.class, JColumn.class,
+			Favorite.class };
 
 	public MyJAXBContextResolver() throws Exception {
 		this.context = new JSONJAXBContext(JSONConfiguration.natural().build(),
@@ -35,7 +38,6 @@ public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 	@Override
 	public JAXBContext getContext(Class<?> objectType) {
 
-		
 		for (Class<?> c : types) {
 			if (c.equals(objectType)) {
 				System.out.println("用到小弟了");

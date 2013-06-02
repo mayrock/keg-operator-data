@@ -22,7 +22,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.sun.jersey.api.json.JSONWithPadding;
 
-import edu.thu.keg.mdap.management.ManagementImpl;
+import edu.thu.keg.mdap.management.ManagementPlatform;
 import edu.thu.keg.mdap.management.impl.user.UserManagerImpl;
 import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
 import edu.thu.keg.mdap.management.user.IUserManager;
@@ -53,7 +53,7 @@ public class UserPostFunctions {
 		JSONObject job = new JSONObject();
 		try {
 			User user = new User(userid, username, password, User.BROWSER);
-			ManagementImpl mi = new ManagementImpl();
+			ManagementPlatform mi = new ManagementPlatform();
 			boolean status = mi.getUserManager().addUser(user);
 			job = new JSONObject();
 			job.put("status", status);
