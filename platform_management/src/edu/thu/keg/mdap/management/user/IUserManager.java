@@ -1,8 +1,8 @@
-package edu.thu.keg.mdap.user;
+package edu.thu.keg.mdap.management.user;
 
 import java.sql.SQLException;
 
-import edu.thu.keg.mdap.provider.IllegalUserManageException;
+import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
 
 public interface IUserManager {
 	/**

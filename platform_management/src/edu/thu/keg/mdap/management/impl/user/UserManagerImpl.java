@@ -1,15 +1,15 @@
-package edu.thu.keg.mdap_impl.user;
+package edu.thu.keg.mdap.management.impl.user;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import edu.thu.keg.mdap.provider.AbsSqlServerProvider;
-import edu.thu.keg.mdap.provider.IllegalUserManageException;
-import edu.thu.keg.mdap.user.User;
-import edu.thu.keg.mdap.user.IUserManager;
-import edu.thu.keg.mdap_impl.provider.SqlServerProviderImpl;
+import edu.thu.keg.mdap.management.impl.provider.SqlServerProviderImpl;
+import edu.thu.keg.mdap.management.provider.AbsSqlServerProvider;
+import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
+import edu.thu.keg.mdap.management.user.IUserManager;
+import edu.thu.keg.mdap.management.user.User;
 
 public class UserManagerImpl implements IUserManager {
 	public static UserManagerImpl instance;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.provider;
+package edu.thu.keg.mdap.management.provider;
 
 /**
  * @author Yuanchao Ma

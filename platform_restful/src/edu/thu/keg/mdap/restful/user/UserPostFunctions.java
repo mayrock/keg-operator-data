@@ -22,12 +22,12 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.sun.jersey.api.json.JSONWithPadding;
 
-import edu.thu.keg.mdap.ManagementImpl;
-import edu.thu.keg.mdap.provider.IllegalUserManageException;
-import edu.thu.keg.mdap.user.IUserManager;
-import edu.thu.keg.mdap.user.User;
+import edu.thu.keg.mdap.management.ManagementImpl;
+import edu.thu.keg.mdap.management.impl.user.UserManagerImpl;
+import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
+import edu.thu.keg.mdap.management.user.IUserManager;
+import edu.thu.keg.mdap.management.user.User;
 
-import edu.thu.keg.mdap_impl.user.UserManagerImpl;
 
 @Path("/up")
 public class UserPostFunctions {

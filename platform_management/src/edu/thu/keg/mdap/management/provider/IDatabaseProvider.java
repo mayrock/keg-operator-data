@@ -1,4 +1,4 @@
-package edu.thu.keg.mdap.provider;
+package edu.thu.keg.mdap.management.provider;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

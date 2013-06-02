@@ -1,4 +1,4 @@
-package edu.thu.keg.mdap_impl.provider;
+package edu.thu.keg.mdap.management.impl.provider;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
-import edu.thu.keg.mdap.provider.AbsSqlServerProvider;
-import edu.thu.keg.mdap.provider.IDatabaseProvider;
-import edu.thu.keg.mdap.provider.DatabaseProviderException;
-import edu.thu.keg.mdap.provider.IllegalQueryException;
+import edu.thu.keg.mdap.management.provider.AbsSqlServerProvider;
+import edu.thu.keg.mdap.management.provider.DatabaseProviderException;
+import edu.thu.keg.mdap.management.provider.IDatabaseProvider;
+import edu.thu.keg.mdap.management.provider.IllegalQueryException;
 
 public class SqlServerProviderImpl extends AbsSqlServerProvider {
 	private static SqlServerProviderImpl instance;

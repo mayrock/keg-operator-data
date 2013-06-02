@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.thu.keg.mdap.provider;
+package edu.thu.keg.mdap.management.provider;
 
 /**
  * Thrown when a query is illegal (cannot be executed) on a data provider

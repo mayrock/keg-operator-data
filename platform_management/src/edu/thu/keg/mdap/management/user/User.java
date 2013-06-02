@@ -1,4 +1,4 @@
-package edu.thu.keg.mdap.user;
+package edu.thu.keg.mdap.management.user;
 
 public class User {
 	public static final int ADMIN = 3;

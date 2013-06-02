@@ -1,4 +1,4 @@
-package edu.thu.keg.mdap.provider;
+package edu.thu.keg.mdap.management.provider;
 
 public class IllegalUserManageException extends Exception {
 
