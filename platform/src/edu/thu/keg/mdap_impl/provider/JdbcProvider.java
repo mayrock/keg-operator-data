@@ -28,7 +28,6 @@ import edu.thu.keg.mdap.provider.IllegalQueryException;
  */
 public class JdbcProvider extends AbstractDataProvider {
 	
-	private Connection conn;
 	private HashMap<Query, ResultSet> results;
 
 	public JdbcProvider(String connString) {
@@ -37,9 +36,10 @@ public class JdbcProvider extends AbstractDataProvider {
 	}
 	
 	private synchronized Connection getConnection() throws SQLException {
-		if (this.conn == null || this.conn.isClosed())
-			this.conn = DriverManager.getConnection(connString);
-		return this.conn;
+//		if (this.conn == null || this.conn.isClosed())
+//			this.conn = DriverManager.getConnection(connString);
+//		return this.conn;
+		return DriverManager.getConnection(connString);
 	}
 	
 	@Override 
@@ -136,13 +136,19 @@ public class JdbcProvider extends AbstractDataProvider {
 	}
 
 	public void execute(String text) throws DataProviderException {
-		Statement stmt;
+		Statement stmt = null;
 		try {
 			stmt = this.getConnection().createStatement();
 			stmt.executeUpdate(text);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				stmt.getConnection().close();
+			} catch (SQLException e) {s
+				throw new DataProviderException(e.getMessage());
+			}
 		}
 	}
 
@@ -258,9 +264,10 @@ public class JdbcProvider extends AbstractDataProvider {
 	public void closeQuery(Query q) throws DataProviderException {
 		try {
 			results.get(q).close();
+			results.get(q).getStatement().getConnection().close();
 			results.remove(q);
-			if (results.size() == 0)
-				getConnection().close();
+//			if (results.size() == 0)
+//				getConnection().close();
 		} catch (SQLException e) {
 			throw new DataProviderException();
 		}
