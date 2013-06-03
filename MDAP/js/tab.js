@@ -50,7 +50,10 @@ Tab.createFrame = function(tabType){
 			},function(){
 				$(this).attr("src","css/images/close.png");
 			}
-		).click(
+		).css({
+			"margin-top": "12px",
+			"margin-right": "5px"
+		}).click(
 			function(){
 				Tab.close(tabType,tabIndex);
 			}

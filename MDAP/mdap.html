@@ -18,52 +18,7 @@
 		<script type = "text/javascript" src = "js/favorite.js"></script>
 	</head>
 	<body>
-		<div id = "user">
-			<ul>
-				<li><a href = "#register">Register</a></li>
-				<li><a href = "#login">Login</a></li>
-			</ul>
-			<div id = "register">
-				<table>
-					<tr>
-						<td>Input Username:</td>
-						<td><input type = "text" id = "username_r"/></td>
-					</tr>
-					<tr>
-						<td>Input Password:</td>
-						<td><input type = "password" id = "password_r"/></td>
-					</tr>
-					<tr>
-						<td>Password Again:</td>
-						<td><input type = "password" id = "password_r2"/></td>
-					</tr>
-				</table>
-				<table>
-					<tr>
-						<td><input type = "button" value = "register" onclick = "User.register();"/></td>
-						<td><input type = "button" value = "reset" onclick = "User.reset('register');"/></td>
-					</tr>
-				</table>
-			</div>
-			<div id = "login">
-				<table>
-					<tr>
-						<td>Input Username:</td>
-						<td><input type = "text" id = "username_l"/></td>
-					</tr>
-					<tr>
-						<td>Input Password:</td>
-						<td><input type = "password" id = "password_l"/></td>
-					</tr>
-				</table>
-				<input type = "checkbox" id = "checkbox_l"/>Save username and password in 7 days
-				<table>
-					<tr>
-						<td><input type = "button" value = "login" onclick = "User.login();"/></td>
-						<td><input type = "button" value = "reset" onclick = "User.reset('login');"/></td>
-					</tr>
-				</table>
-			</div>
+		<div id = "userShell">
 		</div>
 		
 		<div id = "largeChart">
@@ -88,18 +43,17 @@
 				<div id = "userInfo">
 				</div>
 				<div id = "extraMenu" style = "display:none">
-					<a href = "javascript:void(0);" onclick = "Tab.createFrame('geo');">geo data</a><br/>
-					<a href = "javascript:void(0);" onclick = "Tab.createFrame('sta');">sta data</a>
 				</div>
 				<div id = "extendedFav" style = "display:none">
 				</div>
 			</div>
 			<div id = "header">
-				<span class = "title">Mobile Data Analysis Platform</span>
 			</div>
-			<div id = "tabs">
-				<ul id = "tabs_ul">
-				</ul>
+			<div id = "tabsShell">
+				<div id = "tabs">
+					<ul id = "tabs_ul">
+					</ul>
+				</div>
 			</div>
 			<!--
 			<div id = "footer">

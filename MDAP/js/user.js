@@ -1,25 +1,12 @@
 User = {};
 
-/**********initialize when loading page**********/
+User.height = function(){return 240;};
+User.width = function(){return 360;};
+User.tableWidth = function(){return 320;};
+
 User.init = function(){
-	user_h = 240;
-	user_w = 360;
-	user_tw = 320;
-	$("#user").css({
-		"position": "absolute",
-		"margin-top": (Common.height() - user_h) / 2,
-		"margin-right": (Common.width() - user_w) / 2,
-		"margin-bottom": (Common.height() - user_h) / 2,
-		"margin-left": (Common.width() - user_w) / 2,
-		"border": "1px solid #000000",
-		"height": user_h,
-		"width": user_w,
-		"z-index": "1000",
-		"background-color": "white",
-		"display": "none"
-	});
 	$("#user table").attr({
-		"width": user_tw,
+		"width": User.tableWidth(),
 		"style": "margin: auto"
 	});
 	$("<img src = 'css/images/close.png'/>")
@@ -40,6 +27,8 @@ User.init = function(){
 
 /**********open register/login window**********/
 User.createFrame = function(){
+	Common.bgInit();
+	Common.userInit();
 	$("#background").css("display","block");
 	$("#user").css("display","block");
 	$("#user").tabs("option","active",1);
@@ -65,7 +54,7 @@ User.upperRightMenu = function(status,info){
 		}else{
 			username = info;
 		}
-		if(Common.language() == "en"){
+		if(Common.language() == "en-US"){
 			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
 				"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">new<img src = 'css/images/down_arrow.png'/></a>" +
 				"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">favorite<img src = 'css/images/down_arrow.png'/></a>" +
@@ -79,7 +68,7 @@ User.upperRightMenu = function(status,info){
 			/**********need to do**********/
 		}
 	}else if(status == "logout"){
-		if(Common.language() == "en"){
+		if(Common.language() == "en-US"){
 			htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">register/login</a>";
 		}else if(Common.language() == "zh-CN"){
 			htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">注册/登录</a>";
@@ -104,7 +93,7 @@ User.register = function(){
 	password = $("#password_r").val();
 	password_r = $("#password_r2").val();
 	if(username == ""){
-		if(Common.language() == "en"){
+		if(Common.language() == "en-US"){
 			alert("Username cann't be empty!");
 		}else if(Common.language() == "zh-CN"){
 			alert("用户名不能为空!");
@@ -114,7 +103,7 @@ User.register = function(){
 		return;
 	}
 	if((password == "") || (password_r == "")){
-		if(Common.language() == "en"){
+		if(Common.language() == "en-US"){
 			alert("Password cann't be empty!");
 		}else if(Common.language() == "zh-CN"){
 			alert("密码不能为空!");
@@ -124,7 +113,7 @@ User.register = function(){
 		return;
 	}
 	if(password != password_r){
-		if(Common.language() == "en"){
+		if(Common.language() == "en-US"){
 			alert("The two passwords you input don't match!");
 		}else if(Common.language() == "zh-CN"){
 			alert("两次密码不一致!");
@@ -133,25 +122,25 @@ User.register = function(){
 		}
 		return;
 	}
-	$.post(Common.registerUrl(),{
+/*	$.post(Common.registerUrl(),{
 		username: username,
 		password: password
 	},function(data){
-		if(data.status == true){
+		if(data.status == true){*/
 			$.cookie("username",username,{expires: 7,path: "/"});
 			$.cookie("password",password,{expires: 7,path: "/"});
 			User.upperRightMenu("login","saved");
 			User.closeFrame();
-		}else if(data.status == false){
+/*		}else if(data.status == false){
 			alert("This username has been registered!");
 			return;
 		}else{
 			/**********need to do**********/
-		}
+/*		}
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
-	});
+	});*/
 };
 
 /**********log in**********/
@@ -159,38 +148,50 @@ User.login = function(){
 	username = $("#username_l").val();
 	password = $("#password_l").val();
 	if(username == ""){
-		alert("Username cann't be empty!");
+		if(Common.language() == "en-US"){
+			alert("Username cann't be empty!");
+		}else if(Common.language() == "zh-CN"){
+			alert("用户名不能为空!");
+		}else{
+			/**********need to do**********/
+		}
 		return;
 	}
 	if(password == ""){
-		alert("Password cann't be empty!");
+		if(Common.language() == "en-US"){
+			alert("Password cann't be empty!");
+		}else if(Common.language() == "zh-CN"){
+			alert("密码不能为空!");
+		}else{
+			/**********need to do**********/
+		}
 		return;
 	}
-//	$.ajaxSettings.async = false;
-//	$.getJSON(Common.loginUrl().replace("username",username).replace("password",password),function(data){
-//		if(data.status == true){
-//			if($("#checkbox_l").is(":checked") == true){
+/*	$.ajaxSettings.async = false;
+	$.getJSON(Common.loginUrl().replace("username",username).replace("password",password),function(data){
+		if(data.status == true){*/
+			if($("#checkbox_l").is(":checked") == true){
 				$.cookie("username",username,{expires: 7,path: "/"});
 				$.cookie("password",password,{expires: 7,path: "/"});
 				$.cookie("favData",JSON.stringify("[]"),{expires: 7,path: "/"});
 				User.upperRightMenu("login","saved");
 				User.closeFrame();
-//			}else if($("#checkbox_l").is(":checked") == false){
-//				User.upperRightMenu("login",username);
-//				User.closeFrame();
-//			}else{
-//				/**********need to do**********/
-//			}
-//		}else if(data.status == false){
-//			alert("Username or password error!");
-//			return;
-//		}else{
-//			/**********need to do**********/
-//		}
-//	}).error(function(){
-//		alert("Oops, we got an error...");
-//		return;
-//	});
+			}else if($("#checkbox_l").is(":checked") == false){
+				User.upperRightMenu("login",username);
+				User.closeFrame();
+			}else{
+				/**********need to do**********/
+			}
+/*		}else if(data.status == false){
+			alert("Username or password error!");
+			return;
+		}else{
+			/**********need to do**********/
+/*		}
+	}).error(function(){
+		alert("Oops, we got an error...");
+		return;
+	});*/
 };
 
 /**********log out**********/
