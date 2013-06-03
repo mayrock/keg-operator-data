@@ -146,7 +146,7 @@ public class JdbcProvider extends AbstractDataProvider {
 		} finally {
 			try {
 				stmt.getConnection().close();
-			} catch (SQLException e) {s
+			} catch (SQLException e) {
 				throw new DataProviderException(e.getMessage());
 			}
 		}

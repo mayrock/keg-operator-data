@@ -26,6 +26,16 @@ public class QueryImpl implements Query {
 		this.orders = new ArrayList<OrderClause>();
 		this.innerQuery = null;
 		this.setProvider(ds.getProvider());
+		
+		this.state = DataContentState.Ready;
+	}
+	public QueryImpl(Query q) {
+		this.fields = q.getFields();
+		this.wheres = q.getWhereClauses();
+		this.orders = q.getOrderClauses();
+		this.provider = q.getProvider();
+		this.innerQuery = q.getInnerQuery();
+		this.state = DataContentState.Ready;
 	}
 	QueryImpl(DataField[] fields, List<WhereClause> wheres,
 			List<OrderClause> orders, DataProvider provider, Query innerQuery) {
@@ -34,9 +44,11 @@ public class QueryImpl implements Query {
 		this.orders = orders;
 		this.provider = provider;
 		this.innerQuery = innerQuery;
+		this.state = DataContentState.Ready;
 	}
 
 	private Query innerQuery;
+	private DataContentState state;
 	
 	private DataField[] fields;
 	private List<WhereClause> wheres;
@@ -59,6 +71,7 @@ public class QueryImpl implements Query {
 	@Override
 	public void close() throws DataProviderException {
 		this.getProvider().closeQuery(this);
+		this.state = DataContentState.Closed;
 	}
 	@Override
 	public boolean next() throws DataProviderException {
@@ -71,6 +84,7 @@ public class QueryImpl implements Query {
 	@Override
 	public void open() throws DataProviderException {
 		this.getProvider().openQuery(this);
+		this.state = DataContentState.Opened;
 	}
 	@Override
 	public Query select(DataField ... fields) {
@@ -105,10 +119,6 @@ public class QueryImpl implements Query {
 	public Query join(Query q2, DataField f1, DataField f2) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	@Override
-	public DataField[] getDataFields() {
-		return this.fields;
 	}
 	@Override
 	public List<WhereClause> getWhereClauses() {
@@ -168,5 +178,9 @@ public class QueryImpl implements Query {
 			}
 		}
 		return nfs;
+	}
+	@Override
+	public DataContentState getState() {
+		return this.state;
 	}
 }

@@ -9,6 +9,7 @@ import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
+import edu.thu.keg.mdap_impl.datamodel.QueryImpl;
 
 public class DataViewImpl implements DataView {
 
@@ -48,7 +49,7 @@ public class DataViewImpl implements DataView {
 	private void initKeyValueFields() {
 		this.keyFields = new ArrayList<DataField>();
 		this.valueFields = new ArrayList<DataField>();
-		for (DataField f : q.getDataFields()) {
+		for (DataField f : q.getFields()) {
 			if (isKeyField(f) ) {
 				keyFields.add(f);
 			} else {
@@ -87,7 +88,7 @@ public class DataViewImpl implements DataView {
 
 	@Override
 	public DataField[] getAllFields() {
-		return q.getDataFields();
+		return q.getFields();
 	}
 
 	@Override
@@ -97,7 +98,7 @@ public class DataViewImpl implements DataView {
 
 	@Override
 	public Query getQuery() {
-		return this.q;
+		return new QueryImpl(this.q);
 	}
 
 	@Override

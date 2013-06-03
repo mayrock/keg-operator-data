@@ -150,7 +150,7 @@ public interface Query extends DataContent {
 			return Order.valueOf(str.trim());
 		}
 	}
-	
+
 	
 
 	
@@ -196,11 +196,6 @@ public interface Query extends DataContent {
 	 */
 	public String toString();
 	/**
-	 * Get all DataFields in the return structure of the query.
-	 * @return data fields in this query
-	 */
-	public DataField[] getDataFields();
-	/**
 	 * Get the inner query of this query. 
 	 * @return Return null if there is 
 	 * no inner query
@@ -219,4 +214,5 @@ public interface Query extends DataContent {
 	 * Get the groupBy key fields of this query, if any
 	 */
 	public List<DataField> getGroupByFields();
+	
 }

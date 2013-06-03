@@ -14,6 +14,12 @@ import edu.thu.keg.mdap.provider.DataProviderException;
  */
 public interface DataContent {
 	
+	
+	public enum DataContentState {
+		Ready, Opened, Closed
+	}
+
+	public DataContentState getState();
 	/**
 	 * 
 	 * @return A array of contained fields in this DataContent
