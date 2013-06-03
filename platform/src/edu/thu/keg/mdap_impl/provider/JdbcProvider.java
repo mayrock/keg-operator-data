@@ -264,12 +264,18 @@ public class JdbcProvider extends AbstractDataProvider {
 	public void closeQuery(Query q) throws DataProviderException {
 		try {
 			results.get(q).close();
-			results.get(q).getStatement().getConnection().close();
+			
 			results.remove(q);
 //			if (results.size() == 0)
 //				getConnection().close();
 		} catch (SQLException e) {
-			throw new DataProviderException();
+			throw new DataProviderException(e.getMessage());
+		} finally {
+			try {
+				results.get(q).getStatement().getConnection().close();
+			} catch (SQLException e) {
+				throw new DataProviderException(e.getMessage());
+			}
 		}
 	}
 
