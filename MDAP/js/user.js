@@ -58,23 +58,40 @@ User.closeFrame = function(){
 
 /**********change info in the upper-right page**********/
 User.upperRightMenu = function(status,info){
+	var htmlString = "";
 	if(status == "login"){
 		if(info == "saved"){
 			username = $.cookie("username");
 		}else{
 			username = info;
 		}
-		htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
-			"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">new<img src = 'css/images/down_arrow.png'/></a>" +
-			"<a href = 'javascript:void(0);' onClick = \"Tab.createFrame('fav');\">my favorite</a>" +
-			"<a href = 'javascript:void(0);' onclick = \"User.logout();\">logout</a>";
+		if(Common.language() == "en"){
+			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
+				"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">new<img src = 'css/images/down_arrow.png'/></a>" +
+				"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">favorite<img src = 'css/images/down_arrow.png'/></a>" +
+				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">logout</a>";
+		}else if(Common.language() == "zh-CN"){
+			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
+				"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">新建<img src = 'css/images/down_arrow.png'/></a>" +
+				"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">收藏<img src = 'css/images/down_arrow.png'/></a>" +
+				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">登出</a>";
+		}else{
+			/**********need to do**********/
+		}
 	}else if(status == "logout"){
+		if(Common.language() == "en"){
+			htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">register/login</a>";
+		}else if(Common.language() == "zh-CN"){
+			htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">注册/登录</a>";
+		}else{
+			/**********need to do**********/
+		}
 		if(info == ""){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});
 			$.removeCookie("favData",{path: "/"});
+			$.removeCookie("language",{path: "/"});
 		}
-		htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">register/login</a>";
 	}else{
 		/**********need to do**********/
 	}
@@ -87,15 +104,33 @@ User.register = function(){
 	password = $("#password_r").val();
 	password_r = $("#password_r2").val();
 	if(username == ""){
-		alert("Username cann't be empty!");
+		if(Common.language() == "en"){
+			alert("Username cann't be empty!");
+		}else if(Common.language() == "zh-CN"){
+			alert("用户名不能为空!");
+		}else{
+			/**********need to do**********/
+		}
 		return;
 	}
 	if((password == "") || (password_r == "")){
-		alert("Password cann't be empty!");
+		if(Common.language() == "en"){
+			alert("Password cann't be empty!");
+		}else if(Common.language() == "zh-CN"){
+			alert("密码不能为空!");
+		}else{
+			/**********need to do**********/
+		}
 		return;
 	}
 	if(password != password_r){
-		alert("The two passwords you input don't match!");
+		if(Common.language() == "en"){
+			alert("The two passwords you input don't match!");
+		}else if(Common.language() == "zh-CN"){
+			alert("两次密码不一致!");
+		}else{
+			/**********need to do**********/
+		}
 		return;
 	}
 	$.post(Common.registerUrl(),{

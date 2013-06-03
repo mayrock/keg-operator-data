@@ -1,11 +1,13 @@
 Tab = {};
 
+/**********add a tab**********/
 Tab.createFrame = function(tabType){
-	if(!((tabType == "geo") || (tabType == "sta") || (tabType == "fav"))){
+	if(!((tabType == "geo") || (tabType == "sta"))){
 		alert("Oops, we got an error...");
 		return;
 	}
 	$("#extraMenu").css("display","none");
+	$("#extendedFav").css("display","none");
 	var tabCount = Common.tabCount;
 	var tabIndex = Common.tabIndex;
 	/**********limit the number of tab**********/
@@ -15,7 +17,6 @@ Tab.createFrame = function(tabType){
 	}
 	Common.tabCount ++;
 	Common.tabIndex ++;
-	/**********add a tab**********/
 	li = document.createElement("li");
 	li.setAttribute("id","tabs_li" + tabIndex);
 	$(li).appendTo("#tabs_ul");
@@ -23,8 +24,6 @@ Tab.createFrame = function(tabType){
 		li.innerHTML = "<a href='#tab" + tabIndex + "'>geo data</a>";
 	}else if(tabType == "sta"){
 		li.innerHTML = "<a href='#tab" + tabIndex + "'>stat data</a>";
-	}else if(tabType == "fav"){
-		li.innerHTML = "<a href='#tab" + tabIndex + "'>my favorite</a>";
 	}else{
 		/**********need to do**********/
 	}
@@ -32,32 +31,14 @@ Tab.createFrame = function(tabType){
 	tab.setAttribute("id","tab" + tabIndex);
 	tab.setAttribute("class","tab");
 	$(tab).appendTo("#tabs");
-	if((tabType == "geo") || (tabType == "sta")){
-		option = document.createElement("div");
-		option.setAttribute("id","option" + tabIndex);
-		option.setAttribute("class","option");
-		$(option).appendTo(tab);
-		view = document.createElement("div");
-		view.setAttribute("id","view" + tabIndex);
-		view.setAttribute("class","view");
-		$(view).appendTo(tab);
-	}else if(tabType == "fav"){
-		favorite = document.createElement("div");
-		favorite.setAttribute("id","favorite" + tabIndex);
-		favorite.setAttribute("class","favorite");
-		$(favorite).appendTo(tab);
-		$("<img src = 'css/images/refresh.png'/>")
-			.appendTo(li)
-			.click(
-				/**********refresh tab**********/
-				function(){
-					$("#favorite" + tabIndex).empty();
-					Tab.load(tabType,tabIndex);
-				}
-			);
-	}else{
-		/**********need to do**********/
-	}
+	option = document.createElement("div");
+	option.setAttribute("id","option" + tabIndex);
+	option.setAttribute("class","option");
+	$(option).appendTo(tab);
+	view = document.createElement("div");
+	view.setAttribute("id","view" + tabIndex);
+	view.setAttribute("class","view");
+	$(view).appendTo(tab);
 	if(tabType == "sta"){
 		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
 	}
@@ -138,32 +119,6 @@ Tab.load = function(tabType,tabIndex){
 			alert("Oops, we got an error...");
 			return;
 		});
-	}else if(tabType == "fav"){
-		table = document.createElement("table");
-		$(table).appendTo("#favorite" + tabIndex);
-		$(table).attr({
-			"border": 1,
-			"cellpadding": 10
-		});
-		$("<thead><tr><th width = '50'><span>index</span></th><th width = '100'><span>name</span></th><th width = '50'><span>options</span></th></tr></thead>").appendTo(table);
-		var favData = JSON.parse($.cookie("favData"));
-		var len = favData.length;
-		for(var i = 0; i < len; i++){
-			var tabData = favData[i];
-			var name = tabData.name;
-			var datasetData = tabData.dataset;
-			tr = document.createElement("tr");
-			$(tr).appendTo(table);
-			td = document.createElement("td");
-			$("<span>" + (i + 1) + "</span>").appendTo(td);
-			$(td).appendTo(tr);
-			td = document.createElement("td");
-			$("<a herf = 'javascript:void(0);' onClick = \"Fav.revertSta(" + i + ");\">" + name + "</a>").appendTo(td);
-			$(td).appendTo(tr);
-			td = document.createElement("td");
-			$("<a herf = 'javascript:void(0);' onClick = \"Fav.delSta(" + i + ");\">delete</a>").appendTo(td);
-			$(td).appendTo(tr);
-		}
 	}else{
 		/**********need to do**********/
 	}

@@ -66,9 +66,35 @@ Fav.saveSta = function(tabIndex){
 		favData.splice(length,0,tabData);
 		$.cookie("favData",JSON.stringify(favData),{expires: 7,path: "/"});
 		Fav.closeFrame();
+		Fav.downList();
 	}).error(function(){
 		alert("Oops, we got an error...");
 	});
+};
+
+Fav.downList = function(){
+	$("#extendedFav").empty();
+	var favData = JSON.parse($.cookie("favData"));
+	var len = favData.length;
+	for(var i = 0; i < len; i++){
+		var tabData = favData[i];
+		var name = tabData.name;
+		staFav = document.createElement("a");
+		$(staFav).attr("href","javascript:void(0);");
+		$(staFav).attr("onClick","Fav.revertSta(" + i + ");");
+		staFav.innerHTML = name;
+		$(staFav).appendTo("#extendedFav");
+		$("<img src = 'css/images/close.png' onClick = \"Fav.delSta(" + i + ");\"/>")
+			.appendTo("#extendedFav")
+			.hover(
+				function(){
+					$(this).attr("src","css/images/close_hover.png");
+				},function(){
+					$(this).attr("src","css/images/close.png");
+				}
+			);
+		$("<br/>").appendTo("#extendedFav");
+	}
 };
 
 /**********revert one saved favorite**********/
@@ -117,7 +143,8 @@ Fav.revertSta = function(favIndex){
 
 /**********delete**********/
 Fav.delSta = function(favIndex){
-	var favData = JSON.parse($.cookie("favData"));alert(JSON.stringify(favData));
-	favData.splice(favIndex,1);alert(JSON.stringify(favData));
+	var favData = JSON.parse($.cookie("favData"));
+	favData.splice(favIndex,1);
 	$.cookie("favData",JSON.stringify(favData),{expires: 7,path: "/"});
+	Fav.downList();
 };

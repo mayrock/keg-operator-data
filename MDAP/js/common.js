@@ -9,19 +9,70 @@ $(document).ready(function(){
 		"width": Common.width()
 	});
 	$("#tabs").tabs();
-	if(($.cookie("username") != null) && ($.cookie("password") != null) && ($.cookie("favData") != null)){
-		User.upperRightMenu("login","saved");
-	}else{
-		User.upperRightMenu("logout","init");
-	}
+	Common.loading();
 });
 
 Common = {};
 
-Common.height = function(){return $(document).height();}
-Common.width = function(){return $(document).width();}
+Common.height = function(){return $(document).height();};
+Common.width = function(){return $(document).width();};
 
-Common.ip = function(){return "http://10.1.1.55:8088/platform_restful/rest/";};
+Common.language = function(){
+	var language = window.navigator.language;
+	if($.cookie("language") == null){
+		$.cookie("language",language,{expires: 7,path: "/"});
+	}else{
+		language = $.cookie("language");
+	}
+	return language;
+};
+
+Common.switchLan = function(language){
+	$.cookie("language",language,{expires: 7,path: "/"});
+	Common.loading();
+}
+
+Common.loading = function(){
+	if(Common.language() == "en"){
+		$("#lanOption").empty();
+		$("<span>language:<span><input name = 'language' type = 'radio' value = 'En' Onclick = \"Common.switchLan('en');\" checked/>English" +
+			"<input name = 'language' type = 'radio' value = 'Chs' Onclick = \"Common.switchLan('zh-CN');\"/>Chinese Simplified<br/>").appendTo("#lanOption");
+		Common.userLoading();
+	}else if(Common.language() == "zh-CN"){
+		$("#lanOption").empty();
+		$("<span>语言:<span><input name = 'language' type = 'radio' value = 'En' Onclick = \"Common.switchLan('en');\"/>英语" +
+			"<input name = 'language' type = 'radio' value = 'Chs' Onclick = \"Common.switchLan('zh-CN');\" checked/>简体中文<br/>").appendTo("#lanOption");
+		Common.userLoading();
+	}else{
+		/**********need to do**********/
+	}
+};
+
+Common.userLoading = function(){
+	if(($.cookie("username") != null) && ($.cookie("password") != null) && ($.cookie("favData") != null)){
+		User.upperRightMenu("login","saved");
+		Fav.downList();
+	}else{
+		User.upperRightMenu("logout","init");
+	}
+};
+
+Common.func = function(){
+	/**********aplha**********/
+//	return 0;
+	/**********release**********/
+	return 1;
+};
+
+Common.ip = function(){
+	if(Common.func() == 0){
+		return "http://10.1.1.55:8080/platform_restful/rest/";
+	}else if(Common.func() == 1){
+		return "http://10.1.1.55:8080/platform_restful2/rest/";
+	}else{
+		/**********need to do**********/
+	}
+};
 
 Common.registerUrl = function(){return Common.ip() + "up/adduser?jsoncallback=?";};
 Common.loginUrl = function(){return Common.ip() + "ug/verifyuser/username/password?jsoncallback=?";};
@@ -99,12 +150,20 @@ Common.bgInit = function(){
 		"background-color": "gray",
 		"display": "none"
 	});
-}
+};
 
 Common.extraMenu = function(){
 	if($("#extraMenu").css("display") == "none"){
 		$("#extraMenu").css("display","block");
 	}else{
 		$("#extraMenu").css("display","none");
+	}
+};
+
+Common.extendedFav = function(){
+	if($("#extendedFav").css("display") == "none"){
+		$("#extendedFav").css("display","block");
+	}else{
+		$("#extendedFav").css("display","none");
 	}
 };

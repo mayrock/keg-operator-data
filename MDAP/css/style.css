@@ -29,6 +29,14 @@
 	background-color: white;
 }
 
+#extendedFav{
+	position: absolute;
+	right: 40px;
+	width: 100px;
+	border: 1px solid #efefef;
+	background-color: white;
+}
+
 #header{
 	vertical-align: top;/*垂直对齐方式	top: 把元素的顶端与行中最高元素的顶端对齐*/
 	font-family: Times New Roman;
