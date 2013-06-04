@@ -24,11 +24,8 @@ import org.codehaus.jettison.json.JSONObject;
 import com.sun.jersey.api.json.JSONWithPadding;
 
 import edu.thu.keg.mdap.management.ManagementPlatform;
-import edu.thu.keg.mdap.management.impl.user.UserManagerImpl;
 import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
-import edu.thu.keg.mdap.management.user.IUserManager;
 import edu.thu.keg.mdap.management.user.User;
-import edu.thu.keg.mdap.restful.dataset.DsPostFunctions;
 
 @Path("/up")
 public class UserPostFunctions {

@@ -50,8 +50,8 @@ public class FavPostFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding addFav(@FormParam("userid") String userid,
-			@FormParam("favid") String favid,
-			@FormParam("favstring") String favstring,
+
+	@FormParam("favstring") String favstring,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 
 		log.info(uriInfo.getAbsolutePath());
@@ -60,10 +60,10 @@ public class FavPostFunctions {
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
 					.getAttribute("managementplatform");
 			IFavoriteManager favManager = mp.getFavoriteManager();
-			favManager.addFav(new Favorite(userid, favid, favstring));
+			favManager.addFav(userid, favstring);
 			job = new JSONObject();
 			job.put("status", true);
-			System.out.println("已经添加fav:" + userid + " favid:" + favid);
+			System.out.println("已经添加fav:" + userid);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			System.out.println("用户名密码错误:" + userid);
