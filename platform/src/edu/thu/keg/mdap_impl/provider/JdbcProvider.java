@@ -262,9 +262,10 @@ public class JdbcProvider extends AbstractDataProvider {
 
 	@Override
 	public void closeQuery(Query q) throws DataProviderException {
+		Connection conn = null;
 		try {
+			conn = results.get(q).getStatement().getConnection();
 			results.get(q).close();
-			
 			results.remove(q);
 //			if (results.size() == 0)
 //				getConnection().close();
@@ -272,7 +273,7 @@ public class JdbcProvider extends AbstractDataProvider {
 			throw new DataProviderException(e.getMessage());
 		} finally {
 			try {
-				results.get(q).getStatement().getConnection().close();
+				conn.close();
 			} catch (SQLException e) {
 				throw new DataProviderException(e.getMessage());
 			}
