@@ -67,7 +67,7 @@ Common.loading = function(){
 		Common.userLoading();
 		$("#extraMenu").empty();
 		$("<a href = 'javascript:void(0);' onclick = \"Tab.createFrame('geo');\">geo data</a><br/>" +
-			"<a href = 'javascript:void(0);' onclick = \"Tab.createFrame('sta');\">sta data</a>").appendTo("#extraMenu");
+			"<a href = 'javascript:void(0);' onclick = \"Tab.createFrame('sta');\">stat data</a>").appendTo("#extraMenu");
 		$("#header").empty();
 		$("<span class = 'title'>Mobile Data Analysis Platform</span>").appendTo("#header");
 	}else if(Common.language() == "zh-CN"){
@@ -129,9 +129,9 @@ Common.func = function(){
 
 Common.ip = function(){
 	if(Common.func() == 0){
-		return "http://10.1.1.55:8080/platform_restful/rest/";
+		return "http://10.1.1.55:8080/keg/rest/";
 	}else if(Common.func() == 1){
-		return "http://10.1.1.55:8080/platform_restful2/rest/";
+		return "http://10.1.1.55:8080/keg2/rest/";
 	}else{
 		/**********need to do**********/
 	}
