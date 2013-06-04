@@ -5,5 +5,5 @@ platform_restful/build
 platform/bin
 platform_restful/bin
 platform_management/bin
-platform_restful/src/platform_initial.properties
+platform_restful/WebContent
 Test_Connect/bin

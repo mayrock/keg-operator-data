@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -59,6 +60,8 @@ public class DsGetFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
+	@Context
+	HttpServletRequest httpServletRequest;
 	private static Logger log = Logger.getLogger(DsGetFunctions.class);
 
 	/**
@@ -71,7 +74,7 @@ public class DsGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDatasetsNames4 " + uriInfo.getAbsolutePath());
+		log.info(uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		JDatasetName datasetName = new JDatasetName();
 
@@ -107,8 +110,8 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			log.debug(e.getStackTrace());
-//			e.printStackTrace();
+			log.warn(e.getStackTrace());
+			// e.printStackTrace();
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
@@ -157,7 +160,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -207,7 +210,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -253,7 +256,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
 				datasetList) {
@@ -294,7 +297,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JGeograph>>(
 				datasetList) {
@@ -348,7 +351,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
 				datasetList) {
@@ -403,7 +406,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
 				datasetList) {
@@ -440,7 +443,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		} finally {
 
 		}
@@ -491,7 +494,7 @@ public class DsGetFunctions {
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -543,7 +546,7 @@ public class DsGetFunctions {
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
@@ -597,7 +600,7 @@ public class DsGetFunctions {
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -641,7 +644,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
 				datasetList) {
@@ -682,7 +685,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.debug(e.getStackTrace());
+			log.warn(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
 				datasetList) {

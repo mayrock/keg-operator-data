@@ -3,6 +3,7 @@ package edu.thu.keg.mdap.restful.user;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -18,10 +19,13 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.sun.jersey.api.json.JSONWithPadding;
+
+import edu.thu.keg.mdap.restful.dataset.DsPostFunctions;
 
 @Path("/ug")
 public class UserGetFunctions {
@@ -31,14 +35,18 @@ public class UserGetFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
+	@Context
+	HttpServletRequest httpServletRequest;
+	private static Logger log = Logger.getLogger(UserGetFunctions.class);
 
 	@GET
 	@Path("/verifyuser/{userid}/{password}")
-	@Produces({"application/javascript" , MediaType.APPLICATION_JSON })
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding verifyUser(@PathParam("userid") String userid,
 			@PathParam("password") String password,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		log.info(uriInfo.getAbsolutePath());
 		JSONObject job = null;
 		try {
 			job = new JSONObject();

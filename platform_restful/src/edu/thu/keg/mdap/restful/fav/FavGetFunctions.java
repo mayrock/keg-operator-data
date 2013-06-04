@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -29,6 +31,7 @@ import edu.thu.keg.mdap.management.ManagementPlatform;
 import edu.thu.keg.mdap.management.favorite.Favorite;
 import edu.thu.keg.mdap.management.favorite.IFavoriteManager;
 import edu.thu.keg.mdap.management.provider.IllegalFavManageException;
+import edu.thu.keg.mdap.restful.dataset.DsPostFunctions;
 import edu.thu.keg.mdap.restful.jerseyclasses.management.JFavorite;
 
 @Path("/favg")
@@ -39,6 +42,9 @@ public class FavGetFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
+	@Context
+	HttpServletRequest httpServletRequest;
+	private static Logger log = Logger.getLogger(FavGetFunctions.class);
 
 	@GET
 	@Path("/getfav/{userid}/{favid}")
@@ -47,6 +53,7 @@ public class FavGetFunctions {
 	public JSONWithPadding getFav(@PathParam("userid") String userid,
 			@PathParam("favid") String favid,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		log.info(uriInfo.getAbsolutePath());
 		Favorite fav = null;
 		try {
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
@@ -69,6 +76,7 @@ public class FavGetFunctions {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public JSONWithPadding getAllFavs(@PathParam("userid") String userid,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		log.info(uriInfo.getAbsolutePath());
 		List<Favorite> favs = null;
 		try {
 			ManagementPlatform mp = (ManagementPlatform) servletcontext

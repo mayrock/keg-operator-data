@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -27,7 +28,7 @@ import edu.thu.keg.mdap.management.impl.user.UserManagerImpl;
 import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
 import edu.thu.keg.mdap.management.user.IUserManager;
 import edu.thu.keg.mdap.management.user.User;
-
+import edu.thu.keg.mdap.restful.dataset.DsPostFunctions;
 
 @Path("/up")
 public class UserPostFunctions {
@@ -39,17 +40,17 @@ public class UserPostFunctions {
 	ServletContext servletcontext;
 	@Context
 	HttpServletRequest httpServletRequest;
+	private static Logger log = Logger.getLogger(UserPostFunctions.class);
 
 	@POST
 	@Path("/adduser")
-	@Produces({ "application/javascript",MediaType.APPLICATION_JSON  })
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding addUser(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@FormParam("userid") String userid,
 			@FormParam("username") String username,
 			@FormParam("password") String password) {
-		System.out.println(userid + " " + username + " " + password);
-
+		log.info(uriInfo.getAbsolutePath());
 		JSONObject job = new JSONObject();
 		try {
 			User user = new User(userid, username, password, User.BROWSER);

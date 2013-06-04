@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -19,6 +20,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -54,6 +57,9 @@ public class DsPostFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
+	@Context
+	HttpServletRequest httpServletRequest;
+	private static Logger log = Logger.getLogger(DsPostFunctions.class);
 
 	/**
 	 * create a new dataset
@@ -76,7 +82,9 @@ public class DsPostFunctions {
 		 * description 数据集描述 loadable 是否可以加载 dsFields 数据域的jsonarray fieldName
 		 * fieldType description isKey
 		 */
+		log.info(uriInfo.getAbsolutePath());
 		try {
+
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataProvider provider = p.getDataProviderManager()
 					.getDefaultSQLProvider(connstr);
@@ -132,11 +140,10 @@ public class DsPostFunctions {
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@FormParam("fields") JSONArray jsonFileds,
 			@FormParam("orderby") String orderby) {
-
+		log.info(uriInfo.getAbsolutePath());
 		String fieldname = null;
 		List<JColumn> all_dfs = null;
 		List<JField> list_df = null;
-		System.out.println("POST");
 		/**
 		 * fields 存储列名的参数jsonarray orderby 排序的域名
 		 */
@@ -214,6 +221,7 @@ public class DsPostFunctions {
 			@PathParam("datasetname") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@FormParam("jsonoper") JSONArray jsonOper) {
+		log.info(uriInfo.getAbsolutePath());
 		String fieldname = null;
 		String opr = null;
 		String value = null;

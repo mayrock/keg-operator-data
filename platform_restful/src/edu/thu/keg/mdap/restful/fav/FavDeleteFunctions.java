@@ -3,6 +3,7 @@ package edu.thu.keg.mdap.restful.fav;
 import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -26,6 +28,7 @@ import edu.thu.keg.mdap.management.ManagementPlatform;
 import edu.thu.keg.mdap.management.favorite.Favorite;
 import edu.thu.keg.mdap.management.favorite.IFavoriteManager;
 import edu.thu.keg.mdap.management.provider.IllegalFavManageException;
+import edu.thu.keg.mdap.restful.dataset.DsPostFunctions;
 
 @Path("/favd")
 public class FavDeleteFunctions {
@@ -35,6 +38,9 @@ public class FavDeleteFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
+	@Context
+	HttpServletRequest httpServletRequest;
+	private static Logger log = Logger.getLogger(FavDeleteFunctions.class);
 
 	@GET
 	@Path("/rmfav/{userid}/{favid}")
