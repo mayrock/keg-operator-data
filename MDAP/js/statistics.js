@@ -258,6 +258,7 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 				}else{
 					chart = new google.visualization.PieChart(view);
 				}
+				console.log("container: " + ccName + tabIndex + "_" + dsIndex + "_" + chartIndex + ",array:" + arr);
 				chart.draw(data,options);
 			}
 		}).error(function(){
