@@ -19,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
+
 import com.sun.jersey.api.json.JSONWithPadding;
 
 import edu.thu.keg.mdap.DataSetManager;
@@ -57,6 +59,7 @@ public class DsGetFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
+	private static Logger log = Logger.getLogger(DsGetFunctions.class);
 
 	/**
 	 * get all dataset names list
@@ -73,6 +76,13 @@ public class DsGetFunctions {
 		JDatasetName datasetName = new JDatasetName();
 
 		try {
+			//
+			// log.fatal("测试fatal");
+			// log.error("测试error");
+			// log.warn("测试warn");
+			// log.info("测试info");
+			// log.debug("测试debug");
+
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
@@ -97,7 +107,8 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
+//			e.printStackTrace();
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
@@ -146,7 +157,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -196,7 +207,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -242,8 +253,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
 				datasetList) {
@@ -284,8 +294,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JGeograph>>(
 				datasetList) {
@@ -339,8 +348,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
 				datasetList) {
@@ -395,8 +403,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
 				datasetList) {
@@ -433,7 +440,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		} finally {
 
 		}
@@ -484,7 +491,7 @@ public class DsGetFunctions {
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -536,7 +543,7 @@ public class DsGetFunctions {
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
@@ -590,7 +597,7 @@ public class DsGetFunctions {
 				datasetsName.add(dname);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -599,10 +606,10 @@ public class DsGetFunctions {
 	}
 
 	@GET
-	@Path("/getstadv/{datasetname}")
+	@Path("/getstadv/{dataviewname}")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaDataview(
-			@PathParam("datasetname") String dataview,
+			@PathParam("dataviewname") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getStaDataset " + dataview + " "
 				+ uriInfo.getAbsolutePath());
@@ -634,8 +641,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
 				datasetList) {
@@ -676,8 +682,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.debug(e.getStackTrace());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
 				datasetList) {
