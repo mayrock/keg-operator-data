@@ -26,6 +26,7 @@ import com.sun.jersey.api.json.JSONWithPadding;
 import edu.thu.keg.mdap.management.ManagementPlatform;
 import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
 import edu.thu.keg.mdap.management.user.User;
+import edu.thu.keg.mdap.restful.jerseyclasses.user.JUser;
 
 @Path("/up")
 public class UserPostFunctions {
@@ -46,23 +47,24 @@ public class UserPostFunctions {
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@FormParam("userid") String userid,
 			@FormParam("username") String username,
-			@FormParam("password") String password) {
+			@FormParam("password") String password,
+			@FormParam("language") int language) {
 		log.info(uriInfo.getAbsolutePath());
-		JSONObject job = new JSONObject();
+		JUser juser = new JUser();
+		boolean status = false;
 		try {
-			User user = new User(userid, username, password, User.BROWSER);
+			User user = new User(userid, username, password, User.BROWSER,
+					language);
 			ManagementPlatform mi = new ManagementPlatform();
-			boolean status = mi.getUserManager().addUser(user);
-			job = new JSONObject();
-			job.put("status", status);
+			status = mi.getUserManager().addUser(user);
+			juser.setStatus(status);
 			System.out.println("添加用户成功：" + userid + " " + username);
-		} catch (JSONException | SQLException e) {
+		} catch (IllegalUserManageException | SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalUserManageException e) {
-			System.err.print(e.getMessage());
+			juser.setStatus(status);
+			log.info(e.getMessage());
 		}
-		return new JSONWithPadding(new GenericEntity<String>(job.toString()) {
+		return new JSONWithPadding(new GenericEntity<JUser>(juser) {
 		}, callback);
 
 	}

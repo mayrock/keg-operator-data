@@ -27,8 +27,8 @@ public class UserManagerImpl implements IUserManager {
 	public boolean addUser(User user) throws SQLException,
 			IllegalUserManageException {
 		System.out.println("add user ");
-		String sql = "insert into [User] ( userid, username, password, permission) "
-				+ " values (?,?,?,?)";
+		String sql = "insert into [User] ( userid, username, password, permission, language) "
+				+ " values (?,?,?,?,?)";
 		AbsSqlServerProvider ssp = null;
 
 		if (isUseridExist(user.getUserid()))
@@ -41,6 +41,7 @@ public class UserManagerImpl implements IUserManager {
 		pstmt.setString(2, user.getUsername());
 		pstmt.setString(3, user.getPassword());
 		pstmt.setInt(4, user.getPermission());
+		pstmt.setInt(5, user.getLanguage());
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
 		return true;
@@ -49,8 +50,8 @@ public class UserManagerImpl implements IUserManager {
 	@Override
 	public User getUser(String userid) throws SQLException,
 			IllegalUserManageException {
-		String sql = "select username, password, permission" + " from [User]"
-				+ " where userid = ?";
+		String sql = "select username, password, permission, language"
+				+ " from [User]" + " where userid = ?";
 		AbsSqlServerProvider ssp = null;
 		User user = null;
 
@@ -60,7 +61,7 @@ public class UserManagerImpl implements IUserManager {
 		ResultSet rs = pstmt.executeQuery();
 		if (rs.next()) {
 			user = new User(userid, rs.getString(2), rs.getString(3),
-					rs.getInt(4));
+					rs.getInt(4), rs.getInt(5));
 		} else
 			throw new IllegalUserManageException(
 					"UserManager: the userid don't exist");
