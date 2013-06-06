@@ -9,8 +9,15 @@
 	font-family: Times New Roman;/*字体系列*/
 }
 
+#lanOption{
+	position: absolute;
+	right: 10px;
+	text-align: center;
+}
+
 #upperRightMenu{
 	position: absolute;
+	top: 20px;
 	right: 10px;
 	text-align: center;
 	font-family: Times New Roman;
@@ -23,16 +30,12 @@
 
 #extraMenu{
 	position: absolute;
-	right: 120px;
-	width: 75px;
 	border: 1px solid #efefef;
 	background-color: white;
 }
 
 #extendedFav{
 	position: absolute;
-	right: 40px;
-	width: 100px;
 	border: 1px solid #efefef;
 	background-color: white;
 }
@@ -47,7 +50,6 @@
 
 #footer{
 	position: absolute;
-	bottom: 0;
 	float: left;
 	width: 100%;
 	padding-top: 5px;

@@ -8,15 +8,14 @@ Tab.createFrame = function(tabType){
 	}
 	$("#extraMenu").css("display","none");
 	$("#extendedFav").css("display","none");
-	var tabCount = Common.tabCount;
-	var tabIndex = Common.tabIndex;
+	length = Common.tabIndex.length - 1;
+	var tabIndex = Common.tabIndex[length];
 	/**********limit the number of tab**********/
-	if(tabCount == Common.tabLimit()){
+	if(length == Common.tabLimit()){
 		alert("Tabs cann't be more than " + Common.tabLimit() + "!");
 		return;
 	}
-	Common.tabCount ++;
-	Common.tabIndex ++;
+	Common.tabIndex[length + 1] = tabIndex + 1;
 	li = document.createElement("li");
 	li.setAttribute("id","tabs_li" + tabIndex);
 	$(li).appendTo("#tabs_ul");
@@ -60,7 +59,7 @@ Tab.createFrame = function(tabType){
 		);
 	Tab.load(tabType,tabIndex);
 	$("#tabs").tabs("refresh");
-	$("#tabs").tabs("option","active",tabCount);
+	$("#tabs").tabs("option","active",length);
 };
 
 /**********initialize a tab**********/
@@ -131,6 +130,10 @@ Tab.load = function(tabType,tabIndex){
 Tab.close = function(tabType,tabIndex){
 	$("#tabs_li" + tabIndex).remove();
 	$("#tab" + tabIndex).remove();
-	Common.tabCount --;
+	Common.tabIndex.splice(tabIndex,1);
 	$("#tabs").tabs("refresh");
+};
+
+Tab.refresh = function(tabIndex){
+	
 };
