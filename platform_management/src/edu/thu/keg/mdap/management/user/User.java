@@ -11,6 +11,10 @@ public class User {
 	private int permission;
 	private int language;
 
+	public User() {
+
+	}
+
 	public User(String userid, String username, String password,
 			int permission, int language) {
 		this.userid = userid;

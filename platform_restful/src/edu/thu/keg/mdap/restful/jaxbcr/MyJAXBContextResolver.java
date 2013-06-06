@@ -21,6 +21,7 @@ import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JFieldName;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JGeograph;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JStatistic;
 import edu.thu.keg.mdap.restful.jerseyclasses.management.JFavorite;
+import edu.thu.keg.mdap.restful.jerseyclasses.user.JUser;
 
 @Provider
 public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
@@ -29,7 +30,7 @@ public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 	private Class<?>[] types = { JSONObject.class, String.class, Object.class,
 			Boolean.class, ArrayList.class, JDatasetName.class, JDataset.class,
 			JGeograph.class, JStatistic.class, JFieldName.class, JColumn.class,
-			Favorite.class };
+			Favorite.class, JUser.class };
 	private static Logger log = Logger.getLogger(MyJAXBContextResolver.class);
 
 	public MyJAXBContextResolver() throws Exception {

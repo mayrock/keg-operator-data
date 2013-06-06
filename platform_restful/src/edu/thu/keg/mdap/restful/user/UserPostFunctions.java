@@ -45,8 +45,8 @@ public class UserPostFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding addUser(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
-			@FormParam("userid") String userid,
-			@FormParam("username") String username,
+			@FormParam("userid")  String userid,
+			@FormParam("username") @DefaultValue("wcxm") String username,
 			@FormParam("password") String password,
 			@FormParam("language") int language) {
 		log.info(uriInfo.getAbsolutePath());
