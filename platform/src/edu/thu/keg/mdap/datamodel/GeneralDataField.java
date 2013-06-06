@@ -3,6 +3,9 @@
  */
 package edu.thu.keg.mdap.datamodel;
 
+import java.util.Locale;
+
+
 
 
 /**
@@ -16,7 +19,7 @@ public class GeneralDataField implements DataField {
 	protected String name;
 	protected String queryName;
 	protected DataSet dataset;
-	protected String desp;
+	protected LocalizedMessage desps;
 	protected boolean isKey;
 	protected FieldType type;
 	protected boolean allowNull;
@@ -32,7 +35,7 @@ public class GeneralDataField implements DataField {
 	}
 	@Override
 	public String getDescription() {
-		return this.desp;
+		return this.desps.getMessage();
 	}
 	@Override
 	public boolean isKey() {
@@ -56,7 +59,9 @@ public class GeneralDataField implements DataField {
 		this.queryName = name;
 		this.type = type;
 		this.dataset = null;
-		this.desp = description;
+		
+		this.desps = new LocalizedMessage();
+		this.desps.setMessage(description);
 		this.isKey = isKey;
 		this.allowNull = allowNull;
 		this.func = func;
@@ -77,7 +82,9 @@ public class GeneralDataField implements DataField {
 		this.queryName = name;
 		this.type = type;
 		this.dataset = null;
-		this.desp = description;
+		this.desps = new LocalizedMessage();
+		
+		this.desps.setMessage(description);
 		this.isKey = isKey;
 		this.allowNull = !isKey;
 		this.func = func;
@@ -108,5 +115,9 @@ public class GeneralDataField implements DataField {
 	@Override
 	public boolean isDim() {
 		return this.isDim;
+	}
+	@Override
+	public String getDescription(Locale locale) {
+		return this.desps.getMessage(locale);
 	}
 }

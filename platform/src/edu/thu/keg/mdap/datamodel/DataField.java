@@ -4,6 +4,7 @@
 package edu.thu.keg.mdap.datamodel;
 
 import java.sql.Date;
+import java.util.Locale;
 
 
 
@@ -97,6 +98,8 @@ public interface DataField {
 	 * @return The description as a string
 	 */
 	public String getDescription();
+	
+	public String getDescription(Locale locale);
 	/**
 	 * Whether the field is a key field in the dataset
 	 * @return true when it is key, false otherwise

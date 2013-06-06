@@ -3,6 +3,8 @@
  */
 package edu.thu.keg.mdap.datamodel;
 
+import java.util.Locale;
+
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.provider.DataProviderException;
@@ -31,4 +33,10 @@ public interface TableStructure {
 	 * @return Human-friendly description.
 	 */
 	public String getDescription();
+	
+	public void setDescription(String desp);
+	
+	public void setDescription(Locale locale, String desp);
+	
+	public String getDescription(Locale locale);
 }
