@@ -32,8 +32,8 @@ public class UserManagerImpl implements IUserManager {
 		AbsSqlServerProvider ssp = null;
 
 		if (isUseridExist(user.getUserid()))
-			throw new IllegalUserManageException(
-					user.getUserid()+" UserManager the user already exists!");
+			throw new IllegalUserManageException(user.getUserid()
+					+ " UserManager the user already exists!");
 		ssp = SqlServerProviderImpl.getInstance();
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
 				Statement.RETURN_GENERATED_KEYS);
@@ -99,7 +99,9 @@ public class UserManagerImpl implements IUserManager {
 		pstmt.setString(1, userid);
 		ResultSet rs = pstmt.executeQuery();
 		if (rs.next()) {
-			if (rs.getString(1).equals(password))
+			String databasepass = rs.getString(1);
+			System.out.println(databasepass+"  "+ password);
+			if (databasepass.equals(password))
 				return true;
 		}
 		return false;
