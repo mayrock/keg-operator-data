@@ -4,6 +4,37 @@ Sta.lcHeight = function(){return 480;};
 Sta.lcWidth = function(){return 800;};
 Sta.lcCntrWidth = function(){return 600;};
 
+/**********initialize # related to sta**********/
+Sta.init = function(){
+	$("#largeChart").css({
+		"position": "absolute",
+		"margin-top": (Common.height() - Sta.lcHeight()) / 2,
+		"margin-right": (Common.width() - Sta.lcWidth()) / 2,
+		"margin-bottom": (Common.height() - Sta.lcHeight()) / 2,
+		"margin-left": (Common.width() - Sta.lcWidth()) / 2,
+		"border": "1px solid #000000",
+		"height": Sta.lcHeight(),
+		"width": Sta.lcWidth(),
+		"z-index": "1000",
+		"background-color": "white",
+		"display": "none"
+	});
+	$("#lcContainer").css({
+		"position": "absolute",
+		"top": 0,
+		"left": 0,
+		"height": Sta.lcHeight(),
+		"width": Sta.lcCntrWidth()
+	});
+	$("#lcCheckbox").css({
+		"position": "absolute",
+		"right": 0,
+		"bottom": 0,
+		"height": Sta.lcHeight() - 40,
+		"width": Sta.lcWidth() - Sta.lcCntrWidth()
+	});
+};
+
 /**********initialize chartType and yAxis of a chart**********/
 Sta.guide = function(tabIndex,dsIndex){
 	/**********Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.**********/
@@ -21,7 +52,10 @@ Sta.guide = function(tabIndex,dsIndex){
 		for(var i = 0; i < len; i++){
 			Common.yAxis[tabIndex][dsIndex][chartIndex][i] = true;
 		}
-		Sta.createChart(tabIndex,dsIndex,chartIndex);
+		google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
+		function drawChart(){
+			Sta.createChart(tabIndex,dsIndex,chartIndex);
+		}
 	}).error(function(){
 		alert("Oops, we got an error...");
 	});
@@ -53,11 +87,13 @@ Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 			function(){$(this).attr("src","css/images/close_hover.png");},
 			function(){$(this).attr("src","css/images/close.png");}
 		);
+	Common.footer();
 	Sta.showChart(tabIndex,dsIndex,chartIndex,"chartContainer");
 };
 
 /**********close one chart container**********/
 Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
+	Common.clearFooter();
 	var l = Common.chartIndex[tabIndex][dsIndex].length;
 	for(var i = 0; i < l - 1; i++){
 		temp = Common.chartIndex[tabIndex][dsIndex][i];
@@ -76,12 +112,13 @@ Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
 	if(l == 1){
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("display","none");
 	}
+	Common.footer();
 };
 
 /**********magnify one chart**********/
 Sta.magnifier = function(tabIndex,dsIndex,chartIndex,chartType){
-	Common.bgInit();
-	Common.staInit();
+	Common.background();
+	Sta.init();
 	Sta.createFrame();
 	Common.chartType[tabIndex][dsIndex][chartIndex] = chartType;
 	$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
@@ -244,22 +281,19 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 			}else{
 				/**********need to do**********/
 			}
-			google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
 			
-			function drawChart(){
-				var data = google.visualization.arrayToDataTable(jsonArr);
-				var options = {
-					title: des
-				};
-				if(chartType == "columnChart"){
-					chart = new google.visualization.ColumnChart(view);
-				}else if(chartType == "lineChart"){
-					chart = new google.visualization.LineChart(view);
-				}else{
-					chart = new google.visualization.PieChart(view);
-				}
-				chart.draw(data,options);
+			var data = google.visualization.arrayToDataTable(jsonArr);
+			var options = {
+				title: des
+			};
+			if(chartType == "columnChart"){
+				chart = new google.visualization.ColumnChart(view);
+			}else if(chartType == "lineChart"){
+				chart = new google.visualization.LineChart(view);
+			}else{
+				chart = new google.visualization.PieChart(view);
 			}
+			chart.draw(data,options);
 		}).error(function(){
 			alert("Oops, we got an error...");
 			return;

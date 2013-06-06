@@ -31,8 +31,7 @@
 
 
 	<!-- 编译好后的源class文件路径 -->
-	<property name="CLASS_PATH"
-		value="${GIT_PATH}/platform_restful/WebContent/WEB-INF/classes" />
+	<property name="CLASS_PATH" value="${GIT_PATH}/platform_restful/WebContent/WEB-INF/classes" />
 	<!-- tomcat class文件路径 -->
 	<property name="JAR_PATH_TOM" value="${TOMCAT_PATH}/lib" />
 
@@ -77,39 +76,36 @@
 		<mkdir dir="${CLASS_PATH}" />
 	</target>
 	<!---编译platform -->
-	<target name="compile_pla_jar" depends="init"
-		description="compile the source files2">
+	<target name="compile_pla_jar" depends="init" description="compile the source files2">
 		<echo message="compiling platform..." />
 		<mkdir dir="${PRO_PATH_PLA}/bin/classes" />
-		<javac encoding="UTF-8" srcdir="${SCR_PATH_PLA}" destdir="${PRO_PATH_PLA}/bin/classes"
-			includeantruntime="on">
+		<javac encoding="UTF-8" srcdir="${SCR_PATH_PLA}" destdir="${PRO_PATH_PLA}/bin/classes" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
-		<jar destfile="${WEB_PATH}/WEB-INF/lib/compile_platform.jar"
-			basedir="${PRO_PATH_PLA}/bin/classes" />
+		<jar destfile="${WEB_PATH}/WEB-INF/lib/compile_platform.jar" basedir="${PRO_PATH_PLA}/bin/classes" />
 		<delete dir="${PRO_PATH_PLA}/bin/classes" />
 	</target>
 
 	<!---编译platform_management -->
-	<target name="compile_management_jar" depends="init"
-		description="compile the source files management">
+	<target name="compile_management_jar" depends="init" description="compile the source files management">
 		<echo message="compiling platform_management..." />
 		<mkdir dir="${PRO_PATH_MANAGER}/bin/classes" />
-		<javac encoding="UTF-8" srcdir="${SCR_PATH_MANAGER}" destdir="${PRO_PATH_MANAGER}/bin/classes"
-			includeantruntime="on">
+		<javac encoding="UTF-8" srcdir="${SCR_PATH_MANAGER}" destdir="${PRO_PATH_MANAGER}/bin/classes" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
-		<jar destfile="${WEB_PATH}/WEB-INF/lib/compile_management.jar"
-			basedir="${PRO_PATH_MANAGER}/bin/classes" />
+		<copy todir="${PRO_PATH_MANAGER}/bin/classes">
+			<fileset dir="${SCR_PATH_MANAGER}">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+		<jar destfile="${WEB_PATH}/WEB-INF/lib/compile_management.jar" basedir="${PRO_PATH_MANAGER}/bin/classes" />
 		<delete dir="${PRO_PATH_MANAGER}/bin/classes" />
 	</target>
 	<!-- 编译类 platform_restful -->
-	<target name="compile" depends="init,compile_pla_jar,compile_management_jar"
-		description="compile the source files">
+	<target name="compile" depends="init,compile_pla_jar,compile_management_jar" description="compile the source files">
 		<!-- mkdir dir="${CLASS_PATH}" -->
 		<echo message="compiling platform_restful..." />
-		<javac encoding="UTF-8" srcdir="${SCR_PATH_RESTFUL}" destdir="${CLASS_PATH}"
-			includeantruntime="on">
+		<javac encoding="UTF-8" srcdir="${SCR_PATH_RESTFUL}" destdir="${CLASS_PATH}" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 			<classpath refid="LIB_CLASS_PATH_TOM" />
 		</javac>

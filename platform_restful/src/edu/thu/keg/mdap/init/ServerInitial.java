@@ -7,8 +7,11 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.apache.log4j.Logger;
+
 import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap.management.ManagementPlatform;
+import edu.thu.keg.mdap.restful.jaxbcr.MyJAXBContextResolver;
 import edu.thu.keg.mdap_impl.PlatformImpl;
 
 /**
@@ -19,10 +22,11 @@ import edu.thu.keg.mdap_impl.PlatformImpl;
  */
 @WebListener("Socket Init")
 public class ServerInitial implements ServletContextListener {
+	private static Logger log = Logger.getLogger(ServerInitial.class);
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		System.out.println("destroy");
+		log.info("Server destroying!");
 	}
 
 	@Override
@@ -42,7 +46,6 @@ public class ServerInitial implements ServletContextListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("启动服务器2\n" + P_Config);
-
+		log.info("启动MDAP服务器");
 	}
 }

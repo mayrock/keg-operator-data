@@ -9,12 +9,19 @@ public class User {
 	private String username;
 	private String password;
 	private int permission;
+	private int language;
 
-	public User(String userid, String username, String password, int permission) {
+	public User() {
+
+	}
+
+	public User(String userid, String username, String password,
+			int permission, int language) {
 		this.userid = userid;
 		this.username = username;
 		this.password = password;
 		this.permission = permission;
+		this.language = language;
 
 	}
 
@@ -50,4 +57,11 @@ public class User {
 		return permission;
 	}
 
+	public void setLanguage(int language) {
+		this.language = language;
+	}
+
+	public int getLanguage() {
+		return language;
+	}
 }

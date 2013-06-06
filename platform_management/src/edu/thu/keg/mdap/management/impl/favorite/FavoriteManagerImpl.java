@@ -26,20 +26,19 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 	}
 
 	@Override
-	public boolean addFav(Favorite fav) throws SQLException,
+	public boolean addFav(String userid, String favstr) throws SQLException,
 			IllegalFavManageException {
 		System.out.println("add fav ");
-		String sql = "insert into [Favorite] ( userid, favid, favstring) "
-				+ " values (?,?,?)";
+		String sql = "insert into [Favorite] ( userid,  favstring) "
+				+ " values (?,?)";
 		AbsSqlServerProvider ssp = null;
-		if (isFavExsist(fav.getUserid(), fav.getFavid()))
+		if (isFavExsist(userid, favstr))
 			throw new IllegalFavManageException("the favrite already exists!");
 		ssp = SqlServerProviderImpl.getInstance();
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
 				Statement.RETURN_GENERATED_KEYS);
-		pstmt.setString(1, fav.getUserid());
-		pstmt.setString(2, fav.getFavid());
-		pstmt.setString(3, fav.getFavstring());
+		pstmt.setString(1, userid);
+		pstmt.setString(2, favstr);
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
 		return true;
@@ -127,15 +126,15 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		String sql = "delete from [Favorite] "
 				+ "where (userid = ? and favid = ? )";
 		AbsSqlServerProvider ssp = null;
-//		if (!isFavExsist(userid, favid))
-//			throw new IllegalFavManageException("the favrite don't exists!");
-//		ssp = SqlServerProviderImpl.getInstance();
-//		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
-//				Statement.RETURN_GENERATED_KEYS);
-//		pstmt.setString(1, userid);
-//		pstmt.setString(2, favid);
-//		pstmt.executeUpdate();
-//		ResultSet rs = pstmt.getGeneratedKeys();
+		// if (!isFavExsist(userid, favid))
+		// throw new IllegalFavManageException("the favrite don't exists!");
+		// ssp = SqlServerProviderImpl.getInstance();
+		// PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
+		// Statement.RETURN_GENERATED_KEYS);
+		// pstmt.setString(1, userid);
+		// pstmt.setString(2, favid);
+		// pstmt.executeUpdate();
+		// ResultSet rs = pstmt.getGeneratedKeys();
 
 		return true;
 	}

@@ -1,13 +1,30 @@
 Fav = {};
 
-Fav.height = function(){return 200;};
+Fav.height = function(){return 100;};
 Fav.weight = function(){return 300;};
+
+/**********initialize #favInfo**********/
+Fav.init = function(){
+	$("#favInfo").css({
+		"position": "absolute",
+		"margin-top": (Common.height() - Fav.height()) / 2,
+		"margin-right": (Common.width() - Fav.weight()) / 2,
+		"margin-bottom": (Common.height() - Fav.height()) / 2,
+		"margin-left": (Common.width() - Fav.weight()) / 2,
+		"border": "1px solid #000000",
+		"height": Fav.height(),
+		"width": Fav.weight(),
+		"z-index": "1000",
+		"background-color": "white",
+		"display": "none"
+	});
+};
 
 /**********open window for confirm**********/
 Fav.createFrame = function(tabIndex){
-	Common.bgInit();
-	Common.favInit();
-	$("<span>Input a name:</span><br/><input type = 'text' value = 'my favorite' id = 'favName' maxlength = '36'/><br/>" +
+	Common.background();
+	Fav.init();
+	$("<span>Input a name:</span><br/><input type = 'text' value = 'my favorite' id = 'favName' maxlength = '16'/><br/>" +
 		"<input type = 'button' value = 'confirm' onclick = \"Fav.saveSta(" + tabIndex + ");\"/>").appendTo("#favInfo");
 	$("#background").css("display","block");
 	$("#favInfo").css("display","block");
@@ -100,40 +117,44 @@ Fav.downList = function(){
 /**********revert one saved favorite**********/
 Fav.revertSta = function(favIndex){
 	Tab.createFrame("sta");
-	var tabIndex = Common.tabIndex - 1;
+	var length = Common.tabIndex.length;
+	var tabIndex = Common.tabIndex[length - 2];alert(tabIndex);
 	var favData = JSON.parse($.cookie("favData"));
 	var tabData = favData[favIndex];
 	var datasetData = tabData.dataset;
 	var dsLen = datasetData.length;
 	$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
 		var len = data.length;
-		for(var i = 0; i < dsLen; i++){
-			var dsData = datasetData[i];
-			var dsName = dsData.name;
-			var dsIndex = new Object;
-			for(var j = 0; j < len; j++){
-				var name = data[j].datasetName;
-				if(dsName == name){
-					dsIndex = j;
-					break;
+		google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
+		function drawChart(){
+			for(var i = 0; i < dsLen; i++){
+				var dsData = datasetData[i];
+				var dsName = dsData.name;
+				var dsIndex = new Object;
+				for(var j = 0; j < len; j++){
+					var name = data[j].datasetName;
+					if(dsName == name){
+						dsIndex = j;
+						break;
+					}
 				}
-			}
-			var chartData = dsData.chart;
-			var chartLen = chartData.length;
-			for(var j = 0; j < chartLen; j++){
-				Common.chartIndex[tabIndex][dsIndex][j + 1] = j + 1;
-			}
-			$("#view_ds" + tabIndex + "_" + dsIndex).css("display","block");
-			for(var j = 0; j < chartLen; j++){
-				var cData = chartData[j];
-				Common.chartType[tabIndex][dsIndex][j] = cData.type;
-				var yAxisData = cData.yAxis;
-				yAxisLen = yAxisData.length;
-				Common.yAxis[tabIndex][dsIndex][j] = new Array();
-				for(var k = 0; k < yAxisLen; k++){
-					Common.yAxis[tabIndex][dsIndex][j][k] = yAxisData[k];
+				var chartData = dsData.chart;
+				var chartLen = chartData.length;
+				for(var j = 0; j < chartLen; j++){
+					Common.chartIndex[tabIndex][dsIndex][j + 1] = j + 1;
 				}
-				Sta.createChart(tabIndex,dsIndex,j);
+				$("#view_ds" + tabIndex + "_" + dsIndex).css("display","block");
+				for(var j = 0; j < chartLen; j++){
+					var cData = chartData[j];
+					Common.chartType[tabIndex][dsIndex][j] = cData.type;
+					var yAxisData = cData.yAxis;
+					yAxisLen = yAxisData.length;
+					Common.yAxis[tabIndex][dsIndex][j] = new Array();
+					for(var k = 0; k < yAxisLen; k++){
+						Common.yAxis[tabIndex][dsIndex][j][k] = yAxisData[k];
+					}
+					Sta.createChart(tabIndex,dsIndex,j);
+				}
 			}
 		}
 	}).error(function(){

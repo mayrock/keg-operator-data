@@ -1,6 +1,7 @@
 package edu.thu.keg.mdap.restful.dataset;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONObject;
 
 import edu.thu.keg.mdap.DataSetManager;
@@ -32,6 +34,9 @@ public class DsDeleteFunctions {
 	Request request;
 	@Context
 	ServletContext servletcontext;
+	@Context
+	HttpServletRequest httpServletRequest;
+	private static Logger log = Logger.getLogger(DsDeleteFunctions.class);
 
 	@DELETE
 	@Path("/rmds/{datasetname}")
