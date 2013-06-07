@@ -32,8 +32,6 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		String sql = "insert into [Favorite] ( userid,  favstring) "
 				+ " values (?,?)";
 		AbsSqlServerProvider ssp = null;
-		if (isFavExsist(userid, favstr))
-			throw new IllegalFavManageException("the favrite already exists!");
 		ssp = SqlServerProviderImpl.getInstance();
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
 				Statement.RETURN_GENERATED_KEYS);
@@ -50,8 +48,6 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		String sql = "select favstring" + " from [Favorite]"
 				+ " where (userid = ? and favid = ?)";
 		AbsSqlServerProvider ssp = null;
-		if (!isFavExsist(userid, favid))
-			throw new IllegalFavManageException("the favrite already exists!");
 		ssp = SqlServerProviderImpl.getInstance();
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql);
 		pstmt.setString(1, userid);
@@ -86,8 +82,6 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		String sql = "update [Favorite] set favid = ? "
 				+ "where (userid=? and favid=?)";
 		AbsSqlServerProvider ssp = null;
-		if (!isFavExsist(userid, oldfavid))
-			throw new IllegalFavManageException("the favrite already exists!");
 		ssp = SqlServerProviderImpl.getInstance();
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
 				Statement.RETURN_GENERATED_KEYS);
@@ -106,8 +100,8 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		String sql = "update [Favorite] set favstring = ? "
 				+ "where ( userid = ? and favid= ? )";
 		AbsSqlServerProvider ssp = null;
-		if (!isFavExsist(userid, favid))
-			throw new IllegalFavManageException("the favrite already exists!");
+//		if (!isFavExsist(userid, favid))
+//			throw new IllegalFavManageException("the favrite already exists!");
 		ssp = SqlServerProviderImpl.getInstance();
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
 				Statement.RETURN_GENERATED_KEYS);

@@ -40,7 +40,7 @@ public class Test_User {
 			ClientResponse response2 = service.path("rest").path("up")
 					.path("adduser")
 					// .type(MediaType.APPLICATION_FORM_URLENCODED)
-					.accept(MediaType.APPLICATION_JSON)
+					.accept(MediaType.TEXT_PLAIN)
 					.post(ClientResponse.class, param);
 			System.out.println(response2.getEntity(String.class));
 		} catch (JSONException e) {
@@ -58,7 +58,7 @@ public class Test_User {
 	}
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://10.1.1.55:8082/mdap").build();
+		return UriBuilder.fromUri("http://10.1.1.55:8080/keg2").build();
 	}
 
 }

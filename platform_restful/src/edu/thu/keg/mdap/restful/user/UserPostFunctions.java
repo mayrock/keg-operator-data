@@ -42,10 +42,8 @@ public class UserPostFunctions {
 
 	@POST
 	@Path("/adduser")
-	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding addUser(
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
-			@FormParam("userid")  String userid,
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JUser addUser(@FormParam("userid") String userid,
 			@FormParam("username") @DefaultValue("wcxm") String username,
 			@FormParam("password") String password,
 			@FormParam("language") int language) {
@@ -61,11 +59,11 @@ public class UserPostFunctions {
 			System.out.println("添加用户成功：" + userid + " " + username);
 		} catch (IllegalUserManageException | SQLException e) {
 			// TODO Auto-generated catch block
-			juser.setStatus(status);
+			juser.setStatus(false);
 			log.warn(e.getMessage());
+
 		}
-		return new JSONWithPadding(new GenericEntity<JUser>(juser) {
-		}, callback);
+		return juser;
 
 	}
 

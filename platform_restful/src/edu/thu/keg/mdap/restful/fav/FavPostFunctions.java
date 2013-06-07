@@ -49,33 +49,34 @@ public class FavPostFunctions {
 	@Path("/addfav")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding addFav(@FormParam("userid") String userid,
+	public JSONObject addFav(@FormParam("userid") String userid,
 
 	@FormParam("favstring") String favstring,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 
 		log.info(uriInfo.getAbsolutePath());
-		JSONObject job = null;
+
+		boolean status = false;
+		JSONObject job = new JSONObject();
+
 		try {
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
 					.getAttribute("managementplatform");
 			IFavoriteManager favManager = mp.getFavoriteManager();
-			favManager.addFav(userid, favstring);
-			job = new JSONObject();
-			job.put("status", true);
+			job.put("status", status);
+			status = favManager.addFav(userid, favstring);
+			job.put("status", status);
 			System.out.println("已经添加fav:" + userid);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			System.out.println("用户名密码错误:" + userid);
+			log.warn(e.getMessage());
 			e.printStackTrace();
 		} catch (SQLException | IllegalFavManageException e) {
-			log.info(e.getMessage());
+			log.warn(e.getMessage());
 			e.printStackTrace();
 		}
 		System.out.println(job.toString());
 		// return Response.created(uriInfo.getAbsolutePath()).build();
-		return new JSONWithPadding(new GenericEntity<String>(job.toString()) {
-		}, callback);
+		return job;
 	}
 
 	@POST
