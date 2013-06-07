@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
@@ -15,6 +16,7 @@ import edu.thu.keg.mdap.datafeature.DataFeature;
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.LocalizedMessage;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.Query;
@@ -33,7 +35,7 @@ public class DataSetImpl implements DataSet {
 	private String name = null;
 	private String owner = null;
 	private DataProvider provider = null;
-	private String description = null;
+	private LocalizedMessage descriptions = null;
 	private boolean loadable;
 	private HashMap<FieldFunctionality, List<DataField>> fieldsMap;
 	private List<DataField> fields;
@@ -41,17 +43,19 @@ public class DataSetImpl implements DataSet {
 	public DataSetImpl(){
 		fieldsMap = new HashMap<FieldFunctionality, List<DataField>>();
 		fields = new ArrayList<DataField>();
+		descriptions = new LocalizedMessage();
 	}
 
 
-	public DataSetImpl(String name, String owner, String description, DataProvider provider,
+	public DataSetImpl(String name, String owner, DataProvider provider,
 			 boolean loadable, DataField... fields) {
 		super();
 		this.name = name;
 		this.owner = owner;
 		this.provider = provider;
 		this.loadable = loadable;
-		this.description = description;
+		this.descriptions = new LocalizedMessage();
+		
 		
 		this.fieldsMap = new HashMap<FieldFunctionality, List<DataField>>();
 		this.fields = new ArrayList<DataField>();
@@ -100,7 +104,7 @@ public class DataSetImpl implements DataSet {
 	}
 	@Override
 	public String getDescription() {
-		return this.description;
+		return this.descriptions.getMessage();
 	}
 	@Override
 	public DataFeature getFeature(DataFeatureType type) {
@@ -194,5 +198,23 @@ public class DataSetImpl implements DataSet {
 	@Override
 	public String getOwner() {
 		return this.owner;
+	}
+
+
+	@Override
+	public String getDescription(Locale locale) {
+		return this.descriptions.getMessage(locale);
+	}
+
+
+	@Override
+	public void setDescription(String desp) {
+		this.descriptions.setMessage(desp);
+	}
+
+
+	@Override
+	public void setDescription(Locale locale, String desp) {
+		this.descriptions.setMessage(locale, desp);
 	}
 }

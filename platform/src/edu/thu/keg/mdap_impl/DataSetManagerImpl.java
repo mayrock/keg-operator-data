@@ -172,23 +172,26 @@ public class DataSetManagerImpl implements DataSetManager {
 	@Override
 	public DataSet createDataSet(String name, String owner, String description,
 			DataProvider provider, boolean loadable, DataField... fields) {
-		DataSet ds = new DataSetImpl(name, owner, description, provider, 
+		DataSet ds = new DataSetImpl(name, owner,  provider, 
 				loadable, fields);
+		ds.setDescription(description);
 		addDataSet(ds);
 		return ds;
 	}
 	@Override
 	public DataView defineView(String name, String description
 			, DataFeatureType type, Query q) {
-		DataView v = new DataViewImpl(name, description, type, q);
+		DataView v = new DataViewImpl(name,  type, q);
+		v.setDescription(description);
 		addDataView(v);
 		return v;
 	}
 	@Override
 	public DataView defineView(String name, String description
-			, DataFeatureType type, Query q, DataField key, DataField...values) {
+			, DataFeatureType type, Query q, DataField key, DataField[] values) {
 		DataField[] keys = {key};
-		DataView v = new DataViewImpl(name, description, type, q, keys, values);
+		DataView v = new DataViewImpl(name, type, q, keys, values);
+		v.setDescription(description);
 		addDataView(v);
 		return v;
 	}

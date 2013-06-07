@@ -4,6 +4,8 @@
 package edu.thu.keg.mdap_impl;
 
 import java.io.IOException;
+import java.util.Locale;
+
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.DataProviderManager;
@@ -67,6 +69,7 @@ public class PlatformImpl implements Platform {
 		Query q = null;
 		DataField[] fields = null;
 		DataSet dsSite = null;
+		DataView dv = null;
 		
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true, FieldFunctionality.Identifier );
@@ -79,8 +82,10 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("Name", FieldType.ShortString, "", false, FieldFunctionality.Other );
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "", false, FieldFunctionality.Latitude );
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "", false, FieldFunctionality.Longitude );
-		getDataSetManager().createDataSet("RegionInfo3","myc", "地理区域",
+		dsSite = getDataSetManager().createDataSet("RegionInfo3","myc", "地理区域",
 				provider, true, fields);
+		
+
 		
 		fields = new DataField[5];
 		fields[0] = new GeneralDataField("SiteId", FieldType.Int, "", true, FieldFunctionality.Identifier );
@@ -100,8 +105,9 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		getDataSetManager().defineView("RegionSta", "区域内基站数统计",
+		dv = getDataSetManager().defineView("RegionSta", "区域内基站数统计",
 				DataFeatureType.ValueFeature, q);
+		dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
 		
 		fields = new DataField[6];
 		fields[0] = new GeneralDataField("Domain", FieldType.LongString, 
@@ -132,8 +138,9 @@ public class PlatformImpl implements Platform {
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
 		}
-		getDataSetManager().defineView("ContentTypeView", "ContentType分布",
+		dv = getDataSetManager().defineView("ContentTypeView", "ContentType分布",
 				DataFeatureType.DistributionFeature, q);
+		dv.setDescription(Locale.ENGLISH, "ContentType distribution");
 		
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("Imsi", FieldType.ShortString, 
@@ -154,8 +161,9 @@ public class PlatformImpl implements Platform {
 					 )
 					.orderBy("WebsiteCount", Order.ASC);
 			DataField[] vas = {va};
-			getDataSetManager().defineView("UserWebsiteCountView", "用户网站访问数分布",
+			dv = getDataSetManager().defineView("UserWebsiteCountView", "用户网站访问数分布",
 					DataFeatureType.ValueFeature, q, dsSite.getField("WebsiteCount"), vas);
+			dv.setDescription(Locale.ENGLISH, "User website count distribution");
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
 		}

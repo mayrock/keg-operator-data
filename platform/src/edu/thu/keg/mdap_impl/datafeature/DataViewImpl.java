@@ -3,10 +3,12 @@ package edu.thu.keg.mdap_impl.datafeature;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.LocalizedMessage;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap_impl.datamodel.QueryImpl;
@@ -15,7 +17,7 @@ public class DataViewImpl implements DataView {
 
 	private Query q;
 	private String name;
-	private String desp;
+	private LocalizedMessage desps;
 	private DataFeatureType type;
 	private List<DataField> keyFields;
 	private List<DataField> valueFields;
@@ -24,23 +26,23 @@ public class DataViewImpl implements DataView {
 	/**
 	 * @param q
 	 * @param name
-	 * @param desp
+	 * @param desps
 	 */
-	public DataViewImpl(String name, String desp, DataFeatureType type, Query q) {
+	public DataViewImpl(String name, DataFeatureType type, Query q) {
 		super();
 		this.q = q;
 		this.name = name;
-		this.desp = desp;
+		this.desps = new LocalizedMessage();
 		this.type = type;
 		initKeyValueFields();
 	}
 	
-	public DataViewImpl(String name, String desp, DataFeatureType type, Query q, 
+	public DataViewImpl(String name, DataFeatureType type, Query q, 
 			DataField[] keyFields, DataField[] valueFields) {
 		super();
 		this.q = q;
 		this.name = name;
-		this.desp = desp;
+		this.desps = new LocalizedMessage();
 		this.type = type;
 		this.keyFields = Arrays.asList(keyFields);
 		this.valueFields = Arrays.asList(valueFields);
@@ -108,7 +110,22 @@ public class DataViewImpl implements DataView {
 
 	@Override
 	public String getDescription() {
-		return this.desp;
+		return this.desps.getMessage();
+	}
+
+	@Override
+	public String getDescription(Locale locale) {
+		return this.desps.getMessage(locale);
+	}
+
+	@Override
+	public void setDescription(String desp) {
+		this.desps.setMessage(desp);
+	}
+
+	@Override
+	public void setDescription(Locale locale, String desp) {
+		this.desps.setMessage(desp);
 	}
 
 }

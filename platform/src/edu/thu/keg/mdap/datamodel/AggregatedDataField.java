@@ -3,6 +3,9 @@
  */
 package edu.thu.keg.mdap.datamodel;
 
+import java.util.Locale;
+
+
 
 /**
  * @author myc
@@ -38,11 +41,18 @@ public class AggregatedDataField implements DataField {
 	private DataField field;
 	private AggrFunction func;
 	private String name;
+	private LocalizedMessage desps;
 	
 	public AggregatedDataField(DataField field, AggrFunction func, String name) {
 		this.field = field;
 		this.func = func;
 		this.name = name;
+		
+		this.desps = new LocalizedMessage();
+		
+		desps.setMessage(Locale.ENGLISH, func.toString() + " of the field "
+			+ field.getDescription(Locale.ENGLISH) 
+			+ " in " + field.getDataSet().getDescription(Locale.ENGLISH));
 	}
 	
 	/* (non-Javadoc)
@@ -66,8 +76,7 @@ public class AggregatedDataField implements DataField {
 	 */
 	@Override
 	public String getDescription() {
-		return func.toString() + " of the field "
-				+ field.getName() + " in " + field.getDataSet().getName();
+		return desps.getMessage();
 	}
 
 	/* (non-Javadoc)
@@ -127,6 +136,11 @@ public class AggregatedDataField implements DataField {
 	@Override
 	public boolean isDim() {
 		return false;
+	}
+
+	@Override
+	public String getDescription(Locale locale) {
+		return desps.getMessage(locale);
 	}
 
 }
