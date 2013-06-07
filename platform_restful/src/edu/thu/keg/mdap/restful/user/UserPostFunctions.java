@@ -62,7 +62,7 @@ public class UserPostFunctions {
 		} catch (IllegalUserManageException | SQLException e) {
 			// TODO Auto-generated catch block
 			juser.setStatus(status);
-			log.info(e.getMessage());
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<JUser>(juser) {
 		}, callback);

@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,6 +23,9 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import com.sun.jersey.api.json.JSONWithPadding;
 
@@ -35,8 +39,11 @@ import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
+import edu.thu.keg.mdap.datamodel.Query.Operator;
+import edu.thu.keg.mdap.datamodel.Query.Order;
 
 import edu.thu.keg.mdap.provider.DataProviderException;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JColumn;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDataset;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JField;
@@ -225,48 +232,9 @@ public class DsGetFunctions {
 	 * @return a json or xml format all rs array of JDataset
 	 */
 	@GET
-	@Path("/getds/{datasetname}")
-	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataset(@PathParam("datasetname") String dataset,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDataset " + dataset + " "
-				+ uriInfo.getAbsolutePath());
-		List<JDataset> datasetList = new ArrayList<>();
-		try {
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
-			DataContent rs = ds.getQuery();
-			rs.open();
-			int i = 0;
-			while (rs.next() && i++ < 20) {
-				JDataset jdataset = new JDataset();
-				List<JField> fields = new ArrayList<>();
-				DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
-				int j = 0;
-				for (DataField df : dfs) {
-					// if(j++>=2)
-					// break;
-					JField field = new JField();
-					field.setValue(rs.getValue(df).toString());
-					field.setType(rs.getValue(df).getClass().getSimpleName());
-					fields.add(field);
-				}
-				jdataset.setField(fields);
-				datasetList.add(jdataset);
-			}
-			rs.close();
-		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.warn(e.getStackTrace());
-		}
-		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
-				datasetList) {
-		}, jsoncallback);
-	}
-	@GET
 	@Path("/getds")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataset2(@FormParam("dataset") String dataset,
+	public JSONWithPadding getDataset(@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
@@ -302,6 +270,7 @@ public class DsGetFunctions {
 				datasetList) {
 		}, jsoncallback);
 	}
+	
 	/**
 	 * get the location fields form the dataset
 	 * 
@@ -309,10 +278,10 @@ public class DsGetFunctions {
 	 * @return a json or xml format location array
 	 */
 	@GET
-	@Path("/getgeods/{datasetname}")
+	@Path("/getgeods")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getGeoDataset(
-			@PathParam("datasetname") String dataset,
+			@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getLocDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
@@ -350,10 +319,10 @@ public class DsGetFunctions {
 	 * @return a json or xml format statistics array
 	 */
 	@GET
-	@Path("/getstads/{datasetname}")
+	@Path("/getstads")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaDataset(
-			@PathParam("datasetname") String dataset,
+			@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getStaDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
@@ -404,10 +373,10 @@ public class DsGetFunctions {
 	 * @return a json or xml format statistics array
 	 */
 	@GET
-	@Path("/getstatds/{datasetname}")
+	@Path("/getstatds")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaTimeDataset(
-			@PathParam("datasetname") String dataset,
+			@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getStaTimeDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
@@ -459,10 +428,10 @@ public class DsGetFunctions {
 	 * @return a list of all fields name
 	 */
 	@GET
-	@Path("/getdsfds/{datasetname}")
+	@Path("/getdsfds")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetFieldsNames(
-			@PathParam("datasetname") String dataset,
+			@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDatasetFieldsNames " + dataset + " "
 				+ uriInfo.getAbsolutePath());
@@ -647,54 +616,13 @@ public class DsGetFunctions {
 
 	}
 
-	@GET
-	@Path("/getstadv/{dataviewname}")
-	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getStaDataview(
-			@PathParam("dataviewname") String dataview,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getStaDataset " + dataview + " "
-				+ uriInfo.getAbsolutePath());
-		List<JStatistic> datasetList = new ArrayList<JStatistic>();
-		try {
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			DataView dv = datasetManager.getDataView(dataview);
-			DataContent rs = dv.getQuery();
-			rs.open();
-			int i = 0;
-			while (rs.next() && i++ < 20) {
-				// System.out.println(rs.getValue(ds.getDataFields()[0])
-				// .toString()
-				// + " "
-				// + rs.getValue(ds.getDataFields()[1]).toString());
-				JStatistic statistic = new JStatistic();
-				ArrayList<String> keys = new ArrayList<>();
-				for (DataField key : dv.getKeyFields()) {
-					keys.add(rs.getValue(key).toString());
-				}
-				ArrayList<Double> values = new ArrayList<>();
-				for (DataField df : dv.getValueFields()) {
-					values.add(Double.valueOf(rs.getValue(df).toString()));
-				}
-				statistic.setKey(keys);
-				statistic.setValue(values);
-				datasetList.add(statistic);
-			}
-			rs.close();
-		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.warn(e.getStackTrace());
-		}
-		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
-				datasetList) {
-		}, jsoncallback);
-	}
+
 
 	@GET
-	@Path("/getdv/{dataviewname}")
+	@Path("/getdv")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDataview(
-			@PathParam("dataviewname") String dataview,
+			@QueryParam("dataview") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDataset " + dataview + " "
 				+ uriInfo.getAbsolutePath());
@@ -730,7 +658,154 @@ public class DsGetFunctions {
 				datasetList) {
 		}, jsoncallback);
 	}
+	/**
+	 * get a column form the dataset
+	 * 
+	 * @param dataset
+	 * @param fieldname
+	 * @return
+	 */
+	@GET
+	@Path("/getdscs")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public JSONWithPadding getDatasetField(
+			@QueryParam("dataset") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
+			@QueryParam("fields") JSONArray jsonFileds,
+			@QueryParam("orderby") String orderby) {
+		log.info(uriInfo.getAbsolutePath());
+		String fieldname = null;
+		List<JColumn> all_dfs = null;
+		List<JField> list_df = null;
+		/**
+		 * fields 存储列名的参数jsonarray orderby 排序的域名
+		 */
+		try {
+			if (jsonFileds == null)
+				throw new JSONException("have not the this Field");
+			all_dfs = new ArrayList<>();
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			DataSet ds = datasetManager.getDataSet(dataset);
+			DataContent rs;
+			if (orderby != null)
+				rs = ds.getQuery().orderBy(orderby, Order.parse(orderby));
+			else
+				rs = ds.getQuery();
+			for (int i = 0; i < jsonFileds.length(); i++) {
+				fieldname = (String) jsonFileds.get(i);
+				System.out.println("getDatasetField " + dataset + " "
+						+ fieldname + " " + uriInfo.getAbsolutePath());
+				list_df = new ArrayList<JField>();
+				DataField df = ds.getField(fieldname);
 
+				rs.open();
+				int ii = 0;
+				while (rs.next() && ii++ < 20) {
+					JField field = new JField();
+					field.setValue(rs.getValue(df).toString());
+					field.setType(rs.getValue(df).getClass().getSimpleName());
+					list_df.add(field);
+				}
+				rs.close();
+				// ObjectMapper mapper = new ObjectMapper();
+				// StringWriter sw = new StringWriter();
+				// JsonGenerator gen = new
+				// JsonFactory().createJsonGenerator(sw);
+				// mapper.writeValue(gen, list_df);
+				// gen.close();
+				// String json = sw.toString();
+				// System.out.println("json: "+json);
+				JColumn jc = new JColumn();
+				jc.setColumn(list_df);
+				all_dfs.add(jc);
+			}
+
+		} catch (JSONException e) {
+			System.out.println("POST: Json form wrong!");
+			e.printStackTrace();
+		} catch (OperationNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+
+		}
+		// return all_dfs;
+		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
+		}, callback);
+	}
+
+	/**
+	 * get the clause result
+	 * 
+	 * @param dataset
+	 * @param fieldname
+	 * @param opr
+	 * @param value
+	 * @return
+	 */
+	@POST
+	@Path("/getdsres")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONWithPadding getDatasetValueOfOpr(
+			@QueryParam("dataset") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
+			@QueryParam("jsonoper") JSONArray jsonOper) {
+		log.info(uriInfo.getAbsolutePath());
+		String fieldname = null;
+		String opr = null;
+		String value = null;
+		List<JColumn> all_dfs = null;
+		List<JField> list_df = null;
+		/**
+		 * jsonOper 操作参数jsonarray fieldname 域名 opr 操作符号 value 值
+		 */
+		try {
+			if (jsonOper == null)
+				throw new JSONException("have not the this Operation");
+			all_dfs = new ArrayList<>();
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			DataSet ds = datasetManager.getDataSet(dataset);
+
+			for (int i = 0; i < jsonOper.length(); i++) {
+				JSONObject job = (JSONObject) jsonOper.get(i);
+				fieldname = job.getString("fieldname");
+				opr = job.getString("opr");
+				value = job.getString("value");
+				System.out.println("getDatasetValueOfOpr " + dataset + " "
+						+ fieldname + " " + opr + " " + value + " "
+						+ uriInfo.getAbsolutePath());
+				list_df = new ArrayList<JField>();
+				DataField df = ds.getField(fieldname);
+				DataContent rs = ds.getQuery().where(fieldname,
+						Operator.parse(opr), value);
+				rs.open();
+				int ii = 0;
+				while (rs.next() && ii++ < 2) {
+					JField field = new JField();
+					field.setValue(rs.getValue(df).toString());
+					field.setType(rs.getValue(df).getClass().getSimpleName());
+					list_df.add(field);
+				}
+				rs.close();
+				JColumn jc = new JColumn();
+				jc.setColumn(list_df);
+				all_dfs.add(jc);
+			}
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			System.out.println("POST: Json form wrong!");
+			e.printStackTrace();
+		}
+		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
+		}, callback);
+	}
 	@GET
 	@Path("/hello")
 	@Produces({ MediaType.APPLICATION_JSON })

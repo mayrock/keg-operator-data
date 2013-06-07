@@ -1,5 +1,8 @@
 import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -11,6 +14,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 public class Test_con {
 	public static void main(String arg[]) {
@@ -54,28 +58,36 @@ public class Test_con {
 		fields.put("SiteName");
 		fields.put("Latitude");
 		fields.put("Longitude");
-		try {
-			job.put("fields", fields);
-			ClientResponse response = service.path("rest").path("dsp")
-					.path("getds").path("RegionInfo2")
-					.accept(MediaType.APPLICATION_JSON)
-					.post(ClientResponse.class, job);
-			System.out.println(response.getEntity(String.class));
+//		try {
+//			job.put("fields", fields);
+//			ClientResponse response = service.path("rest").path("dsp")
+//					.path("getds").path("RegionInfo2")
+//					.accept(MediaType.APPLICATION_JSON)
+//					.post(ClientResponse.class, job);
+//			System.out.println(response.getEntity(String.class));
+//			URI  u =new URI("http://houfeng:8080/jerseyWebServiceTest/services/hello/test_get2");   
+//			    System.out.println(u);   
 
+		
+		
+			   WebResource resource = client.resource(service.path("rest").path("dsg").path("getdsa")
+						 .accept(MediaType.APPLICATION_JSON).get(String.class));   
+			  MultivaluedMap<String, String>  params = new MultivaluedMapImpl();   
+			    params.add("dataset", "slot_Imsi_All");   
+			   String result = resource.queryParams(params).get(String.class);   
+			    System.out.println(result);
 //			ClientResponse response2 = service.path("rest").path("up")
 //					.path("adduser")
 //					.accept(MediaType.APPLICATION_JSON)
 //					.post(ClientResponse.class, job);
 //			System.out.println(response2.getEntity(String.class));
-		} catch (JSONException e) {
-
-			e.printStackTrace();
-		}
+//		} 
 		// service.path("rest").path("dsd").path("/rmds/sa").delete();
 		// ClientResponse response =
 		// service.path("rest").path("dsu").path("/upds/a/b")
 		// .accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, job);
 		// System.out.println(response.getStatus());
+
 
 		// System.out.println(service.path("rest").path("dsd").path("/rmds/a")
 		// .accept(MediaType.APPLICATION_JSON).get(String.class));

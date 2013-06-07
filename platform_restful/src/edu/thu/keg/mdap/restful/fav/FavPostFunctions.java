@@ -69,7 +69,7 @@ public class FavPostFunctions {
 			System.out.println("用户名密码错误:" + userid);
 			e.printStackTrace();
 		} catch (SQLException | IllegalFavManageException e) {
-			System.err.println(e.getMessage());
+			log.info(e.getMessage());
 			e.printStackTrace();
 		}
 		System.out.println(job.toString());

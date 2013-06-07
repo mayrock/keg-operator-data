@@ -46,11 +46,11 @@ public class UserGetFunctions {
 	private static Logger log = Logger.getLogger(UserGetFunctions.class);
 
 	@GET
-	@Path("/verifyuser/{userid}/{password}")
+	@Path("/verifyuser")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding verifyUser(@PathParam("userid") String userid,
-			@PathParam("password") String password,
+	public JSONWithPadding verifyUser(@QueryParam("userid") String userid,
+			@QueryParam("password") String password,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		log.info(uriInfo.getAbsolutePath());
 		JSONObject job = null;
@@ -70,11 +70,11 @@ public class UserGetFunctions {
 	}
 
 	@GET
-	@Path("/login/{userid}/{password}")
+	@Path("/login")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding login(@PathParam("userid") String userid,
-			@PathParam("password") String password,
+	public JSONWithPadding login(@QueryParam("userid") String userid,
+			@QueryParam("password") String password,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		log.info(uriInfo.getAbsolutePath());
 		JSONObject job = null;
@@ -94,7 +94,7 @@ public class UserGetFunctions {
 			// TODO Auto-generated catch block
 			juser.setStatus(false);
 			System.out.println("用户名密码错误:" + userid);
-			log.info(e.getMessage());
+			log.warn(e.getMessage());
 			e.printStackTrace();
 		}
 		// return Response.created(uriInfo.getAbsolutePath()).build();

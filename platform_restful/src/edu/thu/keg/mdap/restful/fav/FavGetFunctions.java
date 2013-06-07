@@ -47,11 +47,11 @@ public class FavGetFunctions {
 	private static Logger log = Logger.getLogger(FavGetFunctions.class);
 
 	@GET
-	@Path("/getfav/{userid}/{favid}")
+	@Path("/getfav")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding getFav(@PathParam("userid") String userid,
-			@PathParam("favid") String favid,
+	public JSONWithPadding getFav(@QueryParam("userid") String userid,
+			@QueryParam("favid") String favid,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		log.info(uriInfo.getAbsolutePath());
 		Favorite fav = null;
@@ -63,7 +63,7 @@ public class FavGetFunctions {
 
 			System.out.println("得到fav:" + userid + " favid:" + favid);
 		} catch (SQLException | IllegalFavManageException e) {
-			System.err.println(e.getMessage());
+			log.info(e.getMessage());
 			e.printStackTrace();
 		}
 		return new JSONWithPadding(new GenericEntity<Favorite>(fav) {
@@ -71,10 +71,10 @@ public class FavGetFunctions {
 	}
 
 	@GET
-	@Path("/getfavs/{userid}")
+	@Path("/getfavs")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding getAllFavs(@PathParam("userid") String userid,
+	public JSONWithPadding getAllFavs(@QueryParam("userid") String userid,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		log.info(uriInfo.getAbsolutePath());
 		List<Favorite> favs = null;
@@ -86,7 +86,7 @@ public class FavGetFunctions {
 
 			System.out.println("得到All favs:" + userid);
 		} catch (SQLException | IllegalFavManageException e) {
-			System.err.println(e.getMessage());
+			log.info(e.getMessage());
 			e.printStackTrace();
 		}
 		return new JSONWithPadding(new GenericEntity<List<Favorite>>(favs) {

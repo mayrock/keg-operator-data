@@ -70,10 +70,10 @@ public class DsPostFunctions {
 	 * @return
 	 */
 	@POST
-	@Path("/adds/{connstr}/{datasetname}")
+	@Path("/addds")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public Response createDataset(@PathParam("connstr") String connstr,
-			@PathParam("datasetname") String dataset,
+	public Response createDataset(@FormParam("connstr") String connstr,
+			@FormParam("dataset") String dataset,
 			@FormParam("description") String description,
 			@FormParam("loadable") boolean loadable,
 			@FormParam("owner") String owner,
@@ -125,153 +125,6 @@ public class DsPostFunctions {
 		return Response.created(uriInfo.getAbsolutePath()).build();
 	}
 
-	/**
-	 * get a column form the dataset
-	 * 
-	 * @param dataset
-	 * @param fieldname
-	 * @return
-	 */
-	@POST
-	@Path("/getds/{datasetname}")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDatasetField(
-			@PathParam("datasetname") String dataset,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
-			@FormParam("fields") JSONArray jsonFileds,
-			@FormParam("orderby") String orderby) {
-		log.info(uriInfo.getAbsolutePath());
-		String fieldname = null;
-		List<JColumn> all_dfs = null;
-		List<JField> list_df = null;
-		/**
-		 * fields 存储列名的参数jsonarray orderby 排序的域名
-		 */
-		try {
-			if (jsonFileds == null)
-				throw new JSONException("have not the this Field");
-			all_dfs = new ArrayList<>();
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
-			DataContent rs;
-			if (orderby != null)
-				rs = ds.getQuery().orderBy(orderby, Order.parse(orderby));
-			else
-				rs = ds.getQuery();
-			for (int i = 0; i < jsonFileds.length(); i++) {
-				fieldname = (String) jsonFileds.get(i);
-				System.out.println("getDatasetField " + dataset + " "
-						+ fieldname + " " + uriInfo.getAbsolutePath());
-				list_df = new ArrayList<JField>();
-				DataField df = ds.getField(fieldname);
 
-				rs.open();
-				int ii = 0;
-				while (rs.next() && ii++ < 20) {
-					JField field = new JField();
-					field.setValue(rs.getValue(df).toString());
-					field.setType(rs.getValue(df).getClass().getSimpleName());
-					list_df.add(field);
-				}
-				rs.close();
-				// ObjectMapper mapper = new ObjectMapper();
-				// StringWriter sw = new StringWriter();
-				// JsonGenerator gen = new
-				// JsonFactory().createJsonGenerator(sw);
-				// mapper.writeValue(gen, list_df);
-				// gen.close();
-				// String json = sw.toString();
-				// System.out.println("json: "+json);
-				JColumn jc = new JColumn();
-				jc.setColumn(list_df);
-				all_dfs.add(jc);
-			}
-
-		} catch (JSONException e) {
-			System.out.println("POST: Json form wrong!");
-			e.printStackTrace();
-		} catch (OperationNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-		}
-		// return all_dfs;
-		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
-		}, callback);
-	}
-
-	/**
-	 * get the clause result
-	 * 
-	 * @param dataset
-	 * @param fieldname
-	 * @param opr
-	 * @param value
-	 * @return
-	 */
-	@POST
-	@Path("/getdsres/{datasetname}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDatasetValueOfOpr(
-			@PathParam("datasetname") String dataset,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
-			@FormParam("jsonoper") JSONArray jsonOper) {
-		log.info(uriInfo.getAbsolutePath());
-		String fieldname = null;
-		String opr = null;
-		String value = null;
-		List<JColumn> all_dfs = null;
-		List<JField> list_df = null;
-		/**
-		 * jsonOper 操作参数jsonarray fieldname 域名 opr 操作符号 value 值
-		 */
-		try {
-			if (jsonOper == null)
-				throw new JSONException("have not the this Operation");
-			all_dfs = new ArrayList<>();
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
-
-			for (int i = 0; i < jsonOper.length(); i++) {
-				JSONObject job = (JSONObject) jsonOper.get(i);
-				fieldname = job.getString("fieldname");
-				opr = job.getString("opr");
-				value = job.getString("value");
-				System.out.println("getDatasetValueOfOpr " + dataset + " "
-						+ fieldname + " " + opr + " " + value + " "
-						+ uriInfo.getAbsolutePath());
-				list_df = new ArrayList<JField>();
-				DataField df = ds.getField(fieldname);
-				DataContent rs = ds.getQuery().where(fieldname,
-						Operator.parse(opr), value);
-				rs.open();
-				int ii = 0;
-				while (rs.next() && ii++ < 2) {
-					JField field = new JField();
-					field.setValue(rs.getValue(df).toString());
-					field.setType(rs.getValue(df).getClass().getSimpleName());
-					list_df.add(field);
-				}
-				rs.close();
-				JColumn jc = new JColumn();
-				jc.setColumn(list_df);
-				all_dfs.add(jc);
-			}
-		} catch (OperationNotSupportedException | DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			System.out.println("POST: Json form wrong!");
-			e.printStackTrace();
-		}
-		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
-		}, callback);
-	}
 
 }
