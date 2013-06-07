@@ -60,8 +60,8 @@ public class UserManagerImpl implements IUserManager {
 		pstmt.setString(1, userid);
 		ResultSet rs = pstmt.executeQuery();
 		if (rs.next()) {
-			user = new User(userid, rs.getString(2), rs.getString(3),
-					rs.getInt(4), rs.getInt(5));
+			user = new User(userid, rs.getString(1), rs.getString(2),
+					rs.getInt(3), rs.getInt(4));
 		} else
 			throw new IllegalUserManageException(
 					"UserManager: the userid don't exist");

@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -262,7 +263,45 @@ public class DsGetFunctions {
 				datasetList) {
 		}, jsoncallback);
 	}
-
+	@GET
+	@Path("/getds")
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public JSONWithPadding getDataset2(@FormParam("dataset") String dataset,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
+		System.out.println("getDataset " + dataset + " "
+				+ uriInfo.getAbsolutePath());
+		List<JDataset> datasetList = new ArrayList<>();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			DataSet ds = datasetManager.getDataSet(dataset);
+			DataContent rs = ds.getQuery();
+			rs.open();
+			int i = 0;
+			while (rs.next() && i++ < 20) {
+				JDataset jdataset = new JDataset();
+				List<JField> fields = new ArrayList<>();
+				DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
+				int j = 0;
+				for (DataField df : dfs) {
+					// if(j++>=2)
+					// break;
+					JField field = new JField();
+					field.setValue(rs.getValue(df).toString());
+					field.setType(rs.getValue(df).getClass().getSimpleName());
+					fields.add(field);
+				}
+				jdataset.setField(fields);
+				datasetList.add(jdataset);
+			}
+			rs.close();
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			log.warn(e.getStackTrace());
+		}
+		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
+				datasetList) {
+		}, jsoncallback);
+	}
 	/**
 	 * get the location fields form the dataset
 	 * 
