@@ -39,7 +39,8 @@ Tab.createFrame = function(tabType){
 	view.setAttribute("class","view");
 	$(view).appendTo(tab);
 	if(tabType == "sta"){
-		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
+//		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
+		$("<img src = 'css/images/save.png' onclick = \"Tab.refresh(" + tabIndex + ");\"/>").appendTo(li);
 	}
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo(li)
@@ -108,7 +109,7 @@ Tab.load = function(tabType,tabIndex){
 				Common.chartType[tabIndex][i] = new Array();
 				Common.yAxis[tabIndex][i] = new Array();
 				var des = data[i].description;
-				$("<span>&nbsp;</span><img src = 'css/images/add.png'/><span>&nbsp;</span><a href = 'javascript:void(0);' " + 
+				$("<span>&nbsp;</span><img src = 'css/images/add.png'/><span>&nbsp;</span><a href = 'javascript:void(0);' " +
 					"onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a><br/>").appendTo("#option" + tabIndex);
 				view_ds = document.createElement("div");
 				view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
@@ -135,5 +136,56 @@ Tab.close = function(tabType,tabIndex){
 };
 
 Tab.refresh = function(tabIndex){
-	
+	$("#option" + tabIndex).empty();
+	$("#view" + tabIndex).empty();
+	$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
+		var len = data.length;
+		google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
+		function drawChart(){
+			for(var i = 0; i < len; i++){
+				var des = data[i].description;
+				$("<span>&nbsp;</span><img src = 'css/images/add.png'/><span>&nbsp;</span><a href = 'javascript:void(0);' " +
+					"onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a><br/>").appendTo("#option" + tabIndex);
+				view_ds = document.createElement("div");
+				view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
+				view_ds.setAttribute("class","view_ds");
+				$(view_ds).appendTo("#view" + tabIndex);
+				$("<div id = 'special" + tabIndex + "_" + i + "' style = 'clear:both;'></div>").appendTo(view_ds);
+				$(view_ds).css("display","none");
+				var l = Common.chartIndex[tabIndex][i].length;
+				if(l == 1){
+					continue;
+				}
+				$(view_ds).css("display","block");
+				var cType = new Array();
+				var yAxisData = new Array();
+				for(var j = 0; j < l - 1; j++){
+					var chartIndex = Common.chartIndex[tabIndex][i][j];
+					cType[j] = Common.chartType[tabIndex][i][chartIndex];
+					yAxisData[j] = new Array();
+					var yAxisLen = Common.yAxis[tabIndex][i][chartIndex].length;
+					for(var k = 0; k < yAxisLen; k++){
+						yAxisData[j][k] = Common.yAxis[tabIndex][i][chartIndex][k];
+					}
+					Common.chartIndex[tabIndex][i][j] = j;
+				}
+				Common.chartIndex[tabIndex][i][j] = j;
+				Common.chartType[tabIndex][i] = new Array();
+				Common.yAxis[tabIndex][i] = new Array();
+				for(var j = 0; j < l - 1; j++){
+					Common.chartType[tabIndex][i][j] = cType[j];
+					Common.yAxis[tabIndex][i][j] = new Array();
+					var yAxisLen = yAxisData[j].length;
+					for(var k = 0; k < yAxisLen; k++){
+						Common.yAxis[tabIndex][i][j][k] = yAxisData[j][k];
+					}
+				}
+				for(var j = 0; j < l - 1; j++){
+					Sta.createChart(tabIndex,i,j);
+				}
+			}
+		}
+	}).error(function(){
+		alert("Oops, we got an error...");
+	});
 };

@@ -119,7 +119,7 @@ User.register = function(){
 		return;
 	}
 	$.post(Common.registerUrl(),{
-		username: username,
+		userid: username,
 		password: password
 	},function(data){
 		if(data.status == true){
@@ -152,7 +152,6 @@ User.login = function(){
 		alert(Lan.emptyCode[index]);
 		return;
 	}
-	$.ajaxSettings.async = false;
 	$.getJSON(Common.loginUrl().replace("username",username).replace("password",password),function(data){
 		if(data.status == true){
 			if($("#checkbox_l").is(":checked") == true){

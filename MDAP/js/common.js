@@ -33,7 +33,10 @@ Common.ip = function(){
 	}
 };
 
-Common.registerUrl = function(){return Common.ip() + "up/adduser?jsoncallback=?";};
+/**********post**********/
+Common.registerUrl = function(){return Common.ip() + "up/adduser";};
+
+/**********get**********/
 Common.loginUrl = function(){return Common.ip() + "ug/login/username/password?jsoncallback=?";};
 Common.datasetUrl = function(){return Common.ip() + "dsg/gettabTypedvs?jsoncallback=?"};
 Common.dsDataUrl = function(){return Common.ip() + "dsg/gettabTypedv/dsName?jsoncallback=?";};
