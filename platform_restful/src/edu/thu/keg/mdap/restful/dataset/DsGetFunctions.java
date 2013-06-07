@@ -616,6 +616,48 @@ public class DsGetFunctions {
 
 	}
 
+	@GET
+	@Path("/getstadv")
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public JSONWithPadding getStaDataview(
+			@QueryParam("dataview") String dataview,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
+		System.out.println("getStaDataset " + dataview + " "
+				+ uriInfo.getAbsolutePath());
+		List<JStatistic> datasetList = new ArrayList<JStatistic>();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			DataView dv = datasetManager.getDataView(dataview);
+			DataContent rs = dv.getQuery();
+			rs.open();
+			int i = 0;
+			while (rs.next() && i++ < 20) {
+				// System.out.println(rs.getValue(ds.getDataFields()[0])
+				// .toString()
+				// + " "
+				// + rs.getValue(ds.getDataFields()[1]).toString());
+				JStatistic statistic = new JStatistic();
+				ArrayList<String> keys = new ArrayList<>();
+				for (DataField key : dv.getKeyFields()) {
+					keys.add(rs.getValue(key).toString());
+				}
+				ArrayList<Double> values = new ArrayList<>();
+				for (DataField df : dv.getValueFields()) {
+					values.add(Double.valueOf(rs.getValue(df).toString()));
+				}
+				statistic.setKey(keys);
+				statistic.setValue(values);
+				datasetList.add(statistic);
+			}
+			rs.close();
+		} catch (OperationNotSupportedException | DataProviderException e) {
+			log.warn(e.getStackTrace());
+		}
+		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
+				datasetList) {
+		}, jsoncallback);
+	}
 
 
 	@GET

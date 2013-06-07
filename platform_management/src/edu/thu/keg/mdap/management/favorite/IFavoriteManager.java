@@ -7,7 +7,7 @@ import edu.thu.keg.mdap.management.provider.IllegalFavManageException;
 
 public interface IFavoriteManager {
 
-	public boolean addFav(String userid, String favstr) throws SQLException,
+	public int addFav(String userid, String favstr) throws SQLException,
 			IllegalFavManageException;
 
 	public Favorite getFav(String userid, String favid) throws SQLException,

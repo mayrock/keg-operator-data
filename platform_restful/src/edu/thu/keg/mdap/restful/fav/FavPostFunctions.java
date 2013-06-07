@@ -33,7 +33,7 @@ import edu.thu.keg.mdap.management.favorite.IFavoriteManager;
 import edu.thu.keg.mdap.management.provider.IllegalFavManageException;
 import edu.thu.keg.mdap.restful.dataset.DsPostFunctions;
 
-@Path("\favp")
+@Path("/favp")
 public class FavPostFunctions {
 	@Context
 	UriInfo uriInfo;
@@ -47,32 +47,34 @@ public class FavPostFunctions {
 
 	@POST
 	@Path("/addfav")
-	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONObject addFav(@FormParam("userid") String userid,
-
-	@FormParam("favstring") String favstring,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+			@FormParam("favstring") String favstring) {
 
 		log.info(uriInfo.getAbsolutePath());
-
-		boolean status = false;
+		int favid = -1;
 		JSONObject job = new JSONObject();
 
 		try {
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
 					.getAttribute("managementplatform");
 			IFavoriteManager favManager = mp.getFavoriteManager();
-			job.put("status", status);
-			status = favManager.addFav(userid, favstring);
-			job.put("status", status);
+			favid = favManager.addFav(userid, favstring);
+			job.put("status", true);
+			job.put("favid", favid);
 			System.out.println("已经添加fav:" + userid);
 		} catch (JSONException e) {
 			log.warn(e.getMessage());
 			e.printStackTrace();
 		} catch (SQLException | IllegalFavManageException e) {
+			try {
+				job.put("status", false);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			log.warn(e.getMessage());
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		System.out.println(job.toString());
 		// return Response.created(uriInfo.getAbsolutePath()).build();
@@ -83,7 +85,7 @@ public class FavPostFunctions {
 	@Path("/setfavid")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding setFavid(@FormParam("userid") String userid,
+	public JSONObject setFavid(@FormParam("userid") String userid,
 			@FormParam("oldfavid") String oldfavid,
 			@FormParam("newfavid") String newfavid,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -97,25 +99,25 @@ public class FavPostFunctions {
 			job = new JSONObject();
 			job.put("status", true);
 			System.out.println("变更id fav:" + userid + " favid:" + newfavid);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			System.out.println("变更id fav:错误:" + userid);
-			e.printStackTrace();
-		} catch (SQLException | IllegalFavManageException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+		} catch (JSONException | SQLException | IllegalFavManageException e) {
+			try {
+				job.put("status", false);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			log.warn(e.getMessage());
 		}
 		System.out.println(job.toString());
 		// return Response.created(uriInfo.getAbsolutePath()).build();
-		return new JSONWithPadding(new GenericEntity<String>(job.toString()) {
-		}, callback);
+		return job;
 	}
 
 	@POST
 	@Path("/setfavstring")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding setFavstring(@FormParam("userid") String userid,
+	public JSONObject setFavstring(@FormParam("userid") String userid,
 			@FormParam("favid") String favid,
 			@FormParam("newfavstring") String newfavstring,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
@@ -130,17 +132,17 @@ public class FavPostFunctions {
 			job.put("status", true);
 			System.out.println("变更str fav:" + userid + " favstr:"
 					+ newfavstring);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			System.out.println("变更str fav:错误:" + userid);
-			e.printStackTrace();
-		} catch (SQLException | IllegalFavManageException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+		} catch (JSONException | SQLException | IllegalFavManageException e) {
+			try {
+				job.put("status", false);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			log.warn(e.getMessage());
 		}
 		System.out.println(job.toString());
 		// return Response.created(uriInfo.getAbsolutePath()).build();
-		return new JSONWithPadding(new GenericEntity<String>(job.toString()) {
-		}, callback);
+		return job;
 	}
 }

@@ -23,30 +23,29 @@ public class Test_User {
 		WebResource service = client.resource(getBaseURI());
 
 		System.out.println(".........................");
-		JSONArray ja = new JSONArray();
-		JSONObject job = new JSONObject();
-		try {
-			job.put("userid", "asd");
-			job.put("username", "asd");
-			job.put("password", "asd");
-			ja.put(job);
+		// 用户添加
+		// MultivaluedMap<String, String> param = new MultivaluedMapImpl();
+		// param.add("userid", "addfrom_eclipse");
+		// param.add("username", "asd");
+		// param.add("password", "asd");
+		//
+		// ClientResponse response2 = service.path("rest").path("up")
+		// .path("adduser")
+		// // .type(MediaType.APPLICATION_FORM_URLENCODED)
+		// .accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, param);
+		// System.out.println(response2.getEntity(String.class));
+		// fav添加
+		MultivaluedMap<String, String> param = new MultivaluedMapImpl();
+		param.add("userid", "aa");
 
-			MultivaluedMap<String, String> param = new MultivaluedMapImpl();
-			param.add("userid", "addfrom_eclipse");
-			param.add("username", "asd");
-			param.add("password", "asd");
-			System.out.println(param + "\n" + job);
+		param.add("favstring", "asd");
 
-			ClientResponse response2 = service.path("rest").path("up")
-					.path("adduser")
-					// .type(MediaType.APPLICATION_FORM_URLENCODED)
-					.accept(MediaType.TEXT_PLAIN)
-					.post(ClientResponse.class, param);
-			System.out.println(response2.getEntity(String.class));
-		} catch (JSONException e) {
-
-			e.printStackTrace();
-		}
+		ClientResponse response2 = service.path("rest").path("favp")
+				.path("addfav")
+				// .type(MediaType.APPLICATION_FORM_URLENCODED)
+				.accept(MediaType.APPLICATION_JSON)
+				.post(ClientResponse.class, param);
+		System.out.println(response2.getEntity(String.class));
 		// service.path("rest").path("dsd").path("/rmds/sa").delete();
 		// ClientResponse response =
 		// service.path("rest").path("dsu").path("/upds/a/b")
@@ -58,7 +57,7 @@ public class Test_User {
 	}
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://10.1.1.55:8080/keg2").build();
+		return UriBuilder.fromUri("http://10.1.1.55:8082/mdap").build();
 	}
 
 }
