@@ -2,6 +2,7 @@ package edu.thu.keg.mdap.management.user;
 
 import java.sql.SQLException;
 
+import edu.thu.keg.mdap.management.provider.IllegalFavManageException;
 import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
 
 public interface IUserManager {
@@ -35,6 +36,9 @@ public interface IUserManager {
 	 * @throws SQLException
 	 */
 	public boolean setNewPassword(String userid, String newpass, String oldpass)
+			throws SQLException, IllegalUserManageException;
+
+	public boolean setLanguage(String userid, String language)
 			throws SQLException, IllegalUserManageException;
 
 	/**

@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 import edu.thu.keg.mdap.management.impl.provider.SqlServerProviderImpl;
 import edu.thu.keg.mdap.management.provider.AbsSqlServerProvider;
+import edu.thu.keg.mdap.management.provider.IllegalFavManageException;
 import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
 import edu.thu.keg.mdap.management.user.IUserManager;
 import edu.thu.keg.mdap.management.user.User;
@@ -100,11 +101,28 @@ public class UserManagerImpl implements IUserManager {
 		ResultSet rs = pstmt.executeQuery();
 		if (rs.next()) {
 			String databasepass = rs.getString(1);
-			System.out.println(databasepass+"  "+ password);
+			System.out.println(databasepass + "  " + password);
 			if (databasepass.equals(password))
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean setLanguage(String userid, String language)
+			throws SQLException, IllegalUserManageException {
+		String sql = "update [User] set language = ? " + "where userid = ?";
+		AbsSqlServerProvider ssp = null;
+		// if (!isFavExsist(userid, favid))
+		// throw new IllegalFavManageException("the favrite already exists!");
+		ssp = SqlServerProviderImpl.getInstance();
+		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
+				Statement.RETURN_GENERATED_KEYS);
+		pstmt.setString(1, userid);
+		pstmt.executeUpdate();
+		ResultSet rs = pstmt.getGeneratedKeys();
+
+		return true;
 	}
 
 	@Override

@@ -65,7 +65,7 @@ public class FavPostFunctions {
 			System.out.println("已经添加fav:" + userid);
 		} catch (JSONException e) {
 			log.warn(e.getMessage());
-			e.printStackTrace();
+
 		} catch (SQLException | IllegalFavManageException e) {
 			try {
 				job.put("status", false);
@@ -74,9 +74,7 @@ public class FavPostFunctions {
 				e1.printStackTrace();
 			}
 			log.warn(e.getMessage());
-			// e.printStackTrace();
 		}
-		System.out.println(job.toString());
 		// return Response.created(uriInfo.getAbsolutePath()).build();
 		return job;
 	}
@@ -108,8 +106,6 @@ public class FavPostFunctions {
 			}
 			log.warn(e.getMessage());
 		}
-		System.out.println(job.toString());
-		// return Response.created(uriInfo.getAbsolutePath()).build();
 		return job;
 	}
 
@@ -136,13 +132,14 @@ public class FavPostFunctions {
 			try {
 				job.put("status", false);
 			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			log.warn(e.getMessage());
 		}
-		System.out.println(job.toString());
-		// return Response.created(uriInfo.getAbsolutePath()).build();
 		return job;
 	}
+
+
+
+
 }

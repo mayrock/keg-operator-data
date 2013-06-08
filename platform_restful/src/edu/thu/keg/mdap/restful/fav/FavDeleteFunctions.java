@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -42,12 +44,11 @@ public class FavDeleteFunctions {
 	HttpServletRequest httpServletRequest;
 	private static Logger log = Logger.getLogger(FavDeleteFunctions.class);
 
-	@GET
-	@Path("/rmfav/{userid}/{favid}")
+	@POST
+	@Path("/rmfav")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding rmFav(@PathParam("userid") String userid,
-			@PathParam("favid") String favid,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+	public JSONObject rmFav(@FormParam("userid") String userid,
+			@FormParam("favid") String favid) {
 		Boolean fav = false;
 		JSONObject job = new JSONObject();
 		try {
@@ -57,14 +58,9 @@ public class FavDeleteFunctions {
 			fav = favManager.removeFav(userid, favid);
 			job.put("status", true);
 			System.out.println("删除fav:" + userid + " favid:" + favid);
-		} catch (SQLException | IllegalFavManageException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (JSONException | SQLException | IllegalFavManageException e) {
+			log.warn(e.getMessage());
 		}
-		return new JSONWithPadding(new GenericEntity<String>(job.toString()) {
-		}, callback);
+		return job;
 	}
 }

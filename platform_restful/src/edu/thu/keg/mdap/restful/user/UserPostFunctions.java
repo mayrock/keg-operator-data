@@ -24,7 +24,10 @@ import org.codehaus.jettison.json.JSONObject;
 import com.sun.jersey.api.json.JSONWithPadding;
 
 import edu.thu.keg.mdap.management.ManagementPlatform;
+import edu.thu.keg.mdap.management.favorite.IFavoriteManager;
+import edu.thu.keg.mdap.management.provider.IllegalFavManageException;
 import edu.thu.keg.mdap.management.provider.IllegalUserManageException;
+import edu.thu.keg.mdap.management.user.IUserManager;
 import edu.thu.keg.mdap.management.user.User;
 import edu.thu.keg.mdap.restful.jerseyclasses.user.JUser;
 
@@ -53,8 +56,10 @@ public class UserPostFunctions {
 		try {
 			User user = new User(userid, username, password, User.BROWSER,
 					language);
-			ManagementPlatform mi = new ManagementPlatform();
-			status = mi.getUserManager().addUser(user);
+			ManagementPlatform mp = (ManagementPlatform) servletcontext
+					.getAttribute("managementplatform");
+			IUserManager ium = mp.getUserManager();
+			status = ium.addUser(user);
 			juser.setStatus(status);
 			System.out.println("添加用户成功：" + userid + " " + username);
 		} catch (IllegalUserManageException | SQLException e) {
@@ -65,6 +70,34 @@ public class UserPostFunctions {
 		}
 		return juser;
 
+	}
+
+	@POST
+	@Path("/setlanguage")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public JSONObject setLanguage(@FormParam("userid") String userid,
+			@FormParam("language") String language) {
+		log.info(uriInfo.getAbsolutePath());
+		JSONObject job = null;
+		try {
+			ManagementPlatform mp = (ManagementPlatform) servletcontext
+					.getAttribute("managementplatform");
+			IUserManager ium = mp.getUserManager();
+			ium.setLanguage(userid, language);
+			job = new JSONObject();
+			job.put("status", true);
+			System.out
+					.println("变更language:" + userid + " language:" + language);
+		} catch (JSONException | SQLException | IllegalUserManageException e) {
+			try {
+				job.put("status", false);
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+			log.warn(e.getMessage());
+		}
+		return job;
 	}
 
 	@POST
