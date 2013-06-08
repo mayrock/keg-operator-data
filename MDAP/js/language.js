@@ -18,6 +18,8 @@ Lan.logout = new Array("logout","登出");
 Lan.emptyName = new Array("Username cann't be empty!","用户名不能为空!");
 Lan.emptyCode = new Array("Password cann't be empty!","密码不能为空!");
 Lan.notSameCode = new Array("The two passwords you input don't match!","两次密码不一致!");
+Lan.nameExist = new Array("This username has been registered!","存在该用户名!");
+Lan.nameOrCodeError = new Array("Username or password error!","用户名或密码错误!")
 
 Lan.init = function(){
 	if($.cookie("language") == null){

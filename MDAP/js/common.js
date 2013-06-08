@@ -16,30 +16,26 @@ Common = {};
 Common.height = function(){return $(document).height();};
 Common.width = function(){return $(document).width();};
 
-Common.func = function(){
+Common.ip = function(){
 	/**********aplha**********/
-	return 0;
+	return "http://10.1.1.55:8080/keg2/rest/";
 	/**********release**********/
-//	return 1;
+//	return "http://10.1.1.55:8080/keg/rest/";
 };
 
-Common.ip = function(){
-	if(Common.func() == 0){
-		return "http://10.1.1.55:8080/keg2/rest/";
-	}else if(Common.func() == 1){
-		return "http://10.1.1.55:8080/keg/rest/";
-	}else{
-		/**********need to do**********/
-	}
-};
+Common.username = new Object;
 
 /**********post**********/
 Common.registerUrl = function(){return Common.ip() + "up/adduser";};
+//Common.registerUrl = function(){return "http://localhost:3000/keg/rest/" + "up/adduser";};
+Common.addFavUrl = function(){return Common.ip() + "favp/addfav";};
 
 /**********get**********/
-Common.loginUrl = function(){return Common.ip() + "ug/login/username/password?jsoncallback=?";};
-Common.datasetUrl = function(){return Common.ip() + "dsg/gettabTypedvs?jsoncallback=?"};
-Common.dsDataUrl = function(){return Common.ip() + "dsg/gettabTypedv/dsName?jsoncallback=?";};
+Common.loginUrl = function(){return Common.ip() + "ug/login?jsoncallback=?";};
+Common.dataViewUrl = function(){return Common.ip() + "dsg/gettabTypedvs?jsoncallback=?"};
+Common.dvDataUrl = function(){return Common.ip() + "dsg/gettabTypedv?jsoncallback=?";};
+Common.favListUrl = function(){return Common.ip() + "favg/getfavs?jsoncallback=?";};
+Common.favDataUrl = function(){return Common.ip() + "favg/getfav?jsoncallback=?";};
 
 Common.tabIndex = new Array();
 Common.tabLimit = function(){return 7;};

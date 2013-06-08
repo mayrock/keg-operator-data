@@ -21,7 +21,9 @@ Geo.initMap = function(tabIndex){
 /**********load data of a dataset**********/
 Geo.loadData = function(tabIndex,dsIndex,name,type){
 	Common.mapInfoArr[tabIndex][dsIndex] = new Array();
-	$.getJSON(Common.dsDataUrl().replace("tabType","geo").replace("dsName",name),function(data){
+	$.getJSON(Common.dvDataUrl().replace("tabType","geo"),{
+		dataview: name
+	},function(data){
 		for(var i = 0; i < data.length; i++){
 			if(type == "points"){
 				Common.mapInfoArr[tabIndex][dsIndex][i] = new google.maps.Marker({

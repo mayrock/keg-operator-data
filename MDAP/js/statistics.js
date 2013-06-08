@@ -4,7 +4,6 @@ Sta.lcHeight = function(){return 480;};
 Sta.lcWidth = function(){return 800;};
 Sta.lcCntrWidth = function(){return 600;};
 
-/**********initialize # related to sta**********/
 Sta.init = function(){
 	$("#largeChart").css({
 		"position": "absolute",
@@ -38,7 +37,7 @@ Sta.init = function(){
 /**********initialize chartType and yAxis of a chart**********/
 Sta.guide = function(tabIndex,dsIndex){
 	/**********Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.**********/
-	$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
 		var values = data[dsIndex].values;
 		var len = values.length;
 		var l = Common.chartIndex[tabIndex][dsIndex].length;
@@ -121,7 +120,7 @@ Sta.magnifier = function(tabIndex,dsIndex,chartIndex,chartType){
 	Sta.init();
 	Sta.createFrame();
 	Common.chartType[tabIndex][dsIndex][chartIndex] = chartType;
-	$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
 		var values = data[dsIndex].values;
 		var len = values.length;
 		var count = 0;
@@ -210,14 +209,16 @@ Sta.closeFrame = function(tabIndex,dsIndex,chartIndex){
 
 /**********show one chart**********/
 Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
-	$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
 		var des = data[dsIndex].description;
 		var name = data[dsIndex].datasetName;
 		var values = data[dsIndex].values;
 		var len = values.length;
 		var key = new Array();
 		var value = new Array();
-		$.getJSON(Common.dsDataUrl().replace("tabType","sta").replace("dsName",name),function(data){
+		$.getJSON(Common.dvDataUrl().replace("tabType","sta"),{
+			dataview: name
+		},function(data){
 			var l = data.length;
 			for(var i = 0; i < l; i++){
 				key[i] = data[i].key[0];

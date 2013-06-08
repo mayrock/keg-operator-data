@@ -39,8 +39,8 @@ Tab.createFrame = function(tabType){
 	view.setAttribute("class","view");
 	$(view).appendTo(tab);
 	if(tabType == "sta"){
-//		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
-		$("<img src = 'css/images/save.png' onclick = \"Tab.refresh(" + tabIndex + ");\"/>").appendTo(li);
+		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
+//		$("<img src = 'css/images/save.png' onclick = \"Tab.refresh(" + tabIndex + ");\"/>").appendTo(li);
 	}
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo(li)
@@ -75,7 +75,7 @@ Tab.load = function(tabType,tabIndex){
 		select.setAttribute("id","select" + tabIndex);
 		select.setAttribute("class","select");
 		$(select).appendTo("#option" + tabIndex);
-		$.getJSON(Common.datasetUrl().replace("tabType",tabType),function(data){
+		$.getJSON(Common.dataViewUrl().replace("tabType",tabType),function(data){
 			var len = data.length;
 			for(var i = 0; i < len; i++){
 				var des = data[i].description;
@@ -101,7 +101,7 @@ Tab.load = function(tabType,tabIndex){
 		Common.chartIndex[tabIndex] = new Array();
 		Common.chartType[tabIndex] = new Array();
 		Common.yAxis[tabIndex] = new Array();
-		$.getJSON(Common.datasetUrl().replace("tabType",tabType),function(data){
+		$.getJSON(Common.dataViewUrl().replace("tabType",tabType),function(data){
 			var len = data.length;
 			for(var i = 0; i < len; i++){
 				Common.chartIndex[tabIndex][i] = new Array();
@@ -138,7 +138,7 @@ Tab.close = function(tabType,tabIndex){
 Tab.refresh = function(tabIndex){
 	$("#option" + tabIndex).empty();
 	$("#view" + tabIndex).empty();
-	$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
 		var len = data.length;
 		google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
 		function drawChart(){

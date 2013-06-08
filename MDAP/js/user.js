@@ -4,7 +4,6 @@ User.height = function(){return 240;};
 User.width = function(){return 360;};
 User.tableWidth = function(){return 320;};
 
-/**********initialize #user**********/
 User.init = function(){
 	$("#user").css({
 		"position": "absolute",
@@ -19,7 +18,7 @@ User.init = function(){
 		"background-color": "white",
 		"display": "none"
 	});
-}
+};
 
 User.load = function(){
 	$("#user table").attr({
@@ -41,9 +40,11 @@ User.load = function(){
 	$("#user").tabs();
 	$("#checkbox_l").attr("checked",true);
 	
-	if(($.cookie("username") != null) && ($.cookie("password") != null) && ($.cookie("favData") != null)){
+	if(($.cookie("username") != null) && ($.cookie("password") != null)){
 		User.upperRightMenu("login","saved");
-		Fav.downList();
+		var username = $.cookie("username");
+		Common.username = username;
+		Fav.loadDownList();
 	}else{
 		User.upperRightMenu("logout","");
 	}
@@ -74,23 +75,19 @@ User.upperRightMenu = function(status,info){
 	var index = $.cookie("language");
 	var htmlString = "";
 	if(status == "login"){
-		if(info == "saved"){
-			username = $.cookie("username");
-		}else{
-			username = info;
-		}
+		var username = Common.username;
 		htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
 			"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">" + Lan.create[index] +
 			"<img src = 'css/images/down_arrow.png'/></a>" +
 			"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
 			"<img src = 'css/images/down_arrow.png'/></a>" +
 			"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>";
+		Fav.loadDownList();
 	}else if(status == "logout"){
 		htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">" + Lan.register[index] + "/" + Lan.login[index] + "</a>";
 		if(info == "clear"){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});
-			$.removeCookie("favData",{path: "/"});
 			$.removeCookie("language",{path: "/"});
 			Lan.init();
 		}
@@ -103,9 +100,9 @@ User.upperRightMenu = function(status,info){
 /**********register**********/
 User.register = function(){
 	var index = $.cookie("language");
-	username = $("#username_r").val();
-	password = $("#password_r").val();
-	password_r = $("#password_r2").val();
+	var username = $("#username_r").val();
+	var password = $("#password_r").val();
+	var password_r = $("#password_r2").val();
 	if(username == ""){
 		alert(Lan.emptyName[index]);
 		return;
@@ -125,15 +122,16 @@ User.register = function(){
 		if(data.status == true){
 			$.cookie("username",username,{expires: 7,path: "/"});
 			$.cookie("password",password,{expires: 7,path: "/"});
-			User.upperRightMenu("login","saved");
+			Common.username = username;
+			User.upperRightMenu("login","");
 			User.closeFrame();
 		}else if(data.status == false){
-			alert("This username has been registered!");
+			alert(Lan.nameExist[index]);
 			return;
 		}else{
 			/**********need to do**********/
 		}
-	}).error(function(){
+	},"json").error(function(){
 		alert("Oops, we got an error...");
 		return;
 	});
@@ -142,8 +140,8 @@ User.register = function(){
 /**********log in**********/
 User.login = function(){
 	var index = $.cookie("language");
-	username = $("#username_l").val();
-	password = $("#password_l").val();
+	var username = $("#username_l").val();
+	var password = $("#password_l").val();
 	if(username == ""){
 		alert(Lan.emptyName[index]);
 		return;
@@ -152,22 +150,20 @@ User.login = function(){
 		alert(Lan.emptyCode[index]);
 		return;
 	}
-	$.getJSON(Common.loginUrl().replace("username",username).replace("password",password),function(data){
+	$.getJSON(Common.loginUrl(),{
+		userid: username,
+		password: password
+	},function(data){
 		if(data.status == true){
 			if($("#checkbox_l").is(":checked") == true){
 				$.cookie("username",username,{expires: 7,path: "/"});
 				$.cookie("password",password,{expires: 7,path: "/"});
-				$.cookie("favData",JSON.stringify("[]"),{expires: 7,path: "/"});
-				User.upperRightMenu("login","saved");
-				User.closeFrame();
-			}else if($("#checkbox_l").is(":checked") == false){
-				User.upperRightMenu("login",username);
-				User.closeFrame();
-			}else{
-				/**********need to do**********/
 			}
+			Common.username = username;
+			User.upperRightMenu("login","");
+			User.closeFrame();
 		}else if(data.status == false){
-			alert("Username or password error!");
+			alert(Lan.nameOrCodeError[index]);
 			return;
 		}else{
 			/**********need to do**********/
@@ -183,7 +179,6 @@ User.logout = function(){
 	$("#extraMenu").css("display","none");
 	$("#extendedFav").css("display","none");
 	User.upperRightMenu("logout","clear");
-	User.closeFrame();
 };
 
 /**********reset info in the register/login window**********/
