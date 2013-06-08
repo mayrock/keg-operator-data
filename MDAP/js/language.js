@@ -21,8 +21,21 @@ Lan.notSameCode = new Array("The two passwords you input don't match!","两次�
 Lan.nameExist = new Array("This username has been registered!","存在该用户名!");
 Lan.nameOrCodeError = new Array("Username or password error!","用户名或密码错误!")
 
+/**********set language at first when loading page**********/
 Lan.init = function(){
-	if($.cookie("language") == null){
+	if(($.cookie("username") != null) && ($.cookie("password") != null)){
+		var username = $.cookie("username");
+		Common.username = username;
+		$.getJSON(Common.getLanUrl(),{
+			userid: username
+		},function(data){
+			Common.language = data;
+			Common.init();
+		}).error(function(){
+			alert("Oops, we got an error...");
+			return;
+		});
+	}else{
 		var index = 0;
 		var language = window.navigator.language;
 		for(var i = 0; i < Lan.list.length; i++){
@@ -31,14 +44,32 @@ Lan.init = function(){
 				break;
 			}
 		}
-		$.cookie("language",index,{expires: 7,path: "/"});
+		Common.language = index;
+		Common.init();
 	}
 };
 
+/**********change language and reload page**********/
 Lan.change = function(index,country){
+	var username = Common.username;
 	if(index == country){
 		return;
-	};
-	$.cookie("language",country,{expires: 7,path: "/"});
-	Common.load();
+	}
+	$.post(Common.setLanUrl(),{
+		userid: username,
+		language: country
+	},function(data){
+		if(data.status == true){
+			Common.language = country;
+			Common.load();
+		}else if(data.status == false){
+			alert("Oops, we got an error...");
+			return;
+		}else{
+			/**********need to do**********/
+		}
+	},"json").error(function(){
+		alert("Oops, we got an error...");
+		return;
+	});
 }

@@ -4,6 +4,7 @@ Sta.lcHeight = function(){return 480;};
 Sta.lcWidth = function(){return 800;};
 Sta.lcCntrWidth = function(){return 600;};
 
+/**********initialize css of magnified chart window**********/
 Sta.init = function(){
 	$("#largeChart").css({
 		"position": "absolute",
@@ -60,7 +61,7 @@ Sta.guide = function(tabIndex,dsIndex){
 	});
 };
 
-/**********create one chart container of a dataset**********/
+/**********create one chart container of one dataset**********/
 Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 	view_chart = document.createElement("div");
 	view_chart.setAttribute("id","view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex);
@@ -187,7 +188,7 @@ Sta.setYAxis = function(tabIndex,dsIndex,chartIndex,index){
 	Sta.showChart(tabIndex,dsIndex,chartIndex,"lcContainer");
 };
 
-/**********open window for a magnified chart**********/
+/**********open window for one magnified chart**********/
 Sta.createFrame = function(){
 	$("#lcContainer").empty();
 	$("#lcCheckbox").empty();

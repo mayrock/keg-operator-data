@@ -3,7 +3,7 @@ Fav = {};
 Fav.height = function(){return 100;};
 Fav.weight = function(){return 300;};
 
-/**********initialize #favInfo**********/
+/**********initialize css of add favorite window**********/
 Fav.init = function(){
 	$("#favInfo").css({
 		"position": "absolute",
@@ -20,7 +20,7 @@ Fav.init = function(){
 	});
 };
 
-/**********open window for confirm**********/
+/**********open add favorite window**********/
 Fav.createFrame = function(tabIndex){
 	Common.background();
 	Fav.init();
@@ -101,6 +101,7 @@ Fav.saveSta = function(tabIndex){
 	});
 };
 
+/**********load drop-down list of favorite**********/
 Fav.loadDownList = function(){
 	$("#extendedFav").empty();
 	var username = Common.username;
@@ -120,15 +121,19 @@ Fav.loadDownList = function(){
 	});
 };
 
+/**********add one favorite to drop-down list**********/
 Fav.addDownList = function(favid,favname){
 	var username = Common.username;
+	div = document.createElement("div");
+	div.setAttribute("id",favid);
+	$(div).appendTo("#extendedFav");
 	staFav = document.createElement("a");
 	$(staFav).attr("href","javascript:void(0);");
 	$(staFav).attr("onClick","Fav.revertSta(" + favid + ");");
 	staFav.innerHTML = favname;
-	$(staFav).appendTo("#extendedFav");
+	$(staFav).appendTo(div);
 	$("<img src = 'css/images/close.png' onClick = \"Fav.delSta(" + favid + ");\"/>")
-		.appendTo("#extendedFav")
+		.appendTo(div)
 		.hover(
 			function(){
 				$(this).attr("src","css/images/close_hover.png");
@@ -136,7 +141,6 @@ Fav.addDownList = function(favid,favname){
 				$(this).attr("src","css/images/close.png");
 			}
 		);
-	$("<br/>").appendTo("#extendedFav");
 };
 
 /**********revert one saved favorite**********/
@@ -196,10 +200,23 @@ Fav.revertSta = function(favid){
 	});
 };
 
-/**********delete**********/
-Fav.delSta = function(favIndex){
-	var favData = JSON.parse($.cookie("favData"));
-	favData.splice(favIndex,1);
-	$.cookie("favData",JSON.stringify(favData),{expires: 7,path: "/"});
-	Fav.downList();
+/**********delete one favorite from drop-down list**********/
+Fav.delSta = function(favid){
+	var username = Common.username;
+	$.post(Common.delFavUrl(),{
+		userid: username,
+		favid: favid
+	},function(data){
+		if(data.status == true){
+			$("#" + favid).remove();
+		}else if(data.status == false){
+			alert("Oops, we got an error...");
+			return;
+		}else{
+			/**********need to do**********/
+		}
+	},"json").error(function(){
+		alert("Oops, we got an error...");
+		return;
+	});
 };

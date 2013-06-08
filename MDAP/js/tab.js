@@ -1,6 +1,6 @@
 Tab = {};
 
-/**********add a tab**********/
+/**********add one tab**********/
 Tab.createFrame = function(tabType){
 	if(!((tabType == "geo") || (tabType == "sta"))){
 		alert("Oops, we got an error...");
@@ -40,7 +40,6 @@ Tab.createFrame = function(tabType){
 	$(view).appendTo(tab);
 	if(tabType == "sta"){
 		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
-//		$("<img src = 'css/images/save.png' onclick = \"Tab.refresh(" + tabIndex + ");\"/>").appendTo(li);
 	}
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo(li)
@@ -63,7 +62,7 @@ Tab.createFrame = function(tabType){
 	$("#tabs").tabs("option","active",length);
 };
 
-/**********initialize a tab**********/
+/**********load one tab**********/
 Tab.load = function(tabType,tabIndex){
 	if(tabType == "geo"){
 		Geo.initMap(tabIndex);
@@ -127,7 +126,7 @@ Tab.load = function(tabType,tabIndex){
 	}
 };
 
-/**********close a tab**********/
+/**********close one tab**********/
 Tab.close = function(tabType,tabIndex){
 	$("#tabs_li" + tabIndex).remove();
 	$("#tab" + tabIndex).remove();
@@ -135,6 +134,7 @@ Tab.close = function(tabType,tabIndex){
 	$("#tabs").tabs("refresh");
 };
 
+/**********refresh one tab**********/
 Tab.refresh = function(tabIndex){
 	$("#option" + tabIndex).empty();
 	$("#view" + tabIndex).empty();

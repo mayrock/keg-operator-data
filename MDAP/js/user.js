@@ -4,6 +4,7 @@ User.height = function(){return 240;};
 User.width = function(){return 360;};
 User.tableWidth = function(){return 320;};
 
+/**********initialize css of register/login window**********/
 User.init = function(){
 	$("#user").css({
 		"position": "absolute",
@@ -20,11 +21,36 @@ User.init = function(){
 	});
 };
 
+/**********load register/login window in the form of the language you set**********/
 User.load = function(){
-	$("#user table").attr({
-		"width": User.tableWidth(),
-		"style": "margin: auto"
-	});
+	var index = Common.language;
+	
+	$("#userShell").empty();
+	user = document.createElement("div");
+	user.setAttribute("id","user");
+	$(user).appendTo("#userShell");
+	ul = document.createElement("ul");
+	ul.setAttribute("id","user_ul");
+	$(ul).appendTo("#user");
+	$("<li><a href = '#register'>" + Lan.register[index] + "</a></li><li><a href = '#login'>" + Lan.login[index] + "</a></li>").appendTo("#user_ul");
+	register = document.createElement("div");
+	register.setAttribute("id","register");
+	$(register).appendTo("#user");
+	$("<table><tr><td>" + Lan.inputName[index] + "</td><td><input type = 'text' id = 'username_r'/></td></tr>" +
+		"<tr><td>" + Lan.inputCode[index] + "</td><td><input type = 'password' id = 'password_r'/></td></tr>" +
+		"<tr><td>" + Lan.reInputCode[index] + "</td><td><input type = 'password' id = 'password_r2'/></td></tr></table>" +
+		"<table><tr><td><input type = 'button' value = '" + Lan.register[index] + "' onclick = \"User.register();\"/></td>" +
+		"<td><input type = 'button' value = '" + Lan.reset[index] + "' onclick = \"User.reset('register');\"/></td></tr></table>")
+		.appendTo("#register");
+	login = document.createElement("div");
+	login.setAttribute("id","login");
+	$(login).appendTo("#user");
+	$("<table><tr><td>" + Lan.inputName[index] + "</td><td><input type = 'text' id = 'username_l'/></td></tr>" +
+		"<tr><td>" + Lan.inputCode[index] + "</td><td><input type = 'password' id = 'password_l'/></td></tr></table>" +
+		"<input type = 'checkbox' id = 'checkbox_l'/>" + Lan.saveInfo[index] +
+		"<table><tr><td><input type = 'button' value = '" + Lan.login[index] + "' onclick = \"User.login();\"/></td>" +
+		"<td><input type = 'button' value = '" + Lan.reset[index] + "' onclick = \"User.reset('login');\"/></td></tr></table>")
+		.appendTo("#login");
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo("#user")
 		.css({
@@ -37,14 +63,17 @@ User.load = function(){
 		).click(
 			function(){User.closeFrame();}
 		);
-	$("#user").tabs();
 	$("#checkbox_l").attr("checked",true);
+	$("#user").tabs();
+	
+	User.init();
+	$("#user table").attr({
+		"width": User.tableWidth(),
+		"style": "margin: auto"
+	});
 	
 	if(($.cookie("username") != null) && ($.cookie("password") != null)){
-		User.upperRightMenu("login","saved");
-		var username = $.cookie("username");
-		Common.username = username;
-		Fav.loadDownList();
+		User.upperRightMenu("login","");
 	}else{
 		User.upperRightMenu("logout","");
 	}
@@ -59,7 +88,7 @@ User.createFrame = function(){
 	$("#user").tabs("option","active",1);
 };
 
-/**********close window**********/
+/**********close register/login window**********/
 User.closeFrame = function(){
 	$("#username_r").val("");
 	$("#password_r").val("");
@@ -70,9 +99,9 @@ User.closeFrame = function(){
 	$("#user").css("display","none");
 };
 
-/**********change info in the upper-right page**********/
+/**********change the upper-right block**********/
 User.upperRightMenu = function(status,info){
-	var index = $.cookie("language");
+	var index = Common.language;
 	var htmlString = "";
 	if(status == "login"){
 		var username = Common.username;
@@ -99,7 +128,7 @@ User.upperRightMenu = function(status,info){
 
 /**********register**********/
 User.register = function(){
-	var index = $.cookie("language");
+	var index = Common.language;
 	var username = $("#username_r").val();
 	var password = $("#password_r").val();
 	var password_r = $("#password_r2").val();
@@ -115,9 +144,11 @@ User.register = function(){
 		alert(Lan.notSameCode[index]);
 		return;
 	}
+	var language = Common.language;
 	$.post(Common.registerUrl(),{
 		userid: username,
-		password: password
+		password: password,
+		language: language
 	},function(data){
 		if(data.status == true){
 			$.cookie("username",username,{expires: 7,path: "/"});
@@ -139,7 +170,7 @@ User.register = function(){
 
 /**********log in**********/
 User.login = function(){
-	var index = $.cookie("language");
+	var index = Common.language;
 	var username = $("#username_l").val();
 	var password = $("#password_l").val();
 	if(username == ""){
@@ -162,6 +193,15 @@ User.login = function(){
 			Common.username = username;
 			User.upperRightMenu("login","");
 			User.closeFrame();
+			$.getJSON(Common.getLanUrl(),{
+				userid: username
+			},function(data){
+				Common.language = data;
+				Common.load();
+			}).error(function(){
+				alert("Oops, we got an error...");
+				return;
+			});
 		}else if(data.status == false){
 			alert(Lan.nameOrCodeError[index]);
 			return;

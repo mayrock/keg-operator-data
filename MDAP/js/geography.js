@@ -1,6 +1,6 @@
 Geo = {};
 
-/**********initialize map of a tab**********/
+/**********initialize map of one tab**********/
 Geo.initMap = function(tabIndex){
 	$("#view" + tabIndex).css("width",Common.width() - 320);
 	$("#view" + tabIndex).css("height","400px");
@@ -18,7 +18,7 @@ Geo.initMap = function(tabIndex){
 	Common.mapInfoArr[tabIndex] = new Array();
 };
 
-/**********load data of a dataset**********/
+/**********load data of one dataset**********/
 Geo.loadData = function(tabIndex,dsIndex,name,type){
 	Common.mapInfoArr[tabIndex][dsIndex] = new Array();
 	$.getJSON(Common.dvDataUrl().replace("tabType","geo"),{
@@ -53,7 +53,7 @@ Geo.loadData = function(tabIndex,dsIndex,name,type){
 	});
 };
 
-/**********choose a dataset**********/
+/**********choose one dataset**********/
 Geo.clickEvent = function(tabIndex,dsIndex){
 	if($("#checkbox" + tabIndex + "_" + dsIndex).is(":checked") == true){
 		for(var i = 0; i < Common.mapInfoArr[tabIndex][dsIndex].length; i++){
