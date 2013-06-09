@@ -36,12 +36,12 @@ public class Test_User {
 		// System.out.println(response2.getEntity(String.class));
 		// fav添加
 		MultivaluedMap<String, String> param = new MultivaluedMapImpl();
-		param.add("userid", "aa");
+		param.add("userid", "w");
 
-		param.add("favstring", "asd");
+		param.add("language", "0");
 
-		ClientResponse response2 = service.path("rest").path("favp")
-				.path("addfav")
+		ClientResponse response2 = service.path("rest").path("up")
+				.path("setlanguage")
 				// .type(MediaType.APPLICATION_FORM_URLENCODED)
 				.accept(MediaType.APPLICATION_JSON)
 				.post(ClientResponse.class, param);

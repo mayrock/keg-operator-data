@@ -38,7 +38,10 @@ public interface IUserManager {
 	public boolean setNewPassword(String userid, String newpass, String oldpass)
 			throws SQLException, IllegalUserManageException;
 
-	public boolean setLanguage(String userid, String language)
+	public int getLanguage(String userid) throws SQLException,
+			IllegalUserManageException;
+
+	public boolean setLanguage(String userid, int language)
 			throws SQLException, IllegalUserManageException;
 
 	/**

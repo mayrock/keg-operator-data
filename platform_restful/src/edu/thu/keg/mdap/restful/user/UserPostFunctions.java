@@ -75,17 +75,16 @@ public class UserPostFunctions {
 	@POST
 	@Path("/setlanguage")
 	@Produces({ MediaType.APPLICATION_JSON })
-	@Consumes({ MediaType.APPLICATION_JSON })
 	public JSONObject setLanguage(@FormParam("userid") String userid,
-			@FormParam("language") String language) {
+			@FormParam("language") int language) {
 		log.info(uriInfo.getAbsolutePath());
-		JSONObject job = null;
+		JSONObject job = new JSONObject();
+		System.out.print(userid+" "+language);
 		try {
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
 					.getAttribute("managementplatform");
 			IUserManager ium = mp.getUserManager();
 			ium.setLanguage(userid, language);
-			job = new JSONObject();
 			job.put("status", true);
 			System.out
 					.println("变更language:" + userid + " language:" + language);

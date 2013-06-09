@@ -3,6 +3,7 @@ package edu.thu.keg.mdap.restful.dataset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
@@ -103,7 +104,12 @@ public class DsGetFunctions {
 				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
-				dname.setDescription(dataset.getDescription());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+
+				dname.setDescriptionCh(dataset.getDescription(Locale.CHINESE));
+
+				System.out.println(dname.getDescriptionEn());
+				System.out.println(dname.getDescriptionCh());
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
 				for (DataField df : dataset.getKeyFields()) {
@@ -148,7 +154,8 @@ public class DsGetFunctions {
 			for (DataSet dataset : datasets) {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
-				dname.setDescription(dataset.getDescription());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+				dname.setDescriptionCh(dataset.getDescription(Locale.CHINESE));
 				// ArrayList<String> schema = new ArrayList<>();
 				// for (DataField df : dataset.getDataFields()) {
 				// schema.add(df.getName());
@@ -198,7 +205,9 @@ public class DsGetFunctions {
 				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
-				dname.setDescription(dataset.getDescription());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+				dname.setDescriptionCh(dataset.getDescription(Locale.CHINESE));
+
 				ArrayList<String> schema = new ArrayList<>();
 				// for (DataField df : dataset.getDataFields()) {
 				// schema.add(df.getName());
@@ -270,7 +279,7 @@ public class DsGetFunctions {
 				datasetList) {
 		}, jsoncallback);
 	}
-	
+
 	/**
 	 * get the location fields form the dataset
 	 * 
@@ -280,8 +289,7 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getgeods")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getGeoDataset(
-			@QueryParam("dataset") String dataset,
+	public JSONWithPadding getGeoDataset(@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getLocDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
@@ -321,8 +329,7 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getstads")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getStaDataset(
-			@QueryParam("dataset") String dataset,
+	public JSONWithPadding getStaDataset(@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getStaDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
@@ -483,7 +490,8 @@ public class DsGetFunctions {
 				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
-				dname.setDescription(dataset.getDescription());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+				dname.setDescriptionCh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> schema = new ArrayList<>();
 				// for (DataField df : dataset.getAllFields()) {
 				// schema.add(df.getName());
@@ -535,7 +543,8 @@ public class DsGetFunctions {
 				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
-				dname.setDescription(dataset.getDescription());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+				dname.setDescriptionCh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> schema = new ArrayList<>();
 				// for (DataField df : dataset.getAllFields()) {
 				// schema.add(df.getName());
@@ -589,7 +598,8 @@ public class DsGetFunctions {
 				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
-				dname.setDescription(dataset.getDescription());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+				dname.setDescriptionCh(dataset.getDescription(Locale.CHINESE));
 				// ArrayList<String> schema = new ArrayList<>();
 				// for (DataField df : dataset.getAllFields()) {
 				// schema.add(df.getName());
@@ -659,12 +669,10 @@ public class DsGetFunctions {
 		}, jsoncallback);
 	}
 
-
 	@GET
 	@Path("/getdv")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataview(
-			@QueryParam("dataview") String dataview,
+	public JSONWithPadding getDataview(@QueryParam("dataview") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDataset " + dataview + " "
 				+ uriInfo.getAbsolutePath());
@@ -700,6 +708,7 @@ public class DsGetFunctions {
 				datasetList) {
 		}, jsoncallback);
 	}
+
 	/**
 	 * get a column form the dataset
 	 * 
@@ -848,6 +857,7 @@ public class DsGetFunctions {
 		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
 		}, callback);
 	}
+
 	@GET
 	@Path("/hello")
 	@Produces({ MediaType.APPLICATION_JSON })

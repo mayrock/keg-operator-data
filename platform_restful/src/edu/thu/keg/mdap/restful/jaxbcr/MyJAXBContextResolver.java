@@ -27,10 +27,10 @@ import edu.thu.keg.mdap.restful.jerseyclasses.user.JUser;
 public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 
 	private JAXBContext context;
-	private Class<?>[] types = { JSONObject.class, String.class, Object.class,
-			Boolean.class, ArrayList.class, JDatasetName.class, JDataset.class,
-			JGeograph.class, JStatistic.class, JFieldName.class, JColumn.class,
-			Favorite.class, JUser.class };
+	private Class<?>[] types = { JSONObject.class, Integer.class, String.class,
+			Object.class, Boolean.class, ArrayList.class, JDatasetName.class,
+			JDataset.class, JGeograph.class, JStatistic.class,
+			JFieldName.class, JColumn.class, Favorite.class, JUser.class };
 	private static Logger log = Logger.getLogger(MyJAXBContextResolver.class);
 
 	public MyJAXBContextResolver() throws Exception {
@@ -44,7 +44,7 @@ public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 
 		for (Class<?> c : types) {
 			if (c.equals(objectType)) {
-				log.info("用到小弟了");
+				log.info("用到小弟吳超了");
 				return context;
 			}
 		}

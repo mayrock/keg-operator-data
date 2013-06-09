@@ -16,7 +16,6 @@ public class UserManagerImpl implements IUserManager {
 	public static UserManagerImpl instance;
 
 	public static UserManagerImpl getInstance() {
-		System.out.print("instance ");
 		// TODO multi-thread
 		if (instance == null)
 			instance = new UserManagerImpl();
@@ -109,16 +108,33 @@ public class UserManagerImpl implements IUserManager {
 	}
 
 	@Override
-	public boolean setLanguage(String userid, String language)
-			throws SQLException, IllegalUserManageException {
-		String sql = "update [User] set language = ? " + "where userid = ?";
+	public int getLanguage(String userid) throws SQLException,
+			IllegalUserManageException {
+		String sql = "select language " + "from [User] " + "where userid = ?";
 		AbsSqlServerProvider ssp = null;
-		// if (!isFavExsist(userid, favid))
-		// throw new IllegalFavManageException("the favrite already exists!");
+		if (!isUseridExist(userid))
+			throw new IllegalUserManageException("the userid not exists!");
 		ssp = SqlServerProviderImpl.getInstance();
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
 				Statement.RETURN_GENERATED_KEYS);
 		pstmt.setString(1, userid);
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		return rs.getInt(1);
+	}
+
+	@Override
+	public boolean setLanguage(String userid, int language)
+			throws SQLException, IllegalUserManageException {
+		String sql = "update [User] set language = ? " + "where userid = ?";
+		AbsSqlServerProvider ssp = null;
+		if (!isUseridExist(userid))
+			throw new IllegalUserManageException("the favrite already exists!");
+		ssp = SqlServerProviderImpl.getInstance();
+		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql,
+				Statement.RETURN_GENERATED_KEYS);
+		pstmt.setInt(1, language);
+		pstmt.setString(2, userid);
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
 

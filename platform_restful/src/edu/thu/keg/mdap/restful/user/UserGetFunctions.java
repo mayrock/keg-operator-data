@@ -102,4 +102,23 @@ public class UserGetFunctions {
 		}, callback);
 	}
 
+	@GET
+	@Path("/getlanguage")
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public JSONWithPadding getLanguage(@QueryParam("userid") String userid,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
+		log.info(uriInfo.getAbsolutePath());
+		Integer language = 0;
+		try {
+			ManagementPlatform mp = (ManagementPlatform) servletcontext
+					.getAttribute("managementplatform");
+			IUserManager ium = mp.getUserManager();
+			language = ium.getLanguage(userid);
+		} catch (SQLException | IllegalUserManageException e) {
+			log.warn(e.getMessage());
+		}
+		return new JSONWithPadding(new GenericEntity<String>(
+				String.valueOf(language)) {
+		}, callback);
+	}
 }

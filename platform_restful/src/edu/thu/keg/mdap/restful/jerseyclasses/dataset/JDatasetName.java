@@ -13,7 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class JDatasetName {
 	private String datasetName;
-	private String description;
+	private String descriptionEn = "玛胖没有给吴超添加英文介绍";
+	private String descriptionCh = "玛胖没有给吴超添加中文介绍";
 	private List<String> keys;
 	private List<String> values;
 	private List<Class> keytypes;
@@ -27,12 +28,22 @@ public class JDatasetName {
 		return this.datasetName;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescriptionEn(String descriptionEn) {
+		if (descriptionEn == null)
+			return;
+		this.descriptionEn = descriptionEn;
 	}
 
-	public String getDescription() {
-		return this.description;
+	public String getDescriptionEn() {
+		return this.descriptionEn;
+	}
+
+	public void setDescriptionCh(String descriptionCh) {
+		this.descriptionCh = descriptionCh;
+	}
+
+	public String getDescriptionCh() {
+		return this.descriptionCh;
 	}
 
 	public void setKeys(List<String> keys) {
