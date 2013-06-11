@@ -87,6 +87,11 @@ Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 			function(){$(this).attr("src","css/images/close_hover.png");},
 			function(){$(this).attr("src","css/images/close.png");}
 		);
+	if($("#view" + tabIndex).height() > 400){
+		$("#view_bg" + tabIndex).css({
+			"height": $("#view" + tabIndex).height()
+		});
+	}
 	Common.footer();
 	Sta.showChart(tabIndex,dsIndex,chartIndex,"chartContainer");
 };
@@ -111,6 +116,11 @@ Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
 	l = Common.chartIndex[tabIndex][dsIndex].length;
 	if(l == 1){
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("display","none");
+	}
+	if($("#view" + tabIndex).height() <= 400){
+		$("#view_bg" + tabIndex).css({
+			"height": "400px"
+		});
 	}
 	Common.footer();
 };
@@ -211,7 +221,7 @@ Sta.closeFrame = function(tabIndex,dsIndex,chartIndex){
 /**********show one chart**********/
 Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
-		var des = data[dsIndex].description;
+		var des = data[dsIndex].descriptionCh;
 		var name = data[dsIndex].datasetName;
 		var values = data[dsIndex].values;
 		var len = values.length;

@@ -16,6 +16,7 @@ Tab.createFrame = function(tabType){
 		return;
 	}
 	Common.tabIndex[length + 1] = tabIndex + 1;
+	Common.header();
 	li = document.createElement("li");
 	li.setAttribute("id","tabs_li" + tabIndex);
 	$(li).appendTo("#tabs_ul");
@@ -40,6 +41,10 @@ Tab.createFrame = function(tabType){
 	$(view).appendTo(tab);
 	if(tabType == "sta"){
 		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
+		view_bg = document.createElement("div");
+		view_bg.setAttribute("id","view_bg" + tabIndex);
+		view_bg.setAttribute("class","view_bg");
+		$(view_bg).appendTo(tab);
 	}
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo(li)
@@ -77,7 +82,7 @@ Tab.load = function(tabType,tabIndex){
 		$.getJSON(Common.dataViewUrl().replace("tabType",tabType),function(data){
 			var len = data.length;
 			for(var i = 0; i < len; i++){
-				var des = data[i].description;
+				var des = data[i].descriptionCh;
 				var name = data[i].datasetName;
 				var keys = data[i].keys;
 				var type = "points";
@@ -107,9 +112,12 @@ Tab.load = function(tabType,tabIndex){
 				Common.chartIndex[tabIndex][i][0] = 0;
 				Common.chartType[tabIndex][i] = new Array();
 				Common.yAxis[tabIndex][i] = new Array();
-				var des = data[i].description;
-				$("<span>&nbsp;</span><img src = 'css/images/add.png'/><span>&nbsp;</span><a href = 'javascript:void(0);' " +
-					"onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a><br/>").appendTo("#option" + tabIndex);
+				var des = data[i].descriptionCh;
+				div = document.createElement("div");
+				div.setAttribute("class","dataset");
+				$(div).appendTo("#option" + tabIndex);
+				$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" +
+					"<img src = 'css/images/add.png'/><span>&nbsp;</span>" + des + "</a>").appendTo(div);
 				view_ds = document.createElement("div");
 				view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
 				view_ds.setAttribute("class","view_ds");
@@ -117,6 +125,14 @@ Tab.load = function(tabType,tabIndex){
 				$("<div id = 'special" + tabIndex + "_" + i + "' style = 'clear:both;'></div>").appendTo(view_ds);
 				$(view_ds).css("display","none");
 			}
+			$("#view" + tabIndex).css({
+				"left": $("#option" + tabIndex).width() + 40
+			});
+			$("#view_bg" + tabIndex).css({
+				"width": Common.width() - 340,
+				"height": "400px",
+				"left": $("#option" + tabIndex).width() + 40
+			});
 		}).error(function(){
 			alert("Oops, we got an error...");
 			return;
@@ -131,6 +147,7 @@ Tab.close = function(tabType,tabIndex){
 	$("#tabs_li" + tabIndex).remove();
 	$("#tab" + tabIndex).remove();
 	Common.tabIndex.splice(tabIndex,1);
+	Common.header();
 	$("#tabs").tabs("refresh");
 };
 
@@ -143,7 +160,7 @@ Tab.refresh = function(tabIndex){
 		google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
 		function drawChart(){
 			for(var i = 0; i < len; i++){
-				var des = data[i].description;
+				var des = data[i].descriptionCh;
 				$("<span>&nbsp;</span><img src = 'css/images/add.png'/><span>&nbsp;</span><a href = 'javascript:void(0);' " +
 					"onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a><br/>").appendTo("#option" + tabIndex);
 				view_ds = document.createElement("div");

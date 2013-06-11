@@ -1,6 +1,6 @@
 User = {};
 
-User.height = function(){return 240;};
+User.height = function(){return 210;};
 User.width = function(){return 360;};
 User.tableWidth = function(){return 320;};
 
@@ -105,15 +105,15 @@ User.upperRightMenu = function(status,info){
 	var htmlString = "";
 	if(status == "login"){
 		var username = Common.username;
-		htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
+		htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>|" +
 			"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">" + Lan.create[index] +
-			"<img src = 'css/images/down_arrow.png'/></a>" +
+			"<img src = 'css/images/down_arrow.png'/></a>|" +
 			"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
-			"<img src = 'css/images/down_arrow.png'/></a>" +
-			"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>";
+			"<img src = 'css/images/down_arrow.png'/></a>|" +
+			"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>|";
 		Fav.loadDownList();
 	}else if(status == "logout"){
-		htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">" + Lan.register[index] + "/" + Lan.login[index] + "</a>";
+		htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">" + Lan.register[index] + "/" + Lan.login[index] + "</a>|";
 		if(info == "clear"){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});

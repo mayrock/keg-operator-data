@@ -1,3 +1,18 @@
+a{
+	text-decoration: none;/*添加到文本的修饰*/
+}
+
+/*a:link 未访问的链接
+a:visited 已访问的链接
+a:hover 鼠标悬停在链接上*/
+a:link,a:visited{
+	color: #000000;
+}
+
+a:hover{
+	color: #008000;/*#008000: green*/
+}
+
 /*#: id选择器*/
 #user{
 	text-align: center;/*文本的水平对齐方式*/
@@ -10,15 +25,17 @@
 }
 
 #lanOption{
-	position: absolute;
-	right: 10px;
+	float: right;
+	margin-right: 10px;
+	height: 25px;
 	text-align: center;
 }
 
 #upperRightMenu{
-	position: absolute;
-	top: 20px;
-	right: 10px;
+	float: right;
+	margin-right: 5px;
+	height: 25px;
+	position: relative;
 	text-align: center;
 	font-family: Times New Roman;
 	z-index: 100;/*z-index:	元素的堆叠顺序,拥有更高堆叠顺序的元素总是会处于堆叠顺序较低的元素的前面;z-index仅能在定位元素上奏效(e.g. position:absolute)*/
@@ -41,11 +58,13 @@
 }
 
 #header{
-	vertical-align: top;/*垂直对齐方式	top: 把元素的顶端与行中最高元素的顶端对齐*/
+	float: left;
+	width: 100%;
 	font-family: Times New Roman;
-	padding-bottom : 5px;
-	padding-left : 10px;
-	padding-right : 10px;
+	background-image: url(images/world_842x178.png),url(images/city_854x252.png),url(images/pie_187x201.png),
+		url(images/line_255x179.png),url(images/column_295x181.png),url(images/background.jpg);
+	background-repeat: no-repeat;
+	background-size: contain,contain,contain,contain,contain,cover;
 }
 
 #footer{
@@ -61,20 +80,33 @@
 
 /*.: class选择器*/
 .title{
+	margin-left: 20px;
 	font-style: italic;/*字体样式	italic: 斜体*/
 	font-weight: bold;/*字体粗细*/
-	font-size : 36px;/*字体大小*/
-	color : #8B0000;/*#8B0000: darkred*/
+	font-size: 36px;/*字体大小*/
+	color: #8B0000;/*#8B0000: darkred*/
 }
 
 .option{
 	position: absolute;/*父div的position是一定要指定的,不然子div的position: absolute就会相对于整个文档定位了,而不是相对于父div定位*/
 	left: 20px;
 	height: 400px;
-	width: 175px;
-	border: 1px solid #000000;/*#000000: black*/
 	font-size: 16px;
 	font-family: Times New Roman;
+	background-image: url(images/background.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.dataset{
+	border-bottom: 1px solid white;
+	padding: 5px;
+	background-color: gray;
+}
+
+.dataset a{
+	color: white;
+	text-decoration: none;
 }
 
 .select{
@@ -87,17 +119,23 @@
 
 .view{
 	position: absolute;
-	left: 200px;
-	border: 1px solid #8B0000;
 	text-align: center;
 	font-family: Times New Roman;
 	font-size: 16px;
+	z-index: 10;
+}
+
+.view_bg{
+	position: absolute;
+	background-image: url(images/background.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .view_ds{
 	border: 1px solid #808080;/*#808080: gray*/
 	height: 246px;
-	margin: 2px;
+	margin-bottom: 2px;
 }
 
 .view_chart{
@@ -107,6 +145,7 @@
 	width: 300px;
 	margin: 2px;
 	border: 1px solid #8B0000;
+	background-color: white;
 }
 
 .chartContainer{
@@ -121,19 +160,4 @@
 	font-size: 16px;
 	font-family: Times New Roman;
 	text-align: center;
-}
-
-a{
-	text-decoration: underline;/*添加到文本的修饰*/
-}
-
-/*a:link 未访问的链接
-a:visited 已访问的链接
-a:hover 鼠标悬停在链接上*/
-a:link,a:visited{
-	color: #000000;
-}
-
-a:hover{
-	color: #008000;/*#008000: green*/
 }

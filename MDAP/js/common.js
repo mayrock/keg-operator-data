@@ -12,9 +12,9 @@ Common.language = new Object;
 
 Common.ip = function(){
 	/**********aplha**********/
-//	return "http://10.1.1.55:8080/keg2/rest/";
+	return "http://10.1.1.55:8080/keg2/rest/";
 	/**********release**********/
-	return "http://10.1.1.55:8080/keg/rest/";
+//	return "http://10.1.1.55:8080/keg/rest/";
 };
 
 /**********post**********/
@@ -51,6 +51,7 @@ Common.init = function(){
 	});
 	Common.footer();
 	Common.tabIndex[0] = 0;
+	Common.header();
 	$("#tabs").tabs();
 };
 
@@ -106,6 +107,27 @@ Common.load = function(){
 	$("#header").empty();
 	$("<span class = 'title'>" + Lan.title[index] + "</span>").appendTo("#header");
 };
+
+/**********initialize css of header**********/
+Common.header = function(){
+	if(Common.tabIndex.length == 1){
+		$("#header").css({
+			"height": "100px",
+			"background-position": "0 0,473px 0,812px 0px,905px 0,1047px 0,1210px 0"//(width:100)473 339 93 142 163
+		});
+		$(".ui-tabs").css({
+			"height": 0
+		});
+	}else{
+		$("#header").css({
+			"height": "65px",
+			"background-position": "0 0,307.5px 0,527.5px 0,588px 0,680.5px 0,786.5px 0"//(width:65)307.5 220 60.5 92.5 106
+		});
+		$(".ui-tabs").css({
+			"height": "35px"
+		});
+	}
+}
 
 /**********initialize css of footer**********/
 Common.footer = function(){
