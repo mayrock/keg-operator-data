@@ -74,6 +74,8 @@ User.load = function(){
 	
 	if(($.cookie("username") != null) && ($.cookie("password") != null)){
 		User.upperRightMenu("login","");
+	}else if(Common.username != ""){
+		User.upperRightMenu("login","");
 	}else{
 		User.upperRightMenu("logout","");
 	}
@@ -111,19 +113,21 @@ User.upperRightMenu = function(status,info){
 			"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
 			"<img src = 'css/images/down_arrow.png'/></a>|" +
 			"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>|";
+		$("#userInfo").html(htmlString);
 		Fav.loadDownList();
 	}else if(status == "logout"){
-		htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">" + Lan.register[index] + "/" + Lan.login[index] + "</a>|";
 		if(info == "clear"){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});
-			$.removeCookie("language",{path: "/"});
+			Common.username = "";
 			Lan.init();
+		}else{
+			htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">" + Lan.register[index] + "/" + Lan.login[index] + "</a>|";
+			$("#userInfo").html(htmlString);
 		}
 	}else{
 		/**********need to do**********/
 	}
-	$("#userInfo").html(htmlString);
 };
 
 /**********register**********/
@@ -191,7 +195,6 @@ User.login = function(){
 				$.cookie("password",password,{expires: 7,path: "/"});
 			}
 			Common.username = username;
-			User.upperRightMenu("login","");
 			User.closeFrame();
 			$.getJSON(Common.getLanUrl(),{
 				userid: username

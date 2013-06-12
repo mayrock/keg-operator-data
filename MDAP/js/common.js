@@ -7,8 +7,8 @@ Common = {};
 Common.height = function(){return $(document).height();};
 Common.width = function(){return $(document).width();};
 
-Common.username = new Object;
-Common.language = new Object;
+Common.username = "";
+Common.language = "";
 
 Common.ip = function(){
 	/**********aplha**********/
@@ -49,6 +49,9 @@ Common.init = function(){
 		"height": Common.height(),
 		"width": Common.width()
 	});
+	Common.clearChart_bg();
+	Common.clearFooter();
+	Common.chart_bg();
 	Common.footer();
 	Common.tabIndex[0] = 0;
 	Common.header();
@@ -128,6 +131,20 @@ Common.header = function(){
 		});
 	}
 }
+
+Common.chart_bg = function(){
+	$("#chart_bg").css({
+		"height": Common.height() - 135,
+		"background-image": "url(css/images/background.jpg)",
+		"background-size": "cover"
+	});
+};
+
+Common.clearChart_bg = function(){
+	$("#chart_bg").css({
+		"height": 0
+	});
+};
 
 /**********initialize css of footer**********/
 Common.footer = function(){

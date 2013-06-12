@@ -87,17 +87,16 @@ Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 			function(){$(this).attr("src","css/images/close_hover.png");},
 			function(){$(this).attr("src","css/images/close.png");}
 		);
-	if($("#view" + tabIndex).height() > 400){
-		$("#view_bg" + tabIndex).css({
-			"height": $("#view" + tabIndex).height()
-		});
-	}
+	Common.clearChart_bg();
+	Common.clearFooter();
+	Common.chart_bg();
 	Common.footer();
 	Sta.showChart(tabIndex,dsIndex,chartIndex,"chartContainer");
 };
 
 /**********close one chart container**********/
 Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
+	Common.clearChart_bg();
 	Common.clearFooter();
 	var l = Common.chartIndex[tabIndex][dsIndex].length;
 	for(var i = 0; i < l - 1; i++){
@@ -117,11 +116,7 @@ Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
 	if(l == 1){
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("display","none");
 	}
-	if($("#view" + tabIndex).height() <= 400){
-		$("#view_bg" + tabIndex).css({
-			"height": "400px"
-		});
-	}
+	Common.chart_bg();
 	Common.footer();
 };
 

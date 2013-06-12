@@ -41,10 +41,10 @@ Tab.createFrame = function(tabType){
 	$(view).appendTo(tab);
 	if(tabType == "sta"){
 		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
-		view_bg = document.createElement("div");
-		view_bg.setAttribute("id","view_bg" + tabIndex);
-		view_bg.setAttribute("class","view_bg");
-		$(view_bg).appendTo(tab);
+		Common.clearChart_bg();
+		Common.clearFooter();
+		Common.chart_bg();
+		Common.footer();
 	}
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo(li)
@@ -128,11 +128,6 @@ Tab.load = function(tabType,tabIndex){
 			$("#view" + tabIndex).css({
 				"left": $("#option" + tabIndex).width() + 40
 			});
-			$("#view_bg" + tabIndex).css({
-				"width": Common.width() - 340,
-				"height": "400px",
-				"left": $("#option" + tabIndex).width() + 40
-			});
 		}).error(function(){
 			alert("Oops, we got an error...");
 			return;
@@ -146,9 +141,14 @@ Tab.load = function(tabType,tabIndex){
 Tab.close = function(tabType,tabIndex){
 	$("#tabs_li" + tabIndex).remove();
 	$("#tab" + tabIndex).remove();
+	$("#view_bg" + tabIndex).remove();
 	Common.tabIndex.splice(tabIndex,1);
 	Common.header();
 	$("#tabs").tabs("refresh");
+	Common.clearChart_bg();
+	Common.clearFooter();
+	Common.chart_bg();
+	Common.footer();
 };
 
 /**********refresh one tab**********/

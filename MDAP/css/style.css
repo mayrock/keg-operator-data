@@ -67,6 +67,12 @@ a:hover{
 	background-size: contain,contain,contain,contain,contain,cover;
 }
 
+#chart_bg{
+	float: left;
+	width: 100%;
+	background-repeat: no-repeat;
+}
+
 #footer{
 	position: absolute;
 	float: left;
@@ -93,9 +99,6 @@ a:hover{
 	height: 400px;
 	font-size: 16px;
 	font-family: Times New Roman;
-	background-image: url(images/background.jpg);
-	background-repeat: no-repeat;
-	background-size: cover;
 }
 
 .dataset{
@@ -123,13 +126,6 @@ a:hover{
 	font-family: Times New Roman;
 	font-size: 16px;
 	z-index: 10;
-}
-
-.view_bg{
-	position: absolute;
-	background-image: url(images/background.jpg);
-	background-repeat: no-repeat;
-	background-size: cover;
 }
 
 .view_ds{
