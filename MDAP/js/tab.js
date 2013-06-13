@@ -41,10 +41,6 @@ Tab.createFrame = function(tabType){
 	$(view).appendTo(tab);
 	if(tabType == "sta"){
 		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
-		Common.clearChart_bg();
-		Common.clearFooter();
-		Common.chart_bg();
-		Common.footer();
 	}
 	$("<img src = 'css/images/close.png'/>")
 		.appendTo(li)
@@ -81,6 +77,9 @@ Tab.load = function(tabType,tabIndex){
 		$(select).appendTo("#option" + tabIndex);
 		$.getJSON(Common.dataViewUrl().replace("tabType",tabType),function(data){
 			var len = data.length;
+			if(len == 0){
+				return;
+			}
 			for(var i = 0; i < len; i++){
 				var des = data[i].descriptionCh;
 				var name = data[i].datasetName;
@@ -141,14 +140,9 @@ Tab.load = function(tabType,tabIndex){
 Tab.close = function(tabType,tabIndex){
 	$("#tabs_li" + tabIndex).remove();
 	$("#tab" + tabIndex).remove();
-	$("#view_bg" + tabIndex).remove();
 	Common.tabIndex.splice(tabIndex,1);
 	Common.header();
 	$("#tabs").tabs("refresh");
-	Common.clearChart_bg();
-	Common.clearFooter();
-	Common.chart_bg();
-	Common.footer();
 };
 
 /**********refresh one tab**********/

@@ -55,7 +55,14 @@ Common.init = function(){
 	Common.footer();
 	Common.tabIndex[0] = 0;
 	Common.header();
-	$("#tabs").tabs();
+	$("#tabs").tabs({
+		activate: function(event,ui){
+			Common.clearChart_bg();
+			Common.clearFooter();
+			Common.chart_bg();
+			Common.footer();
+		}
+	});
 };
 
 /**********load page in the form of the language you set**********/
@@ -134,7 +141,7 @@ Common.header = function(){
 
 Common.chart_bg = function(){
 	$("#chart_bg").css({
-		"height": Common.height() - 135,
+		"height": Common.height() - 125,
 		"background-image": "url(css/images/background.jpg)",
 		"background-size": "cover"
 	});

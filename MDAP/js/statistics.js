@@ -108,9 +108,11 @@ Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
 	}
 	Common.chartIndex[tabIndex][dsIndex].splice(index,1);
 	$("#view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex).remove();
-	if($("#view_ds" + tabIndex + "_" + dsIndex).width() <= (Common.width() - 345)){
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("width","auto");
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","visible");
+	$("#view_ds" + tabIndex + "_" + dsIndex).css("width","auto");
+	$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","visible");
+	if($("#view_ds" + tabIndex + "_" + dsIndex).width() > (Common.width() - 345)){
+		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - 345);
+		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","auto");
 	}
 	l = Common.chartIndex[tabIndex][dsIndex].length;
 	if(l == 1){
