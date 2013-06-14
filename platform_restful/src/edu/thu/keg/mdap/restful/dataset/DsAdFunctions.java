@@ -1,5 +1,8 @@
 package edu.thu.keg.mdap.restful.dataset;
 
+import java.io.IOException;
+
+import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -19,11 +22,16 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import edu.thu.keg.mdap.Platform;
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
+import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.DataField;
+import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
+import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.provider.DataProvider;
+import edu.thu.keg.mdap.provider.DataProviderException;
 
 /**
  * the functions of dataset's administrator operations
@@ -100,12 +108,45 @@ public class DsAdFunctions {
 			}
 			p.getDataSetManager().createDataSet(dataset, owner, description,
 					provider, loadable, fields);
-
-		} catch (JSONException e) {
+			p.getDataSetManager().saveChanges();
+		} catch (JSONException | IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 		return Response.created(uriInfo.getAbsolutePath()).build();
 	}
 
+	@POST
+	@Path("/adddv")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public Response createDataview(@FormParam("dataset") String dataset,
+			@FormParam("dataview") String dataview,
+			@FormParam("description") String description,
+			@FormParam("datafeaturetype") String datafuturetype,
+			@FormParam("key") String key, @FormParam("values") String[] values) {
+		log.info(uriInfo.getAbsolutePath());
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataView dv = null;
+			DataSet ds = null;
+			DataField[] vs = null;
+			Query q = null;
+
+			ds = p.getDataSetManager().getDataSet(dataset);
+			vs = new DataField[values.length];
+			for (int i = 0; i < vs.length; i++) {
+				vs[i] = ds.getField(values[i]);
+			}
+			q = ds.getQuery().select();
+			dv = p.getDataSetManager().defineView(dataview, description,
+					DataFeatureType.ValueFeature, q, ds.getField(key), vs);
+			p.getDataSetManager().saveChanges();
+		} catch (OperationNotSupportedException | DataProviderException
+				| IOException e) {
+			// TODO Auto-generated catch block
+			log.warn(e.getMessage());
+		}
+		return Response.created(uriInfo.getAbsolutePath()).build();
+	}
 }
