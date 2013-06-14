@@ -26,6 +26,18 @@ Fav.createFrame = function(tabIndex){
 	Fav.init();
 	$("<span>Input a name:</span><br/><input type = 'text' value = 'my favorite' id = 'favName' maxlength = '16'/><br/>" +
 		"<input type = 'button' value = 'confirm' onclick = \"Fav.saveSta(" + tabIndex + ");\"/>").appendTo("#favInfo");
+	$("<img src = 'css/images/close.png'/>")
+		.appendTo("#favInfo")
+		.css({
+			"position": "absolute",
+			"top": "5px",
+			"right": "5px"
+		}).hover(
+			function(){$(this).attr("src","css/images/close_hover.png");},
+			function(){$(this).attr("src","css/images/close.png");}
+		).click(
+			function(){Fav.closeFrame();}
+		);
 	$("#background").css("display","block");
 	$("#favInfo").css("display","block");
 };

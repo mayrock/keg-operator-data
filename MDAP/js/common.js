@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	alert("Version Test Environment: Chrome27");
 	Lan.init();
 });
 
@@ -31,8 +32,8 @@ Common.favListUrl = function(){return Common.ip() + "favg/getfavs?jsoncallback=?
 Common.favDataUrl = function(){return Common.ip() + "favg/getfav?jsoncallback=?";};
 Common.getLanUrl = function(){return Common.ip() + "ug/getlanguage?jsoncallback=?"};
 
-Common.tabIndex = new Array();
 Common.tabLimit = function(){return 7;};
+Common.tabIndex = new Array();
 
 Common.mapArr = new Array();
 Common.mapInfoArr = new Array();
@@ -44,15 +45,15 @@ Common.yAxis = new Array();
 /**********initialize page after set language**********/
 Common.init = function(){
 	Common.load();
+	Common.clearChart_bg();
+	Common.clearFooter();
+	Common.chart_bg();
+	Common.footer();
 	$("#main").css({
 		"position": "absolute",
 		"height": Common.height(),
 		"width": Common.width()
 	});
-	Common.clearChart_bg();
-	Common.clearFooter();
-	Common.chart_bg();
-	Common.footer();
 	Common.tabIndex[0] = 0;
 	Common.header();
 	$("#tabs").tabs({

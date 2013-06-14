@@ -55,6 +55,11 @@ Lan.change = function(index,country){
 	if(index == country){
 		return;
 	}
+	if(username == ""){
+		Common.language = country;
+		Common.load();
+		return;
+	}
 	$.post(Common.setLanUrl(),{
 		userid: username,
 		language: country

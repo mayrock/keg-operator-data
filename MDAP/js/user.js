@@ -120,6 +120,19 @@ User.upperRightMenu = function(status,info){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});
 			Common.username = "";
+			$("#tabsShell").empty();
+			tabs = document.createElement("div");
+			tabs.setAttribute("id","tabs");
+			$(tabs).appendTo("#tabsShell");
+			tabs_ul = document.createElement("ul");
+			tabs_ul.setAttribute("id","tabs_ul");
+			$(tabs_ul).appendTo(tabs);
+			Common.tabIndex = new Array();
+			Common.mapArr = new Array();
+			Common.mapInfoArr = new Array();
+			Common.chartIndex = new Array();
+			Common.chartType = new Array();
+			Common.yAxis = new Array();
 			Lan.init();
 		}else{
 			htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">" + Lan.register[index] + "/" + Lan.login[index] + "</a>|";
