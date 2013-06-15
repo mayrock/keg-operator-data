@@ -1,57 +1,33 @@
 Fav = {};
 
-Fav.height = function(){return 100;};
-Fav.weight = function(){return 300;};
-
-/**********initialize css of add favorite window**********/
-Fav.init = function(){
-	$("#favInfo").css({
-		"position": "absolute",
-		"margin-top": (Common.height() - Fav.height()) / 2,
-		"margin-right": (Common.width() - Fav.weight()) / 2,
-		"margin-bottom": (Common.height() - Fav.height()) / 2,
-		"margin-left": (Common.width() - Fav.weight()) / 2,
-		"border": "1px solid #000000",
-		"height": Fav.height(),
-		"width": Fav.weight(),
-		"z-index": "1000",
-		"background-color": "white",
-		"display": "none"
-	});
-};
-
-/**********open add favorite window**********/
+/*****open add favorite window*****/
 Fav.createFrame = function(tabIndex){
 	Common.background();
-	Fav.init();
+	Common.favInfo();
 	$("<span>Input a name:</span><br/><input type = 'text' value = 'my favorite' id = 'favName' maxlength = '16'/><br/>" +
 		"<input type = 'button' value = 'confirm' onclick = \"Fav.saveSta(" + tabIndex + ");\"/>").appendTo("#favInfo");
-	$("<img src = 'css/images/close.png'/>")
+	$("<img src = 'css/images/close_256x256.png' onclick = \"Fav.closeFrame();\"/>")
 		.appendTo("#favInfo")
 		.css({
 			"position": "absolute",
 			"top": "5px",
-			"right": "5px"
-		}).hover(
-			function(){$(this).attr("src","css/images/close_hover.png");},
-			function(){$(this).attr("src","css/images/close.png");}
-		).click(
-			function(){Fav.closeFrame();}
-		);
+			"right": "5px",
+			"width": "16px"
+		});
 	$("#background").css("display","block");
 	$("#favInfo").css("display","block");
 };
 
-/**********close window**********/
+/*****close window*****/
 Fav.closeFrame = function(){
 	$("#favInfo").empty();
 	$("#background").css("display","none");
 	$("#favInfo").css("display","none");
 };
 
-/**********save one sta tab**********/
+/*****save one sta tab*****/
 Fav.saveSta = function(tabIndex){
-	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
 		var len = data.length;
 		var datasetData = JSON.parse("[]");
 		for(var i = 0; i < len; i++){
@@ -68,23 +44,23 @@ Fav.saveSta = function(tabIndex){
 				for(var k = 0; k < yAxisLen; k++){
 					yAxisData[k] = Common.yAxis[tabIndex][i][chartIndex][k];
 				}
-				/**********chart type and yAxis array make up a chart**********/
+				/*****chart type and yAxis array make up a chart*****/
 				var cData = JSON.parse("{}");
 				cData.type = Common.chartType[tabIndex][i][chartIndex];
 				cData.yAxis = yAxisData;
-				/**********chart array**********/
+				/*****chart array*****/
 				var chartLen = chartData.length;
 				chartData.splice(chartLen,0,cData);
 			}
-			/**********dataset name and chart array make up a dataset**********/
+			/*****dataset name and chart array make up a dataset*****/
 			var dsData = JSON.parse("{}");
 			dsData.name = name;
 			dsData.chart = chartData;
-			/**********dataset array**********/
+			/*****dataset array*****/
 			var dsLen = datasetData.length;
 			datasetData.splice(dsLen,0,dsData);
 		}
-		/**********tab name and dataset array make up a tab**********/
+		/*****tab name and dataset array make up a tab*****/
 		var tabData = JSON.parse("{}");
 		var tabName = $("#favName").val();
 		tabData.name = tabName;
@@ -102,7 +78,7 @@ Fav.saveSta = function(tabIndex){
 				alert("Oops, we got an error...");
 				return;
 			}else{
-				/**********need to do**********/
+				/*****need to do*****/
 			}
 		},"json").error(function(){
 			alert("Oops, we got an error...");
@@ -113,7 +89,7 @@ Fav.saveSta = function(tabIndex){
 	});
 };
 
-/**********load drop-down list of favorite**********/
+/*****load drop-down list of favorite*****/
 Fav.loadDownList = function(){
 	$("#extendedFav").empty();
 	var username = Common.username;
@@ -133,29 +109,25 @@ Fav.loadDownList = function(){
 	});
 };
 
-/**********add one favorite to drop-down list**********/
+/*****add one favorite to drop-down list*****/
 Fav.addDownList = function(favid,favname){
 	var username = Common.username;
-	div = document.createElement("div");
-	div.setAttribute("id",favid);
-	$(div).appendTo("#extendedFav");
+	fav = document.createElement("div");
+	fav.setAttribute("id",favid);
+	$(fav).appendTo("#extendedFav");
 	staFav = document.createElement("a");
 	$(staFav).attr("href","javascript:void(0);");
 	$(staFav).attr("onClick","Fav.revertSta(" + favid + ");");
 	staFav.innerHTML = favname;
-	$(staFav).appendTo(div);
-	$("<img src = 'css/images/close.png' onClick = \"Fav.delSta(" + favid + ");\"/>")
-		.appendTo(div)
-		.hover(
-			function(){
-				$(this).attr("src","css/images/close_hover.png");
-			},function(){
-				$(this).attr("src","css/images/close.png");
-			}
-		);
+	$(staFav).appendTo(fav);
+	$("<img src = 'css/images/close_256x256.png' onClick = \"Fav.delSta(" + favid + ");\"/>")
+		.appendTo(fav)
+		.css({
+			"width": "16px"
+		});
 };
 
-/**********revert one saved favorite**********/
+/*****revert one saved favorite*****/
 Fav.revertSta = function(favid){
 	var username = Common.username;
 	Tab.createFrame("sta");
@@ -168,7 +140,7 @@ Fav.revertSta = function(favid){
 		var tabData = JSON.parse(data.favstring);
 		var datasetData = tabData.dataset;
 		var dsLen = datasetData.length;
-		$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
+		$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
 			var len = data.length;
 			google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
 			
@@ -212,7 +184,7 @@ Fav.revertSta = function(favid){
 	});
 };
 
-/**********delete one favorite from drop-down list**********/
+/*****delete one favorite from drop-down list*****/
 Fav.delSta = function(favid){
 	var username = Common.username;
 	$.post(Common.delFavUrl(),{
@@ -221,11 +193,9 @@ Fav.delSta = function(favid){
 	},function(data){
 		if(data.status == true){
 			$("#" + favid).remove();
-		}else if(data.status == false){
+		}else{
 			alert("Oops, we got an error...");
 			return;
-		}else{
-			/**********need to do**********/
 		}
 	},"json").error(function(){
 		alert("Oops, we got an error...");

@@ -1,44 +1,9 @@
 Sta = {};
 
-Sta.lcHeight = function(){return 480;};
-Sta.lcWidth = function(){return 800;};
-Sta.lcCntrWidth = function(){return 600;};
-
-/**********initialize css of magnified chart window**********/
-Sta.init = function(){
-	$("#largeChart").css({
-		"position": "absolute",
-		"margin-top": (Common.height() - Sta.lcHeight()) / 2,
-		"margin-right": (Common.width() - Sta.lcWidth()) / 2,
-		"margin-bottom": (Common.height() - Sta.lcHeight()) / 2,
-		"margin-left": (Common.width() - Sta.lcWidth()) / 2,
-		"border": "1px solid #000000",
-		"height": Sta.lcHeight(),
-		"width": Sta.lcWidth(),
-		"z-index": "1000",
-		"background-color": "white",
-		"display": "none"
-	});
-	$("#lcContainer").css({
-		"position": "absolute",
-		"top": 0,
-		"left": 0,
-		"height": Sta.lcHeight(),
-		"width": Sta.lcCntrWidth()
-	});
-	$("#lcCheckbox").css({
-		"position": "absolute",
-		"right": 0,
-		"bottom": 0,
-		"height": Sta.lcHeight() - 40,
-		"width": Sta.lcWidth() - Sta.lcCntrWidth()
-	});
-};
-
-/**********initialize chartType and yAxis of a chart**********/
+/*****initialize chartType and yAxis of a chart*****/
 Sta.guide = function(tabIndex,dsIndex){
-	/**********Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.**********/
-	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
+	/*****Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.*****/
+	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
 		var values = data[dsIndex].values;
 		var len = values.length;
 		var l = Common.chartIndex[tabIndex][dsIndex].length;
@@ -61,7 +26,7 @@ Sta.guide = function(tabIndex,dsIndex){
 	});
 };
 
-/**********create one chart container of one dataset**********/
+/*****create one chart container*****/
 Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 	view_chart = document.createElement("div");
 	view_chart.setAttribute("id","view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex);
@@ -69,35 +34,34 @@ Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 	$(view_chart).appendTo("#view_ds" + tabIndex + "_" + dsIndex);
 	$("#special" + tabIndex + "_" + dsIndex).remove();
 	$("<div id = 'special" + tabIndex + "_" + dsIndex + "' style = 'clear:both;'></div>").appendTo("#view_ds" + tabIndex + "_" + dsIndex);
-	if($("#view_ds" + tabIndex + "_" + dsIndex).width() > (Common.width() - 345)){
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - 345);
+	var optionWidth = $("#option" + tabIndex).width() + 80;
+	if($("#view_ds" + tabIndex + "_" + dsIndex).width() > (Common.width() - optionWidth)){
+		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - optionWidth);
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","auto");
 	}
 	chartContainer = document.createElement("div");
 	chartContainer.setAttribute("id","chartContainer" + tabIndex + "_" + dsIndex + "_" + chartIndex);
 	chartContainer.setAttribute("class","chartContainer");
 	$(chartContainer).appendTo(view_chart);
-	$("<img src = 'css/images/close.png' onclick = \"Sta.closeChart(" + tabIndex + "," + dsIndex + "," + chartIndex + ");\"/>")
+	$("<img src = 'css/images/close_256x256.png' onclick = \"Sta.closeChart(" + tabIndex + "," + dsIndex + "," + chartIndex + ");\"/>")
 		.appendTo("#view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex)
 		.css({
 			"position": "absolute",
 			"top": "5px",
-			"right": "5px"
-		}).hover(
-			function(){$(this).attr("src","css/images/close_hover.png");},
-			function(){$(this).attr("src","css/images/close.png");}
-		);
-	Common.clearChart_bg();
-	Common.clearFooter();
-	Common.chart_bg();
-	Common.footer();
+			"right": "5px",
+			"width": "16px"
+		});
+	var viewHeight = $("#view" + tabIndex).height();
+	if((viewHeight + 25) > Common.tabHeight){
+		$("#tab_bg").css({
+			"height": viewHeight + 25
+		});
+	}
 	Sta.showChart(tabIndex,dsIndex,chartIndex,"chartContainer");
 };
 
-/**********close one chart container**********/
+/*****close one chart container*****/
 Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
-	Common.clearChart_bg();
-	Common.clearFooter();
 	var l = Common.chartIndex[tabIndex][dsIndex].length;
 	for(var i = 0; i < l - 1; i++){
 		temp = Common.chartIndex[tabIndex][dsIndex][i];
@@ -110,25 +74,34 @@ Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
 	$("#view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex).remove();
 	$("#view_ds" + tabIndex + "_" + dsIndex).css("width","auto");
 	$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","visible");
-	if($("#view_ds" + tabIndex + "_" + dsIndex).width() > (Common.width() - 345)){
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - 345);
+	var optionWidth = $("#option" + tabIndex).width() + 80;
+	if($("#view_ds" + tabIndex + "_" + dsIndex).width() > (Common.width() - optionWidth)){
+		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - optionWidth);
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","auto");
 	}
 	l = Common.chartIndex[tabIndex][dsIndex].length;
 	if(l == 1){
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("display","none");
 	}
-	Common.chart_bg();
-	Common.footer();
+	var viewHeight = $("#view" + tabIndex).height();
+	if((viewHeight + 25) > Common.tabHeight){
+		$("#tab_bg").css({
+			"height": viewHeight + 25
+		});
+	}else{
+		$("#tab_bg").css({
+			"height": Common.tabHeight
+		});
+	}
 };
 
-/**********magnify one chart**********/
+/*****magnify one chart*****/
 Sta.magnifier = function(tabIndex,dsIndex,chartIndex,chartType){
 	Common.background();
-	Sta.init();
+	Common.largeChart();
 	Sta.createFrame();
 	Common.chartType[tabIndex][dsIndex][chartIndex] = chartType;
-	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
 		var values = data[dsIndex].values;
 		var len = values.length;
 		var count = 0;
@@ -147,7 +120,7 @@ Sta.magnifier = function(tabIndex,dsIndex,chartIndex,chartType){
 		}else{
 			$("#lcCheckbox").empty();
 		}
-		/**********set the next chart type**********/
+		/*****set next chart type*****/
 		if(chartType == "columnChart"){
 			nextType = "lineChart";
 		}else if(chartType == "lineChart"){
@@ -159,54 +132,49 @@ Sta.magnifier = function(tabIndex,dsIndex,chartIndex,chartType){
 		}else{
 			nextType = "columnChart";
 		}
-		$("<img src = 'css/images/switch.png' onclick = \"Sta.magnifier(" + tabIndex + "," + dsIndex + "," + chartIndex + ",'" + nextType + "');\"/>")
+		$("<img src = 'css/images/close_256x256.png' onclick = \"Sta.closeFrame(" + tabIndex + "," + dsIndex + "," + chartIndex + ");\"/>")
 			.appendTo("#icon_lc")
 			.css({
-				"position": "absolute",
-				"top": "5px",
-				"right": "25px"
+				"float": "right",
+				"width": "16px",
+				"margin-top": "5px",
+				"margin-right": "5px"
 			});
-		$("<img src = 'css/images/close.png' onclick = \"Sta.closeFrame(" + tabIndex + "," + dsIndex + "," + chartIndex + ");\"/>")
+		$("<img src = 'css/images/change_100x100.jpg' onclick = \"Sta.magnifier(" + tabIndex + "," + dsIndex + "," + chartIndex + ",'" + nextType + "');\"/>")
 			.appendTo("#icon_lc")
 			.css({
-				"position": "absolute",
-				"top": "5px",
-				"right": "5px"
-			}).hover(
-				function(){$(this).attr("src","css/images/close_hover.png");},
-				function(){$(this).attr("src","css/images/close.png");}
-			);
+				"float": "right",
+				"width": "16px",
+				"margin-top": "5px",
+				"margin-right": "5px"
+			});
 		Sta.showChart(tabIndex,dsIndex,chartIndex,"lcContainer");
 	}).error(function(){
 		alert("Oops, we got an error...");
 	});
 };
 
-/**********change chart by y axis**********/
+/*****change chart by y axis*****/
 Sta.setYAxis = function(tabIndex,dsIndex,chartIndex,index){
 	if(Common.yAxis[tabIndex][dsIndex][chartIndex][index] == true){
 		Common.yAxis[tabIndex][dsIndex][chartIndex][index] = false;
-	}else if(Common.yAxis[tabIndex][dsIndex][chartIndex][index] == false){
-		Common.yAxis[tabIndex][dsIndex][chartIndex][index] = true;
 	}else{
-		/**********need to do**********/
+		Common.yAxis[tabIndex][dsIndex][chartIndex][index] = true;
 	}
 	$("#lcContainer").empty();
 	Sta.showChart(tabIndex,dsIndex,chartIndex,"lcContainer");
 };
 
-/**********open window for one magnified chart**********/
+/*****open window for one magnified chart*****/
 Sta.createFrame = function(){
 	$("#lcContainer").empty();
 	$("#lcCheckbox").empty();
 	$("#icon_lc").empty();
-	if($("#background").css("display") == "none"){
-		$("#background").css("display","block");
-		$("#largeChart").css("display","block");
-	}
+	$("#background").css("display","block");
+	$("#largeChart").css("display","block");
 };
 
-/**********close window**********/
+/*****close window*****/
 Sta.closeFrame = function(tabIndex,dsIndex,chartIndex){
 	$("#background").css("display","none");
 	$("#largeChart").css("display","none");
@@ -215,9 +183,9 @@ Sta.closeFrame = function(tabIndex,dsIndex,chartIndex){
 	Sta.showChart(tabIndex,dsIndex,chartIndex,"chartContainer");
 };
 
-/**********show one chart**********/
+/*****show one chart*****/
 Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
-	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
 		var des = data[dsIndex].descriptionCh;
 		var name = data[dsIndex].datasetName;
 		var values = data[dsIndex].values;
@@ -236,7 +204,7 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 				}
 			}
 			l = key.length;
-			/**/
+			
 			var arr = "[";
 			chartType = Common.chartType[tabIndex][dsIndex][chartIndex];
 			if((chartType == "columnChart") || (chartType == "lineChart")){
@@ -274,21 +242,20 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 				}
 			}
 			var jsonArr = $.parseJSON(arr);
-			/**/
+			
 			if(ccName == "chartContainer"){
-				$("<img id = 'magnifier" + tabIndex + "_" + dsIndex + "_" + chartIndex + "' src = 'css/images/magnifier.png' " +
-				"onclick = \"Sta.magnifier(" + tabIndex + "," + dsIndex + "," + chartIndex + ",'" + chartType + "');\"/>")
-				.appendTo("#view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex)
-				.css({
-					"position": "absolute",
-					"right": "5px",
-					"bottom": "5px"
-				});
+				$("<img id = 'magnifier" + tabIndex + "_" + dsIndex + "_" + chartIndex + "' src = 'css/images/magnifier_256x256.png' " +
+					"onclick = \"Sta.magnifier(" + tabIndex + "," + dsIndex + "," + chartIndex + ",'" + chartType + "');\"/>")
+					.appendTo("#view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex)
+					.css({
+						"position": "absolute",
+						"right": "5px",
+						"bottom": "5px",
+						"width": "16px"
+					});
 				view = document.getElementById(ccName + tabIndex + "_" + dsIndex + "_" + chartIndex);
-			}else if(ccName == "lcContainer"){
-				view = document.getElementById(ccName);
 			}else{
-				/**********need to do**********/
+				view = document.getElementById(ccName);
 			}
 			
 			var data = google.visualization.arrayToDataTable(jsonArr);

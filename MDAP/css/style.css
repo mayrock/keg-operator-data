@@ -2,9 +2,6 @@ a{
 	text-decoration: none;/*添加到文本的修饰*/
 }
 
-/*a:link 未访问的链接
-a:visited 已访问的链接
-a:hover 鼠标悬停在链接上*/
 a:link,a:visited{
 	color: #000000;
 }
@@ -13,52 +10,35 @@ a:hover{
 	color: #008000;/*#008000: green*/
 }
 
-/*#: id选择器*/
-#user{
-	text-align: center;/*文本的水平对齐方式*/
-	font-family: Times New Roman;/*字体系列*/
+#upperRightMenu{
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	font-family: Times New Roman;
 }
 
-#favInfo{
-	text-align: center;/*文本的水平对齐方式*/
-	font-family: Times New Roman;/*字体系列*/
+#upperRightMenu a{
+	margin: 0 5px;
 }
 
 #lanOption{
 	float: right;
-	margin-right: 10px;
-	height: 25px;
-	text-align: center;
+	margin: 0 5px;
 }
 
-#upperRightMenu{
+#userInfo{
 	float: right;
-	margin-right: 5px;
-	height: 25px;
-	position: relative;
-	text-align: center;
-	font-family: Times New Roman;
-	z-index: 100;/*z-index:	元素的堆叠顺序,拥有更高堆叠顺序的元素总是会处于堆叠顺序较低的元素的前面;z-index仅能在定位元素上奏效(e.g. position:absolute)*/
 }
 
-#upperRightMenu a{
-	padding: 0 5px;/*padding: 内边距	顺序: 上 右 下 左*/
-}
-
-#extraMenu{
+#extraMenu,#extendedFav{
 	position: absolute;
+	top: 30px;
 	border: 1px solid #efefef;
 	background-color: white;
-}
-
-#extendedFav{
-	position: absolute;
-	border: 1px solid #efefef;
-	background-color: white;
+	z-index: 100;
 }
 
 #header{
-	float: left;
 	width: 100%;
 	font-family: Times New Roman;
 	background-image: url(images/world_842x178.png),url(images/city_854x252.png),url(images/pie_187x201.png),
@@ -67,24 +47,6 @@ a:hover{
 	background-size: contain,contain,contain,contain,contain,cover;
 }
 
-#chart_bg{
-	float: left;
-	width: 100%;
-	background-repeat: no-repeat;
-}
-
-#footer{
-	position: absolute;
-	float: left;
-	width: 100%;
-	padding-top: 5px;
-	text-align: center;
-	font-family: Times New Roman;
-	font-weight: lighter;
-	color: #cccccc;
-}
-
-/*.: class选择器*/
 .title{
 	margin-left: 20px;
 	font-style: italic;/*字体样式	italic: 斜体*/
@@ -96,28 +58,34 @@ a:hover{
 .option{
 	position: absolute;/*父div的position是一定要指定的,不然子div的position: absolute就会相对于整个文档定位了,而不是相对于父div定位*/
 	left: 20px;
-	height: 400px;
 	font-size: 16px;
 	font-family: Times New Roman;
 }
 
-.dataset{
+.select{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+}
+
+.dvTitle,.dsTitle{
+	border-bottom: 1px solid white;
+	padding: 5px;
+	background-color: gray;
+	color: white;
+	text-align: center;
+}
+
+.dataview,.dataset{
 	border-bottom: 1px solid white;
 	padding: 5px;
 	background-color: gray;
 }
 
-.dataset a{
+.dataview a,.dataset a{
 	color: white;
 	text-decoration: none;
-}
-
-.select{
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	text-align: center;
 }
 
 .view{
@@ -134,10 +102,10 @@ a:hover{
 }
 
 .view_chart{
-	float: left;
 	position: relative;
-	height: 240px;
+	float: left;
 	width: 300px;
+	height: 240px;
 	margin: 2px;
 	border: 1px solid #8B0000;
 	background-color: white;
@@ -149,10 +117,44 @@ a:hover{
 	width: 270px;
 }
 
+#tabBar_bg{
+	width: 100%;
+	background-image: url(images/background.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+#tab_bg{
+	width: 100%;
+	background-image: url(images/background.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+#footer{
+	width: 100%;
+	text-align: center;
+	font-family: Times New Roman;
+	font-weight: lighter;
+	color: #cccccc;
+}
+
 .favorite{
 	position: absolute;
 	left: 20px;
 	font-size: 16px;
 	font-family: Times New Roman;
 	text-align: center;
+}
+
+
+#user{
+	text-align: center;/*文本的水平对齐方式*/
+	font-family: Times New Roman;/*字体系列*/
+	display: none;
+}
+
+#favInfo{
+	text-align: center;/*文本的水平对齐方式*/
+	font-family: Times New Roman;/*字体系列*/
 }

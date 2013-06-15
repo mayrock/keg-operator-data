@@ -1,8 +1,9 @@
 Geo = {};
 
-/**********initialize map of one tab**********/
+/*****initialize map of one tab*****/
 Geo.initMap = function(tabIndex){
-	$("#view" + tabIndex).css("width",Common.width() - 320);
+	var optionWidth = $("#option" + tabIndex).width() + 80;
+	$("#view" + tabIndex).css("width",Common.width() - optionWidth);
 	$("#view" + tabIndex).css("height","400px");
 	$("#view" + tabIndex).css("border","1px solid #000000");
 	mapOptions = {
@@ -18,7 +19,7 @@ Geo.initMap = function(tabIndex){
 	Common.mapInfoArr[tabIndex] = new Array();
 };
 
-/**********load data of one dataset**********/
+/*****load data of one dataset*****/
 Geo.loadData = function(tabIndex,dsIndex,name,type){
 	Common.mapInfoArr[tabIndex][dsIndex] = new Array();
 	$.getJSON(Common.dvDataUrl().replace("tabType","geo"),{
@@ -29,12 +30,12 @@ Geo.loadData = function(tabIndex,dsIndex,name,type){
 				Common.mapInfoArr[tabIndex][dsIndex][i] = new google.maps.Marker({
 					position : new google.maps.LatLng(data[i].latitude,data[i].longitude),
 					title : data[i].tag
-					/**********get a good icon image**********/
+					/*****get a good icon image*****/
 //					icon : "css/images/tower.png"
 				});
-			}else if(type == "regions"){
+			}else{
 				Common.mapInfoArr[tabIndex][dsIndex][i] = new google.maps.Circle({
-					/**********make region looks better**********/
+					/*****make region looks better*****/
 					strokeColor: "gray",
 					strokeOpacity: 1.0,
 					strokeWeight: 2,
@@ -43,8 +44,6 @@ Geo.loadData = function(tabIndex,dsIndex,name,type){
 					center: new google.maps.LatLng(data[i].latitude,data[i].longitude),
 					radius: 250
 				});
-			}else{
-				/**********need to do**********/
 			}
 		}
 	}).error(function(){
@@ -53,22 +52,20 @@ Geo.loadData = function(tabIndex,dsIndex,name,type){
 	});
 };
 
-/**********choose one dataset**********/
+/*****choose one dataset*****/
 Geo.clickEvent = function(tabIndex,dsIndex){
 	if($("#checkbox" + tabIndex + "_" + dsIndex).is(":checked") == true){
 		for(var i = 0; i < Common.mapInfoArr[tabIndex][dsIndex].length; i++){
 			Common.mapInfoArr[tabIndex][dsIndex][i].setMap(Common.mapArr[tabIndex]);
 		}
-	}else if($("#checkbox" + tabIndex + "_" + dsIndex).is(":checked") == false){
+	}else{
 		for(var i = 0; i < Common.mapInfoArr[tabIndex][dsIndex].length; i++){
 			Common.mapInfoArr[tabIndex][dsIndex][i].setMap(null);
 		}
-	}else{
-		/**********need to do**********/
 	}
 };
 
-/**********select all the datasets**********/
+/*****select all the datasets*****/
 Geo.selectAll = function(tabIndex,len){
 	for(var i = 0; i < len; i++){
 		if($("#checkbox" + tabIndex + "_" + i).is(":checked") == false){
@@ -78,15 +75,13 @@ Geo.selectAll = function(tabIndex,len){
 	}
 };
 
-/**********invert all the datasets**********/
+/*****invert all the datasets*****/
 Geo.invertAll = function(tabIndex,len){
 	for(var i = 0; i < len; i++){
 		if($("#checkbox" + tabIndex + "_" + i).is(":checked") == false){
 			$("#checkbox" + tabIndex + "_" + i).prop("checked",true);
-		}else if($("#checkbox" + tabIndex + "_" + i).is(":checked") == true){
-			$("#checkbox" + tabIndex + "_" + i).prop("checked",false);
 		}else{
-			/**********need to do**********/
+			$("#checkbox" + tabIndex + "_" + i).prop("checked",false);
 		}
 		Geo.clickEvent(tabIndex,i);
 	}

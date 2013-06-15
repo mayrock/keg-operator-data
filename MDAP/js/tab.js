@@ -1,8 +1,8 @@
 Tab = {};
 
-/**********add one tab**********/
+/*****add one tab*****/
 Tab.createFrame = function(tabType){
-	if(!((tabType == "geo") || (tabType == "sta"))){
+	if(!((tabType == "geo") || (tabType == "sta") || (tabType == "manage"))){
 		alert("Oops, we got an error...");
 		return;
 	}
@@ -10,22 +10,22 @@ Tab.createFrame = function(tabType){
 	$("#extendedFav").css("display","none");
 	length = Common.tabIndex.length - 1;
 	var tabIndex = Common.tabIndex[length];
-	/**********limit the number of tab**********/
+	/*****limit the number of tab*****/
 	if(length == Common.tabLimit()){
 		alert("Tabs cann't be more than " + Common.tabLimit() + "!");
 		return;
 	}
 	Common.tabIndex[length + 1] = tabIndex + 1;
-	Common.header();
+	Common.adjunct();
 	li = document.createElement("li");
 	li.setAttribute("id","tabs_li" + tabIndex);
 	$(li).appendTo("#tabs_ul");
 	if(tabType == "geo"){
-		li.innerHTML = "<a href='#tab" + tabIndex + "'>geo data</a>";
+		li.innerHTML = "<a href = '#tab" + tabIndex + "'>geo data</a>";
 	}else if(tabType == "sta"){
-		li.innerHTML = "<a href='#tab" + tabIndex + "'>stat data</a>";
+		li.innerHTML = "<a href = '#tab" + tabIndex + "'>stat data</a>";
 	}else{
-		/**********need to do**********/
+		li.innerHTML = "<a href = '#tab" + tabIndex + "'>manage</a>";
 	}
 	tab = document.createElement("div");
 	tab.setAttribute("id","tab" + tabIndex);
@@ -40,24 +40,31 @@ Tab.createFrame = function(tabType){
 	view.setAttribute("class","view");
 	$(view).appendTo(tab);
 	if(tabType == "sta"){
-		$("<img src = 'css/images/save.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>").appendTo(li);
+		$("<img src = 'css/images/save_256x256.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>")
+			.appendTo(li)
+			.css({
+				"width": "16px",
+				"margin-right": "5px"
+			});
 	}
-	$("<img src = 'css/images/close.png'/>")
+	var permit = Common.permit;
+	if(permit == 2){
+		if((tabType == "sta") || (tabType == "geo")){
+			$("<img src = 'css/images/refresh_512x512.png' onclick = \"alert('refresh!');\"/>")
+				.appendTo(li)
+				.css({
+					"width": "16px",
+					"margin-right": "5px"
+				});
+		}
+	}
+	$("<img src = 'css/images/close_256x256.png' onclick = \"Tab.close('" + tabType + "'," + tabIndex + ");\"/>")
 		.appendTo(li)
-		.hover(
-			function(){
-				$(this).attr("src","css/images/close_hover.png");
-			},function(){
-				$(this).attr("src","css/images/close.png");
-			}
-		).css({
-			"margin-top": "12px",
+		.css({
+			"width": "16px",
+			"margin-top": "10px",
 			"margin-right": "5px"
-		}).click(
-			function(){
-				Tab.close(tabType,tabIndex);
-			}
-		);
+		});
 	Tab.load(tabType,tabIndex);
 	$("#tabs").tabs("refresh");
 	$("#tabs").tabs("option","active",length);
@@ -66,7 +73,6 @@ Tab.createFrame = function(tabType){
 /**********load one tab**********/
 Tab.load = function(tabType,tabIndex){
 	if(tabType == "geo"){
-		Geo.initMap(tabIndex);
 		checkbox = document.createElement("div");
 		checkbox.setAttribute("id","checkbox" + tabIndex);
 		checkbox.setAttribute("class","checkbox");
@@ -75,11 +81,19 @@ Tab.load = function(tabType,tabIndex){
 		select.setAttribute("id","select" + tabIndex);
 		select.setAttribute("class","select");
 		$(select).appendTo("#option" + tabIndex);
-		$.getJSON(Common.dataViewUrl().replace("tabType",tabType),function(data){
+		$(select).css({})
+		$.getJSON(Common.dataviewUrl().replace("tabType",tabType),function(data){
 			var len = data.length;
 			if(len == 0){
+				$("#view" + tabIndex).css({
+					"left": "40px"
+				});
+				Geo.initMap(tabIndex);
 				return;
 			}
+			$("#option" + tabIndex).css({
+				"height": "400px"
+			});
 			for(var i = 0; i < len; i++){
 				var des = data[i].descriptionCh;
 				var name = data[i].datasetName;
@@ -96,6 +110,16 @@ Tab.load = function(tabType,tabIndex){
 				"onclick = \"Geo.selectAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
 			$("<span>&nbsp;&nbsp;</span><input type = 'button' style = 'font-family: Times New Roman;font-size: 16px;' value = 'invertAll' " +
 				"onclick = \"Geo.invertAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
+			if($("#option" + tabIndex).width() < 160){
+				$("#option" + tabIndex).css({
+					"width": "160px",
+					"border": "1px solid #000000"
+				});
+			}
+			$("#view" + tabIndex).css({
+				"left": $("#option" + tabIndex).width() + 40
+			});
+			Geo.initMap(tabIndex);
 		}).error(function(){
 			alert("Oops, we got an error...");
 			return;
@@ -104,7 +128,7 @@ Tab.load = function(tabType,tabIndex){
 		Common.chartIndex[tabIndex] = new Array();
 		Common.chartType[tabIndex] = new Array();
 		Common.yAxis[tabIndex] = new Array();
-		$.getJSON(Common.dataViewUrl().replace("tabType",tabType),function(data){
+		$.getJSON(Common.dataviewUrl().replace("tabType",tabType),function(data){
 			var len = data.length;
 			for(var i = 0; i < len; i++){
 				Common.chartIndex[tabIndex][i] = new Array();
@@ -112,11 +136,10 @@ Tab.load = function(tabType,tabIndex){
 				Common.chartType[tabIndex][i] = new Array();
 				Common.yAxis[tabIndex][i] = new Array();
 				var des = data[i].descriptionCh;
-				div = document.createElement("div");
-				div.setAttribute("class","dataset");
-				$(div).appendTo("#option" + tabIndex);
-				$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" +
-					"<img src = 'css/images/add.png'/><span>&nbsp;</span>" + des + "</a>").appendTo(div);
+				dataview = document.createElement("div");
+				dataview.setAttribute("class","dataview");
+				$(dataview).appendTo("#option" + tabIndex);
+				$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a>").appendTo(dataview);
 				view_ds = document.createElement("div");
 				view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
 				view_ds.setAttribute("class","view_ds");
@@ -132,16 +155,105 @@ Tab.load = function(tabType,tabIndex){
 			return;
 		});
 	}else{
-		/**********need to do**********/
+		Common.chartIndex[tabIndex] = new Array();
+		Common.chartType[tabIndex] = new Array();
+		Common.yAxis[tabIndex] = new Array();
+		$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
+			var len = data.length;
+			dv = document.createElement("div");
+			dv.setAttribute("class","dvTitle");
+			$(dv).appendTo("#option" + tabIndex);
+			$("<span>----------dataview----------</span>").appendTo(dv);
+			for(var i = 0; i < len; i++){
+				Common.chartIndex[tabIndex][i] = new Array();
+				Common.chartIndex[tabIndex][i][0] = 0;
+				Common.chartType[tabIndex][i] = new Array();
+				Common.yAxis[tabIndex][i] = new Array();
+				var des = data[i].descriptionCh;
+				dataview = document.createElement("div");
+				dataview.setAttribute("class","dataview");
+				$(dataview).appendTo("#option" + tabIndex);
+				$("<img src = 'css/images/setting_256x256.png' onClick = \"alert('setting');\"/>")
+					.appendTo(dataview)
+					.css({
+						"width": "16px",
+						"margin-right": "5px"
+					});
+				$("<img src = 'css/images/delete_256x256.png' onClick = \"alert('delete');\"/>")
+					.appendTo(dataview)
+					.css({
+						"width": "16px",
+						"margin-right": "5px"
+					});
+				$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a>").appendTo(dataview);
+				view_ds = document.createElement("div");
+				view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
+				view_ds.setAttribute("class","view_ds");
+				$(view_ds).appendTo("#view" + tabIndex);
+				$("<div id = 'special" + tabIndex + "_" + i + "' style = 'clear:both;'></div>").appendTo(view_ds);
+				$(view_ds).css("display","none");
+			}
+			$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
+				var length = data.length;
+				ds = document.createElement("div");
+				ds.setAttribute("class","dsTitle");
+				$(ds).appendTo("#option" + tabIndex);
+				$("<span>----------dataset----------</span>").appendTo(ds);
+				for(var i = len; i < len + length; i++){
+					Common.chartIndex[tabIndex][i] = new Array();
+					Common.chartIndex[tabIndex][i][0] = 0;
+					Common.chartType[tabIndex][i] = new Array();
+					Common.yAxis[tabIndex][i] = new Array();
+					var des = data[i - len].descriptionCh;
+					dataset = document.createElement("div");
+					dataset.setAttribute("class","dataset");
+					$(dataset).appendTo("#option" + tabIndex);
+					$("<img src = 'css/images/add_256x256.png' onClick = \"alert('add');\"/>")
+						.appendTo(dataset)
+						.css({
+							"width": "16px",
+							"margin-right": "5px"
+						});
+					$("<img src = 'css/images/setting_256x256.png' onClick = \"alert('setting');\"/>")
+						.appendTo(dataset)
+						.css({
+							"width": "16px",
+							"margin-right": "5px"
+						});
+					$("<img src = 'css/images/delete_256x256.png' onClick = \"alert('delete');\"/>")
+						.appendTo(dataset)
+						.css({
+							"width": "16px",
+							"margin-right": "5px"
+						});
+					$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a>").appendTo(dataset);
+					view_ds = document.createElement("div");
+					view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
+					view_ds.setAttribute("class","view_ds");
+					$(view_ds).appendTo("#view" + tabIndex);
+					$("<div id = 'special" + tabIndex + "_" + i + "' style = 'clear:both;'></div>").appendTo(view_ds);
+					$(view_ds).css("display","none");
+				}
+				$("#view" + tabIndex).css({
+					"left": $("#option" + tabIndex).width() + 40
+				});
+			}).error(function(){
+				alert("Oops, we got an error...");
+				return;
+			});
+		}).error(function(){
+			alert("Oops, we got an error...");
+			return;
+		});
 	}
 };
 
-/**********close one tab**********/
+/*****close one tab*****/
 Tab.close = function(tabType,tabIndex){
 	$("#tabs_li" + tabIndex).remove();
 	$("#tab" + tabIndex).remove();
 	Common.tabIndex.splice(tabIndex,1);
-	Common.header();
+	Common.adjunct();
 	$("#tabs").tabs("refresh");
 };
 
@@ -149,7 +261,7 @@ Tab.close = function(tabType,tabIndex){
 Tab.refresh = function(tabIndex){
 	$("#option" + tabIndex).empty();
 	$("#view" + tabIndex).empty();
-	$.getJSON(Common.dataViewUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
 		var len = data.length;
 		google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
 		function drawChart(){

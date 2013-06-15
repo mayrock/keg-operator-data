@@ -1,27 +1,6 @@
 User = {};
 
-User.height = function(){return 210;};
-User.width = function(){return 360;};
-User.tableWidth = function(){return 320;};
-
-/**********initialize css of register/login window**********/
-User.init = function(){
-	$("#user").css({
-		"position": "absolute",
-		"margin-top": (Common.height() - User.height()) / 2,
-		"margin-right": (Common.width() - User.width()) / 2,
-		"margin-bottom": (Common.height() - User.height()) / 2,
-		"margin-left": (Common.width() - User.width()) / 2,
-		"border": "1px solid #000000",
-		"height": User.height(),
-		"width": User.width(),
-		"z-index": "1000",
-		"background-color": "white",
-		"display": "none"
-	});
-};
-
-/**********load register/login window in the form of the language you set**********/
+/*****load register/login window*****/
 User.load = function(){
 	var index = Common.language;
 	
@@ -29,10 +8,10 @@ User.load = function(){
 	user = document.createElement("div");
 	user.setAttribute("id","user");
 	$(user).appendTo("#userShell");
-	ul = document.createElement("ul");
-	ul.setAttribute("id","user_ul");
-	$(ul).appendTo("#user");
-	$("<li><a href = '#register'>" + Lan.register[index] + "</a></li><li><a href = '#login'>" + Lan.login[index] + "</a></li>").appendTo("#user_ul");
+	user_ul = document.createElement("ul");
+	user_ul.setAttribute("id","user_ul");
+	$(user_ul).appendTo("#user");
+	$("<li><a href = '#register'>" + Lan.register[index] + "</a></li><li><a href = '#login'>" + Lan.login[index] + "</a></li>").appendTo(user_ul);
 	register = document.createElement("div");
 	register.setAttribute("id","register");
 	$(register).appendTo("#user");
@@ -51,75 +30,84 @@ User.load = function(){
 		"<table><tr><td><input type = 'button' value = '" + Lan.login[index] + "' onclick = \"User.login();\"/></td>" +
 		"<td><input type = 'button' value = '" + Lan.reset[index] + "' onclick = \"User.reset('login');\"/></td></tr></table>")
 		.appendTo("#login");
-	$("<img src = 'css/images/close.png'/>")
+	$("<img src = 'css/images/close_256x256.png' onclick = \"User.closeFrame();\"/>")
 		.appendTo("#user")
 		.css({
 			"position": "absolute",
 			"top": "5px",
-			"right": "5px"
-		}).hover(
-			function(){$(this).attr("src","css/images/close_hover.png");},
-			function(){$(this).attr("src","css/images/close.png");}
-		).click(
-			function(){User.closeFrame();}
-		);
-	$("#checkbox_l").attr("checked",true);
-	$("#user").tabs();
-	
-	User.init();
-	$("#user table").attr({
-		"width": User.tableWidth(),
-		"style": "margin: auto"
+			"right": "5px",
+			"width": "16px"
+		});
+	$("#user").tabs({
+		activate: function(event,ui){
+			var active = $("#user").tabs("option","active");
+			if(active == 0){
+				User.reset("register");
+			}else{
+				User.reset("login");
+			}
+		}
 	});
 	
-	if(($.cookie("username") != null) && ($.cookie("password") != null)){
-		User.upperRightMenu("login","");
-	}else if(Common.username != ""){
-		User.upperRightMenu("login","");
+	$("#user table").attr({
+		"width": Common.uTableWidth(),
+		"style": "margin: auto"
+	});
+	$("#checkbox_l").prop("checked",true);
+	
+	if(Common.username == ""){
+		User.infoMenu("logout","");
 	}else{
-		User.upperRightMenu("logout","");
+		User.infoMenu("login","");
 	}
 };
 
-/**********open register/login window**********/
+/*****open window*****/
 User.createFrame = function(){
 	Common.background();
-	User.init();
+	Common.user();
 	$("#background").css("display","block");
 	$("#user").css("display","block");
 	$("#user").tabs("option","active",1);
 };
 
-/**********close register/login window**********/
+/*****close window*****/
 User.closeFrame = function(){
-	$("#username_r").val("");
-	$("#password_r").val("");
-	$("#password_r2").val("");
-	$("#password_l").val("");
-	$("#checkbox_l").attr("checked",true);
 	$("#background").css("display","none");
 	$("#user").css("display","none");
 };
 
-/**********change the upper-right block**********/
-User.upperRightMenu = function(status,info){
+/*****change #userInfo*****/
+User.infoMenu = function(status,info){
 	var index = Common.language;
 	var htmlString = "";
 	if(status == "login"){
 		var username = Common.username;
-		htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>|" +
-			"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">" + Lan.create[index] +
-			"<img src = 'css/images/down_arrow.png'/></a>|" +
-			"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
-			"<img src = 'css/images/down_arrow.png'/></a>|" +
-			"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>|";
+		var permit = Common.permit;
+		if(permit == 1){
+			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>|" +
+				"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">" + Lan.create[index] +
+				"<img src = 'css/images/down_arrow.png'/></a>|" +
+				"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
+				"<img src = 'css/images/down_arrow.png'/></a>|" +
+				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>|";
+		}else{
+			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>|" +
+				"<a href = 'javascript:void(0);' onClick = \"Tab.createFrame('manage');\">" + Lan.manage[index] + "</a>|" +
+				"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">" + Lan.create[index] +
+				"<img src = 'css/images/down_arrow.png'/></a>|" +
+				"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
+				"<img src = 'css/images/down_arrow.png'/></a>|" +
+				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>|";
+		}
 		$("#userInfo").html(htmlString);
 		Fav.loadDownList();
-	}else if(status == "logout"){
+	}else{
 		if(info == "clear"){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});
 			Common.username = "";
+			Common.permit = 0;
 			$("#tabsShell").empty();
 			tabs = document.createElement("div");
 			tabs.setAttribute("id","tabs");
@@ -138,12 +126,10 @@ User.upperRightMenu = function(status,info){
 			htmlString = "<a href = 'javascript:void(0);' onclick = \"User.createFrame();\">" + Lan.register[index] + "/" + Lan.login[index] + "</a>|";
 			$("#userInfo").html(htmlString);
 		}
-	}else{
-		/**********need to do**********/
 	}
 };
 
-/**********register**********/
+/*****register*****/
 User.register = function(){
 	var index = Common.language;
 	var username = $("#username_r").val();
@@ -171,13 +157,11 @@ User.register = function(){
 			$.cookie("username",username,{expires: 7,path: "/"});
 			$.cookie("password",password,{expires: 7,path: "/"});
 			Common.username = username;
-			User.upperRightMenu("login","");
 			User.closeFrame();
-		}else if(data.status == false){
+			User.infoMenu("login","");
+		}else{
 			alert(Lan.nameExist[index]);
 			return;
-		}else{
-			/**********need to do**********/
 		}
 	},"json").error(function(){
 		alert("Oops, we got an error...");
@@ -208,21 +192,13 @@ User.login = function(){
 				$.cookie("password",password,{expires: 7,path: "/"});
 			}
 			Common.username = username;
+			Common.language = data.user.language;
+			Common.permit = data.user.permission;
 			User.closeFrame();
-			$.getJSON(Common.getLanUrl(),{
-				userid: username
-			},function(data){
-				Common.language = data;
-				Common.load();
-			}).error(function(){
-				alert("Oops, we got an error...");
-				return;
-			});
-		}else if(data.status == false){
+			Common.load();
+		}else{
 			alert(Lan.nameOrCodeError[index]);
 			return;
-		}else{
-			/**********need to do**********/
 		}
 	}).error(function(){
 		alert("Oops, we got an error...");
@@ -230,14 +206,14 @@ User.login = function(){
 	});
 };
 
-/**********log out**********/
+/*****log out*****/
 User.logout = function(){
 	$("#extraMenu").css("display","none");
 	$("#extendedFav").css("display","none");
-	User.upperRightMenu("logout","clear");
+	User.infoMenu("logout","clear");
 };
 
-/**********reset info in the register/login window**********/
+/*****reset information*****/
 User.reset = function(status){
 	if(status == "register"){
 		$("#username_r").val("");
@@ -246,7 +222,6 @@ User.reset = function(status){
 	}else if(status == "login"){
 		$("#username_l").val("");
 		$("#password_l").val("");
-	}else{
-		/**********need to do**********/
+		$("#checkbox_l").prop("checked",true);
 	}
 };
