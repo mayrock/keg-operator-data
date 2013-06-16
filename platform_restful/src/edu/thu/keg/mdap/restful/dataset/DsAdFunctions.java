@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
@@ -62,13 +63,13 @@ public class DsAdFunctions {
 	@POST
 	@Path("/addds")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	// @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public Response createDataset(@FormParam("connstr") String connstr,
 			@FormParam("dataset") String dataset,
 			@FormParam("description") String description,
 			@FormParam("loadable") boolean loadable,
 			@FormParam("owner") String owner,
-			@FormParam("dsFields") JSONArray datafields) {
+			@FormParam("dsfields") JSONArray datafields) {
 		/**
 		 * description 数据集描述 loadable 是否可以加载 dsFields 数据域的jsonarray fieldName
 		 * fieldType description isKey
@@ -113,18 +114,19 @@ public class DsAdFunctions {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
 		}
-		return Response.created(uriInfo.getAbsolutePath()).build();
+		return Response.status(Status.OK).build();
+		// return Response.created(uriInfo.getAbsolutePath()).build();
 	}
 
 	@POST
 	@Path("/adddv")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public Response createDataview(@FormParam("dataset") String dataset,
+	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public void createDataview(@FormParam("dataset") String dataset,
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
 			@FormParam("datafeaturetype") String datafuturetype,
-			@FormParam("key") String key, @FormParam("values") String[] values) {
+			@FormParam("key") String key, @FormParam("values") JSONArray values) {
 		log.info(uriInfo.getAbsolutePath());
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -134,19 +136,22 @@ public class DsAdFunctions {
 			Query q = null;
 
 			ds = p.getDataSetManager().getDataSet(dataset);
-			vs = new DataField[values.length];
+			vs = new DataField[values.length()];
 			for (int i = 0; i < vs.length; i++) {
-				vs[i] = ds.getField(values[i]);
+				vs[i] = ds.getField(values.getJSONObject(i).getString("valuse"));
 			}
 			q = ds.getQuery().select();
 			dv = p.getDataSetManager().defineView(dataview, description,
 					DataFeatureType.ValueFeature, q, ds.getField(key), vs);
 			p.getDataSetManager().saveChanges();
 		} catch (OperationNotSupportedException | DataProviderException
-				| IOException e) {
+				| IOException | JSONException e) {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
 		}
-		return Response.created(uriInfo.getAbsolutePath()).build();
+
+		// return Response.status(Status.OK).build();
+		//
+		// // return Response.created(uriInfo.getAbsolutePath()).build();
 	}
 }

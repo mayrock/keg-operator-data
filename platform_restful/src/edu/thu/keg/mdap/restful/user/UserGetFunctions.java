@@ -87,8 +87,10 @@ public class UserGetFunctions {
 				juser.setStatus(true);
 				juser.setUser(ium.getUser(userid));
 				System.out.println("用户名密码正确:" + userid);
-			} else
+			} else {
 				juser.setStatus(false);
+				System.out.println("用户名不存在:" + userid);
+			}
 
 		} catch (SQLException | IllegalUserManageException e) {
 			// TODO Auto-generated catch block
