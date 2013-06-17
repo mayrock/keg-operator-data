@@ -61,10 +61,11 @@ public interface DataSetManager {
 	 *            DataField set
 	 * @return A new DataSet instance
 	 */
-	public DataSet createDataSet(String name, String owner, String description,
-			DataProvider provider, boolean loadable, DataField... fields);
+	public DataSet createDataSet(String name, String owner, int permission,
+			String description, DataProvider provider, boolean loadable,
+			DataField... fields);
 
-	public DataView defineView(String name, String description,
+	public DataView defineView(String name, String description, int permission,
 			DataFeatureType type, Query q);
 
 	/**
@@ -97,7 +98,9 @@ public interface DataSetManager {
 	 * @return all datasets that supports the certain type of feature
 	 */
 	public Collection<DataSet> getDataSetList(DataFeatureType type);
-
+	public Collection<DataSet> getPublicDataSetList();
+	public Collection<DataSet> getLimitedDataSetList(String userid);
+	public Collection<DataSet> getPrivateDataSetList(String owner);
 	/**
 	 * 
 	 * @param type
@@ -114,7 +117,7 @@ public interface DataSetManager {
 	 */
 	public void saveChanges() throws IOException;
 
-	DataView defineView(String name, String description, DataFeatureType type,
-			Query q, DataField key, DataField[] values);
+	DataView defineView(String name, String description, int permission,
+			DataFeatureType type, Query q, DataField key, DataField[] values);
 
 }

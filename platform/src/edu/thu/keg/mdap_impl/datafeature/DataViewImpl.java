@@ -21,27 +21,31 @@ public class DataViewImpl implements DataView {
 	private DataFeatureType type;
 	private List<DataField> keyFields;
 	private List<DataField> valueFields;
-
+	private int permission;
+	private List<String> users;
 
 	/**
 	 * @param q
 	 * @param name
 	 * @param desps
 	 */
-	public DataViewImpl(String name, DataFeatureType type, Query q) {
+	public DataViewImpl(String name, int permission, DataFeatureType type,
+			Query q) {
 		super();
 		this.q = q;
 		this.name = name;
+		this.permission = permission;
 		this.desps = new LocalizedMessage();
 		this.type = type;
 		initKeyValueFields();
 	}
-	
-	public DataViewImpl(String name, DataFeatureType type, Query q, 
-			DataField[] keyFields, DataField[] valueFields) {
+
+	public DataViewImpl(String name, int permission, DataFeatureType type,
+			Query q, DataField[] keyFields, DataField[] valueFields) {
 		super();
 		this.q = q;
 		this.name = name;
+		this.permission = permission;
 		this.desps = new LocalizedMessage();
 		this.type = type;
 		this.keyFields = Arrays.asList(keyFields);
@@ -52,7 +56,7 @@ public class DataViewImpl implements DataView {
 		this.keyFields = new ArrayList<DataField>();
 		this.valueFields = new ArrayList<DataField>();
 		for (DataField f : q.getFields()) {
-			if (isKeyField(f) ) {
+			if (isKeyField(f)) {
 				keyFields.add(f);
 			} else {
 				valueFields.add(f);
@@ -61,11 +65,17 @@ public class DataViewImpl implements DataView {
 	}
 
 	@Override
+	public int getPermission() {
+		return this.permission;
+	}
+
+	@Override
 	public DataField[] getKeyFields() {
 		return keyFields.toArray(new DataField[0]);
 	}
+
 	private boolean isKeyField(DataField f) {
-		//TODO: not right!
+		// TODO: not right!
 		if (this.type.equals(DataFeatureType.GeoFeature)) {
 			return f.getFunction().equals(FieldFunctionality.Latitude)
 					|| f.getFunction().equals(FieldFunctionality.Longitude);

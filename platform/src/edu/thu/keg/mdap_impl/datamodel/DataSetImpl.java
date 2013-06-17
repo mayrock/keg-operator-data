@@ -27,47 +27,88 @@ import edu.thu.keg.mdap_impl.datafeature.DataFeatureImpl;
 
 /**
  * A general implementation of the interface DataSet
+ * 
  * @author Yuanchao Ma
- *
+ * 
  */
 public class DataSetImpl implements DataSet {
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DataSetImpl other = (DataSetImpl) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
+		return true;
+	}
+
 	private String name = null;
 	private String owner = null;
+
 	private DataProvider provider = null;
 	private LocalizedMessage descriptions = null;
 	private boolean loadable;
 	private HashMap<FieldFunctionality, List<DataField>> fieldsMap;
 	private List<DataField> fields;
-	
-	public DataSetImpl(){
+
+	private int permission;
+	private List<String> limitedUsers;
+
+	public DataSetImpl() {
 		fieldsMap = new HashMap<FieldFunctionality, List<DataField>>();
 		fields = new ArrayList<DataField>();
 		descriptions = new LocalizedMessage();
 	}
 
-
-	public DataSetImpl(String name, String owner, DataProvider provider,
-			 boolean loadable, DataField... fields) {
+	public DataSetImpl(String name, String owner, int permission,
+			DataProvider provider, boolean loadable, DataField... fields) {
 		super();
 		this.name = name;
 		this.owner = owner;
+		this.permission = permission;
 		this.provider = provider;
 		this.loadable = loadable;
 		this.descriptions = new LocalizedMessage();
-		
-		
+
 		this.fieldsMap = new HashMap<FieldFunctionality, List<DataField>>();
 		this.fields = new ArrayList<DataField>();
-		
+
 		setDataFields(fields);
 	}
-	
+
 	private void setDataFields(DataField[] fields) {
 		for (DataField field : fields) {
 			field.setDataSet(this);
 			this.fields.add(field);
-			
+
 			FieldFunctionality func = field.getFunction();
 			if (!this.fieldsMap.containsKey(func)) {
 				this.fieldsMap.put(func, new ArrayList<DataField>());
@@ -75,8 +116,6 @@ public class DataSetImpl implements DataSet {
 			this.fieldsMap.get(func).add(field);
 		}
 	}
-
-
 
 	@Override
 	public String getName() {
@@ -87,25 +126,29 @@ public class DataSetImpl implements DataSet {
 	public boolean isLoadable() {
 		return this.loadable;
 	}
+
 	@Override
 	public List<DataField> getDataFields() {
 		return this.fields;
 	}
+
 	@Override
 	public DataProvider getProvider() {
 		return this.provider;
 	}
-	
+
 	@Override
 	public Query getQuery() throws OperationNotSupportedException,
 			DataProviderException {
 		Query q = new QueryImpl(this);
 		return q;
 	}
+
 	@Override
 	public String getDescription() {
 		return this.descriptions.getMessage();
 	}
+
 	@Override
 	public DataFeature getFeature(DataFeatureType type) {
 		List<DataField> keys = new ArrayList<DataField>();
@@ -115,23 +158,23 @@ public class DataSetImpl implements DataSet {
 			if (!fieldsMap.containsKey(func)) {
 				flag = false;
 				break;
-			} 
+			}
 		}
-		
+
 		keys = this.getKeyFields();
-		
+
 		if (flag) {
-			return new DataFeatureImpl(type, keys.toArray(new DataField[0]), 
+			return new DataFeatureImpl(type, keys.toArray(new DataField[0]),
 					this.getValueFields().toArray(new DataField[0]));
 		} else {
 			return null;
 		}
 	}
+
 	@Override
 	public void writeData(DataContent content) throws DataProviderException {
 		this.getProvider().writeDataSetContent(this, content);
 	}
-
 
 	@Override
 	public Query getQuery(DataFeatureType featureType)
@@ -145,18 +188,15 @@ public class DataSetImpl implements DataSet {
 		return q;
 	}
 
-
 	@Override
 	public DataField getField(String columnName) {
 		for (DataField f : this.fields) {
-			if (f.getName().equals(columnName) )
+			if (f.getName().equals(columnName))
 				return f;
 		}
-		throw new IllegalArgumentException("Field with name " 
-				+ columnName + " does not exist in DataSet "
-				+ this.getName()); 
+		throw new IllegalArgumentException("Field with name " + columnName
+				+ " does not exist in DataSet " + this.getName());
 	}
-
 
 	@Override
 	public Set<DataFeature> getFeatures() {
@@ -170,7 +210,6 @@ public class DataSetImpl implements DataSet {
 		return features;
 	}
 
-
 	@Override
 	public List<DataField> getKeyFields() {
 		List<DataField> ret = new ArrayList<DataField>();
@@ -181,7 +220,6 @@ public class DataSetImpl implements DataSet {
 		}
 		return ret;
 	}
-
 
 	@Override
 	public List<DataField> getValueFields() {
@@ -194,27 +232,49 @@ public class DataSetImpl implements DataSet {
 		return ret;
 	}
 
-
 	@Override
 	public String getOwner() {
 		return this.owner;
 	}
 
+	@Override
+	public int getPermission() {
+
+		return this.permission;
+	}
+
+	@Override
+	public List<String> getLimitedUsers() {
+		return this.limitedUsers;
+	}
 
 	@Override
 	public String getDescription(Locale locale) {
 		return this.descriptions.getMessage(locale);
 	}
 
-
 	@Override
 	public void setDescription(String desp) {
 		this.descriptions.setMessage(desp);
 	}
 
-
 	@Override
 	public void setDescription(Locale locale, String desp) {
 		this.descriptions.setMessage(locale, desp);
 	}
+
+	public static int parsePermission(String permission) {
+		switch (permission) {
+		case "public":
+			return DataSet.PERMISSION_PUBLIC;
+		case "limited":
+			return DataSet.PERMISSION_LIMITED;
+		case "private":
+			return DataSet.PERMISSION_PRIVATE;
+		default:
+			break;
+		}
+		return DataSet.PERMISSION_PRIVATE;
+	}
+
 }

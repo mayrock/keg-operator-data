@@ -36,6 +36,7 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
+import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 
 /**
  * the functions of dataset's administrator operations
@@ -72,6 +73,7 @@ public class DsAdFunctions {
 			@FormParam("description") String description,
 			@FormParam("loadable") boolean loadable,
 			@FormParam("owner") String owner,
+			@FormParam("permission") String permission,
 			@FormParam("dsfields") JSONArray datafields) {
 		/**
 		 * description 数据集描述 loadable 是否可以加载 dsFields 数据域的jsonarray fieldName
@@ -110,7 +112,8 @@ public class DsAdFunctions {
 						df_description, isKey, allowNull, isDim,
 						FieldFunctionality.parse(func));
 			}
-			p.getDataSetManager().createDataSet(dataset, owner, description,
+			p.getDataSetManager().createDataSet(dataset, owner,
+					DataSetImpl.parsePermission(permission), description,
 					provider, loadable, fields);
 			p.getDataSetManager().saveChanges();
 		} catch (JSONException | IOException e) {
@@ -145,8 +148,10 @@ public class DsAdFunctions {
 						.getField(values.getJSONObject(i).getString("valuse"));
 			}
 			q = ds.getQuery().select();
+			// to-do
 			dv = p.getDataSetManager().defineView(dataview, description,
-					DataFeatureType.ValueFeature, q, ds.getField(key), vs);
+					DataView.PERMISSION_PUBLIC, DataFeatureType.ValueFeature,
+					q, ds.getField(key), vs);
 			p.getDataSetManager().saveChanges();
 		} catch (OperationNotSupportedException | DataProviderException
 				| IOException | JSONException e) {

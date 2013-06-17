@@ -6,10 +6,13 @@ package edu.thu.keg.mdap_impl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.acl.Owner;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.jws.Oneway;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
@@ -66,6 +69,10 @@ public class DataSetManagerImpl implements DataSetManager {
 	private HashMap<DataFeatureType, Set<DataSet>> features = null;
 	private HashMap<String, DataView> views = null;
 	private HashMap<DataFeatureType, Set<DataView>> viewsMap = null;
+
+	private HashMap<String, Set<DataSet>> ownerMap = null;
+	private HashMap<String, Set<DataSet>> limitedMap = null;
+	private HashSet<DataSet> publicMap = null;
 	private XStream xstream;
 
 	private XStream getXstream() {
@@ -96,6 +103,9 @@ public class DataSetManagerImpl implements DataSetManager {
 		views = new HashMap<String, DataView>();
 		viewsMap = new HashMap<DataFeatureType, Set<DataView>>();
 
+		ownerMap = new HashMap<String, Set<DataSet>>();
+		limitedMap = new HashMap<String, Set<DataSet>>();
+		publicMap = new HashSet<DataSet>();
 		try {
 			loadDataSets();
 		} catch (Exception ex) {
@@ -128,6 +138,22 @@ public class DataSetManagerImpl implements DataSetManager {
 		return datasets.values();
 	}
 
+	@Override
+	public Collection<DataSet> getPublicDataSetList() {
+		// TODO Auto-generated method stub
+		return publicMap;
+	}
+
+	@Override
+	public Collection<DataSet> getLimitedDataSetList(String userid) {
+		return limitedMap.get(userid);
+	}
+
+	@Override
+	public Collection<DataSet> getPrivateDataSetList(String owner) {
+		return ownerMap.get(owner);
+	}
+
 	private void loadDataSets() {
 		String f = Config.getDataSetFile();
 		Storage sto = (Storage) getXstream().fromXML(new File(f));
@@ -157,6 +183,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		ds.getProvider().removeContent(ds);
 		removeDSMeta(ds);
 	}
+
 	@Override
 	public void removeDataView(DataView dv) throws DataProviderException {
 		if (!views.containsValue(dv))
@@ -164,7 +191,6 @@ public class DataSetManagerImpl implements DataSetManager {
 		// dv.getProvider().removeContent(dv);
 		removeDSMeta(dv);
 	}
-	
 
 	@Override
 	public Collection<DataSet> getDataSetList(DataFeatureType type) {
@@ -173,16 +199,38 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	private void addDataSet(DataSet ds) {
 		datasets.put(ds.getName(), ds);
+
 		for (DataFeature feature : ds.getFeatures()) {
 			DataFeatureType type = feature.getFeatureType();
 			if (!features.containsKey(type))
 				features.put(type, new HashSet<DataSet>());
 			features.get(type).add(ds);
 		}
+
+		if (!ownerMap.containsKey(ds.getOwner())) {
+			ownerMap.put(ds.getOwner(), new HashSet<DataSet>());
+		}
+		if (!ownerMap.get(ds.getOwner()).contains(ds))
+			ownerMap.get(ds.getOwner()).add(ds);
+		if (ds.getPermission() == DataSet.PERMISSION_PUBLIC) {
+			if (!publicMap.contains(ds))
+				publicMap.add(ds);
+		} else if (ds.getPermission() == DataSet.PERMISSION_LIMITED) {
+			for (String user : ds.getLimitedUsers()) {
+				if (!limitedMap.containsKey(user))
+					limitedMap.put(user, new HashSet<DataSet>());
+				limitedMap.get(user).add(ds);
+			}
+		}
 	}
 
 	private void removeDSMeta(DataSet ds) {
-		datasets.remove(ds);
+		datasets.remove(ds.getName());
+		ownerMap.get(ds.getOwner()).remove(ds);
+		publicMap.remove(ds);
+		for (Set<DataSet> list : limitedMap.values()) {
+			list.remove(ds);
+		}
 		for (Set<DataSet> list : features.values()) {
 			list.remove(ds);
 		}
@@ -196,28 +244,30 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	@Override
-	public DataSet createDataSet(String name, String owner, String description,
-			DataProvider provider, boolean loadable, DataField... fields) {
-		DataSet ds = new DataSetImpl(name, owner, provider, loadable, fields);
+	public DataSet createDataSet(String name, String owner, int permission,
+			String description, DataProvider provider, boolean loadable,
+			DataField... fields) {
+		DataSet ds = new DataSetImpl(name, owner, permission, provider,
+				loadable, fields);
 		ds.setDescription(description);
 		addDataSet(ds);
 		return ds;
 	}
 
 	@Override
-	public DataView defineView(String name, String description,
+	public DataView defineView(String name, String description, int permission,
 			DataFeatureType type, Query q) {
-		DataView v = new DataViewImpl(name, type, q);
+		DataView v = new DataViewImpl(name, permission, type, q);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
 	}
 
 	@Override
-	public DataView defineView(String name, String description,
+	public DataView defineView(String name, String description, int permission,
 			DataFeatureType type, Query q, DataField key, DataField[] values) {
 		DataField[] keys = { key };
-		DataView v = new DataViewImpl(name, type, q, keys, values);
+		DataView v = new DataViewImpl(name, permission, type, q, keys, values);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
