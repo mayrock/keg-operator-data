@@ -23,7 +23,7 @@ Geo.initMap = function(tabIndex){
 Geo.loadData = function(tabIndex,dsIndex,name,type){
 	Common.mapInfoArr[tabIndex][dsIndex] = new Array();
 	$.getJSON(Common.dvDataUrl().replace("tabType","geo"),{
-		dataview: name
+		dataset: name
 	},function(data){
 		for(var i = 0; i < data.length; i++){
 			if(type == "points"){
@@ -31,7 +31,7 @@ Geo.loadData = function(tabIndex,dsIndex,name,type){
 					position : new google.maps.LatLng(data[i].latitude,data[i].longitude),
 					title : data[i].tag
 					/*****get a good icon image*****/
-//					icon : "css/images/tower.png"
+//					icon : "css/images/.png"
 				});
 			}else{
 				Common.mapInfoArr[tabIndex][dsIndex][i] = new google.maps.Circle({

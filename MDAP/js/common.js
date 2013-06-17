@@ -73,6 +73,11 @@ Common.init = function(){
 	Common.load();
 	Common.tabIndex[0] = 0;
 	Common.adjunct();
+	$("<img src = 'css/images/phone_472x591.png'/>")
+		.appendTo("#logo")
+		.css({
+			"width": "60px"
+		});
 	$("#tab_bg").css({
 		"height": Common.tabHeight
 	});
@@ -80,15 +85,20 @@ Common.init = function(){
 		activate: function(event,ui){
 			var active = $("#tabs").tabs("option","active");
 			var tabIndex = Common.tabIndex[active];
+			var tabHeight = $("#tab" + tabIndex).height();
 			var viewHeight = $("#view" + tabIndex).height();
 			if((viewHeight + 25) > Common.tabHeight){
 				$("#tab_bg").css({
 					"height": viewHeight + 25
 				});
 			}else{
+				if((tabHeight + 25) > Common.tabHeight){$("#tab_bg").css({
+					"height": tabHeight + 25
+				});}else{
 				$("#tab_bg").css({
 					"height": Common.tabHeight
 				});
+				}
 			}
 		}
 	});
@@ -152,7 +162,7 @@ Common.load = function(){
 		.appendTo("#extraMenu");
 	
 	$("#header").empty();
-	$("<span class = 'title'>" + Lan.title[index] + "</span>").appendTo("#header");
+	$("<span class = 'mainTitle'>" + Lan.mainTitle[index] + "</span><span class = 'subtitle'>" + Lan.subtitle[index] + "</span>").appendTo("#header");
 };
 
 /*****initialize css of #header, .ui-tabs & #tabBar_bg*****/

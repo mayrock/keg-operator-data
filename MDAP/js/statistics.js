@@ -28,7 +28,7 @@ Sta.guide = function(tabIndex,dsIndex){
 
 /*****create one chart container*****/
 Sta.createChart = function(tabIndex,dsIndex,chartIndex){
-	view_chart = document.createElement("div");
+	var view_chart = document.createElement("div");
 	view_chart.setAttribute("id","view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex);
 	view_chart.setAttribute("class","view_chart");
 	$(view_chart).appendTo("#view_ds" + tabIndex + "_" + dsIndex);
@@ -39,7 +39,7 @@ Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - optionWidth);
 		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","auto");
 	}
-	chartContainer = document.createElement("div");
+	var chartContainer = document.createElement("div");
 	chartContainer.setAttribute("id","chartContainer" + tabIndex + "_" + dsIndex + "_" + chartIndex);
 	chartContainer.setAttribute("class","chartContainer");
 	$(chartContainer).appendTo(view_chart);
@@ -186,7 +186,7 @@ Sta.closeFrame = function(tabIndex,dsIndex,chartIndex){
 /*****show one chart*****/
 Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
-		var des = data[dsIndex].descriptionCh;
+		var des = data[dsIndex].descriptionZh;
 		var name = data[dsIndex].datasetName;
 		var values = data[dsIndex].values;
 		var len = values.length;
@@ -206,7 +206,7 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 			l = key.length;
 			
 			var arr = "[";
-			chartType = Common.chartType[tabIndex][dsIndex][chartIndex];
+			var chartType = Common.chartType[tabIndex][dsIndex][chartIndex];
 			if((chartType == "columnChart") || (chartType == "lineChart")){
 				arr += "[\"" + "key" + "\"";
 				for(var i = 0; i < len; i++){
@@ -230,7 +230,7 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 					}
 				}
 			}else{
-				pieIndex = parseInt(chartType);
+				var pieIndex = parseInt(chartType);
 				arr += "[\"" + "key" + "\",\"" + "value" + "\"],";
 				for(var i = 0; i < l; i++){
 					arr += "[\"" + key[i] + "\"," + value[i][pieIndex] + "]";
@@ -243,6 +243,7 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 			}
 			var jsonArr = $.parseJSON(arr);
 			
+			var view = new Object;
 			if(ccName == "chartContainer"){
 				$("<img id = 'magnifier" + tabIndex + "_" + dsIndex + "_" + chartIndex + "' src = 'css/images/magnifier_256x256.png' " +
 					"onclick = \"Sta.magnifier(" + tabIndex + "," + dsIndex + "," + chartIndex + ",'" + chartType + "');\"/>")
@@ -262,6 +263,7 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 			var options = {
 				title: des
 			};
+			var chart = new Object;
 			if(chartType == "columnChart"){
 				chart = new google.visualization.ColumnChart(view);
 			}else if(chartType == "lineChart"){

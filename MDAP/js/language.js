@@ -10,7 +10,8 @@ Lan.reInputCode = new Array("Password Again:","请确认密码:");
 Lan.saveInfo = new Array("Save username and password in 7 days","保存用户名和密码7天");
 Lan.reset = new Array("reset","重置");
 
-Lan.title = new Array("Mobile Data Analysis Platform","移动数据分析平台");
+Lan.mainTitle = new Array("Mobile Data","移动数据");
+Lan.subtitle = new Array("Analysis Platform","分析平台");
 
 Lan.manage = new Array("manage","管理");
 Lan.create = new Array("new","新建");

@@ -40,7 +40,7 @@ Fav.saveSta = function(tabIndex){
 			for(var j = 0; j < l - 1; j++){
 				var chartIndex = Common.chartIndex[tabIndex][i][j];
 				var yAxisData = JSON.parse("[]");
-				yAxisLen = Common.yAxis[tabIndex][i][chartIndex].length;
+				var yAxisLen = Common.yAxis[tabIndex][i][chartIndex].length;
 				for(var k = 0; k < yAxisLen; k++){
 					yAxisData[k] = Common.yAxis[tabIndex][i][chartIndex][k];
 				}
@@ -112,11 +112,11 @@ Fav.loadDownList = function(){
 /*****add one favorite to drop-down list*****/
 Fav.addDownList = function(favid,favname){
 	var username = Common.username;
-	fav = document.createElement("div");
+	var fav = document.createElement("div");
 	fav.setAttribute("id",favid);
 	fav.setAttribute("class","favorite");
 	$(fav).appendTo("#extendedFav");
-	staFav = document.createElement("a");
+	var staFav = document.createElement("a");
 	$(staFav).attr("href","javascript:void(0);");
 	$(staFav).attr("onClick","Fav.revertSta(" + favid + ");");
 	staFav.innerHTML = favname;
@@ -169,7 +169,7 @@ Fav.revertSta = function(favid){
 						var cData = chartData[j];
 						Common.chartType[tabIndex][dsIndex][j] = cData.type;
 						var yAxisData = cData.yAxis;
-						yAxisLen = yAxisData.length;
+						var yAxisLen = yAxisData.length;
 						Common.yAxis[tabIndex][dsIndex][j] = new Array();
 						for(var k = 0; k < yAxisLen; k++){
 							Common.yAxis[tabIndex][dsIndex][j][k] = yAxisData[k];

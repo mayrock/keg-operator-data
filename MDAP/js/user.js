@@ -5,14 +5,14 @@ User.load = function(){
 	var index = Common.language;
 	
 	$("#userShell").empty();
-	user = document.createElement("div");
+	var user = document.createElement("div");
 	user.setAttribute("id","user");
 	$(user).appendTo("#userShell");
-	user_ul = document.createElement("ul");
+	var user_ul = document.createElement("ul");
 	user_ul.setAttribute("id","user_ul");
 	$(user_ul).appendTo("#user");
 	$("<li><a href = '#register'>" + Lan.register[index] + "</a></li><li><a href = '#login'>" + Lan.login[index] + "</a></li>").appendTo(user_ul);
-	register = document.createElement("div");
+	var register = document.createElement("div");
 	register.setAttribute("id","register");
 	$(register).appendTo("#user");
 	$("<table><tr><td>" + Lan.inputName[index] + "</td><td><input type = 'text' id = 'username_r'/></td></tr>" +
@@ -21,7 +21,7 @@ User.load = function(){
 		"<table><tr><td><input type = 'button' value = '" + Lan.register[index] + "' onclick = \"User.register();\"/></td>" +
 		"<td><input type = 'button' value = '" + Lan.reset[index] + "' onclick = \"User.reset('register');\"/></td></tr></table>")
 		.appendTo("#register");
-	login = document.createElement("div");
+	var login = document.createElement("div");
 	login.setAttribute("id","login");
 	$(login).appendTo("#user");
 	$("<table><tr><td>" + Lan.inputName[index] + "</td><td><input type = 'text' id = 'username_l'/></td></tr>" +
@@ -93,7 +93,7 @@ User.infoMenu = function(status,info){
 				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>";
 		}else{
 			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
-				"<a href = 'javascript:void(0);' onClick = \"Tab.createFrame('manage');\">" + Lan.manage[index] + "</a>" +
+				"<a href = 'javascript:void(0);' onClick = \"Tab.createFrame('mgt');\">" + Lan.manage[index] + "</a>" +
 				"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">" + Lan.create[index] +
 				"<img src = 'css/images/down_arrow_64x64.png' style = 'width: 10px;margin-left: 2px'/></a>" +
 				"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
@@ -109,10 +109,10 @@ User.infoMenu = function(status,info){
 			Common.username = "";
 			Common.permit = 0;
 			$("#tabsShell").empty();
-			tabs = document.createElement("div");
+			var tabs = document.createElement("div");
 			tabs.setAttribute("id","tabs");
 			$(tabs).appendTo("#tabsShell");
-			tabs_ul = document.createElement("ul");
+			var tabs_ul = document.createElement("ul");
 			tabs_ul.setAttribute("id","tabs_ul");
 			$(tabs_ul).appendTo(tabs);
 			Common.tabIndex = new Array();
