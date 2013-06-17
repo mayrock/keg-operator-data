@@ -193,7 +193,7 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 		var key = new Array();
 		var value = new Array();
 		$.getJSON(Common.dvDataUrl().replace("tabType","sta"),{
-			dataview: name
+			dataset: name
 		},function(data){
 			var l = data.length;
 			for(var i = 0; i < l; i++){

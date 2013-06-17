@@ -99,4 +99,4 @@ Lan.change = function(index,country){
 		alert("Oops, we get an error...");
 		return;
 	});
-}
+};

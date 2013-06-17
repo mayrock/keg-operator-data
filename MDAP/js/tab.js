@@ -19,6 +19,7 @@ Tab.createFrame = function(tabType){
 	Common.adjunct();
 	li = document.createElement("li");
 	li.setAttribute("id","tabs_li" + tabIndex);
+	li.setAttribute("class","tabs_li");
 	$(li).appendTo("#tabs_ul");
 	if(tabType == "geo"){
 		li.innerHTML = "<a href = '#tab" + tabIndex + "'>geo data</a>";
@@ -31,14 +32,24 @@ Tab.createFrame = function(tabType){
 	tab.setAttribute("id","tab" + tabIndex);
 	tab.setAttribute("class","tab");
 	$(tab).appendTo("#tabs");
-	option = document.createElement("div");
-	option.setAttribute("id","option" + tabIndex);
-	option.setAttribute("class","option");
-	$(option).appendTo(tab);
-	view = document.createElement("div");
-	view.setAttribute("id","view" + tabIndex);
-	view.setAttribute("class","view");
-	$(view).appendTo(tab);
+	if((tabType == "sta") || (tabType == "geo")){
+		option = document.createElement("div");
+		option.setAttribute("id","option" + tabIndex);
+		option.setAttribute("class","option");
+		$(option).appendTo(tab);
+		view = document.createElement("div");
+		view.setAttribute("id","view" + tabIndex);
+		view.setAttribute("class","view");
+		$(view).appendTo(tab);
+	}else{
+		subTabs = document.createElement("div");
+		subTabs.setAttribute("id","subTabs" + tabIndex);
+		subTabs.setAttribute("class","subTabs");
+		$(subTabs).appendTo(tab);
+		subTabs_ul = document.createElement("ul");
+		subTabs_ul.setAttribute("id","subTabs_ul" + tabIndex);
+		$(subTabs_ul).appendTo(subTabs);
+	}
 	if(tabType == "sta"){
 		$("<img src = 'css/images/save_256x256.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>")
 			.appendTo(li)
@@ -62,7 +73,7 @@ Tab.createFrame = function(tabType){
 		.appendTo(li)
 		.css({
 			"width": "16px",
-			"margin-top": "10px",
+			"margin-top": "8px",
 			"margin-right": "5px"
 		});
 	Tab.load(tabType,tabIndex);
@@ -95,7 +106,7 @@ Tab.load = function(tabType,tabIndex){
 				"height": "400px"
 			});
 			for(var i = 0; i < len; i++){
-				var des = data[i].descriptionCh;
+				var des = data[i].descriptionZh;
 				var name = data[i].datasetName;
 				var keys = data[i].keys;
 				var type = "points";
@@ -135,7 +146,7 @@ Tab.load = function(tabType,tabIndex){
 				Common.chartIndex[tabIndex][i][0] = 0;
 				Common.chartType[tabIndex][i] = new Array();
 				Common.yAxis[tabIndex][i] = new Array();
-				var des = data[i].descriptionCh;
+				var des = data[i].descriptionZh;
 				dataview = document.createElement("div");
 				dataview.setAttribute("class","dataview");
 				$(dataview).appendTo("#option" + tabIndex);
@@ -155,92 +166,89 @@ Tab.load = function(tabType,tabIndex){
 			return;
 		});
 	}else{
-		Common.chartIndex[tabIndex] = new Array();
-		Common.chartType[tabIndex] = new Array();
-		Common.yAxis[tabIndex] = new Array();
-		$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
+		$.getJSON(Common.allDataviewUrl(),function(data){
 			var len = data.length;
+/*
 			dv = document.createElement("div");
 			dv.setAttribute("class","dvTitle");
 			$(dv).appendTo("#option" + tabIndex);
-			$("<span>----------dataview----------</span>").appendTo(dv);
-			for(var i = 0; i < len; i++){
-				Common.chartIndex[tabIndex][i] = new Array();
-				Common.chartIndex[tabIndex][i][0] = 0;
-				Common.chartType[tabIndex][i] = new Array();
-				Common.yAxis[tabIndex][i] = new Array();
-				var des = data[i].descriptionCh;
-				dataview = document.createElement("div");
-				dataview.setAttribute("class","dataview");
-				$(dataview).appendTo("#option" + tabIndex);
-				$("<img src = 'css/images/setting_256x256.png' onClick = \"alert('setting');\"/>")
-					.appendTo(dataview)
-					.css({
-						"width": "16px",
-						"margin-right": "5px"
-					});
-				$("<img src = 'css/images/delete_256x256.png' onClick = \"alert('delete');\"/>")
-					.appendTo(dataview)
-					.css({
-						"width": "16px",
-						"margin-right": "5px"
-					});
-				$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a>").appendTo(dataview);
-				view_ds = document.createElement("div");
-				view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
-				view_ds.setAttribute("class","view_ds");
-				$(view_ds).appendTo("#view" + tabIndex);
-				$("<div id = 'special" + tabIndex + "_" + i + "' style = 'clear:both;'></div>").appendTo(view_ds);
-				$(view_ds).css("display","none");
-			}
-			$.getJSON(Common.datasetUrl().replace("tabType","sta"),function(data){
-				var length = data.length;
-				ds = document.createElement("div");
-				ds.setAttribute("class","dsTitle");
-				$(ds).appendTo("#option" + tabIndex);
-				$("<span>----------dataset----------</span>").appendTo(ds);
-				for(var i = len; i < len + length; i++){
-					Common.chartIndex[tabIndex][i] = new Array();
-					Common.chartIndex[tabIndex][i][0] = 0;
-					Common.chartType[tabIndex][i] = new Array();
-					Common.yAxis[tabIndex][i] = new Array();
-					var des = data[i - len].descriptionCh;
-					dataset = document.createElement("div");
-					dataset.setAttribute("class","dataset");
-					$(dataset).appendTo("#option" + tabIndex);
-					$("<img src = 'css/images/add_256x256.png' onClick = \"alert('add');\"/>")
-						.appendTo(dataset)
+			$("<span>----------dataview----------</span>").appendTo(dv);*/
+			google.load("visualization","1",{packages:["table"],"callback":drawTable});
+			
+			function drawTable(){
+				for(var i = 0; i < len; i++){
+					var name = data[i].datasetName;
+					var des = data[i].descriptionZh;
+					li = document.createElement("li");
+					li.setAttribute("id","subTabs_li" + tabIndex + "_" + i);
+					li.setAttribute("class","subTabs_li");
+					$(li).appendTo("#subTabs_ul" + tabIndex);
+					li.innerHTML = "<a href = '#subTab" + tabIndex + "_" + i + "'>" + des + "</a>";
+					$("<img src = 'css/images/close_256x256.png' onClick = \"alert('delete');\"/>")
+						.appendTo(li)
 						.css({
+							"float": "right",
 							"width": "16px",
+							"margin-top": "5px",
 							"margin-right": "5px"
 						});
-					$("<img src = 'css/images/setting_256x256.png' onClick = \"alert('setting');\"/>")
-						.appendTo(dataset)
-						.css({
-							"width": "16px",
-							"margin-right": "5px"
-						});
-					$("<img src = 'css/images/delete_256x256.png' onClick = \"alert('delete');\"/>")
-						.appendTo(dataset)
-						.css({
-							"width": "16px",
-							"margin-right": "5px"
-						});
-					$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a>").appendTo(dataset);
-					view_ds = document.createElement("div");
-					view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
-					view_ds.setAttribute("class","view_ds");
-					$(view_ds).appendTo("#view" + tabIndex);
-					$("<div id = 'special" + tabIndex + "_" + i + "' style = 'clear:both;'></div>").appendTo(view_ds);
-					$(view_ds).css("display","none");
+					subTab = document.createElement("div");
+					subTab.setAttribute("id","subTab" + tabIndex + "_" + i);
+					subTab.setAttribute("class","subTab");
+					$(subTab).appendTo("#subTabs" + tabIndex);
+					dataMgt = document.createElement("div");
+					dataMgt.setAttribute("id","dataMgt" + tabIndex + "_" + i);
+					dataMgt.setAttribute("class","dataMgt");
+					$(dataMgt).appendTo("#subTab" + tabIndex + "_" + i);
+					Mgt.load(tabIndex,i,name,"dv");
 				}
-				$("#view" + tabIndex).css({
-					"left": $("#option" + tabIndex).width() + 40
+				$.getJSON(Common.allDatasetUrl(),function(data){
+					var length = data.length;/*
+					ds = document.createElement("div");
+					ds.setAttribute("class","dsTitle");
+					$(ds).appendTo("#option" + tabIndex);
+					$("<span>----------dataset----------</span>").appendTo(ds);*/
+					for(var i = len; i < len + length; i++){
+						var name = data[i - len].datasetName;
+						var des = data[i - len].descriptionZh;
+						li = document.createElement("li");
+						li.setAttribute("id","subTabs_li" + tabIndex + "_" + i);
+						li.setAttribute("class","subTabs_li");
+						$(li).appendTo("#subTabs_ul" + tabIndex);
+						li.innerHTML = "<a href = '#subTab" + tabIndex + "_" + i + "'>" + des + "</a>";
+						$("<img src = 'css/images/close_256x256.png' onClick = \"alert('delete');\"/>")
+							.appendTo(li)
+							.css({
+								"float": "right",
+								"width": "16px",
+								"margin-top": "5px",
+								"margin-right": "5px"
+							});
+						subTab = document.createElement("div");
+						subTab.setAttribute("id","subTab" + tabIndex + "_" + i);
+						subTab.setAttribute("class","subTab");
+						$(subTab).appendTo("#subTabs" + tabIndex);
+						dataMgt = document.createElement("div");
+						dataMgt.setAttribute("id","dataMgt" + tabIndex + "_" + i);
+						dataMgt.setAttribute("class","dataMgt");
+						$(dataMgt).appendTo("#subTab" + tabIndex + "_" + i);
+						Mgt.load(tabIndex,i,name,"ds");
+					}
+					$("#subTabs" + tabIndex).tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+					$("#subTabs" + tabIndex + " li").removeClass("ui-corner-top").addClass("ui-corner-left");
+					$("#subTabs" + tabIndex + " .ui-widget-header").css({
+						"border-right": "1px solid #000000"
+					});
+					var subTabWidth = $("#subTabs" + tabIndex + " ul").width() + 36;
+					$(".dataMgt").css({
+						"left": subTabWidth,
+						"width": Common.width() - subTabWidth - 400
+					});
+				}).error(function(){
+					alert("Oops, we got an error...");
+					return;
 				});
-			}).error(function(){
-				alert("Oops, we got an error...");
-				return;
-			});
+			}
 		}).error(function(){
 			alert("Oops, we got an error...");
 			return;
@@ -266,7 +274,7 @@ Tab.refresh = function(tabIndex){
 		google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
 		function drawChart(){
 			for(var i = 0; i < len; i++){
-				var des = data[i].descriptionCh;
+				var des = data[i].descriptionZh;
 				$("<span>&nbsp;</span><img src = 'css/images/add.png'/><span>&nbsp;</span><a href = 'javascript:void(0);' " +
 					"onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a><br/>").appendTo("#option" + tabIndex);
 				view_ds = document.createElement("div");

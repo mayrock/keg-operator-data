@@ -114,6 +114,7 @@ Fav.addDownList = function(favid,favname){
 	var username = Common.username;
 	fav = document.createElement("div");
 	fav.setAttribute("id",favid);
+	fav.setAttribute("class","favorite");
 	$(fav).appendTo("#extendedFav");
 	staFav = document.createElement("a");
 	$(staFav).attr("href","javascript:void(0);");
@@ -123,6 +124,8 @@ Fav.addDownList = function(favid,favname){
 	$("<img src = 'css/images/close_256x256.png' onClick = \"Fav.delSta(" + favid + ");\"/>")
 		.appendTo(fav)
 		.css({
+			"float": "right",
+			"margin-top": "2px",
 			"width": "16px"
 		});
 };

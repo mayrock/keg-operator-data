@@ -85,20 +85,20 @@ User.infoMenu = function(status,info){
 		var username = Common.username;
 		var permit = Common.permit;
 		if(permit == 1){
-			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>|" +
+			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
 				"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">" + Lan.create[index] +
-				"<img src = 'css/images/down_arrow.png'/></a>|" +
+				"<img src = 'css/images/down_arrow_64x64.png' style = 'width: 10px;margin-left: 2px'/></a>" +
 				"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
-				"<img src = 'css/images/down_arrow.png'/></a>|" +
-				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>|";
+				"<img src = 'css/images/down_arrow_64x64.png' style = 'width: 10px;margin-left: 2px'/></a>" +
+				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>";
 		}else{
-			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>|" +
-				"<a href = 'javascript:void(0);' onClick = \"Tab.createFrame('manage');\">" + Lan.manage[index] + "</a>|" +
+			htmlString = "<a href = 'javascript:void(0);'>" + username + "</a>" +
+				"<a href = 'javascript:void(0);' onClick = \"Tab.createFrame('manage');\">" + Lan.manage[index] + "</a>" +
 				"<a href = 'javascript:void(0);' onClick = \"Common.extraMenu();\">" + Lan.create[index] +
-				"<img src = 'css/images/down_arrow.png'/></a>|" +
+				"<img src = 'css/images/down_arrow_64x64.png' style = 'width: 10px;margin-left: 2px'/></a>" +
 				"<a href = 'javascript:void(0);' onClick = \"Common.extendedFav();\">" + Lan.favorite[index] +
-				"<img src = 'css/images/down_arrow.png'/></a>|" +
-				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>|";
+				"<img src = 'css/images/down_arrow_64x64.png' style = 'width: 10px;margin-left: 2px'/></a>" +
+				"<a href = 'javascript:void(0);' onclick = \"User.logout();\">" + Lan.logout[index] + "</a>";
 		}
 		$("#userInfo").html(htmlString);
 		Fav.loadDownList();
@@ -169,7 +169,7 @@ User.register = function(){
 	});
 };
 
-/**********log in**********/
+/*****log in*****/
 User.login = function(){
 	var index = Common.language;
 	var username = $("#username_l").val();

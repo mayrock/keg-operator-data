@@ -1,6 +1,6 @@
 $(document).ready(function(){
-	alert("Version Test Environment: Chrome27");
-	Common.tabHeight = Common.height() - 160;
+//	alert("Version Test Environment: Chrome27");
+	Common.tabHeight = Common.height() - 180;
 	Lan.init();
 });
 
@@ -28,9 +28,9 @@ Common.favWidth = function(){return 200;};
 
 Common.ip = function(){
 	/*****aplha*****/
-	return "http://10.1.1.55:8080/keg2/rest/";
+//	return "http://10.1.1.55:8080/keg2/rest/";
 	/*****release*****/
-//	return "http://10.1.1.55:8080/keg/rest/";
+	return "http://10.1.1.55:8080/keg1/rest/";
 };
 
 /*****post*****/
@@ -44,10 +44,16 @@ Common.setLanUrl = function(){return Common.ip() + "up/setlanguage";};
 /*****get*****/
 Common.loginUrl = function(){return Common.ip() + "ug/login?jsoncallback=?";};
 
-Common.dataviewUrl = function(){return Common.ip() + "dsg/gettabTypedvs?jsoncallback=?"};
-Common.dvDataUrl = function(){return Common.ip() + "dsg/gettabTypedv?jsoncallback=?";};
-Common.datasetUrl = function(){return Common.ip() + "dsg/gettabTypedss?jsoncallback=?"};
-Common.dsDataUrl = function(){return Common.ip() + "dsg/gettabTypeds?jsoncallback=?";};
+Common.dataviewUrl = function(){return Common.ip() + "dvg/gettabTypedvs?jsoncallback=?"};
+Common.dvDataUrl = function(){return Common.ip() + "dvg/gettabTypedv?jsoncallback=?";};
+
+Common.allDatasetUrl = function(){return Common.ip() + "dsg/getdss?jsoncallback=?"};
+Common.dsFieldUrl = function(){return Common.ip() + "dsg/getdsfds?jsoncallback=?"};
+Common.dsInfoUrl = function(){return Common.ip() + "dsg/getdsinfo?jsoncallback=?"};
+
+Common.allDataviewUrl = function(){return Common.ip() + "dvg/getdvs?jsoncallback=?"};
+Common.dvFieldUrl = function(){return Common.ip() + "dvg/getdvfds?jsoncallback=?"};
+Common.dvInfoUrl = function(){return Common.ip() + "dvg/getdvinfo?jsoncallback=?"};
 
 Common.favListUrl = function(){return Common.ip() + "favg/getfavs?jsoncallback=?";};
 Common.favDataUrl = function(){return Common.ip() + "favg/getfav?jsoncallback=?";};
@@ -86,6 +92,9 @@ Common.init = function(){
 			}
 		}
 	});
+	$("#tabs .ui-widget-header").css({
+		"border-bottom": "1px solid #000000"
+	});
 };
 
 /*****load page*****/
@@ -95,17 +104,24 @@ Common.load = function(){
 	User.load();
 	
 	$("#lanOption").empty();
-	$("<img src = 'css/images/American.png'/>")
+	$("<img src = 'css/images/American_256x256.png'/>")
 		.appendTo("#lanOption")
-		.click(
+		.css({
+			"float": "right",
+			"margin-right": "10px",
+			"margin-bottom": "2px",
+			"width": "18px"
+		}).click(
 			function(){
 				Lan.change(index,0);
 			}
 		);
-	$("<img src = 'css/images/China.png'/>")
+	$("<img src = 'css/images/China_256x256.png'/>")
 		.appendTo("#lanOption")
 		.css({
-			"margin-left": "10px"
+			"float": "right",
+			"margin-right": "10px",
+			"width": "18px"
 		}).click(
 			function(){
 				Lan.change(index,1);
@@ -114,10 +130,10 @@ Common.load = function(){
 	
 	if(index == 0){
 		$("#extraMenu").css({
-			"right": "180px"
+			"right": "175px"
 		});
 		$("#extendedFav").css({
-			"right": "75px",
+			"right": "72px",
 			"width": "150px"
 		});
 	}else if(index == 1){
@@ -125,13 +141,13 @@ Common.load = function(){
 			"right": "160px"
 		});
 		$("#extendedFav").css({
-			"right": "60px",
+			"right": "64px",
 			"width": "150px"
 		});
 	}
 	
 	$("#extraMenu").empty();
-	$("<a href = 'javascript:void(0);' onclick = \"Tab.createFrame('geo');\">" + Lan.geo[index] + "</a><br/>" +
+	$("<a href = 'javascript:void(0);' onclick = \"Tab.createFrame('geo');\" style = 'border-bottom: 1px solid black'>" + Lan.geo[index] + "</a><br/>" +
 		"<a href = 'javascript:void(0);' onclick = \"Tab.createFrame('sta');\">" + Lan.sta[index] + "</a>")
 		.appendTo("#extraMenu");
 	
@@ -143,8 +159,7 @@ Common.load = function(){
 Common.adjunct = function(){
 	if(Common.tabIndex.length == 1){
 		$("#header").css({
-			"height": "100px",
-			"background-position": "0 0,473px 0,812px 0px,905px 0,1047px 0,1210px 0"//(width:100)473 339 93 142 163
+			"height": "96px"
 		});
 		$(".ui-tabs").css({
 			"height": 0
@@ -154,17 +169,17 @@ Common.adjunct = function(){
 		});
 	}else{
 		$("#header").css({
-			"height": "65px",
-			"background-position": "0 0,307.5px 0,527.5px 0,588px 0,680.5px 0,786.5px 0"//(width:65)307.5 220 60.5 92.5 106
+			"height": "64px",
+			"border-bottom": "1px solid white"
 		});
 		$(".ui-tabs").css({
-			"height": "35px"
+			"height": "32px"
 		});
 		$("#tabBar_bg").css({
-			"height": "35px"
+			"height": "32px"
 		});
 	}
-}
+};
 
 /*****initialize css of #background*****/
 Common.background = function(){
