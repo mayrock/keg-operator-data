@@ -223,7 +223,7 @@ public class DvGetFunctions {
 	@Path("/getstadv")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaDataview(
-			@QueryParam("dataview") String dataview,
+			@QueryParam("dataset") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getStaDataset " + dataview + " "
 				+ uriInfo.getAbsolutePath());
@@ -265,7 +265,7 @@ public class DvGetFunctions {
 	@GET
 	@Path("/getdv")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataview(@QueryParam("dataview") String dataview,
+	public JSONWithPadding getDataview(@QueryParam("dataset") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDataset " + dataview + " "
 				+ uriInfo.getAbsolutePath());
@@ -306,7 +306,7 @@ public class DvGetFunctions {
 	@Path("/getdvinfo")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetInfo(
-			@QueryParam("dataview") String dataview,
+			@QueryParam("dataset") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDatasetInfo " + dataview + " "
 				+ uriInfo.getAbsolutePath());
@@ -349,7 +349,7 @@ public class DvGetFunctions {
 	@Path("/getdvfds")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDataviewFieldsNames(
-			@QueryParam("dataview") String dataview,
+			@QueryParam("dataset") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDatasetFieldsNames " + dataview + " "
 				+ uriInfo.getAbsolutePath());

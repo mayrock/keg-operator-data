@@ -6,9 +6,11 @@ import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +24,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datafeature.DataView;
@@ -138,7 +141,8 @@ public class DsAdFunctions {
 			ds = p.getDataSetManager().getDataSet(dataset);
 			vs = new DataField[values.length()];
 			for (int i = 0; i < vs.length; i++) {
-				vs[i] = ds.getField(values.getJSONObject(i).getString("valuse"));
+				vs[i] = ds
+						.getField(values.getJSONObject(i).getString("valuse"));
 			}
 			q = ds.getQuery().select();
 			dv = p.getDataSetManager().defineView(dataview, description,
@@ -153,5 +157,34 @@ public class DsAdFunctions {
 		// return Response.status(Status.OK).build();
 		//
 		// // return Response.created(uriInfo.getAbsolutePath()).build();
+	}
+
+	@DELETE
+	@Path("/rmds")
+	public void removeDataset(@PathParam("dataset") String dataset) {
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			datasetManager.removeDataSet(datasetManager.getDataSet(dataset));
+			datasetManager.saveChanges();
+		} catch (DataProviderException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@DELETE
+	@Path("/rmdv")
+	public void removeDataview(@PathParam("dataset") String dataview) {
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			datasetManager.removeDataView(datasetManager.getDataView(dataview));
+			datasetManager.saveChanges();
+		} catch (DataProviderException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
