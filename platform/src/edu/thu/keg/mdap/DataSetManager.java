@@ -122,7 +122,7 @@ public interface DataSetManager {
 	 * @param owner
 	 * @return the collection of datasets
 	 */
-	public Collection<DataSet> getPrivateDataSetList(String owner);
+	public Collection<DataSet> getOwnDataSetList(String owner);
 
 	/**
 	 * 

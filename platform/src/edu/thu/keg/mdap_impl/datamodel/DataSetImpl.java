@@ -299,7 +299,21 @@ public class DataSetImpl implements DataSet {
 		default:
 			break;
 		}
-		return DataSet.PERMISSION_PRIVATE;
+		return 0;
+	}
+
+	public static String permissionToString(int permission) {
+		switch (permission) {
+		case DataSet.PERMISSION_PUBLIC:
+			return "public";
+		case DataSet.PERMISSION_LIMITED:
+			return "limited";
+		case DataSet.PERMISSION_PRIVATE:
+			return "private";
+		default:
+			break;
+		}
+		return null;
 	}
 
 }

@@ -52,6 +52,7 @@ import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JFieldName;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JGeograph;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JStatistic;
 import edu.thu.keg.mdap_impl.PlatformImpl;
+import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 
 /**
  * the functions of dataset's get operations
@@ -98,8 +99,11 @@ public class DsGetFunctions {
 				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
+				dname.setOwner(dataset.getOwner());
+				dname.setPermission(DataSetImpl.permissionToString(dataset
+						.getPermission()));
+				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
-
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
@@ -145,6 +149,10 @@ public class DsGetFunctions {
 			for (DataSet dataset : datasets) {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
+				dname.setOwner(dataset.getOwner());
+				dname.setPermission(DataSetImpl.permissionToString(dataset
+						.getPermission()));
+				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				// ArrayList<String> schema = new ArrayList<>();
@@ -196,6 +204,10 @@ public class DsGetFunctions {
 				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
+				dname.setOwner(dataset.getOwner());
+				dname.setPermission(DataSetImpl.permissionToString(dataset
+						.getPermission()));
+				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 
@@ -609,30 +621,32 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getdsinfo")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDatasetInfo(
-			@QueryParam("dataset") String dataset,
+	public JSONWithPadding getDatasetInfo(@QueryParam("dataset") String ds,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDatasetInfo " + dataset + " "
+		System.out.println("getDatasetInfo " + ds + " "
 				+ uriInfo.getAbsolutePath());
 		log.info(uriInfo.getAbsolutePath());
 		Platform p = (Platform) servletcontext.getAttribute("platform");
 		DataSetManager datasetManager = p.getDataSetManager();
-		DataSet ds = datasetManager.getDataSet(dataset);
+		DataSet dataset = datasetManager.getDataSet(ds);
 
 		// if(i++>=1)
 		// break;
 		JDatasetName dname = new JDatasetName();
-		dname.setDatasetName(ds.getName());
-		dname.setDescriptionEn(ds.getDescription(Locale.ENGLISH));
-
-		dname.setDescriptionZh(ds.getDescription(Locale.CHINESE));
+		dname.setDatasetName(dataset.getName());
+		dname.setOwner(dataset.getOwner());
+		dname.setPermission(DataSetImpl.permissionToString(dataset
+				.getPermission()));
+		dname.setLimitedUsers(dataset.getLimitedUsers());
+		dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+		dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 		ArrayList<String> keys = new ArrayList<>();
 		ArrayList<String> values = new ArrayList<>();
-		for (DataField df : ds.getKeyFields()) {
+		for (DataField df : dataset.getKeyFields()) {
 			keys.add(df.getName());
 		}
 		dname.setKeys(keys);
-		for (DataField df : ds.getValueFields()) {
+		for (DataField df : dataset.getValueFields()) {
 			values.add(df.getName());
 		}
 		dname.setValues(values);
@@ -663,6 +677,10 @@ public class DsGetFunctions {
 			for (DataSet dataset : datasets) {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
+				dname.setOwner(dataset.getOwner());
+				dname.setPermission(DataSetImpl.permissionToString(dataset
+						.getPermission()));
+				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> keys = new ArrayList<>();
@@ -708,6 +726,10 @@ public class DsGetFunctions {
 			for (DataSet dataset : datasets) {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
+				dname.setOwner(dataset.getOwner());
+				dname.setPermission(DataSetImpl.permissionToString(dataset
+						.getPermission()));
+				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> keys = new ArrayList<>();
@@ -733,9 +755,9 @@ public class DsGetFunctions {
 	}
 
 	@GET
-	@Path("/getpridss")
+	@Path("/getowndss")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getPrivateDatasetNames(
+	public JSONWithPadding getOwnDatasetNames(
 			@QueryParam("userid") String userid,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
@@ -747,11 +769,15 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
-					.getPrivateDataSetList(userid);
+					.getOwnDataSetList(userid);
 			int i = 0;
 			for (DataSet dataset : datasets) {
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
+				dname.setOwner(dataset.getOwner());
+				dname.setPermission(DataSetImpl.permissionToString(dataset
+						.getPermission()));
+				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> keys = new ArrayList<>();

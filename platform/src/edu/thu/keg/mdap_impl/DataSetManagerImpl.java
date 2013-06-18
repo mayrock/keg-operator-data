@@ -154,7 +154,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	@Override
-	public Collection<DataSet> getPrivateDataSetList(String owner) {
+	public Collection<DataSet> getOwnDataSetList(String owner) {
 		return ownerMap.get(owner);
 	}
 
@@ -216,30 +216,6 @@ public class DataSetManagerImpl implements DataSetManager {
 		for (DataView ds : sto.views) {
 			addDataView(ds);
 		}
-
-		System.out.println("----------------------------"
-				+ getDataSetList().size());
-		for (DataSet ds : getDataSetList()) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
-		}
-
-		System.out.println("PUBLIC-----------------------------"
-				+ getPublicDataSetList().size());
-		for (DataSet ds : getPublicDataSetList()) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
-		}
-		System.out.println("myc-----------------------------"
-				+ getPrivateDataSetList("myc").size());
-		for (DataSet ds : getPrivateDataSetList("myc")) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
-		}
-
-		System.out.println("wc-----------------------------"
-				+ getPrivateDataSetList("wc").size());
-		for (DataSet ds : getPrivateDataSetList("wc")) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
-		}
-		System.out.println();
 	}
 
 	@Override

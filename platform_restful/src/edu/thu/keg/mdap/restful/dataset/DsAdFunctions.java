@@ -1,6 +1,8 @@
 package edu.thu.keg.mdap.restful.dataset;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
@@ -128,7 +130,7 @@ public class DsAdFunctions {
 	@Path("/adddv")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public void createDataview(@FormParam("dataset") String dataset,
+	public Response createDataview(@FormParam("dataset") String dataset,
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
 			@FormParam("datafeaturetype") String datafuturetype,
@@ -158,10 +160,37 @@ public class DsAdFunctions {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
 		}
-
+		return Response.status(Status.OK).build();
 		// return Response.status(Status.OK).build();
 		//
 		// // return Response.created(uriInfo.getAbsolutePath()).build();
+	}
+
+	@POST
+	@Path("/setdsp")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public Response setDatasetPermission(@FormParam("dataset") String dataset,
+			@FormParam("dataview") String dataview,
+			@FormParam("owner") String owner,
+			@FormParam("permisson") String permission,
+			@FormParam("limitedusers") JSONArray limitedusers) {
+		log.info(uriInfo.getAbsolutePath());
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			List<String> users = null;
+			users = new ArrayList<String>();
+			for (int i = 0; i < limitedusers.length(); i++) {
+				users.add(limitedusers.getJSONObject(i)
+						.getString("limiteduser"));
+			}
+			p.getDataSetManager().setDataSetPermission(dataset, owner,
+					DataSetImpl.parsePermission(permission), users);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			log.warn(e.getMessage());
+		}
+		return Response.status(Status.OK).build();
 	}
 
 	@DELETE

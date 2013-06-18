@@ -13,8 +13,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class JDatasetName {
 	private String datasetName;
+	private String permission;
+	private String owner;
+	private List<String> limitedUsers;
 	private String descriptionEn = "玛胖没有给吴超添加英文介绍";
 	private String descriptionZh = "玛胖没有给吴超添加中文介绍";
+
 	private List<String> keys;
 	private List<String> values;
 	private List<Class> keytypes;
@@ -26,6 +30,51 @@ public class JDatasetName {
 
 	public String getDatasetName() {
 		return this.datasetName;
+	}
+
+	/**
+	 * @return the permission
+	 */
+	public String getPermission() {
+		return permission;
+	}
+
+	/**
+	 * @param permission
+	 *            the permission to set
+	 */
+	public void setPermission(String permission) {
+		this.permission = permission;
+	}
+
+	/**
+	 * @return the owner
+	 */
+	public String getOwner() {
+		return owner;
+	}
+
+	/**
+	 * @param owner
+	 *            the owner to set
+	 */
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	/**
+	 * @return the limitedUsers
+	 */
+	public List<String> getLimitedUsers() {
+		return limitedUsers;
+	}
+
+	/**
+	 * @param limitedUsers
+	 *            the limitedUsers to set
+	 */
+	public void setLimitedUsers(List<String> limitedUsers) {
+		this.limitedUsers = limitedUsers;
 	}
 
 	public void setDescriptionEn(String descriptionEn) {
