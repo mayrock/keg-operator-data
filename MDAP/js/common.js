@@ -1,5 +1,10 @@
 $(document).ready(function(){
-//	alert("Version Test Environment: Chrome27");
+	alert("Version Test Environment: Chrome27");
+	$("<img src = 'css/images/phone_472x591.png'/>")
+		.appendTo("#logo")
+		.css({
+			"width": "60px"
+		});
 	Common.tabHeight = Common.height() - 180;
 	Lan.init();
 });
@@ -58,7 +63,7 @@ Common.dvInfoUrl = function(){return Common.ip() + "dvg/getdvinfo?jsoncallback=?
 Common.favListUrl = function(){return Common.ip() + "favg/getfavs?jsoncallback=?";};
 Common.favDataUrl = function(){return Common.ip() + "favg/getfav?jsoncallback=?";};
 
-Common.tabLimit = function(){return 7;};
+Common.tabLimit = function(){return 10;};
 Common.tabIndex = new Array();
 
 Common.mapArr = new Array();
@@ -73,11 +78,6 @@ Common.init = function(){
 	Common.load();
 	Common.tabIndex[0] = 0;
 	Common.adjunct();
-	$("<img src = 'css/images/phone_472x591.png'/>")
-		.appendTo("#logo")
-		.css({
-			"width": "60px"
-		});
 	$("#tab_bg").css({
 		"height": Common.tabHeight
 	});
@@ -92,18 +92,20 @@ Common.init = function(){
 					"height": viewHeight + 25
 				});
 			}else{
-				if((tabHeight + 25) > Common.tabHeight){$("#tab_bg").css({
-					"height": tabHeight + 25
-				});}else{
-				$("#tab_bg").css({
-					"height": Common.tabHeight
-				});
+				if((tabHeight + 25) > Common.tabHeight){
+					$("#tab_bg").css({
+						"height": tabHeight + 25
+					});
+				}else{
+					$("#tab_bg").css({
+						"height": Common.tabHeight
+					});
 				}
 			}
 		}
 	});
-	$("#tabs .ui-widget-header").css({
-		"border-bottom": "1px solid #000000"
+	$("#tabs").css({
+		"border-bottom": "1px solid #282828"
 	});
 };
 
@@ -165,13 +167,13 @@ Common.load = function(){
 	$("<span class = 'mainTitle'>" + Lan.mainTitle[index] + "</span><span class = 'subtitle'>" + Lan.subtitle[index] + "</span>").appendTo("#header");
 };
 
-/*****initialize css of #header, .ui-tabs & #tabBar_bg*****/
+/*****initialize css of #header, #tabs & #tabBar_bg*****/
 Common.adjunct = function(){
 	if(Common.tabIndex.length == 1){
 		$("#header").css({
 			"height": "96px"
 		});
-		$(".ui-tabs").css({
+		$("#tabs").css({
 			"height": 0
 		});
 		$("#tabBar_bg").css({
@@ -182,7 +184,7 @@ Common.adjunct = function(){
 			"height": "64px",
 			"border-bottom": "1px solid white"
 		});
-		$(".ui-tabs").css({
+		$("#tabs").css({
 			"height": "32px"
 		});
 		$("#tabBar_bg").css({

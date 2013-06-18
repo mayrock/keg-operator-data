@@ -9,6 +9,10 @@
 	font-family: Times New Roman,'楷体';
 }
 
+.favorite{
+	border-bottom: 1px solid black;
+}
+
 #logo{
 	position: absolute;
 	top: 10px;
@@ -78,10 +82,6 @@
 	background-color: #282828;
 }
 
-.tab{
-	border: 1px solid red;
-}
-
 .mainTitle{
 	margin-left: 80px;
 	font-size: 36px;/*字体大小*/
@@ -96,11 +96,8 @@
 	color: white;
 }
 
-.tabs_li a{
-	height: 20px;
-	text-align: center;
-	font-family: Times New Roman,'楷体';
-	font-size: 16px;
+.tab{
+	position: relative;
 }
 
 .option{
@@ -172,24 +169,7 @@
 	width: 270px;
 }
 
-.favorite{
-	border-bottom: 1px solid black;
-}
-
-.dvContent,.dsContent{
-	position: relative;
-}
-
-.dvTabs,.dsTabs{
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	width: 100%;
-}
-
-.dvTabs_li a,.dsTabs_li a{
-	height: 20px;
-	text-align: center;
+.head{
 	font-family: Times New Roman,'楷体';
 	font-size: 16px;
 }
@@ -202,10 +182,6 @@
 	width: 100px;
 }
 
-.tab{
-	position: relative;
-}
-
 #tabBar_bg{
 	width: 100%;
 	background-color: #282828;
@@ -213,7 +189,6 @@
 
 #tab_bg{
 	width: 100%;
-	background-image: url(images/background.jpg);
 }
 
 #footer{
@@ -223,6 +198,69 @@
 	font-weight: lighter;
 	color: #cccccc;
 	border-top: 1px solid black;
+}
+
+#tabs{
+	float: left;
+	width: 100%;
+	padding: 0;
+	background-image: none;
+	background-color: transparent;
+	border-width: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+
+#tabs_ul{
+	padding-top: 0;
+	background-image: none;
+	background-color: transparent;
+	border-width: 0;
+}
+
+#tabs_ul a{
+	height: 20px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: center;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
+}
+
+.dvContent,.dsContent{
+	position: relative;
+	background-image: none;
+	background-color: transparent;
+	border-width: 0;
+}
+
+.dvTabs,.dsTabs{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	padding: 0;
+	background-image: none;
+	background-color: transparent;
+	border-width: 0;
+}
+
+.dvTabs_ul,.dsTabs_ul{
+	background-image: none;
+	background-color: transparent;
+	border-width: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.dvTabs_ul a,.dsTabs_ul a{
+	height: 20px;
+	text-align: center;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
 }
 
 /*****vertical tab*****/

@@ -99,7 +99,7 @@ Tab.createFrame = function(tabType){
 			Tab.loadMgt(tabIndex,"ds");
 		}
 		
-		$("#accordion" + tabIndex).accordion("option","active",1);
+		$("#accordion" + tabIndex).accordion("option","active",false);
 	}
 	$("#tabs").tabs("refresh");
 	$("#tabs").tabs("option","active",length);
@@ -207,6 +207,10 @@ Tab.loadMgt = function(tabIndex,type){
 			li.setAttribute("class",type + "Tabs_li");
 			$(li).appendTo("#" + type + "Tabs_ul" + tabIndex);
 			li.innerHTML = "<a href = '#" + type + "Tab" + tabIndex + "_" + i + "'>" + des + "</a>";
+			$("#" + type + "Tabs_li" + tabIndex + "_" + i + " a").css({
+				"padding-top": "4px",
+				"padding-bottom": "4px"
+			});
 			$("<img src = 'css/images/close_256x256.png' onClick = \"alert('delete');\"/>")
 				.appendTo(li)
 				.css({

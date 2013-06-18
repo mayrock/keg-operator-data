@@ -68,7 +68,14 @@ Mgt.load = function(tabIndex,dsIndex,name,type){
 
 Mgt.createFrame = function(tabIndex,type){
 	var head = document.createElement("h3");
+	head.setAttribute("id",type + "Head" + tabIndex);
+	head.setAttribute("class","head");
 	$(head).appendTo("#accordion" + tabIndex);
+	$(head).css({
+		"padding-top": "10px",
+		"padding-right": 0,
+		"padding-bottom": "10px"
+	});
 	if(type == "dv"){
 		$(head).html("data view");
 	}else{
@@ -87,6 +94,7 @@ Mgt.createFrame = function(tabIndex,type){
 	$(tabs).appendTo(content);
 	var tabs_ul = document.createElement("ul");
 	tabs_ul.setAttribute("id",type + "Tabs_ul" + tabIndex);
+	tabs_ul.setAttribute("class",type + "Tabs_ul");
 	$(tabs_ul).appendTo(tabs);
 };
 
