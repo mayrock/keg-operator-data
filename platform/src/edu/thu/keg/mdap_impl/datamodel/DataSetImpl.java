@@ -33,7 +33,9 @@ import edu.thu.keg.mdap_impl.datafeature.DataFeatureImpl;
  */
 public class DataSetImpl implements DataSet {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -45,7 +47,9 @@ public class DataSetImpl implements DataSet {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -243,9 +247,30 @@ public class DataSetImpl implements DataSet {
 		return this.permission;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.thu.keg.mdap.datamodel.DataSet#setPermission()
+	 */
+	@Override
+	public void setPermission(int permission) {
+		this.permission = permission;
+
+	}
+
 	@Override
 	public List<String> getLimitedUsers() {
 		return this.limitedUsers;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.thu.keg.mdap.datamodel.DataSet#setLimitedUsers(java.util.List)
+	 */
+	@Override
+	public void setLimitedUsers(List<String> limitedUsers) {
+		this.limitedUsers = limitedUsers;
 	}
 
 	@Override

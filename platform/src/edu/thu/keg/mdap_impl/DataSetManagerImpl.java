@@ -10,6 +10,7 @@ import java.security.acl.Owner;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.jws.Oneway;
@@ -154,6 +155,51 @@ public class DataSetManagerImpl implements DataSetManager {
 		return ownerMap.get(owner);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.thu.keg.mdap.DataSetManager#setDataSetPermission(java.lang.String,
+	 * java.lang.String, int, java.util.List)
+	 */
+	@Override
+	public void setDataSetPermission(String name, String owner, int permisson,
+			List<String> limitedUsers) {
+		DataSet ds = getDataSet(name);
+		if (!ds.getOwner().equals(owner))
+			throw new IllegalArgumentException("the " + owner + " dataset \""
+					+ name + "\" does not compareble.");
+		if (permisson == DataSet.PERMISSION_LIMITED && limitedUsers == null)
+			throw new IllegalArgumentException("the limited users is null ");
+		// if (ds.getPermission() == permisson)
+		// return;
+		switch (ds.getPermission()) {
+		case DataSet.PERMISSION_PUBLIC:
+			publicMap.remove(ds);
+			break;
+		case DataSet.PERMISSION_LIMITED:
+			for (Set<DataSet> dset : limitedMap.values()) {
+				dset.remove(ds);
+			}
+			break;
+		case DataSet.PERMISSION_PRIVATE:
+		default:
+		}
+		if (permisson == DataSet.PERMISSION_PUBLIC) {
+			if (!publicMap.contains(ds))
+				publicMap.add(ds);
+		} else if (permisson == DataSet.PERMISSION_LIMITED) {
+			for (String user : limitedUsers) {
+				if (!limitedMap.containsKey(user))
+					limitedMap.put(user, new HashSet<DataSet>());
+				limitedMap.get(user).add(ds);
+			}
+			ds.setLimitedUsers(limitedUsers);
+		} else if (permisson == DataSet.PERMISSION_PRIVATE) {
+		}
+		ds.setPermission(permisson);
+	}
+
 	private void loadDataSets() {
 		String f = Config.getDataSetFile();
 		Storage sto = (Storage) getXstream().fromXML(new File(f));
@@ -212,16 +258,19 @@ public class DataSetManagerImpl implements DataSetManager {
 		}
 		if (!ownerMap.get(ds.getOwner()).contains(ds))
 			ownerMap.get(ds.getOwner()).add(ds);
-		if (ds.getPermission() == DataSet.PERMISSION_PUBLIC) {
-			if (!publicMap.contains(ds))
-				publicMap.add(ds);
-		} else if (ds.getPermission() == DataSet.PERMISSION_LIMITED) {
-			for (String user : ds.getLimitedUsers()) {
-				if (!limitedMap.containsKey(user))
-					limitedMap.put(user, new HashSet<DataSet>());
-				limitedMap.get(user).add(ds);
-			}
-		}
+
+		setDataSetPermission(ds.getName(), ds.getOwner(), ds.getPermission(),
+				null);
+		// if (ds.getPermission() == DataSet.PERMISSION_PUBLIC) {
+		// if (!publicMap.contains(ds))
+		// publicMap.add(ds);
+		// } else if (ds.getPermission() == DataSet.PERMISSION_LIMITED) {
+		// for (String user : ds.getLimitedUsers()) {
+		// if (!limitedMap.containsKey(user))
+		// limitedMap.put(user, new HashSet<DataSet>());
+		// limitedMap.get(user).add(ds);
+		// }
+		// }
 	}
 
 	private void removeDSMeta(DataSet ds) {

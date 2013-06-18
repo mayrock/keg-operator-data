@@ -2,6 +2,7 @@ package edu.thu.keg.mdap;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datafeature.DataView;
@@ -98,15 +99,40 @@ public interface DataSetManager {
 	 * @return all datasets that supports the certain type of feature
 	 */
 	public Collection<DataSet> getDataSetList(DataFeatureType type);
+
+	/**
+	 * Get all datasets which the permission is Public, therefore everyone can
+	 * read it
+	 * 
+	 * @return all datasets which suitble for beyound conditions
+	 */
 	public Collection<DataSet> getPublicDataSetList();
+
+	/**
+	 * Get all datasets which userid can read
+	 * 
+	 * @param userid
+	 * @return the collection of datasets
+	 */
 	public Collection<DataSet> getLimitedDataSetList(String userid);
+
+	/**
+	 * Get all datasets which are belonged to the owner
+	 * 
+	 * @param owner
+	 * @return the collection of datasets
+	 */
 	public Collection<DataSet> getPrivateDataSetList(String owner);
+
 	/**
 	 * 
 	 * @param type
 	 * @return
 	 */
 	public Collection<DataView> getDataViewList(DataFeatureType type);
+
+	public void setDataSetPermission(String name, String owner, int permisson,
+			List<String> userid);
 
 	public DataView getDataView(String name);
 

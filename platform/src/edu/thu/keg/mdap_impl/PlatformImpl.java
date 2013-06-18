@@ -139,7 +139,7 @@ public class PlatformImpl implements Platform {
 				FieldFunctionality.Value);
 		fields[5] = new GeneralDataField("TotalCount", FieldType.Int,
 				"total visits of this domain", false, FieldFunctionality.Value);
-		getDataSetManager().createDataSet("FilteredByCT_Domain", "myc",
+		getDataSetManager().createDataSet("FilteredByCT_Domain", "wc",
 				DataSet.PERMISSION_PUBLIC, "Domain statistics", provider,
 				false, fields);
 
@@ -150,7 +150,7 @@ public class PlatformImpl implements Platform {
 				"appear times of the ContentType", false,
 				FieldFunctionality.Value);
 		dsSite = getDataSetManager().createDataSet(
-				"DataAggr_ContentTypes_Up90", "myc", DataSet.PERMISSION_PUBLIC,
+				"DataAggr_ContentTypes_Up90", "wc", DataSet.PERMISSION_PUBLIC,
 				"ContentType分布集", provider, true, fields);
 
 		try {
@@ -266,6 +266,12 @@ public class PlatformImpl implements Platform {
 		System.out.println("myc-----------------------------"
 				+ getDataSetManager().getPrivateDataSetList("myc").size());
 		for (DataSet ds : getDataSetManager().getPrivateDataSetList("myc")) {
+			System.out.println(ds.getName() + " " + ds.getDescription());
+		}
+
+		System.out.println("wc-----------------------------"
+				+ getDataSetManager().getPrivateDataSetList("wc").size());
+		for (DataSet ds : getDataSetManager().getPrivateDataSetList("wc")) {
 			System.out.println(ds.getName() + " " + ds.getDescription());
 		}
 		System.out.println();

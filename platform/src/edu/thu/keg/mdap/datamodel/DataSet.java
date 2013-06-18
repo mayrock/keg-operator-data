@@ -117,6 +117,10 @@ public interface DataSet extends TableStructure {
 
 	public int getPermission();
 
+	public void setPermission(int permission);
+
 	public List<String> getLimitedUsers();
+
+	public void setLimitedUsers(List<String> limitedUsers);
 
 }
