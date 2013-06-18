@@ -8,9 +8,6 @@ Sta.guide = function(tabIndex,dsIndex){
 		var len = values.length;
 		var l = Common.chartIndex[tabIndex][dsIndex].length;
 		var chartIndex = Common.chartIndex[tabIndex][dsIndex][l - 1];
-		if(l == 1){
-			$("#view_ds" + tabIndex + "_" + dsIndex).css("display","block");
-		}
 		Common.chartIndex[tabIndex][dsIndex][l] = chartIndex + 1;
 		Common.chartType[tabIndex][dsIndex][chartIndex] = "lineChart";
 		Common.yAxis[tabIndex][dsIndex][chartIndex] = new Array();
@@ -32,13 +29,10 @@ Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 	view_chart.setAttribute("id","view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex);
 	view_chart.setAttribute("class","view_chart");
 	$(view_chart).appendTo("#view_ds" + tabIndex + "_" + dsIndex);
-	$("#special" + tabIndex + "_" + dsIndex).remove();
-	$("<div id = 'special" + tabIndex + "_" + dsIndex + "' style = 'clear:both;'></div>").appendTo("#view_ds" + tabIndex + "_" + dsIndex);
-	var optionWidth = $("#option" + tabIndex).width() + 80;
-	if($("#view_ds" + tabIndex + "_" + dsIndex).width() > (Common.width() - optionWidth)){
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - optionWidth);
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","auto");
-	}
+	var l = Common.chartIndex[tabIndex][dsIndex].length;
+	$("#view_ds" + tabIndex + "_" + dsIndex).css({
+		"width": 304 * (l - 1)
+	});
 	var chartContainer = document.createElement("div");
 	chartContainer.setAttribute("id","chartContainer" + tabIndex + "_" + dsIndex + "_" + chartIndex);
 	chartContainer.setAttribute("class","chartContainer");
@@ -51,12 +45,6 @@ Sta.createChart = function(tabIndex,dsIndex,chartIndex){
 			"right": "5px",
 			"width": "16px"
 		});
-	var viewHeight = $("#view" + tabIndex).height();
-	if((viewHeight + 25) > Common.tabHeight){
-		$("#tab_bg").css({
-			"height": viewHeight + 25
-		});
-	}
 	Sta.showChart(tabIndex,dsIndex,chartIndex,"chartContainer");
 };
 
@@ -72,27 +60,10 @@ Sta.closeChart = function(tabIndex,dsIndex,chartIndex){
 	}
 	Common.chartIndex[tabIndex][dsIndex].splice(index,1);
 	$("#view_chart" + tabIndex + "_" + dsIndex + "_" + chartIndex).remove();
-	$("#view_ds" + tabIndex + "_" + dsIndex).css("width","auto");
-	$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","visible");
-	var optionWidth = $("#option" + tabIndex).width() + 80;
-	if($("#view_ds" + tabIndex + "_" + dsIndex).width() > (Common.width() - optionWidth)){
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("width",Common.width() - optionWidth);
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("overflow","auto");
-	}
-	l = Common.chartIndex[tabIndex][dsIndex].length;
-	if(l == 1){
-		$("#view_ds" + tabIndex + "_" + dsIndex).css("display","none");
-	}
-	var viewHeight = $("#view" + tabIndex).height();
-	if((viewHeight + 25) > Common.tabHeight){
-		$("#tab_bg").css({
-			"height": viewHeight + 25
-		});
-	}else{
-		$("#tab_bg").css({
-			"height": Common.tabHeight
-		});
-	}
+	var l = Common.chartIndex[tabIndex][dsIndex].length;
+	$("#view_ds" + tabIndex + "_" + dsIndex).css({
+		"width": 304 * (l - 1)
+	});
 };
 
 /*****magnify one chart*****/
@@ -272,6 +243,7 @@ Sta.showChart = function(tabIndex,dsIndex,chartIndex,ccName){
 				chart = new google.visualization.PieChart(view);
 			}
 			chart.draw(data,options);
+			$("#accordion" + tabIndex).accordion("option","active",dsIndex);
 		}).error(function(){
 			alert("Oops, we got an error...");
 			return;

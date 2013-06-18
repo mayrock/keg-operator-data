@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	alert("Version Test Environment: Chrome27");
+//	alert("Version Test Environment: Chrome27");
 	$("<img src = 'css/images/phone_472x591.png'/>")
 		.appendTo("#logo")
 		.css({

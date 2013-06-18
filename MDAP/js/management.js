@@ -83,8 +83,8 @@ Mgt.createFrame = function(tabIndex,type){
 	}
 	var content = document.createElement("div");
 	content.setAttribute("id",type + "Content" + tabIndex);
-	content.setAttribute("class",type + "Content");
-	$(content).appendTo(accordion);
+	content.setAttribute("class","content");
+	$(content).appendTo("#accordion" + tabIndex);
 	$(content).css({
 		"padding": 0
 	});
@@ -103,6 +103,19 @@ Mgt.adjustHeight = function(){
 	var tabIndex = Common.tabIndex[activeTab];
 	var active = $("#accordion" + tabIndex).accordion("option","active");
 	var type = "";
+	if(typeof(active) == "boolean"){
+		var tabHeight = $("#tab" + tabIndex).height();
+		if((tabHeight + 25) > Common.tabHeight){
+			$("#tab_bg").css({
+				"height": tabHeight + 25
+			});
+		}else{
+			$("#tab_bg").css({
+				"height": Common.tabHeight
+			});
+		}
+		return;
+	}
 	if(active == 0){
 		type = "dv";
 	}else{

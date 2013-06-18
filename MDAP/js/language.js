@@ -10,15 +10,15 @@ Lan.reInputCode = new Array("Password Again:","请确认密码:");
 Lan.saveInfo = new Array("Save username and password in 7 days","保存用户名和密码7天");
 Lan.reset = new Array("reset","重置");
 
-Lan.mainTitle = new Array("Mobile Data","移动数据");
-Lan.subtitle = new Array("Analysis Platform","分析平台");
+Lan.mainTitle = new Array("MOBILE DATA","移 动 数 据");
+Lan.subtitle = new Array("ANALYSIS PLATFORM","分 析 平 台");
 
-Lan.manage = new Array("manage","管理");
-Lan.create = new Array("new","新建");
-Lan.geo = new Array("geo data","地理数据");
-Lan.sta = new Array("stat data","统计数据");
-Lan.favorite = new Array("favorite","收藏");
-Lan.logout = new Array("logout","登出");
+Lan.manage = new Array("Manage","管理");
+Lan.create = new Array("New","新建");
+Lan.geo = new Array("Geo Data","地理数据");
+Lan.sta = new Array("Stat Data","统计数据");
+Lan.favorite = new Array("Favorite","收藏");
+Lan.logout = new Array("Logout","登出");
 
 Lan.emptyName = new Array("Username cann't be empty!","用户名不能为空!");
 Lan.emptyCode = new Array("Password cann't be empty!","密码不能为空!");

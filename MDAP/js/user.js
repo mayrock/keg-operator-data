@@ -107,7 +107,7 @@ User.infoMenu = function(status,info){
 			$.removeCookie("username",{path: "/"});
 			$.removeCookie("password",{path: "/"});
 			Common.username = "";
-			Common.permit = 0;
+			Common.permit = 1;
 			$("#tabsShell").empty();
 			var tabs = document.createElement("div");
 			tabs.setAttribute("id","tabs");

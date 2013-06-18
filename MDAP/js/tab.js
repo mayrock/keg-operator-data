@@ -38,17 +38,24 @@ Tab.createFrame = function(tabType){
 		"padding-bottom": 0,
 		"padding-left": 0
 	});
-	if((tabType == "sta") || (tabType == "geo")){
-		option = document.createElement("div");
+	if(tabType == "geo"){
+		var option = document.createElement("div");
 		option.setAttribute("id","option" + tabIndex);
 		option.setAttribute("class","option");
 		$(option).appendTo(tab);
-		view = document.createElement("div");
+		var view = document.createElement("div");
 		view.setAttribute("id","view" + tabIndex);
 		view.setAttribute("class","view");
 		$(view).appendTo(tab);
+		Tab.loadGeo(tabIndex);
+	}else if(tabType == "sta"){
+		var accordion = document.createElement("div");
+		accordion.setAttribute("id","accordion" + tabIndex);
+		accordion.setAttribute("class","accordion");
+		$(accordion).appendTo(tab);
+		Tab.loadSta(tabIndex);
 	}else{
-		accordion = document.createElement("div");
+		var accordion = document.createElement("div");
 		accordion.setAttribute("id","accordion" + tabIndex);
 		accordion.setAttribute("class","accordion");
 		$(accordion).appendTo(tab);
@@ -60,6 +67,14 @@ Tab.createFrame = function(tabType){
 				Mgt.adjustHeight();
 			}
 		});
+		google.load("visualization","1",{packages:["table"],"callback":drawTable});
+		
+		function drawTable(){
+			Tab.loadMgt(tabIndex,"dv");
+			Tab.loadMgt(tabIndex,"ds");
+		}
+		
+		$("#accordion" + tabIndex).accordion("option","active",false);
 	}
 	if(tabType == "sta"){
 		$("<img src = 'css/images/save_256x256.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>")
@@ -87,20 +102,6 @@ Tab.createFrame = function(tabType){
 			"margin-top": "8px",
 			"margin-right": "5px"
 		});
-	if(tabType == "geo"){
-		Tab.loadGeo(tabIndex);
-	}else if(tabType == "sta"){
-		Tab.loadSta(tabIndex);
-	}else{
-		google.load("visualization","1",{packages:["table"],"callback":drawTable});
-		
-		function drawTable(){
-			Tab.loadMgt(tabIndex,"dv");
-			Tab.loadMgt(tabIndex,"ds");
-		}
-		
-		$("#accordion" + tabIndex).accordion("option","active",false);
-	}
 	$("#tabs").tabs("refresh");
 	$("#tabs").tabs("option","active",length);
 };
@@ -170,20 +171,105 @@ Tab.loadSta = function(tabIndex){
 			Common.chartType[tabIndex][i] = new Array();
 			Common.yAxis[tabIndex][i] = new Array();
 			var des = data[i].descriptionZh;
-			dataview = document.createElement("div");
-			dataview.setAttribute("class","dataview");
-			$(dataview).appendTo("#option" + tabIndex);
-			$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a>").appendTo(dataview);
+			
+			var head = document.createElement("h3");
+			head.setAttribute("id","head" + tabIndex + "_" + i);
+			head.setAttribute("class","head");
+			$(head).appendTo("#accordion" + tabIndex);
+			$(head).css({
+				"padding-top": "10px",
+				"padding-right": 0,
+				"padding-bottom": "10px"
+			});
+			$("<img src = 'css/images/add_256x256.png' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\"/>")
+				.appendTo(head)
+				.css({
+					"width": "16px",
+					"margin-right": "20px"
+				});
+			$("<span>" + des + "</span>").appendTo(head);
+			var content = document.createElement("div");
+			content.setAttribute("id","content" + tabIndex + "_" + i);
+			content.setAttribute("class","content");
+			$(content).appendTo("#accordion" + tabIndex);
+			$(content).css({
+				"padding-top": 0,
+				"padding-right": 0,
+				"padding-bottom": 0,
+				"padding-left": "20px"
+			});
+			
 			view_ds = document.createElement("div");
 			view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
 			view_ds.setAttribute("class","view_ds");
-			$(view_ds).appendTo("#view" + tabIndex);
-			$("<div id = 'special" + tabIndex + "_" + i + "' style = 'clear:both;'></div>").appendTo(view_ds);
-			$(view_ds).css("display","none");
+			$(view_ds).appendTo(content);
+			$(view_ds).css({
+				"width": 0
+			})
 		}
-		$("#view" + tabIndex).css({
-			"left": $("#option" + tabIndex).width() + 40
+		$("#accordion" + tabIndex).accordion({
+			collapsible: true,
+			activate: function(event,ui){
+				var activeTab = $("#tabs").tabs("option","active");
+				var tabIndex = Common.tabIndex[activeTab];
+				var active = $("#accordion" + tabIndex).accordion("option","active");
+				if(typeof(active) == "boolean"){
+					var tabHeight = $("#tab" + tabIndex).height();
+					if((tabHeight + 25) > Common.tabHeight){
+						$("#tab_bg").css({
+							"height": tabHeight + 25
+						});
+					}else{
+						$("#tab_bg").css({
+							"height": Common.tabHeight
+						});
+					}
+					return;
+				}
+				var l = Common.chartIndex[tabIndex][active].length;
+				if(l == 1){
+					$("#content" + tabIndex + "_" + active).css({
+						"height": 0
+					});
+					var tabHeight = $("#tab" + tabIndex).height();
+					if((tabHeight + 25) > Common.tabHeight){
+						$("#tab_bg").css({
+							"height": tabHeight + 25
+						});
+					}else{
+						$("#tab_bg").css({
+							"height": Common.tabHeight
+						});
+					}
+					return;
+				}
+				var dsWidth = $("#view_ds" + tabIndex + "_" + active).width();
+				var width = $("#content" + tabIndex + "_" + active).width();
+				var dsHeight = $("#view_ds" + tabIndex + "_" + active).height();
+				if(dsWidth <= width){
+					$("#content" + tabIndex + "_" + active).css({
+						"padding-top": "10px",
+						"height": dsHeight + 10
+					});
+				}else{
+					$("#content" + tabIndex + "_" + active).css({
+						"padding-top": "10px",
+						"height": dsHeight + 25
+					});
+				}
+				var tabHeight = $("#tab" + tabIndex).height();
+				if((tabHeight + 25) > Common.tabHeight){
+					$("#tab_bg").css({
+						"height": tabHeight + 25
+					});
+				}else{
+					$("#tab_bg").css({
+						"height": Common.tabHeight
+					});
+				}
+			}
 		});
+		$("#accordion" + tabIndex).accordion("option","active",false);
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
