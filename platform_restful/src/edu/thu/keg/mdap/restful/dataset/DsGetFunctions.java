@@ -51,6 +51,7 @@ import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JField;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JFieldName;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JGeograph;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JStatistic;
+import edu.thu.keg.mdap_impl.PlatformImpl;
 
 /**
  * the functions of dataset's get operations
@@ -88,13 +89,6 @@ public class DsGetFunctions {
 		JDatasetName datasetName = new JDatasetName();
 
 		try {
-			//
-			// log.fatal("测试fatal");
-			// log.error("测试error");
-			// log.warn("测试warn");
-			// log.info("测试info");
-			// log.debug("测试debug");
-
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
@@ -107,9 +101,6 @@ public class DsGetFunctions {
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-
-				System.out.println(dname.getDescriptionEn());
-				System.out.println(dname.getDescriptionZh());
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
 				for (DataField df : dataset.getKeyFields()) {
@@ -466,7 +457,6 @@ public class DsGetFunctions {
 		}, jsoncallback);
 	}
 
-
 	/**
 	 * get a column form the dataset
 	 * 
@@ -636,9 +626,6 @@ public class DsGetFunctions {
 		dname.setDescriptionEn(ds.getDescription(Locale.ENGLISH));
 
 		dname.setDescriptionZh(ds.getDescription(Locale.CHINESE));
-
-		System.out.println(dname.getDescriptionEn());
-		System.out.println(dname.getDescriptionZh());
 		ArrayList<String> keys = new ArrayList<>();
 		ArrayList<String> values = new ArrayList<>();
 		for (DataField df : ds.getKeyFields()) {
@@ -656,6 +643,136 @@ public class DsGetFunctions {
 		// }
 
 		return new JSONWithPadding(new GenericEntity<JDatasetName>(dname) {
+		}, jsoncallback);
+	}
+
+	@GET
+	@Path("/getpubdss")
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public JSONWithPadding getPublicDatasetNames(
+			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
+		log.info(uriInfo.getAbsolutePath());
+		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		JDatasetName datasetName = new JDatasetName();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			Collection<DataSet> datasets = datasetManager
+					.getPublicDataSetList();
+			int i = 0;
+			for (DataSet dataset : datasets) {
+				JDatasetName dname = new JDatasetName();
+				dname.setDatasetName(dataset.getName());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
+				}
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
+				datasetsName.add(dname);
+			}
+
+		} catch (Exception e) {
+			log.warn(e.getStackTrace());
+			// e.printStackTrace();
+		}
+
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
+		}, jsoncallback);
+	}
+
+	@GET
+	@Path("/getlimdss")
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public JSONWithPadding getLimitedDatasetNames(
+			@QueryParam("userid") String userid,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
+		log.info(uriInfo.getAbsolutePath());
+		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		JDatasetName datasetName = new JDatasetName();
+		try {
+			if (userid == null)
+				throw new IllegalArgumentException("can't find userid");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			Collection<DataSet> datasets = datasetManager
+					.getLimitedDataSetList(userid);
+			int i = 0;
+			for (DataSet dataset : datasets) {
+				JDatasetName dname = new JDatasetName();
+				dname.setDatasetName(dataset.getName());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
+				}
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
+				datasetsName.add(dname);
+			}
+
+		} catch (Exception e) {
+			log.warn(e.getStackTrace());
+		}
+
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
+		}, jsoncallback);
+	}
+
+	@GET
+	@Path("/getpridss")
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public JSONWithPadding getPrivateDatasetNames(
+			@QueryParam("userid") String userid,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
+		log.info(uriInfo.getAbsolutePath());
+		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
+		JDatasetName datasetName = new JDatasetName();
+		try {
+			if (userid == null)
+				throw new IllegalArgumentException("can't find userid");
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataSetManager datasetManager = p.getDataSetManager();
+			Collection<DataSet> datasets = datasetManager
+					.getPrivateDataSetList(userid);
+			int i = 0;
+			for (DataSet dataset : datasets) {
+				JDatasetName dname = new JDatasetName();
+				dname.setDatasetName(dataset.getName());
+				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
+				ArrayList<String> keys = new ArrayList<>();
+				ArrayList<String> values = new ArrayList<>();
+				for (DataField df : dataset.getKeyFields()) {
+					keys.add(df.getName());
+				}
+				dname.setKeys(keys);
+				for (DataField df : dataset.getValueFields()) {
+					values.add(df.getName());
+				}
+				dname.setValues(values);
+				datasetsName.add(dname);
+			}
+
+		} catch (Exception e) {
+			log.warn(e.getStackTrace());
+		}
+
+		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
+				datasetsName) {
 		}, jsoncallback);
 	}
 

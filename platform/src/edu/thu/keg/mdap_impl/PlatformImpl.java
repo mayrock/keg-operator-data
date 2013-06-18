@@ -106,7 +106,7 @@ public class PlatformImpl implements Platform {
 				false, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false,
 				false, true, FieldFunctionality.Other);
-		dsSite = getDataSetManager().createDataSet("RegionInfo2", "myc",
+		dsSite = getDataSetManager().createDataSet("RegionInfo2", "wc",
 				DataSet.PERMISSION_PUBLIC, "基站信息", provider, true, fields);
 
 		try {
@@ -252,29 +252,29 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("----------------------------"
-				+ getDataSetManager().getDataSetList().size());
-		for (DataSet ds : getDataSetManager().getDataSetList()) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
-		}
-
-		System.out.println("PUBLIC-----------------------------"
-				+ getDataSetManager().getPublicDataSetList().size());
-		for (DataSet ds : getDataSetManager().getPublicDataSetList()) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
-		}
-		System.out.println("myc-----------------------------"
-				+ getDataSetManager().getPrivateDataSetList("myc").size());
-		for (DataSet ds : getDataSetManager().getPrivateDataSetList("myc")) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
-		}
-
-		System.out.println("wc-----------------------------"
-				+ getDataSetManager().getPrivateDataSetList("wc").size());
-		for (DataSet ds : getDataSetManager().getPrivateDataSetList("wc")) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
-		}
-		System.out.println();
+//		System.out.println("----------------------------"
+//				+ getDataSetManager().getDataSetList().size());
+//		for (DataSet ds : getDataSetManager().getDataSetList()) {
+//			System.out.println(ds.getName() + " " + ds.getDescription());
+//		}
+//
+//		System.out.println("PUBLIC-----------------------------"
+//				+ getDataSetManager().getPublicDataSetList().size());
+//		for (DataSet ds : getDataSetManager().getPublicDataSetList()) {
+//			System.out.println(ds.getName() + " " + ds.getDescription());
+//		}
+//		System.out.println("myc-----------------------------"
+//				+ getDataSetManager().getPrivateDataSetList("myc").size());
+//		for (DataSet ds : getDataSetManager().getPrivateDataSetList("myc")) {
+//			System.out.println(ds.getName() + " " + ds.getDescription());
+//		}
+//
+//		System.out.println("wc-----------------------------"
+//				+ getDataSetManager().getPrivateDataSetList("wc").size());
+//		for (DataSet ds : getDataSetManager().getPrivateDataSetList("wc")) {
+//			System.out.println(ds.getName() + " " + ds.getDescription());
+//		}
+//		System.out.println();
 	}
 
 	public static void main(String[] args) {

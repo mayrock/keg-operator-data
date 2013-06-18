@@ -3,6 +3,7 @@
  */
 package edu.thu.keg.mdap_impl;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,8 +13,9 @@ import java.util.Properties;
 
 /**
  * Store platform-wide configurations
+ * 
  * @author Yuanchao Ma
- *
+ * 
  */
 public final class Config {
 	private static String file = "config.xml";
@@ -21,21 +23,24 @@ public final class Config {
 	public static final String SqlAddress = "SqlAddress";
 	public static final String OracleAddress = "OracleAddress";
 	private static Properties prop = null;
-	
+
 	public static void init(String file) throws IOException {
 		Config.file = file;
 		InputStream is = new FileInputStream(file);
 		prop = new Properties();
 		prop.loadFromXML(is);
 	}
-	public static String getProperty(String key){
+
+	public static String getProperty(String key) {
 		return prop.getProperty(key);
 	}
+
 	public static void setProperty(String key, String value) throws IOException {
 		prop.setProperty(key, value);
 		OutputStream os = new FileOutputStream(file);
 		prop.storeToXML(os, null);
 	}
+
 	public static String getDataSetFile() {
 		return getProperty("DataSetFile");
 	}

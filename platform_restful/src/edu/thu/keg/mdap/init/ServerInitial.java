@@ -34,8 +34,9 @@ public class ServerInitial implements ServletContextListener {
 		ServletContext sc = arg0.getServletContext();
 		String P_Config = ResourceBundle.getBundle("platform_initial")
 				.getString("PlatformImpl_CONFIG");
-		Platform p = new PlatformImpl(arg0.getServletContext().getRealPath(
+		PlatformImpl p = new PlatformImpl(arg0.getServletContext().getRealPath(
 				"/WEB-INF/" + P_Config));
+		p.crud();
 		sc.setAttribute("platform", p);
 		ManagementPlatform mp = new ManagementPlatform();
 		sc.setAttribute("managementplatform", mp);

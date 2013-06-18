@@ -23,7 +23,10 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
+import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
+import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datafeature.DataFeature;
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datafeature.DataView;
@@ -169,46 +172,74 @@ public class DataSetManagerImpl implements DataSetManager {
 		if (!ds.getOwner().equals(owner))
 			throw new IllegalArgumentException("the " + owner + " dataset \""
 					+ name + "\" does not compareble.");
-		if (permisson == DataSet.PERMISSION_LIMITED && limitedUsers == null)
-			throw new IllegalArgumentException("the limited users is null ");
-		// if (ds.getPermission() == permisson)
-		// return;
-		switch (ds.getPermission()) {
+		switch (permisson) {
 		case DataSet.PERMISSION_PUBLIC:
-			publicMap.remove(ds);
-			break;
-		case DataSet.PERMISSION_LIMITED:
-			for (Set<DataSet> dset : limitedMap.values()) {
-				dset.remove(ds);
+			publicMap.add(ds);
+			if (ds.getPermission() == DataSet.PERMISSION_LIMITED) {
+				for (Set<DataSet> dset : limitedMap.values()) {
+					dset.remove(ds);
+				}
 			}
 			break;
-		case DataSet.PERMISSION_PRIVATE:
-		default:
-		}
-		if (permisson == DataSet.PERMISSION_PUBLIC) {
-			if (!publicMap.contains(ds))
-				publicMap.add(ds);
-		} else if (permisson == DataSet.PERMISSION_LIMITED) {
+		case DataSet.PERMISSION_LIMITED:
+			if (permisson == DataSet.PERMISSION_LIMITED && limitedUsers == null)
+				throw new IllegalArgumentException("the limited users is null ");
 			for (String user : limitedUsers) {
 				if (!limitedMap.containsKey(user))
 					limitedMap.put(user, new HashSet<DataSet>());
 				limitedMap.get(user).add(ds);
 			}
 			ds.setLimitedUsers(limitedUsers);
-		} else if (permisson == DataSet.PERMISSION_PRIVATE) {
+			if (ds.getPermission() == DataSet.PERMISSION_PUBLIC) {
+				publicMap.remove(ds);
+			}
+			break;
+		case DataSet.PERMISSION_PRIVATE:
+			publicMap.remove(ds);
+			for (Set<DataSet> dset : limitedMap.values()) {
+				dset.remove(ds);
+			}
+			break;
+		default:
 		}
 		ds.setPermission(permisson);
+
 	}
 
 	private void loadDataSets() {
 		String f = Config.getDataSetFile();
-		Storage sto = (Storage) getXstream().fromXML(new File(f));
+		File Fi = new File(f);
+		Storage sto = (Storage) getXstream().fromXML(Fi);
 		for (DataSet ds : sto.datasets) {
 			addDataSet(ds);
 		}
 		for (DataView ds : sto.views) {
 			addDataView(ds);
 		}
+
+		System.out.println("----------------------------"
+				+ getDataSetList().size());
+		for (DataSet ds : getDataSetList()) {
+			System.out.println(ds.getName() + " " + ds.getDescription());
+		}
+
+		System.out.println("PUBLIC-----------------------------"
+				+ getPublicDataSetList().size());
+		for (DataSet ds : getPublicDataSetList()) {
+			System.out.println(ds.getName() + " " + ds.getDescription());
+		}
+		System.out.println("myc-----------------------------"
+				+ getPrivateDataSetList("myc").size());
+		for (DataSet ds : getPrivateDataSetList("myc")) {
+			System.out.println(ds.getName() + " " + ds.getDescription());
+		}
+
+		System.out.println("wc-----------------------------"
+				+ getPrivateDataSetList("wc").size());
+		for (DataSet ds : getPrivateDataSetList("wc")) {
+			System.out.println(ds.getName() + " " + ds.getDescription());
+		}
+		System.out.println();
 	}
 
 	@Override
