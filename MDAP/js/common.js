@@ -33,9 +33,9 @@ Common.favWidth = function(){return 200;};
 
 Common.ip = function(){
 	/*****aplha*****/
-//	return "http://10.1.1.55:8080/keg2/rest/";
+	return "http://10.1.1.55:8080/keg2/rest/";
 	/*****release*****/
-	return "http://10.1.1.55:8080/keg1/rest/";
+//	return "http://10.1.1.55:8080/keg1/rest/";
 };
 
 /*****post*****/
@@ -55,6 +55,9 @@ Common.dvDataUrl = function(){return Common.ip() + "dvg/gettabTypedv?jsoncallbac
 Common.allDatasetUrl = function(){return Common.ip() + "dsg/getdss?jsoncallback=?"};
 Common.dsFieldUrl = function(){return Common.ip() + "dsg/getdsfds?jsoncallback=?"};
 Common.dsInfoUrl = function(){return Common.ip() + "dsg/getdsinfo?jsoncallback=?"};
+Common.pubDsUrl = function(){return Common.ip() + "dsg/getpubdss?jsoncallback=?";};
+Common.limDsUrl = function(){return Common.ip() + "dsg/getlimdss?jsoncallback=?";};
+Common.ownDsUrl = function(){return Common.ip() + "dsg/getowndss?jsoncallback=?";};
 
 Common.allDataviewUrl = function(){return Common.ip() + "dvg/getdvs?jsoncallback=?"};
 Common.dvFieldUrl = function(){return Common.ip() + "dvg/getdvfds?jsoncallback=?"};

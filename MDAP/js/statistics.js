@@ -1,5 +1,180 @@
 Sta = {};
 
+Sta.accordion = function(tabIndex,type){
+	var head = document.createElement("h3");
+	head.setAttribute("id","sta-" + type + "-head-" + tabIndex);
+	head.setAttribute("class","head");
+	$(head).appendTo("#accordion" + tabIndex);
+	$(head).css({
+		"padding-top": 0,
+		"padding-right": "10px",
+		"padding-bottom": 0,
+	});
+	if(type == 0){
+		$(head).html("data view");
+	}else{
+		$(head).html("data set");
+	}
+	var content = document.createElement("div");
+	content.setAttribute("id","sta-" + type + "-content-" + tabIndex);
+	content.setAttribute("class","content");
+	$(content).appendTo("#accordion" + tabIndex);
+	$(content).css({
+		"padding-top": 0,
+		"padding-right": 0,
+		"padding-bottom": 0,
+		"padding-left": "20px"
+	});
+	
+	var accordion = document.createElement("div");
+	accordion.setAttribute("id","sta-" + type + "-accordion-" + tabIndex);
+	accordion.setAttribute("class","accordion");
+	$(accordion).appendTo(content);
+	Sta.subAcc(tabIndex,type,0);//public
+	Sta.subAcc(tabIndex,type,1);//limit
+	Sta.subAcc(tabIndex,type,2);//own
+	$("#sta-" + type + "-accordion-" + tabIndex).accordion({
+		collapsible: true,
+		activate: function(event,ui){
+			var activeTab = $("#tabs").tabs("option","active");
+			var tabIndex = Common.tabIndex[activeTab];
+			var type = $("#accordion" + tabIndex).accordion("option","active");
+			if(typeof(type) == "boolean"){
+				return;
+			}
+			var permit = $("#sta-" + type + "-accordion-" + tabIndex).accordion("option","active");
+			if(typeof(permit) == "boolean"){
+				$("#staList" + tabIndex).css({
+					"width": "200px"
+				});
+				var subAccHeight = $("#sta-" + type + "-accordion-" + tabIndex).height();
+				$("#sta-" + type + "-content-" + tabIndex).css({
+					"height": subAccHeight + 10
+				});
+				var staListHeight = $("#staList" + tabIndex).height();
+				$("#tab" + tabIndex).css({
+					"height": staListHeight + 10
+				});
+				Tab.adjustHeight(tabIndex);
+				return;
+			}
+			Sta.adjustAccWidth(tabIndex,type,permit);
+			var listHeight = $("#sta-" + type + "-" + permit + "-list-" + tabIndex).height();
+			$("#sta-" + type + "-" + permit + "-content-" + tabIndex).css({
+				"height": listHeight + 10
+			});
+			var subAccHeight = $("#sta-" + type + "-accordion-" + tabIndex).height();
+			$("#sta-" + type + "-content-" + tabIndex).css({
+				"height": subAccHeight + 10
+			});
+			var staListHeight = $("#staList" + tabIndex).height();
+			$("#tab" + tabIndex).css({
+				"height": staListHeight + 10
+			});
+			Tab.adjustHeight(tabIndex);
+		}
+	});
+	
+	Sta.loadList(tabIndex,type,0);
+	Sta.loadList(tabIndex,type,1);
+	Sta.loadList(tabIndex,type,2);
+	$("#sta-" + type + "-accordion-" + tabIndex).accordion("option","active",false);
+};
+
+Sta.adjustAccWidth = function(tabIndex,type,permit){
+	$("#staList" + tabIndex).css({
+		"width": "100%"
+	});
+	var a = $("#sta-" + type + "-" + permit + "-list-" + tabIndex).find("a");
+	var max = 0;
+	for(var i = 0; i < a.length; i++){
+		if(a.eq(i).width() > max){
+			max = a.eq(i).width();
+		}
+	}
+	if(max == 0){
+		max = 125;
+	}
+	$("#sta-" + type + "-" + permit + "-list-" + tabIndex).css({
+		"width": max + 10
+	});
+	$("#staList" + tabIndex).css({
+		"width": max + 75
+	});
+};
+
+Sta.subAcc = function(tabIndex,type,permit){
+	var head = document.createElement("h3");
+	head.setAttribute("id","sta-" + type + "-" + permit + "-head-" + tabIndex);
+	head.setAttribute("class","head");
+	$(head).appendTo("#sta-" + type + "-accordion-" + tabIndex);
+	$(head).css({
+		"padding-top": 0,
+		"padding-right": "10px",
+		"padding-bottom": 0
+	});
+	if(permit == 0){
+		$(head).html("public data");
+	}else if(permit == 1){
+		$(head).html("limit data");
+	}else{
+		$(head).html("own data");
+	}
+	var content = document.createElement("div");
+	content.setAttribute("id","sta-" + type + "-" + permit + "-content-" + tabIndex);
+	content.setAttribute("class","content");
+	$(content).appendTo("#sta-" + type + "-accordion-" + tabIndex);
+	$(content).css({
+		"padding-top": "5px",
+		"padding-right": 0,
+		"padding-bottom": 0,
+		"padding-left": "20px"
+	});
+	
+	var list = document.createElement("div");
+	list.setAttribute("id","sta-" + type + "-" + permit + "-list-" + tabIndex);
+	list.setAttribute("class","list");
+	$(list).appendTo(content);
+};
+
+Sta.loadList = function(tabIndex,type,permit){
+	var url = "";
+	var msg = "{}";
+	var username = Common.username;
+	if(type == 0){
+		url = Common.dataviewUrl().replace("tabType","sta");
+	}else{
+		if(permit == 0){
+			url = Common.pubDsUrl();
+		}else if(permit == 1){
+			url = Common.limDsUrl();
+			msg = "{\"userid\":\"" + username + "\"}";
+		}else{
+			url = Common.limDsUrl();
+			msg = "{\"userid\":\"" + username + "\"}";
+		}
+	}
+	$.getJSON(url,$.parseJSON(msg),function(data){
+		var len = data.length;
+		for(var i = 0; i < len; i++){
+			var length = Common.chartIndex[tabIndex].length;
+			Common.chartIndex[tabIndex][length] = new Array();
+			Common.chartIndex[tabIndex][length][0] = 0;
+			Common.chartType[tabIndex][length] = new Array();
+			Common.yAxis[tabIndex][length] = new Array();
+			
+			var des = data[i].descriptionZh;
+			var dsName = document.createElement("div");
+			dsName.setAttribute("id","sta-" + type + "-" + permit + "-dsName-" + tabIndex + "-" + length);
+			dsName.setAttribute("class","dsName");
+			$(dsName).appendTo("#sta-" + type + "-" + permit + "-list-" + tabIndex);
+			$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" + des + "</a>").appendTo(dsName);
+		}
+	}).error(function(){
+		alert("Oops, we got an error...");
+	});
+};
+
 /*****initialize chartType and yAxis of a chart*****/
 Sta.guide = function(tabIndex,dsIndex){
 	/*****Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.*****/

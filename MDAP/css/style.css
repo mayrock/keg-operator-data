@@ -1,6 +1,9 @@
+body{
+	margin: 0;
+}
+
 #user{
 	text-align: center;/*文本的水平对齐方式*/
-	font-family: Times New Roman,'楷体';/*字体系列*/
 	display: none;
 }
 
@@ -141,14 +144,6 @@
 	width: 270px;
 }
 
-.dvDataMgt,.dsDataMgt{
-	border: 1px solid black;
-}
-
-.dvInfoTable,.dvFieldTable,.dsInfoTable,.dsFieldTable{
-	width: 100px;
-}
-
 #tabBar_bg{
 	width: 100%;
 	background-color: #282828;
@@ -166,6 +161,8 @@
 	color: #cccccc;
 	background-color: #282828;
 }
+
+/*****tabs*****/
 
 #tabs{
 	float: left;
@@ -196,17 +193,40 @@
 	font-size: 16px;
 }
 
-.head{
-	font-family: Times New Roman,'楷体';
-	font-size: 16px;
+/*****sta tab*****/
+
+.staList{
+	float: left;
+	width: 200px;
 }
 
-.content{
-	position: relative;
-	background-image: none;
-	background-color: transparent;
-	border-width: 0;
+.dsName{
+	padding-left: 5px;
+	border-bottom: 1px solid white;
+	background-color: #282828;
 }
+
+.dsName a{
+	font-family: Times New Roman,'楷体';
+	font-size: 12px;
+	text-decoration: none;
+}
+
+.dsName a:link{
+	color: white;
+}
+
+.dsName a:hover{
+	color: #008000;
+}
+
+.staView{
+	float: left;
+	margin-left: 20px;
+	border: 1px solid blue;
+}
+
+/*****mgt tab*****/
 
 .dvTabs,.dsTabs{
 	position: absolute;
@@ -229,13 +249,35 @@
 }
 
 .dvTabs_ul a,.dsTabs_ul a{
-	height: 20px;
 	text-align: center;
+	font-family: Times New Roman,'楷体';
+	font-size: 12px;
+}
+
+.dvDataMgt,.dsDataMgt{
+	border: 1px solid #282828;
+}
+
+.dvInfoTable,.dvFieldTable,.dsInfoTable,.dsFieldTable{
+	width: 100px;
+}
+
+/*****accordion*****/
+
+.head{
 	font-family: Times New Roman,'楷体';
 	font-size: 16px;
 }
 
+.content{
+	position: relative;
+	background-image: none;
+	background-color: transparent;
+	border-width: 0;
+}
+
 /*****vertical tab*****/
+
 .ui-tabs-vertical{
 	width: 55em;
 }
@@ -254,7 +296,7 @@
 }
 
 .ui-tabs-vertical .ui-tabs-nav li a{
-	display:block;
+	display: block;
 }
 
 .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active{

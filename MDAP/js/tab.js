@@ -1,5 +1,18 @@
 Tab = {};
 
+Tab.adjustHeight = function(tabIndex){
+	var tabHeight = $("#tab" + tabIndex).height();
+	if((tabHeight + 25) > Common.tabHeight){
+		$("#tab_bg").css({
+			"height": tabHeight + 25
+		});
+	}else{
+		$("#tab_bg").css({
+			"height": Common.tabHeight
+		});
+	}
+};
+
 /*****add one tab*****/
 Tab.createFrame = function(tabType){
 	if(!((tabType == "geo") || (tabType == "sta") || (tabType == "mgt"))){
@@ -34,9 +47,9 @@ Tab.createFrame = function(tabType){
 	$(tab).appendTo("#tabs");
 	$(tab).css({
 		"padding-top": "10px",
-		"padding-right": 0,
+		"padding-right": "10px",
 		"padding-bottom": 0,
-		"padding-left": 0
+		"padding-left": "10px"
 	});
 	if(tabType == "geo"){
 		var option = document.createElement("div");
@@ -49,31 +62,77 @@ Tab.createFrame = function(tabType){
 		$(view).appendTo(tab);
 		Tab.loadGeo(tabIndex);
 	}else if(tabType == "sta"){
+		$(tab).css({
+			"border": "1px solid red"
+		});
+		Common.chartIndex[tabIndex] = new Array();
+		Common.chartType[tabIndex] = new Array();
+		Common.yAxis[tabIndex] = new Array();
+		
+		var staList = document.createElement("div");
+		staList.setAttribute("id","staList" + tabIndex);
+		staList.setAttribute("class","staList");
+		$(staList).appendTo(tab);
 		var accordion = document.createElement("div");
 		accordion.setAttribute("id","accordion" + tabIndex);
 		accordion.setAttribute("class","accordion");
-		$(accordion).appendTo(tab);
-		Tab.loadSta(tabIndex);
+		$(accordion).appendTo(staList);
+		Sta.accordion(tabIndex,0);//dv
+		Sta.accordion(tabIndex,1);//ds
+		$("#accordion" + tabIndex).accordion({
+			collapsible: true,
+			activate: function(event,ui){
+				var activeTab = $("#tabs").tabs("option","active");
+				var tabIndex = Common.tabIndex[activeTab];
+				var type = $("#accordion" + tabIndex).accordion("option","active");
+				if(typeof(type) == "boolean"){
+					$("#staList" + tabIndex).css({
+						"width": "200px"
+					});
+					var staListHeight = $("#staList" + tabIndex).height();
+					$("#tab" + tabIndex).css({
+						"height": staListHeight + 10
+					});
+					Tab.adjustHeight(tabIndex);
+					return;
+				}
+				var permit = $("#sta-" + type + "-accordion-" + tabIndex).accordion("option","active");
+				if(typeof(permit) == "number"){
+					Sta.adjustAccWidth(tabIndex,type,permit);
+				}
+				var staListHeight = $("#staList" + tabIndex).height();
+				$("#tab" + tabIndex).css({
+					"height": staListHeight + 10
+				});
+				Tab.adjustHeight(tabIndex);
+			}
+		});
+		$("#accordion" + tabIndex).accordion("option","active",false);
+		
+		var staView = document.createElement("div");
+		staView.setAttribute("id","staView" + tabIndex);
+		staView.setAttribute("class","staView");
+		$(staView).appendTo(tab);
 	}else{
 		var accordion = document.createElement("div");
 		accordion.setAttribute("id","accordion" + tabIndex);
 		accordion.setAttribute("class","accordion");
 		$(accordion).appendTo(tab);
-		Mgt.createFrame(tabIndex,"dv");
-		Mgt.createFrame(tabIndex,"ds");
+		Mgt.accordion(tabIndex,"dv");
+		Mgt.accordion(tabIndex,"ds");
+		
+		google.load("visualization","1",{packages:["table"],"callback":drawTable});
+		function drawTable(){
+			Mgt.loadSubTab(tabIndex,"dv");
+			Mgt.loadSubTab(tabIndex,"ds");
+		}
+		
 		$("#accordion" + tabIndex).accordion({
 			collapsible: true,
 			activate: function(event,ui){
 				Mgt.adjustHeight();
 			}
 		});
-		google.load("visualization","1",{packages:["table"],"callback":drawTable});
-		
-		function drawTable(){
-			Tab.loadMgt(tabIndex,"dv");
-			Tab.loadMgt(tabIndex,"ds");
-		}
-		
 		$("#accordion" + tabIndex).accordion("option","active",false);
 	}
 	if(tabType == "sta"){
@@ -153,183 +212,6 @@ Tab.loadGeo = function(tabIndex){
 			"left": $("#option" + tabIndex).width() + 40
 		});
 		Geo.initMap(tabIndex);
-	}).error(function(){
-		alert("Oops, we got an error...");
-		return;
-	});
-};
-
-Tab.loadSta = function(tabIndex){
-	Common.chartIndex[tabIndex] = new Array();
-	Common.chartType[tabIndex] = new Array();
-	Common.yAxis[tabIndex] = new Array();
-	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
-		var len = data.length;
-		for(var i = 0; i < len; i++){
-			Common.chartIndex[tabIndex][i] = new Array();
-			Common.chartIndex[tabIndex][i][0] = 0;
-			Common.chartType[tabIndex][i] = new Array();
-			Common.yAxis[tabIndex][i] = new Array();
-			var des = data[i].descriptionZh;
-			
-			var head = document.createElement("h3");
-			head.setAttribute("id","head" + tabIndex + "_" + i);
-			head.setAttribute("class","head");
-			$(head).appendTo("#accordion" + tabIndex);
-			$(head).css({
-				"padding-top": "10px",
-				"padding-right": 0,
-				"padding-bottom": "10px"
-			});
-			$("<img src = 'css/images/add_256x256.png' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\"/>")
-				.appendTo(head)
-				.css({
-					"width": "16px",
-					"margin-right": "20px"
-				});
-			$("<span>" + des + "</span>").appendTo(head);
-			var content = document.createElement("div");
-			content.setAttribute("id","content" + tabIndex + "_" + i);
-			content.setAttribute("class","content");
-			$(content).appendTo("#accordion" + tabIndex);
-			$(content).css({
-				"padding-top": 0,
-				"padding-right": 0,
-				"padding-bottom": 0,
-				"padding-left": "20px"
-			});
-			
-			view_ds = document.createElement("div");
-			view_ds.setAttribute("id","view_ds" + tabIndex + "_" + i);
-			view_ds.setAttribute("class","view_ds");
-			$(view_ds).appendTo(content);
-			$(view_ds).css({
-				"width": 0
-			})
-		}
-		$("#accordion" + tabIndex).accordion({
-			collapsible: true,
-			activate: function(event,ui){
-				var activeTab = $("#tabs").tabs("option","active");
-				var tabIndex = Common.tabIndex[activeTab];
-				var active = $("#accordion" + tabIndex).accordion("option","active");
-				if(typeof(active) == "boolean"){
-					var tabHeight = $("#tab" + tabIndex).height();
-					if((tabHeight + 25) > Common.tabHeight){
-						$("#tab_bg").css({
-							"height": tabHeight + 25
-						});
-					}else{
-						$("#tab_bg").css({
-							"height": Common.tabHeight
-						});
-					}
-					return;
-				}
-				var l = Common.chartIndex[tabIndex][active].length;
-				if(l == 1){
-					$("#content" + tabIndex + "_" + active).css({
-						"height": 0
-					});
-					var tabHeight = $("#tab" + tabIndex).height();
-					if((tabHeight + 25) > Common.tabHeight){
-						$("#tab_bg").css({
-							"height": tabHeight + 25
-						});
-					}else{
-						$("#tab_bg").css({
-							"height": Common.tabHeight
-						});
-					}
-					return;
-				}
-				var dsWidth = $("#view_ds" + tabIndex + "_" + active).width();
-				var width = $("#content" + tabIndex + "_" + active).width();
-				var dsHeight = $("#view_ds" + tabIndex + "_" + active).height();
-				if(dsWidth <= width){
-					$("#content" + tabIndex + "_" + active).css({
-						"padding-top": "10px",
-						"height": dsHeight + 10
-					});
-				}else{
-					$("#content" + tabIndex + "_" + active).css({
-						"padding-top": "10px",
-						"height": dsHeight + 25
-					});
-				}
-				var tabHeight = $("#tab" + tabIndex).height();
-				if((tabHeight + 25) > Common.tabHeight){
-					$("#tab_bg").css({
-						"height": tabHeight + 25
-					});
-				}else{
-					$("#tab_bg").css({
-						"height": Common.tabHeight
-					});
-				}
-			}
-		});
-		$("#accordion" + tabIndex).accordion("option","active",false);
-	}).error(function(){
-		alert("Oops, we got an error...");
-		return;
-	});
-};
-
-Tab.loadMgt = function(tabIndex,type){
-	var url = "";
-	if(type == "dv"){
-		url = Common.allDataviewUrl();
-	}else{
-		url = Common.allDatasetUrl();
-	}
-	$.getJSON(url,function(data){
-		var len = data.length;
-		for(var i = 0; i < len; i++){
-			var name = data[i].datasetName;
-			var des = data[i].descriptionZh;
-			li = document.createElement("li");
-			li.setAttribute("id",type + "Tabs_li" + tabIndex + "_" + i);
-			li.setAttribute("class",type + "Tabs_li");
-			$(li).appendTo("#" + type + "Tabs_ul" + tabIndex);
-			li.innerHTML = "<a href = '#" + type + "Tab" + tabIndex + "_" + i + "'>" + des + "</a>";
-			$("#" + type + "Tabs_li" + tabIndex + "_" + i + " a").css({
-				"padding-top": "4px",
-				"padding-bottom": "4px"
-			});
-			$("<img src = 'css/images/close_256x256.png' onClick = \"alert('delete');\"/>")
-				.appendTo(li)
-				.css({
-					"float": "right",
-					"width": "16px",
-					"margin-top": "5px",
-					"margin-right": "5px"
-				});
-			subTab = document.createElement("div");
-			subTab.setAttribute("id",type + "Tab" + tabIndex + "_" + i);
-			subTab.setAttribute("class",type + "Tab");
-			$(subTab).appendTo("#" + type + "Tabs" + tabIndex);
-			$(subTab).css({
-				"padding": 0
-			});
-			dataMgt = document.createElement("div");
-			dataMgt.setAttribute("id",type + "DataMgt" + tabIndex + "_" + i);
-			dataMgt.setAttribute("class",type + "DataMgt");
-			$(dataMgt).appendTo("#" + type + "Tab" + tabIndex + "_" + i);
-			$(dataMgt).css({
-				"width": 400
-			});
-			Mgt.load(tabIndex,i,name,type);
-		}
-		$("#" + type + "Tabs" + tabIndex).tabs({
-			activate: function(event,ui){
-				Mgt.adjustHeight();
-			}
-		}).addClass("ui-tabs-vertical ui-helper-clearfix");
-		$("#" + type + "Tabs" + tabIndex + " li").removeClass("ui-corner-top").addClass("ui-corner-left");
-		$("#" + type + "Tabs" + tabIndex + " .ui-widget-header").css({
-			"border-right": "1px solid #000000"
-		});
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
