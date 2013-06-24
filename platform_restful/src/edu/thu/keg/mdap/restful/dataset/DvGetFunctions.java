@@ -112,60 +112,6 @@ public class DvGetFunctions {
 	}
 
 	/**
-	 * get Statistic dataview
-	 * 
-	 * @param jsoncallback
-	 * @return
-	 */
-	@GET
-	@Path("/getstadvs")
-	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getStaDatasetViewsNames(
-			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getStaDatasetViewsNames "
-				+ uriInfo.getAbsolutePath());
-		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
-		JDatasetName datasetName = new JDatasetName();
-		try {
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			Collection<DataView> datasets = datasetManager.getDataViewList();
-			int i = 0;
-			for (DataView dataset : datasets) {
-				// if(i++>=1)
-				// break;
-				JDatasetName dname = new JDatasetName();
-				dname.setDatasetName(dataset.getName());
-				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
-				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> schema = new ArrayList<>();
-				// for (DataField df : dataset.getAllFields()) {
-				// schema.add(df.getName());
-				// }
-				// dname.setSchema(schema);
-				ArrayList<String> keys = new ArrayList<>();
-				ArrayList<String> values = new ArrayList<>();
-				for (DataField df : dataset.getKeyFields()) {
-					keys.add(df.getName());
-				}
-				dname.setKeys(keys);
-				for (DataField df : dataset.getValueFields()) {
-					values.add(df.getName());
-				}
-				dname.setValues(values);
-				datasetsName.add(dname);
-			}
-		} catch (Exception e) {
-			log.warn(e.getStackTrace());
-		}
-
-		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
-				datasetsName) {
-		}, jsoncallback);
-
-	}
-
-	/**
 	 * get all geo dataviews
 	 * 
 	 * @param jsoncallback

@@ -76,7 +76,8 @@ public class DsAdFunctions {
 			@FormParam("loadable") boolean loadable,
 			@FormParam("owner") String owner,
 			@FormParam("permission") String permission,
-			@FormParam("dsfields") JSONArray datafields) {
+			@FormParam("dsfields") JSONArray datafields,
+			@FormParam("limitedusers") JSONArray limitedusers) {
 		/**
 		 * description 数据集描述 loadable 是否可以加载 dsFields 数据域的jsonarray fieldName
 		 * fieldType description isKey
@@ -114,9 +115,15 @@ public class DsAdFunctions {
 						df_description, isKey, allowNull, isDim,
 						FieldFunctionality.parse(func));
 			}
-			p.getDataSetManager().createDataSet(dataset, owner,
-					DataSetImpl.parsePermission(permission), description,
+			p.getDataSetManager().createDataSet(dataset, owner, description,
 					provider, loadable, fields);
+			List<String> users_list = new ArrayList<>();
+			for (int i = 0; i < limitedusers.length(); i++) {
+				JSONObject user = limitedusers.getJSONObject(i);
+				users_list.add(user.getString("limiteduser"));
+			}
+			p.getDataSetManager().setDataSetPermission(dataset, owner,
+					DataSetImpl.parsePermission(permission), users_list);
 			p.getDataSetManager().saveChanges();
 		} catch (JSONException | IOException e) {
 			// TODO Auto-generated catch block
@@ -219,6 +226,5 @@ public class DsAdFunctions {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 }

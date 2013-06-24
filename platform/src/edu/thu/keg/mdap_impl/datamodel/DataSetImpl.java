@@ -92,12 +92,11 @@ public class DataSetImpl implements DataSet {
 		descriptions = new LocalizedMessage();
 	}
 
-	public DataSetImpl(String name, String owner, int permission,
-			DataProvider provider, boolean loadable, DataField... fields) {
+	public DataSetImpl(String name, String owner, DataProvider provider,
+			boolean loadable, DataField... fields) {
 		super();
 		this.name = name;
 		this.owner = owner;
-		this.permission = permission;
 		this.provider = provider;
 		this.loadable = loadable;
 		this.descriptions = new LocalizedMessage();
@@ -156,6 +155,7 @@ public class DataSetImpl implements DataSet {
 	@Override
 	public DataFeature getFeature(DataFeatureType type) {
 		List<DataField> keys = new ArrayList<DataField>();
+		List<DataField> values = new ArrayList<DataField>();
 		boolean flag = true;
 
 		for (FieldFunctionality func : type.getFuncs()) {
@@ -164,12 +164,21 @@ public class DataSetImpl implements DataSet {
 				break;
 			}
 		}
-
-		keys = this.getKeyFields();
-
 		if (flag) {
+			if (type.equals(DataFeatureType.GeoFeature)) {
+				keys.add(fieldsMap.get(FieldFunctionality.Latitude).get(0));
+				keys.add(fieldsMap.get(FieldFunctionality.Longitude).get(0));
+				values.addAll(this.getValueFields());
+			} else if (type.equals(DataFeatureType.DistributionFeature)) {
+				keys.addAll(fieldsMap.get(FieldFunctionality.Identifier));
+				values.addAll(fieldsMap.get(FieldFunctionality.Value));
+			} else {
+				keys = this.getKeyFields();
+				values = this.getValueFields();
+			}
+
 			return new DataFeatureImpl(type, keys.toArray(new DataField[0]),
-					this.getValueFields().toArray(new DataField[0]));
+					values.toArray(new DataField[0]));
 		} else {
 			return null;
 		}
@@ -203,7 +212,7 @@ public class DataSetImpl implements DataSet {
 	}
 
 	@Override
-	public Set<DataFeature> getFeatures() {
+	public Set<DataFeature> getFeatures() {// 创建数据集的时候调用一次，唯一一次，得到所有的这个数据集的DataFeature
 		Set<DataFeature> features = new HashSet<DataFeature>();
 		for (DataFeatureType type : DataFeatureType.values()) {
 			DataFeature f = this.getFeature(type);

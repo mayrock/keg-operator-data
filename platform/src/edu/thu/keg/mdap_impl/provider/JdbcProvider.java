@@ -24,25 +24,30 @@ import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
  * @author Yuanchao Ma
- *
+ * 
  */
 public class JdbcProvider extends AbstractDataProvider {
-	
+
 	private HashMap<Query, ResultSet> results;
 
 	public JdbcProvider(String connString) {
 		super(connString);
 		results = new HashMap<Query, ResultSet>();
 	}
-	
+
+	public JdbcProvider(String connString, String username, String password) {
+		super(connString, username, password);
+		results = new HashMap<Query, ResultSet>();
+	}
+
 	private synchronized Connection getConnection() throws SQLException {
-//		if (this.conn == null || this.conn.isClosed())
-//			this.conn = DriverManager.getConnection(connString);
-//		return this.conn;
+		// if (this.conn == null || this.conn.isClosed())
+		// this.conn = DriverManager.getConnection(connString);
+		// return this.conn;
 		return DriverManager.getConnection(connString);
 	}
-	
-	@Override 
+
+	@Override
 	public String getQueryString(Query q) {
 		return this.getQueryString(q, 0);
 	}
@@ -53,19 +58,18 @@ public class JdbcProvider extends AbstractDataProvider {
 
 		for (int i = 0; i < fields.length - 1; i++) {
 			DataField df = fields[i];
-			sb.append(df.getQueryName()).append(" AS ")
-			.append(df.getName()).append(",");
+			sb.append(df.getQueryName()).append(" AS ").append(df.getName())
+					.append(",");
 		}
 		sb.append(fields[fields.length - 1].getQueryName()).append(" AS ")
-			.append(fields[fields.length - 1].getName());
-		
-		
+				.append(fields[fields.length - 1].getName());
+
 		if (q.getInnerQuery() == null)
 			sb.append(" FROM ").append(fields[0].getDataSet().getName());
 		else
 			sb.append(" FROM ( ")
-			.append(getQueryString(q.getInnerQuery(), level+1))
-			.append(" ) as t_").append(level);
+					.append(getQueryString(q.getInnerQuery(), level + 1))
+					.append(" ) as t_").append(level);
 		List<WhereClause> wheres = q.getWhereClauses();
 		if (wheres.size() > 0) {
 			sb.append(" WHERE ");
@@ -76,7 +80,7 @@ public class JdbcProvider extends AbstractDataProvider {
 			}
 			sb.append(whereToSB(wheres.get(wheres.size() - 1)));
 		}
-		
+
 		List<DataField> gb = q.getGroupByFields();
 		if (gb != null && gb.size() > 0) {
 			sb.append(" GROUP BY ");
@@ -85,39 +89,41 @@ public class JdbcProvider extends AbstractDataProvider {
 			}
 			sb.append(gb.get(gb.size() - 1).getName());
 		}
-		
+
 		if (level == 0) {
 			List<OrderClause> orders = q.getOrderClauses();
 			if (orders.size() > 0) {
 				sb.append(" ORDER BY ");
 				for (int i = 0; i < orders.size() - 1; i++) {
 					OrderClause order = orders.get(i);
-					sb.append(order.getField().getName())
-						.append(" ").append(order.getOrder().toString());
+					sb.append(order.getField().getName()).append(" ")
+							.append(order.getOrder().toString());
 					sb.append(", ");
 				}
 				sb.append(orders.get(orders.size() - 1).getField().getName())
-				.append(" ").append(orders.get(orders.size() - 1).getOrder().toString());
+						.append(" ")
+						.append(orders.get(orders.size() - 1).getOrder()
+								.toString());
 			}
 		}
-		
-		
+
 		return sb.toString();
 	}
+
 	private StringBuilder whereToSB(WhereClause where) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(where.getField().getName())
-			.append(where.getOperator().toString());
+		sb.append(where.getField().getName()).append(
+				where.getOperator().toString());
 		if (where.getField().getFieldType().isNumber())
 			sb.append(where.getValue().toString());
 		else
-			sb.append("'") 
-				.append(where.getValue().toString())
-				.append("'");
+			sb.append("'").append(where.getValue().toString()).append("'");
 		return sb;
 	}
+
 	private ResultSet executeQuery(String query) throws IllegalQueryException {
 		try {
+			System.out.println(connString + " : " + query);
 			Statement stmt = getConnection().createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			return rs;
@@ -153,29 +159,31 @@ public class JdbcProvider extends AbstractDataProvider {
 	}
 
 	@Override
-	public void writeDataSetContent(DataSet ds, DataContent data) throws DataProviderException {
-		
+	public void writeDataSetContent(DataSet ds, DataContent data)
+			throws DataProviderException {
+
 		removeContent(ds);
-		
+
 		String ddl = getDDL(ds);
 		execute(ddl);
-		
+
 		if (data instanceof Query) {
-			Query q = (Query)data;
+			Query q = (Query) data;
 			if (q.getProvider() == ds.getProvider()) {
 				StringBuilder sb = new StringBuilder();
 				for (DataField df : ds.getDataFields()) {
 					sb.append(df.getName()).append(",");
 				}
-				
+
 				String insertQueryStr = "INSERT INTO " + ds.getName() + " ( "
-						+ sb.toString() + " ) SELECT " + sb.substring(0, sb.length() - 1)
-						+ " FROM ( " + q.toString() + " ) as in0";
+						+ sb.toString() + " ) SELECT "
+						+ sb.substring(0, sb.length() - 1) + " FROM ( "
+						+ q.toString() + " ) as in0";
 				execute(insertQueryStr);
 			}
 		}
 	}
-	
+
 	private String getDDL(DataSet ds) {
 		StringBuilder sb = new StringBuilder("CREATE TABLE ");
 		sb.append(ds.getName());
@@ -184,10 +192,10 @@ public class JdbcProvider extends AbstractDataProvider {
 		for (int i = 0; i < fields.size() - 1; i++) {
 			sb.append(getDDL(fields.get(i))).append(",");
 		}
-		sb.append(getDDL(fields.get(fields.size() - 1)) ).append(" ) ");
+		sb.append(getDDL(fields.get(fields.size() - 1))).append(" ) ");
 		return sb.toString();
 	}
-	
+
 	private String getDDL(DataField field) {
 		FieldType type = field.getFieldType();
 		String typeStr = "";
@@ -222,7 +230,9 @@ public class JdbcProvider extends AbstractDataProvider {
 	@Override
 	public void openQuery(Query query) throws DataProviderException {
 		if (!results.containsKey(query)) {
-			ResultSet rs = executeQuery(getQueryString(query, 0));
+			String sql = getQueryString(query, 0);
+
+			ResultSet rs = executeQuery(sql);
 			results.put(query, rs);
 		}
 	}
@@ -257,7 +267,8 @@ public class JdbcProvider extends AbstractDataProvider {
 		} catch (SQLException e) {
 			throw new DataProviderException(e.getMessage());
 		}
-		throw new IllegalArgumentException("Type of this field is not supported");
+		throw new IllegalArgumentException(
+				"Type of this field is not supported");
 	}
 
 	@Override
@@ -267,8 +278,8 @@ public class JdbcProvider extends AbstractDataProvider {
 			conn = results.get(q).getStatement().getConnection();
 			results.get(q).close();
 			results.remove(q);
-//			if (results.size() == 0)
-//				getConnection().close();
+			// if (results.size() == 0)
+			// getConnection().close();
 		} catch (SQLException e) {
 			throw new DataProviderException(e.getMessage());
 		} finally {

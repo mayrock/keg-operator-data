@@ -62,9 +62,8 @@ public interface DataSetManager {
 	 *            DataField set
 	 * @return A new DataSet instance
 	 */
-	public DataSet createDataSet(String name, String owner, int permission,
-			String description, DataProvider provider, boolean loadable,
-			DataField... fields);
+	public DataSet createDataSet(String name, String owner, String description,
+			DataProvider provider, boolean loadable, DataField... fields);
 
 	public DataView defineView(String name, String description, int permission,
 			DataFeatureType type, Query q);

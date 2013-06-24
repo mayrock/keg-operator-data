@@ -267,7 +267,7 @@ public class DataSetManagerImpl implements DataSetManager {
 			ownerMap.get(ds.getOwner()).add(ds);
 
 		setDataSetPermission(ds.getName(), ds.getOwner(), ds.getPermission(),
-				null);
+				ds.getLimitedUsers());
 		// if (ds.getPermission() == DataSet.PERMISSION_PUBLIC) {
 		// if (!publicMap.contains(ds))
 		// publicMap.add(ds);
@@ -300,12 +300,13 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	@Override
-	public DataSet createDataSet(String name, String owner, int permission,
+	public DataSet createDataSet(String name, String owner,
 			String description, DataProvider provider, boolean loadable,
 			DataField... fields) {
-		DataSet ds = new DataSetImpl(name, owner, permission, provider,
+		DataSet ds = new DataSetImpl(name, owner, provider,
 				loadable, fields);
 		ds.setDescription(description);
+		ds.setPermission(DataSetImpl.PERMISSION_PRIVATE);
 		addDataSet(ds);
 		return ds;
 	}

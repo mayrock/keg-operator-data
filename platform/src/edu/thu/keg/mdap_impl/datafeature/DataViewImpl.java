@@ -79,6 +79,8 @@ public class DataViewImpl implements DataView {
 		if (this.type.equals(DataFeatureType.GeoFeature)) {
 			return f.getFunction().equals(FieldFunctionality.Latitude)
 					|| f.getFunction().equals(FieldFunctionality.Longitude);
+		} else if (this.type.equals(DataFeatureType.DistributionFeature)) {
+			return f.getFunction().equals(FieldFunctionality.Identifier);
 		} else {
 			return !f.getFunction().equals(FieldFunctionality.Value);
 		}
@@ -135,7 +137,7 @@ public class DataViewImpl implements DataView {
 
 	@Override
 	public void setDescription(Locale locale, String desp) {
-		this.desps.setMessage(desp);
+		this.desps.setMessage(locale, desp);
 	}
 
 }

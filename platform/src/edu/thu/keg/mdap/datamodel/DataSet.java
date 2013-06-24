@@ -11,6 +11,7 @@ import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.datafeature.DataFeature;
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
+import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 
@@ -104,6 +105,7 @@ public interface DataSet extends TableStructure {
 	 * Get the key DataFields of this dataset
 	 */
 	public Collection<DataField> getKeyFields();
+
 
 	/**
 	 * Get the value fields of this dataset

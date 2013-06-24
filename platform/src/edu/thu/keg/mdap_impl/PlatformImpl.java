@@ -72,25 +72,57 @@ public class PlatformImpl implements Platform {
 		// Construct a new dataset
 		DataProvider provider = getDataProviderManager().getDefaultSQLProvider(
 				"BeijingData");
+		DataProvider providerOrcl = getDataProviderManager()
+				.getDefaultOracleProvider("orcl", "bj_gb", "root");
 
 		Query q = null;
 		DataField[] fields = null;
 		DataSet dsSite = null;
 		DataView dv = null;
 
+		// 1st oracle
+		fields = new DataField[6];
+		fields[0] = new GeneralDataField("IMSI", FieldType.ShortString, "",
+				true, FieldFunctionality.Identifier);
+		//
+		fields[1] = new GeneralDataField("HOST", FieldType.LongString, "",
+				false, FieldFunctionality.Other);
+		fields[2] = new GeneralDataField("CONTENTTYPE", FieldType.ShortString,
+				"", false, FieldFunctionality.Other);
+		fields[3] = new GeneralDataField("LATITUDE", FieldType.Double, "",
+				true, FieldFunctionality.Latitude);
+		fields[4] = new GeneralDataField("LONGITUDE", FieldType.Double, "",
+				true, FieldFunctionality.Longitude);
+		fields[5] = new GeneralDataField("REQUESTTIME", FieldType.DateTime, "",
+				false, FieldFunctionality.TimeStamp);
+		dsSite = getDataSetManager().createDataSet("T_GB_CDR_HTTP_LOC", "ybz",
+				"618GPRS数据", providerOrcl, true, fields);
+		getDataSetManager().setDataSetPermission("T_GB_CDR_HTTP_LOC", "ybz",
+				DataSetImpl.PERMISSION_PRIVATE, null);
+		try {
+			q = dsSite.getQuery().select(dsSite.getField("IMSI"),
+					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
+		} catch (OperationNotSupportedException | DataProviderException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		dv = getDataSetManager().defineView("618GB_Data", "区域内用户分布",
+				DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
+		dv.setDescription(Locale.ENGLISH, "Distibutuion of the user in th geograph");
+		// 1st DataSet
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true,
 				FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false,
 				FieldFunctionality.Other);
-		getDataSetManager().createDataSet("WebsiteId_URL", "myc",
-				DataSet.PERMISSION_PUBLIC, "网站信息", provider, true, fields);
+		getDataSetManager().createDataSet("WebsiteId_URL", "myc", "网站信息",
+				provider, true, fields);
 		List<String> users = new ArrayList<>();
 		users.add("wc");
 		users.add("xm");
 		getDataSetManager().setDataSetPermission("WebsiteId_URL", "myc",
 				DataSetImpl.PERMISSION_LIMITED, users);
-
+		// 2nd DataSet
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("Region", FieldType.Int, "", true,
 				FieldFunctionality.Other);
@@ -100,9 +132,9 @@ public class PlatformImpl implements Platform {
 				false, FieldFunctionality.Latitude);
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "",
 				false, FieldFunctionality.Longitude);
-		dsSite = getDataSetManager().createDataSet("RegionInfo3", "xm",
-				DataSet.PERMISSION_PUBLIC, "地理区域", provider, true, fields);
-
+		dsSite = getDataSetManager().createDataSet("RegionInfo3", "xm", "地理区域",
+				provider, true, fields);
+		// 3rd DataSet
 		fields = new DataField[5];
 		fields[0] = new GeneralDataField("SiteId", FieldType.Int, "", true,
 				FieldFunctionality.Identifier);
@@ -114,9 +146,9 @@ public class PlatformImpl implements Platform {
 				false, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false,
 				false, true, FieldFunctionality.Other);
-		dsSite = getDataSetManager().createDataSet("RegionInfo2", "xm",
-				DataSet.PERMISSION_PUBLIC, "基站信息", provider, true, fields);
-
+		dsSite = getDataSetManager().createDataSet("RegionInfo2", "xm", "基站信息",
+				provider, true, fields);
+		// 3rd DataView
 		try {
 			q = dsSite
 					.getQuery()
@@ -131,7 +163,7 @@ public class PlatformImpl implements Platform {
 		dv = getDataSetManager().defineView("RegionSta", "区域内基站数统计",
 				DataView.PERMISSION_PUBLIC, DataFeatureType.ValueFeature, q);
 		dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
-
+		// 4th DataSet
 		fields = new DataField[6];
 		fields[0] = new GeneralDataField("Domain", FieldType.LongString,
 				"Domain", true, FieldFunctionality.Identifier);
@@ -148,9 +180,8 @@ public class PlatformImpl implements Platform {
 		fields[5] = new GeneralDataField("TotalCount", FieldType.Int,
 				"total visits of this domain", false, FieldFunctionality.Value);
 		getDataSetManager().createDataSet("FilteredByCT_Domain", "wc",
-				DataSet.PERMISSION_PUBLIC, "Domain statistics", provider,
-				false, fields);
-
+				"Domain statistics", provider, false, fields);
+		// 5th DataSet
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("ContentType", FieldType.LongString,
 				"Content Type of websites", true, FieldFunctionality.Identifier);
@@ -158,9 +189,9 @@ public class PlatformImpl implements Platform {
 				"appear times of the ContentType", false,
 				FieldFunctionality.Value);
 		dsSite = getDataSetManager().createDataSet(
-				"DataAggr_ContentTypes_Up90", "wc", DataSet.PERMISSION_PUBLIC,
-				"ContentType分布集", provider, true, fields);
-
+				"DataAggr_ContentTypes_Up90", "wc", "ContentType分布集", provider,
+				true, fields);
+		// 5th DataView
 		try {
 			q = dsSite.getQuery().orderBy("times", Order.DESC);
 		} catch (OperationNotSupportedException | DataProviderException e1) {
@@ -170,7 +201,7 @@ public class PlatformImpl implements Platform {
 				DataView.PERMISSION_PUBLIC,
 				DataFeatureType.DistributionFeature, q);
 		dv.setDescription(Locale.ENGLISH, "ContentType distribution");
-
+		// 6th DataSet
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("Imsi", FieldType.ShortString,
 				"User IMSI", true, FieldFunctionality.Identifier);
@@ -184,9 +215,8 @@ public class PlatformImpl implements Platform {
 				"Total count of requests", false, FieldFunctionality.Value);
 
 		dsSite = getDataSetManager().createDataSet("slot_Imsi_All", "myc",
-				DataSet.PERMISSION_PUBLIC, "User statistics by time slot",
-				provider, true, fields);
-
+				"User statistics by time slot", provider, true, fields);
+		// 6th DataView
 		try {
 			DataField va = new AggregatedDataField(dsSite.getField("Imsi"),
 					AggrFunction.COUNT, "UserCount");
@@ -201,7 +231,7 @@ public class PlatformImpl implements Platform {
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
 		}
-
+		// 7th DataSet
 		fields = new DataField[3];
 		fields[0] = new GeneralDataField("SiteId", FieldType.ShortString,
 				"基站ID", true, FieldFunctionality.Identifier);
@@ -211,8 +241,8 @@ public class PlatformImpl implements Platform {
 				false, FieldFunctionality.Value);
 
 		dsSite = getDataSetManager().createDataSet("SiteId_ConnHour", "myc",
-				DataSet.PERMISSION_PUBLIC, "每小时每基站连接数", provider, true, fields);
-
+				"每小时每基站连接数", provider, true, fields);
+		// 7th DataView
 		try {
 			q = dsSite
 					.getQuery()
@@ -263,18 +293,24 @@ public class PlatformImpl implements Platform {
 		System.out.println("----------------------------"
 				+ getDataSetManager().getDataSetList().size());
 		for (DataSet ds : getDataSetManager().getDataSetList()) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
+			System.out.println(ds.getOwner() + " "
+					+ DataSetImpl.permissionToString(ds.getPermission()) + " "
+					+ ds.getName() + " " + ds.getDescription());
 		}
-		System.out.println("PUBLIC-----------------------------"
+		System.out.println("PUBLIC----------------------------- "
 				+ getDataSetManager().getPublicDataSetList().size());
 		for (DataSet ds : getDataSetManager().getPublicDataSetList()) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
+			System.out.println(ds.getOwner() + " " + ds.getName() + " "
+					+ ds.getDescription());
 		}
-		System.out.println("LIMITED-----------------------------"
+		System.out.println("LIMITED----------------------------- "
 				+ getDataSetManager().getLimitedDataSetList("wc").size());
 		for (DataSet ds : getDataSetManager().getLimitedDataSetList("wc")) {
-			System.out.println(ds.getName() + " " + ds.getDescription());
+			System.out.println(ds.getOwner() + " " + ds.getName() + " "
+					+ ds.getLimitedUsers() + " " + ds.getDescription());
 		}
+
+		System.out.println("END-----------------------------");
 		// System.out.println("myc-----------------------------"
 		// + getDataSetManager().getPrivateDataSetList("myc").size());
 		// for (DataSet ds : getDataSetManager().getPrivateDataSetList("myc")) {

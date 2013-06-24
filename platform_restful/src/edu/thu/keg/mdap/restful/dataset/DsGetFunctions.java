@@ -267,8 +267,13 @@ public class DsGetFunctions {
 					// if(j++>=2)
 					// break;
 					JField field = new JField();
-					field.setValue(rs.getValue(df).toString());
-					field.setType(rs.getValue(df).getClass().getSimpleName());
+					if (rs.getValue(df) == null) {
+						field.setValue("null");
+					} else {
+						field.setValue(rs.getValue(df).toString());
+					}
+					field.setType(df.getFieldType().getJavaClass()
+							.getSimpleName());
 					fields.add(field);
 				}
 				jdataset.setField(fields);
@@ -316,7 +321,8 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.warn(e.getStackTrace());
+			e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JGeograph>>(
 				datasetList) {
@@ -361,7 +367,11 @@ public class DsGetFunctions {
 				}
 				ArrayList<Double> values = new ArrayList<>();
 				for (DataField value : gds.getValueFields()) {
-					values.add(Double.valueOf(rs.getValue(value).toString()));
+					if (rs.getValue(value) != null)
+						values.add(Double
+								.valueOf(rs.getValue(value).toString()));
+					else
+						values.add(null);
 				}
 				statistic.setKey(keys);
 				statistic.setValue(values);
@@ -369,7 +379,8 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.warn(e.getStackTrace());
+			e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
 				datasetList) {
