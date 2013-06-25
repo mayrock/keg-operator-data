@@ -62,9 +62,6 @@ Tab.createFrame = function(tabType){
 		$(view).appendTo(tab);
 		Tab.loadGeo(tabIndex);
 	}else if(tabType == "sta"){
-		$(tab).css({
-			"border": "1px solid red"
-		});
 		Common.chartIndex[tabIndex] = new Array();
 		Common.chartType[tabIndex] = new Array();
 		Common.yAxis[tabIndex] = new Array();

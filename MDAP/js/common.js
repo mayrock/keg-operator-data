@@ -5,7 +5,7 @@ $(document).ready(function(){
 		.css({
 			"width": "60px"
 		});
-	Common.tabHeight = Common.height() - 180;
+	Common.tabHeight = Common.height() - 158;
 	Lan.init();
 });
 

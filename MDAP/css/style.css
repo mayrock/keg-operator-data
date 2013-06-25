@@ -124,26 +124,6 @@ body{
 	font-size: 16px;
 }
 
-.view_ds{
-	height: 242px;
-}
-
-.view_chart{
-	position: relative;
-	float: left;
-	width: 300px;
-	height: 240px;
-	margin-right: 2px;
-	border: 1px solid #8B0000;
-	background-color: white;
-}
-
-.chartContainer{
-	position: absolute;
-	height: 240px;
-	width: 270px;
-}
-
 #tabBar_bg{
 	width: 100%;
 	background-color: #282828;
@@ -223,7 +203,34 @@ body{
 .staView{
 	float: left;
 	margin-left: 20px;
-	border: 1px solid blue;
+}
+
+.view_ds{
+	height: 246px;
+	padding-top: 4px;
+	overflow: auto;
+	border-bottom: 1px solid #282828;
+}
+
+.dsContainer{
+	width: 0;
+	height: 242px;
+}
+
+.view_chart{
+	position: relative;
+	float: left;
+	width: 300px;
+	height: 240px;
+	margin-right: 2px;
+	border: 1px solid #8B0000;
+	background-color: white;
+}
+
+.chartContainer{
+	position: absolute;
+	height: 240px;
+	width: 270px;
 }
 
 /*****mgt tab*****/
