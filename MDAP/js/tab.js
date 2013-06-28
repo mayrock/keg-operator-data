@@ -29,7 +29,6 @@ Tab.createFrame = function(tabType){
 		return;
 	}
 	Common.tabIndex[length + 1] = tabIndex + 1;
-	Common.adjunct();
 	li = document.createElement("li");
 	li.setAttribute("id","tabs_li" + tabIndex);
 	li.setAttribute("class","tabs_li");
@@ -64,6 +63,7 @@ Tab.createFrame = function(tabType){
 	}else if(tabType == "sta"){
 		Common.chartIndex[tabIndex] = new Array();
 		Common.chartType[tabIndex] = new Array();
+		Common.xAxis[tabIndex] = new Array();
 		Common.yAxis[tabIndex] = new Array();
 		
 		var staList = document.createElement("div");

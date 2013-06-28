@@ -3,6 +3,7 @@ Sta = {};
 Sta.accordion = function(tabIndex,type){
 	Common.chartIndex[tabIndex][type] = new Array();
 	Common.chartType[tabIndex][type] = new Array();
+	Common.xAxis[tabIndex][type] = new Array();
 	Common.yAxis[tabIndex][type] = new Array();
 	var head = document.createElement("h3");
 	head.setAttribute("id","sta-" + type + "-head-" + tabIndex);
@@ -94,6 +95,7 @@ Sta.accordion = function(tabIndex,type){
 Sta.subAcc = function(tabIndex,type,permit){
 	Common.chartIndex[tabIndex][type][permit] = new Array();
 	Common.chartType[tabIndex][type][permit] = new Array();
+	Common.xAxis[tabIndex][type][permit] = new Array();
 	Common.yAxis[tabIndex][type][permit] = new Array();
 	var head = document.createElement("h3");
 	head.setAttribute("id","sta-" + type + "-" + permit + "-head-" + tabIndex);
@@ -176,6 +178,7 @@ Sta.loadList = function(tabIndex,type,permit){
 			Common.chartIndex[tabIndex][type][permit][i] = new Array();
 			Common.chartIndex[tabIndex][type][permit][i][0] = 0;
 			Common.chartType[tabIndex][type][permit][i] = new Array();
+			Common.xAxis[tabIndex][type][permit][i] = new Array();
 			Common.yAxis[tabIndex][type][permit][i] = new Array();
 			
 			var des = data[i].descriptionZh;
@@ -192,6 +195,37 @@ Sta.loadList = function(tabIndex,type,permit){
 			$(view_ds).css({
 				"display": "none"
 			});
+			var dsTitle = document.createElement("div");
+			dsTitle.setAttribute("id","dsTitle-" + tabIndex + "-" + type + "-" + permit + "-" + i);
+			dsTitle.setAttribute("class","dsTitle");
+			$(dsTitle).appendTo(view_ds);
+			var titleContent = document.createElement("div");
+			titleContent.setAttribute("id","titleContent-" + tabIndex + "-" + type + "-" + permit + "-" + i);
+			titleContent.setAttribute("class","titleContent");
+			$(titleContent).appendTo(dsTitle);
+			var title = "";
+			if(type == 0){
+				title = " (dv.";
+			}else{
+				title = " (ds.";
+			}
+			if(permit == 0){
+				title += "pub)";
+			}else if(permit == 1){
+				title += "lim)";
+			}else{
+				title += "own)";
+			}
+			$(titleContent).html(des + title);
+			$("<img src = 'css/images/close_256x256.png' " +
+				"onclick = \"Sta.closeAllChart(" + tabIndex + "," + type + "," + permit + "," + i + ");\"/>")
+				.appendTo(dsTitle)
+				.css({
+					"position": "absolute",
+					"right": "5px",
+					"bottom": "5px",
+					"width": "16px"
+				});
 			var dsContainer = document.createElement("div");
 			dsContainer.setAttribute("id","dsContainer-" + tabIndex + "-" + type + "-" + permit + "-" + i);
 			dsContainer.setAttribute("class","dsContainer");
@@ -204,8 +238,9 @@ Sta.loadList = function(tabIndex,type,permit){
 
 /*****initialize chartType and yAxis of a chart*****/
 Sta.guide = function(tabIndex,type,permit,dsIndex){
+	var url = Common.dataviewUrl().replace("tabType","sta");
 	/*****Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.*****/
-	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
+	$.getJSON(url,function(data){
 		var values = data[dsIndex].values;
 		var len = values.length;
 		var l = Common.chartIndex[tabIndex][type][permit][dsIndex].length;
@@ -215,7 +250,13 @@ Sta.guide = function(tabIndex,type,permit,dsIndex){
 		}
 		Common.chartIndex[tabIndex][type][permit][dsIndex][l] = chartIndex + 1;
 		Common.chartType[tabIndex][type][permit][dsIndex][chartIndex] = "lineChart";
+		Common.xAxis[tabIndex][type][permit][dsIndex][chartIndex] = new Array();
 		Common.yAxis[tabIndex][type][permit][dsIndex][chartIndex] = new Array();
+		if(type == 1){
+			for(var i = 0; i < len; i++){
+				Common.xAxis[tabIndex][type][permit][dsIndex][chartIndex][i] = true;
+			}
+		}
 		for(var i = 0; i < len; i++){
 			Common.yAxis[tabIndex][type][permit][dsIndex][chartIndex][i] = true;
 		}
@@ -239,7 +280,7 @@ Sta.createChart = function(tabIndex,type,permit,dsIndex,chartIndex){
 	$("#dsContainer-" + tabIndex + "-" + type + "-" + permit + "-" + dsIndex).css({
 		"width": ctnrWidth
 	});
-	if($("#staView" + tabIndex).width() < ctnrWidth){
+	if($("#staView" + tabIndex).width() < ctnrWidth + 60){
 		$("#sta-view-ds-" + tabIndex + "-" + type + "-" + permit + "-" + dsIndex).css({
 			"height": "263px"
 		});
@@ -293,7 +334,7 @@ Sta.closeChart = function(tabIndex,type,permit,dsIndex,chartIndex){
 	$("#dsContainer-" + tabIndex + "-" + type + "-" + permit + "-" + dsIndex).css({
 		"width": ctnrWidth
 	});
-	if($("#staView" + tabIndex).width() >= ctnrWidth){
+	if($("#staView" + tabIndex).width() >= ctnrWidth + 60){
 		$("#sta-view-ds-" + tabIndex + "-" + type + "-" + permit + "-" + dsIndex).css({
 			"height": "246px"
 		});
@@ -315,6 +356,14 @@ Sta.closeChart = function(tabIndex,type,permit,dsIndex,chartIndex){
 		});
 	}
 	Tab.adjustHeight(tabIndex);
+};
+
+Sta.closeAllChart = function(tabIndex,type,permit,dsIndex){
+	var l = Common.chartIndex[tabIndex][type][permit][dsIndex].length;
+	for(var i = 0; i < l - 1; i++){
+		var chartIndex = Common.chartIndex[tabIndex][type][permit][dsIndex][0];
+		Sta.closeChart(tabIndex,type,permit,dsIndex,chartIndex);
+	}
 };
 
 /*****magnify one chart*****/
@@ -485,9 +534,27 @@ Sta.showChart = function(tabIndex,type,permit,dsIndex,chartIndex,ccName){
 			}
 			
 			var data = google.visualization.arrayToDataTable(jsonArr);
-			var options = {
-				title: des
-			};
+			var options = new Object;
+			if(ccName == "chartContainer"){
+				options = {};
+			}else{
+				var title = "";
+				if(type == 0){
+					title = " (dv.";
+				}else{
+					title = " (ds.";
+				}
+				if(permit == 0){
+					title += "pub)";
+				}else if(permit == 1){
+					title += "lim)";
+				}else{
+					title += "own)";
+				}
+				options = {
+					title: des + title
+				};
+			}
 			var chart = new Object;
 			if(chartType == "columnChart"){
 				chart = new google.visualization.ColumnChart(view);
