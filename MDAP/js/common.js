@@ -5,7 +5,7 @@ $(document).ready(function(){
 		.css({
 			"width": "60px"
 		});
-	Common.tabHeight = Common.height() - 180;
+	Common.tabHeight = Common.height() - 158;
 	Lan.init();
 });
 
@@ -74,13 +74,13 @@ Common.mapInfoArr = new Array();
 
 Common.chartIndex = new Array();
 Common.chartType = new Array();
+Common.xAxis = new Array();
 Common.yAxis = new Array();
 
 /*****initialize page after set language*****/
 Common.init = function(){
 	Common.load();
 	Common.tabIndex[0] = 0;
-	Common.adjunct();
 	$("#tab_bg").css({
 		"height": Common.tabHeight
 	});
@@ -168,32 +168,6 @@ Common.load = function(){
 	
 	$("#header").empty();
 	$("<span class = 'mainTitle'>" + Lan.mainTitle[index] + "</span><span class = 'subtitle'>" + Lan.subtitle[index] + "</span>").appendTo("#header");
-};
-
-/*****initialize css of #header, #tabs & #tabBar_bg*****/
-Common.adjunct = function(){
-	if(Common.tabIndex.length == 1){
-		$("#header").css({
-			"height": "96px"
-		});
-		$("#tabs").css({
-			"height": 0
-		});
-		$("#tabBar_bg").css({
-			"height": 0
-		});
-	}else{
-		$("#header").css({
-			"height": "64px",
-			"border-bottom": "1px solid white"
-		});
-		$("#tabs").css({
-			"height": "32px"
-		});
-		$("#tabBar_bg").css({
-			"height": "32px"
-		});
-	}
 };
 
 /*****initialize css of #background*****/

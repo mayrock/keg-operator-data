@@ -29,7 +29,6 @@ Tab.createFrame = function(tabType){
 		return;
 	}
 	Common.tabIndex[length + 1] = tabIndex + 1;
-	Common.adjunct();
 	li = document.createElement("li");
 	li.setAttribute("id","tabs_li" + tabIndex);
 	li.setAttribute("class","tabs_li");
@@ -62,11 +61,9 @@ Tab.createFrame = function(tabType){
 		$(view).appendTo(tab);
 		Tab.loadGeo(tabIndex);
 	}else if(tabType == "sta"){
-		$(tab).css({
-			"border": "1px solid red"
-		});
 		Common.chartIndex[tabIndex] = new Array();
 		Common.chartType[tabIndex] = new Array();
+		Common.xAxis[tabIndex] = new Array();
 		Common.yAxis[tabIndex] = new Array();
 		
 		var staList = document.createElement("div");
