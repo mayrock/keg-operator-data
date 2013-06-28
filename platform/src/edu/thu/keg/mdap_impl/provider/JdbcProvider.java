@@ -121,11 +121,12 @@ public class JdbcProvider extends AbstractDataProvider {
 		return sb;
 	}
 
-	private ResultSet executeQuery(String query) throws IllegalQueryException {
+	private ResultSet executeQuery(String queryStr)
+			throws IllegalQueryException {
 		try {
-			System.out.println(connString + " : " + query);
+			System.out.println(connString + " : " + queryStr);
 			Statement stmt = getConnection().createStatement();
-			ResultSet rs = stmt.executeQuery(query);
+			ResultSet rs = stmt.executeQuery(queryStr);
 			return rs;
 		} catch (Exception ex) {
 			throw new IllegalQueryException(ex.getMessage());
@@ -166,7 +167,7 @@ public class JdbcProvider extends AbstractDataProvider {
 
 		String ddl = getDDL(ds);
 		execute(ddl);
-
+//将data里面的字段复制到ds中，复制ds中拥有的所有字段
 		if (data instanceof Query) {
 			Query q = (Query) data;
 			if (q.getProvider() == ds.getProvider()) {

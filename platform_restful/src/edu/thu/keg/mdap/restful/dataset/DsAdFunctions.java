@@ -39,6 +39,7 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
+import edu.thu.keg.mdap_impl.provider.JdbcProvider;
 
 /**
  * the functions of dataset's administrator operations
@@ -57,6 +58,47 @@ public class DsAdFunctions {
 	@Context
 	HttpServletRequest httpServletRequest;
 	private static Logger log = Logger.getLogger(DsAdFunctions.class);
+
+	@POST
+	@Path("/runsql")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	// @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public Response runSQL(@FormParam("dbname") String dbname,
+			@FormParam("sql") String sql, @FormParam("database") String db,
+			@FormParam("username") String username,
+			@FormParam("password") String password) {
+		log.info(uriInfo.getAbsolutePath());
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataProvider provider = null;
+			JdbcProvider jdbc;
+			switch (db) {
+			case "sqlserver":
+				provider = p.getDataProviderManager().getDefaultSQLProvider(
+						dbname);
+				jdbc = (JdbcProvider) provider;
+				jdbc.execute(sql);
+				break;
+			case "oracle":
+				provider = p.getDataProviderManager().getDefaultOracleProvider(
+						dbname, username, password);
+				jdbc = (JdbcProvider) provider;
+				jdbc.execute(sql);
+				break;
+			default:
+				break;
+			}
+			if ((provider == null)) {
+				return Response.status(409).entity("provider not found!\n")
+						.build();
+			}
+		} catch (DataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Response.status(Status.OK).build();
+		// return Response.created(uriInfo.getAbsolutePath()).build();
+	}
 
 	/**
 	 * create a new dataset

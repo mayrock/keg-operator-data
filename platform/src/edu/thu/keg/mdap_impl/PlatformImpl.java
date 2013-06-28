@@ -98,7 +98,7 @@ public class PlatformImpl implements Platform {
 		dsSite = getDataSetManager().createDataSet("T_GB_CDR_HTTP_LOC", "ybz",
 				"618GPRS数据", providerOrcl, true, fields);
 		getDataSetManager().setDataSetPermission("T_GB_CDR_HTTP_LOC", "ybz",
-				DataSetImpl.PERMISSION_PRIVATE, null);
+				DataSetImpl.PERMISSION_PUBLIC, null);
 		try {
 			q = dsSite.getQuery().select(dsSite.getField("IMSI"),
 					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
@@ -106,9 +106,9 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		dv = getDataSetManager().defineView("618GB_Data", "区域内用户分布",
+		dv = getDataSetManager().defineView("618GB_Data", "618区域内用户分布",
 				DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
-		dv.setDescription(Locale.ENGLISH, "Distibutuion of the user in th geograph");
+		dv.setDescription(Locale.ENGLISH, "618 Distibutuion of the user in th geograph");
 		// 1st DataSet
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true,

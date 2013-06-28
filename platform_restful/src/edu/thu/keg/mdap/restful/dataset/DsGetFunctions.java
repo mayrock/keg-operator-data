@@ -29,6 +29,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.sun.jersey.api.json.JSONWithPadding;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.util.QEncoderStream;
 
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
@@ -40,6 +41,7 @@ import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
+import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 
@@ -255,7 +257,8 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
-			DataContent rs = ds.getQuery();
+			Query rs = ds.getQuery();
+			System.out.println(rs.toString());
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
