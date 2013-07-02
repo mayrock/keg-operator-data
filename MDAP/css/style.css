@@ -82,7 +82,9 @@ body{
 
 #header{
 	width: 100%;
+	height: 64px;
 	background-color: #282828;
+	border-bottom: 1px solid white;
 }
 
 .mainTitle{
@@ -124,28 +126,9 @@ body{
 	font-size: 16px;
 }
 
-.view_ds{
-	height: 242px;
-}
-
-.view_chart{
-	position: relative;
-	float: left;
-	width: 300px;
-	height: 240px;
-	margin-right: 2px;
-	border: 1px solid #8B0000;
-	background-color: white;
-}
-
-.chartContainer{
-	position: absolute;
-	height: 240px;
-	width: 270px;
-}
-
 #tabBar_bg{
 	width: 100%;
+	height: 32px;
 	background-color: #282828;
 }
 
@@ -167,6 +150,7 @@ body{
 #tabs{
 	float: left;
 	width: 100%;
+	height: 32px;
 	padding: 0;
 	background-image: none;
 	background-color: transparent;
@@ -223,7 +207,57 @@ body{
 .staView{
 	float: left;
 	margin-left: 20px;
-	border: 1px solid blue;
+}
+
+.view_ds{
+	position: relative;
+	height: 246px;
+	overflow: auto;
+	padding-top: 4px;
+	border-bottom: 1px solid #282828;
+}
+
+.dsTitle{
+	position: absolute;
+	margin-top: 242px;
+	padding-right: 30px;
+	width: 210px;
+	height: 50px;
+	display: table;
+	text-align: center;
+	-webkit-transform-origin: 0 0;
+	-webkit-transform: rotate(-90deg);
+	border: 1px solid #8B0000;
+}
+
+.titleContent{
+	display: table-cell;
+	vertical-align: middle;
+	font-family: Times New Roman,'楷体';
+	font-size: 15px;
+}
+
+.dsContainer{
+	position: absolute;
+	left: 60px;
+	width: 0;
+	height: 242px;
+}
+
+.view_chart{
+	position: relative;
+	float: left;
+	width: 300px;
+	height: 240px;
+	margin-right: 2px;
+	border: 1px solid #8B0000;
+	background-color: white;
+}
+
+.chartContainer{
+	position: absolute;
+	height: 240px;
+	width: 270px;
 }
 
 /*****mgt tab*****/

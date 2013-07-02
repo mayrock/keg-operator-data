@@ -12,7 +12,7 @@ import edu.thu.keg.mdap.provider.DataProvider;
  * convenience, getters for SQL and HIVE providers are built-in, as the two are
  * must-have basic provider types.
  * 
- * @author Yuanchao Ma
+ * @author Yuanchao Ma, Bozhi Yuan
  * 
  */
 public interface DataProviderManager {
@@ -41,6 +41,16 @@ public interface DataProviderManager {
 	 */
 	public DataProvider getDefaultHiveProvider();
 
+	/**
+	 * 
+	 * @param dbName
+	 *            the database name
+	 * @param userName
+	 *            the db username
+	 * @param passWord
+	 *            the db password
+	 * @return the instance for the default oracle provider.
+	 */
 	public DataProvider getDefaultOracleProvider(String dbName,
 			String userName, String passWord);
 

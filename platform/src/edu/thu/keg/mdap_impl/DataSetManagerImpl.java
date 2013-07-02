@@ -39,7 +39,7 @@ import edu.thu.keg.mdap_impl.provider.JdbcProvider;
 /**
  * Implementation of the interface DataSetManager
  * 
- * @author Yuanchao Ma
+ * @author Yuanchao Ma, Bozhi Yuan
  * 
  */
 public class DataSetManagerImpl implements DataSetManager {
@@ -300,11 +300,9 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	@Override
-	public DataSet createDataSet(String name, String owner,
-			String description, DataProvider provider, boolean loadable,
-			DataField... fields) {
-		DataSet ds = new DataSetImpl(name, owner, provider,
-				loadable, fields);
+	public DataSet createDataSet(String name, String owner, String description,
+			DataProvider provider, boolean loadable, DataField... fields) {
+		DataSet ds = new DataSetImpl(name, owner, provider, loadable, fields);
 		ds.setDescription(description);
 		ds.setPermission(DataSetImpl.PERMISSION_PRIVATE);
 		addDataSet(ds);

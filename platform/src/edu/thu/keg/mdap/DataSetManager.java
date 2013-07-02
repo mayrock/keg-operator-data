@@ -17,7 +17,7 @@ import edu.thu.keg.mdap.provider.DataProviderException;
  * including all suppliers. Metadata stored in all data providers are found
  * here.
  * 
- * @author Yuanchao Ma
+ * @author Yuanchao Ma, Bozhi Yuan
  * 
  */
 public interface DataSetManager {
@@ -39,6 +39,7 @@ public interface DataSetManager {
 	public Collection<DataSet> getDataSetList();
 
 	/**
+	 * Get all dataviews stored in the platform in a collection
 	 * 
 	 * @return
 	 */
@@ -130,6 +131,19 @@ public interface DataSetManager {
 	 */
 	public Collection<DataView> getDataViewList(DataFeatureType type);
 
+	/**
+	 * set the dataset's permission
+	 * 
+	 * @param name
+	 *            of the dataset
+	 * @param owner
+	 *            of the dataset
+	 * @param permisson
+	 *            tnter the new permisson
+	 * @param userid
+	 *            the list of the limited user, which useful when the permission
+	 *            is limited
+	 */
 	public void setDataSetPermission(String name, String owner, int permisson,
 			List<String> userid);
 
@@ -142,6 +156,25 @@ public interface DataSetManager {
 	 */
 	public void saveChanges() throws IOException;
 
+	/**
+	 * create a new dataview
+	 * 
+	 * @param name
+	 *            the name of dataview
+	 * @param description
+	 *            the description of dataview
+	 * @param permission
+	 *            the permmisson of dataview
+	 * @param type
+	 *            the type of dataview
+	 * @param q
+	 *            the query statement
+	 * @param key
+	 *            the key field
+	 * @param values
+	 *            the value field
+	 * @return
+	 */
 	DataView defineView(String name, String description, int permission,
 			DataFeatureType type, Query q, DataField key, DataField[] values);
 

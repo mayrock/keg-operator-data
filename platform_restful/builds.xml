@@ -38,7 +38,10 @@
 	<!-- 定义classpath -->
 	<path id="LIB_CLASS_PATH">
 		<fileset file="${JAR_PATH}/*.jar" />
-
+		<fileset file="${JAR_PATH}/jersey/*.jar" />
+		<fileset file="${JAR_PATH}/xstream/*.jar" />
+		<fileset file="${JAR_PATH}/sqljdbc/*.jar" />
+		<fileset file="${JAR_PATH}/log4j/*.jar" />
 	</path>
 	<path id="LIB_CLASS_PATH_TOM">
 		<fileset file="${JAR_PATH_TOM}/*.jar" />
