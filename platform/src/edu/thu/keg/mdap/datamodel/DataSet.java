@@ -18,7 +18,7 @@ import edu.thu.keg.mdap.provider.DataProviderException;
 /**
  * Contains all metadata describing a dataset, stored in a data provider.
  * 
- * @author Yuanchao Ma
+ * @author Yuanchao Ma, Bozhi Yuan
  * 
  */
 public interface DataSet extends TableStructure {
@@ -106,7 +106,6 @@ public interface DataSet extends TableStructure {
 	 */
 	public Collection<DataField> getKeyFields();
 
-
 	/**
 	 * Get the value fields of this dataset
 	 */
@@ -117,12 +116,33 @@ public interface DataSet extends TableStructure {
 	 */
 	public String getOwner();
 
+	/**
+	 * get the dataset's permission
+	 * 
+	 * @return
+	 */
+
 	public int getPermission();
 
+	/**
+	 * set the dataset permission
+	 * 
+	 * @param permission
+	 */
 	public void setPermission(int permission);
 
+	/**
+	 * get the limited dataset's user list
+	 * 
+	 * @return
+	 */
 	public List<String> getLimitedUsers();
 
+	/**
+	 * set the dataset's limited users
+	 * 
+	 * @param limitedUsers
+	 */
 	public void setLimitedUsers(List<String> limitedUsers);
 
 }

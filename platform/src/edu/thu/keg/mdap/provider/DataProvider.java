@@ -13,7 +13,7 @@ import edu.thu.keg.mdap.datamodel.Query;
  * HDFS files, etc.. A DataProvider object is uniquely identified by a
  * Connection String
  * 
- * @author Yuanchao Ma
+ * @author Yuanchao Ma, Bozhi Yuan
  */
 public interface DataProvider {
 	/**

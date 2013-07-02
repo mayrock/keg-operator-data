@@ -6,7 +6,7 @@ package edu.thu.keg.mdap.datafeature;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 
 /**
- * @author myc
+ * @author Yuanchao Ma, Bozhi Yuan
  * 
  */
 public enum DataFeatureType {
