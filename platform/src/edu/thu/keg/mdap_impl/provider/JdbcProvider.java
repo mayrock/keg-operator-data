@@ -43,7 +43,7 @@ public class JdbcProvider extends AbstractDataProvider {
 	private synchronized Connection getConnection() throws SQLException {
 		// if (this.conn == null || this.conn.isClosed())
 		// this.conn = DriverManager.getConnection(connString);
-		// return this.conn;
+		// return this.conn ;
 		return DriverManager.getConnection(connString);
 	}
 
