@@ -39,7 +39,8 @@ public interface DataProviderManager {
 	/**
 	 * @return the instance for the default hive provider.
 	 */
-	public DataProvider getDefaultHiveProvider();
+	public DataProvider getDefaultHiveProvider(String dbName, String userName,
+			String password);
 
 	/**
 	 * 

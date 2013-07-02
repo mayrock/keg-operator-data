@@ -28,16 +28,18 @@ import edu.thu.keg.mdap.provider.IllegalQueryException;
  */
 public class JdbcProvider extends AbstractDataProvider {
 
-	private HashMap<Query, ResultSet> results;
+	protected HashMap<Query, ResultSet> results;
 
 	public JdbcProvider(String connString) {
 		super(connString);
-		results = new HashMap<Query, ResultSet>();
+		if (results == null)
+			results = new HashMap<Query, ResultSet>();
 	}
 
 	public JdbcProvider(String connString, String username, String password) {
 		super(connString, username, password);
-		results = new HashMap<Query, ResultSet>();
+		if (results == null)
+			results = new HashMap<Query, ResultSet>();
 	}
 
 	private synchronized Connection getConnection() throws SQLException {
@@ -121,7 +123,7 @@ public class JdbcProvider extends AbstractDataProvider {
 		return sb;
 	}
 
-	private ResultSet executeQuery(String queryStr)
+	protected ResultSet executeQuery(String queryStr)
 			throws IllegalQueryException {
 		try {
 			System.out.println(connString + " : " + queryStr);
@@ -167,7 +169,7 @@ public class JdbcProvider extends AbstractDataProvider {
 
 		String ddl = getDDL(ds);
 		execute(ddl);
-//将data里面的字段复制到ds中，复制ds中拥有的所有字段
+		// 将data里面的字段复制到ds中，复制ds中拥有的所有字段
 		if (data instanceof Query) {
 			Query q = (Query) data;
 			if (q.getProvider() == ds.getProvider()) {

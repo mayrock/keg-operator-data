@@ -3,10 +3,12 @@
  */
 package edu.thu.keg.mdap_impl;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import edu.thu.keg.mdap.DataProviderManager;
 import edu.thu.keg.mdap.provider.DataProvider;
+import edu.thu.keg.mdap_impl.provider.HiveProvider;
 import edu.thu.keg.mdap_impl.provider.JdbcProvider;
 
 /**
@@ -63,10 +65,24 @@ public class DataProviderManagerImpl implements DataProviderManager {
 		return getProvider(conn);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.thu.keg.mdap.DataProviderManager#getDefaultHiveProvider(java.lang
+	 * .String, java.lang.String, java.lang.String)
+	 */
 	@Override
-	public DataProvider getDefaultHiveProvider() {
-		// TODO Auto-generated method stub
-		return null;
+	public DataProvider getDefaultHiveProvider(String dbName, String userName,
+			String password) {
+		HiveProvider hiveProvider = null;
+		try {
+			hiveProvider = new HiveProvider("");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return hiveProvider;
 	}
 
 }
