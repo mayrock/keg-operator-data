@@ -358,16 +358,7 @@ public class HiveProvider extends JdbcProvider
 		return sb.toString();
 	}
 
-	/*
-	 * if the query contains
-	 */
 
-	private String getQueryStringB(Query q, int level)
-	{
-		StringBuilder strBuil = new StringBuilder();
-
-		return null;
-	}
 
 	public static void main(String[] args) throws Exception
 	{PlatformImpl p = new PlatformImpl("config.xml");
@@ -410,6 +401,32 @@ public class HiveProvider extends JdbcProvider
 					+ q1.getValue(ds.getField("CI")));
 		}
 
+	}
+	
+	@Override
+	public Object getValue(Query q, DataField field)
+			throws DataProviderException {
+		try {
+			ResultSet rs = results.get(q);
+			FieldType type = field.getFieldType();
+			String fieldName=field.getName().toLowerCase();
+			switch (type) {
+			case ShortString:
+			case LongString:
+			case Text:
+				return rs.getString(fieldName);
+			case Double:
+				return rs.getDouble(fieldName);
+			case Int:
+				return rs.getInt(fieldName);
+			case DateTime:
+				return rs.getDate(fieldName);
+			}
+		} catch (SQLException e) {
+			throw new DataProviderException(e.getMessage());
+		}
+		throw new IllegalArgumentException(
+				"Type of this field is not supported");
 	}
 
 }
