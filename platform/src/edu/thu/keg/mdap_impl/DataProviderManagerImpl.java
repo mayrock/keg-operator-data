@@ -77,7 +77,7 @@ public class DataProviderManagerImpl implements DataProviderManager {
 			String password) {
 		HiveProvider hiveProvider = null;
 		try {
-			hiveProvider = new HiveProvider("");
+			hiveProvider = new HiveProvider("jdbc:hive://10.1.1.165:10000/"+dbName);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -143,9 +143,11 @@ public class QueryImpl implements Query {
 
 	@Override
 	public Query orderBy(String fieldName, Order order) {
+		
+		
 		DataField field = null;
 		for (DataField tdf : this.fields) {
-			if (tdf.getName().equals(fieldName)) {
+			if (tdf.getName().equalsIgnoreCase(fieldName)) {
 				field = tdf;
 			}
 		}

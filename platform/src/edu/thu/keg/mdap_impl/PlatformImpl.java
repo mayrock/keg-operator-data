@@ -75,10 +75,25 @@ public class PlatformImpl implements Platform {
 		DataProvider providerOrcl = getDataProviderManager()
 				.getDefaultOracleProvider("orcl", "bj_gb", "root");
 
+		DataProvider hiveProvider = getDataProviderManager()
+				.getDefaultHiveProvider("default", null, null);
+
 		Query q = null;
 		DataField[] fields = null;
 		DataSet dsSite = null;
 		DataView dv = null;
+
+		fields = new DataField[3];
+		fields[0] = new GeneralDataField("EN_NAME", FieldType.ShortString, "",
+				true, FieldFunctionality.Identifier);
+		fields[1] = new GeneralDataField("LAC", FieldType.Int, "", false,
+				FieldFunctionality.Value);
+		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false,
+				FieldFunctionality.Value);
+		dsSite = getDataSetManager().createDataSet("TESTF", "liqi", "小区地理位置信息",
+				hiveProvider, true, fields);
+		getDataSetManager().setDataSetPermission("TESTF", "liqi",
+				DataSetImpl.PERMISSION_PUBLIC, null);
 
 		// 1st oracle
 		fields = new DataField[6];
@@ -108,7 +123,8 @@ public class PlatformImpl implements Platform {
 		}
 		dv = getDataSetManager().defineView("618GB_Data", "618区域内用户分布",
 				DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
-		dv.setDescription(Locale.ENGLISH, "618 Distibutuion of the user in th geograph");
+		dv.setDescription(Locale.ENGLISH,
+				"618 Distibutuion of the user in th geograph");
 		// 1st DataSet
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true,
@@ -346,16 +362,19 @@ public class PlatformImpl implements Platform {
 			}
 		}
 		DataView dv = getDataSetManager().getDataView("UserWebsiteCountView");
-		Query q;
+		Query q, q1;
+		DataSet ds = getDataSetManager().getDataSet("TESTF");
 		try {
 			q = dv.getQuery();
-
-			q.open();
-			while (q.next()) {
-				System.out.println(q.getValue(dv.getKeyField()) + " "
-						+ q.getValue(dv.getValueFields()[0]));
+			q1 = ds.getQuery();
+			q1.open();
+			while (q1.next()) {
+				// System.out.println(q.getValue(dv.getKeyField()) + " "
+				// + q.getValue(dv.getValueFields()[0]));
+				System.out.println(q1.getValue(ds.getField("LAC")) + " "
+						+ q1.getValue(ds.getField("CI")));
 			}
-			q.close();
+			q1.close();
 		} catch (OperationNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
