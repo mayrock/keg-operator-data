@@ -2,10 +2,11 @@
     <wb-module deploy-name="platform_api">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/WebContent/WEB-INF/lib/hive-jdbc"/>
-        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/WebContent/WEB-INF/lib/jersey"/>
-        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/WebContent/WEB-INF/lib/sqljdbc"/>
-        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/WebContent/WEB-INF/lib/log4j"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/localLib/hive-jdbc"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/localLib/jersey"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/localLib/log4j"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/localLib/sqljdbc"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/localLib/xstream"/>
         <dependent-module archiveName="platform.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/platform/platform">
             <dependency-type>uses</dependency-type>
         </dependent-module>
