@@ -10,6 +10,7 @@ import java.util.List;
 import javax.naming.OperationNotSupportedException;
 
 import edu.thu.keg.mdap.datafeature.DataView;
+import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
@@ -31,7 +32,13 @@ import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
  * 
  * @author Yuanchao Ma
  */
+<<<<<<< HEAD
 public class HiveProvider extends JdbcProvider {
+=======
+public class HiveProvider extends JdbcProvider
+{
+	private static String tableLocation="/hiveTable";
+>>>>>>> eaf82c5a51c71c0b774ed13b98e7e9a4b4bfff93
 
 	public HiveProvider(String connString) throws SQLException {
 		super(connString);
@@ -100,6 +107,7 @@ public class HiveProvider extends JdbcProvider {
 
 	}
 
+<<<<<<< HEAD
 	/*
 	 * if the query don't contain the INSERT JOIN
 	 */
@@ -127,11 +135,17 @@ public class HiveProvider extends JdbcProvider {
 
 			}
 		}
+=======
+	@Override
+	
+	//ds will be created , argment:data is the resource of data;
+	public void writeDataSetContent(DataSet ds, DataContent data)
+			throws DataProviderException {
+>>>>>>> eaf82c5a51c71c0b774ed13b98e7e9a4b4bfff93
 
-		// add key from
-		strBuil.append(" from ");
-		strBuil.append(fields[0].getDataSet().getName());
+		removeContent(ds);
 
+<<<<<<< HEAD
 		// add key "where"
 		List<WhereClause> list_where = q.getWhereClauses();
 		if (list_where != null && list_where.size() != 0) {
@@ -143,10 +157,60 @@ public class HiveProvider extends JdbcProvider {
 				if (i != size - 1) {
 					strBuil.append(" and ");
 
+=======
+		//String ddl = getDDL(ds);
+		//execute(ddl);
+		// 将data里面的字段复制到ds中，复制ds中拥有的所有字段
+		
+		if (data instanceof Query) {
+			Query q = (Query) data;
+			if (q.getProvider() == ds.getProvider()) {
+				StringBuilder strBuil = new StringBuilder();
+				
+				List<DataField> dataFieldList=ds.getDataFields();
+				
+				if(dataFieldList==null||dataFieldList.size()==0)
+				{
+					// TODO
+					
+					
 				}
-			}
+				
+				strBuil.append("create table ");
+				strBuil.append(ds.getName());
+				strBuil.append(" row format delimited fields terminated by ',' as select ");
+				
+				
+				int size=dataFieldList.size();
+				String str=null;
+				for (int i=0;i<size-1;i++)
+				{
+					str=dataFieldList.get(i).getName();
+					strBuil.append(str);
+					strBuil.append(" ");
+					strBuil.append(str);
+					strBuil.append(",");
+>>>>>>> eaf82c5a51c71c0b774ed13b98e7e9a4b4bfff93
+				}
+				
+				str=dataFieldList.get(size-1).getName();
+				strBuil.append(str);
+				strBuil.append(" ");
+				strBuil.append(str);
+				
+				strBuil.append(" from testF");
 
+				//String sql="create table "+ ds.getName()+" row format delimited fields terminated by ',' as select "+strBuil.toString()+" from testF";
+				
+				
+//				String insertQueryStr = "INSERT INTO " + ds.getName() + " ( "
+//						+ strBuil.toString() + " ) SELECT "
+//						+ strBuil.substring(0, strBuil.length() - 1) + " FROM ( "
+//						+ q.toString() + " ) as in0";
+				execute(strBuil.toString());
+			}
 		}
+<<<<<<< HEAD
 
 		// the key "group by"
 
@@ -184,13 +248,72 @@ public class HiveProvider extends JdbcProvider {
 			strBuil.append(" ");
 			strBuil.append(order.getOrder().toString());
 
+=======
+	}
+	
+	//hive don't support field is null or not in DDL
+	//so don't use the key word null when create table in hive
+	//actually , hive yet don't support varchar ...etc ,
+	//About String type,hive only have the type "string" 
+	private String getDDL(DataField df)
+	{
+		FieldType type = df.getFieldType();
+		String typeStr = "";
+		switch (type) {
+		case ShortString:
+			typeStr = " STRING ";
+			break;
+		case LongString:
+			typeStr = " STRING ";
+			break;
+		case Text:
+			typeStr = " STRING ";
+			break;
+		case Double:
+			typeStr = " FLOAT ";
+			break;
+		case Int:
+			typeStr = " INT ";
+			break;
+		case DateTime:
+			typeStr = " TIMESTAMP ";
+			break;
 		}
-
-		return strBuil.toString();
-
+		
+		return df.getName() + typeStr;
+	}
+	
+	//generate create table DDL
+	//create table  ........as select   
+	//the command  will create a inner table in  /user/hive/warehouse
+	private String getDDL(DataSet ds) {
+		StringBuilder sb = new StringBuilder("create table ");
+		sb.append(ds.getName());
+		sb.append(" ( ");
+		List<DataField> fields = ds.getDataFields();
+		for (int i = 0; i < fields.size() - 1; i++) {
+			sb.append(getDDL(fields.get(i))).append(",");
+>>>>>>> eaf82c5a51c71c0b774ed13b98e7e9a4b4bfff93
+		}
+		sb.append(getDDL(fields.get(fields.size() - 1))).append(" ) ");
+		
+		
+		
+		sb.append(
+				" row format delimited fields terminated by ',' ");
+		
+		System.out.println(sb.toString());
+		
+		return sb.toString();
 	}
 
+<<<<<<< HEAD
 	private String getGroupByStr(Query query) {
+=======
+
+	private String getGroupByStr(Query query)
+	{
+>>>>>>> eaf82c5a51c71c0b774ed13b98e7e9a4b4bfff93
 
 		List<DataField> list_group = query.getGroupByFields();
 		if (list_group == null || list_group.size() == 0) {
