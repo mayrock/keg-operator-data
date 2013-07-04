@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="/libraries/sqljdbc/sqljdbc4.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="libraries/sqljdbc"/>
-			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="/libraries/xstream/xstream-1.4.4.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
@@ -18,62 +12,18 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/Oracle Thin Driver"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/antlr-2.7.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/antlr-runtime-3.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/avro-1.7.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/avro-mapred-1.7.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-cli-1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-codec-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-compress-1.4.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-configuration-1.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-dbcp-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-logging-api-1.0.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/commons-pool-1.5.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/datanucleus-connectionpool-2.0.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/datanucleus-core-2.0.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/datanucleus-enhancer-2.0.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/datanucleus-rdbms-2.0.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/derby-10.4.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/guava-r09.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hbase-0.92.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hbase-0.92.0-tests.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-builtins-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-cli-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-common-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-contrib-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-exec-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-hbase-handler-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-hwi-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-jdbc-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-metastore-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-pdk-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-serde-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-service-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/hive-shims-0.10.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/jackson-core-asl-1.8.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/jackson-jaxrs-1.8.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/jackson-mapper-asl-1.8.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/jackson-xc-1.8.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/JavaEWAH-0.3.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/javolution-5.5.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/jdo2-api-2.3-ec.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/jetty-6.1.26.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/jetty-util-6.1.26.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/jline-0.9.94.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/json-20090211.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/libfb303-0.9.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/libthrift-0.9.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/log4j-1.2.16.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/servlet-api-2.5-20081211.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/slf4j-api-1.6.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/slf4j-log4j12-1.6.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/sqlline-1_0_2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/stringtemplate-3.1-b1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/xz-1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hive-0.10.0/lib/zookeeper-3.4.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liqi/ZHONGGUOLIQI/hadoop-1.0.4/hadoop-core-1.0.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/Microsoft SQL Server 2008 JDBC Driver"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/antlr-runtime-3.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hadoop-core-1.0.4.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hive-exec-0.10.0.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hive-jdbc-0.10.0.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hive-metastore-0.10.0.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hive-service-0.10.0.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/jdo2-api-2.3-ec.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/libfb303-0.9.0.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

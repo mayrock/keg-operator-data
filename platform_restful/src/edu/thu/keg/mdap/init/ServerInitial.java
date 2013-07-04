@@ -42,6 +42,7 @@ public class ServerInitial implements ServletContextListener {
 		sc.setAttribute("managementplatform", mp);
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			Class.forName("org.apache.hadoop.hive.jdbc.HiveDriver");
 			// Class.forName("");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

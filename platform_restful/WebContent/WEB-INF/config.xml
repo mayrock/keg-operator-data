@@ -5,4 +5,5 @@
 	<entry key="DataSetFile">..\datasets</entry>
 	<entry key="SqlAddress">sqlserver://10.1.1.55:1433</entry>
 	<entry key="OracleAddress">10.1.1.110:1521</entry>
+	<entry key="HiveAddress">10.1.1.165:10000</entry>
 </properties>
