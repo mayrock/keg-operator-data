@@ -13,6 +13,7 @@
 	<property name="PRO_PATH_RESTFUL" value="${GIT_PATH}/platform_restful" />
 	<property name="PRO_PATH_PLA" value="${GIT_PATH}/platform" />
 	<property name="PRO_PATH_MANAGER" value="${GIT_PATH}/platform_management" />
+	<property name="PRO_PATH_LIBRARIES" value="${GIT_PATH}/libraries" />
 
 	<!-- 所有编译需要的路径 -->
 	<!-- 源WEB路径platfrom_restful -->
@@ -38,11 +39,11 @@
 	<!-- 定义classpath -->
 	<path id="LIB_CLASS_PATH">
 		<fileset file="${JAR_PATH}/*.jar" />
-		<fileset file="${JAR_PATH}/jersey/*.jar" />
-		<fileset file="${JAR_PATH}/xstream/*.jar" />
-		<fileset file="${JAR_PATH}/sqljdbc/*.jar" />
-		<fileset file="${JAR_PATH}/hive-jdbc/*.jar" />
-		<fileset file="${JAR_PATH}/log4j/*.jar" />
+		<fileset file="${PRO_PATH_LIBRARIES}/jersey/*.jar" />
+		<fileset file="${PRO_PATH_LIBRARIES}/xstream/*.jar" />
+		<fileset file="${PRO_PATH_LIBRARIES}/sqljdbc/*.jar" />
+		<fileset file="${PRO_PATH_LIBRARIES}/hive-jdbc/*.jar" />
+		<fileset file="${PRO_PATH_LIBRARIES}/log4j/*.jar" />
 	</path>
 	<path id="LIB_CLASS_PATH_TOM">
 		<fileset file="${JAR_PATH_TOM}/*.jar" />
@@ -124,8 +125,38 @@
 		</copy>
 	</target>
 
+	<!-- Copy所有后台的jar文件 到lib里-->
+	<target name="copy_libraries_to_weblib" depends="copy_properties">
+		<echo message="copy .jar to Lib.." />
+		<copy todir="${DEPLOY_PATH}/WEB-INF/lib">
+			<fileset dir="${PRO_PATH_LIBRARIES}/jersey">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${DEPLOY_PATH}/WEB-INF/lib">
+			<fileset dir="${PRO_PATH_LIBRARIES}/hive-jdbc/">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${DEPLOY_PATH}/WEB-INF/lib">
+			<fileset dir="${PRO_PATH_LIBRARIES}/log4j/">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${DEPLOY_PATH}/WEB-INF/lib">
+			<fileset dir="${PRO_PATH_LIBRARIES}/sqljdbc/">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${DEPLOY_PATH}/WEB-INF/lib">
+			<fileset dir="${PRO_PATH_LIBRARIES}/xstream/">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
 	<!-- Copy所有后台的class文件 -->
-	<target name="copy_deploy" depends="copy_properties">
+	<target name="copy_deploy" depends="copy_libraries_to_weblib">
 		<echo message="copy .class to Tomcat.." />
 		<copy todir="${DEPLOY_PATH}">
 			<fileset dir="${WEB_PATH}">
@@ -140,7 +171,7 @@
 			</fileset>
 		</copy>
 	</target>
-	<!-- Copy所有后台的class文件 -->
+	<!-- Copy所有后台的mdap中的网页文件 -->
 	<target name="copy_MDAP" depends="copy_deploy">
 		<echo message="copy MDAP to Tomcat.." />
 		<copy todir="${DEPLOY_PATH}">
