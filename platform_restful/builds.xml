@@ -87,7 +87,7 @@
 		<javac encoding="UTF-8" srcdir="${SCR_PATH_PLA}" destdir="${PRO_PATH_PLA}/bin/classes" includeantruntime="on">
 			<classpath refid="LIB_CLASS_PATH" />
 		</javac>
-		<jar destfile="${WEB_PATH}/WEB-INF/lib/compile_platform.jar" basedir="${PRO_PATH_PLA}/bin/classes" />
+		<jar destfile="${DEPLOY_PATH}/WEB-INF/lib/compile_platform.jar" basedir="${PRO_PATH_PLA}/bin/classes" />
 		<delete dir="${PRO_PATH_PLA}/bin/classes" />
 	</target>
 
@@ -103,7 +103,7 @@
 				<include name="**/*.properties" />
 			</fileset>
 		</copy>
-		<jar destfile="${WEB_PATH}/WEB-INF/lib/compile_management.jar" basedir="${PRO_PATH_MANAGER}/bin/classes" />
+		<jar destfile="${DEPLOY_PATH}/WEB-INF/lib/compile_management.jar" basedir="${PRO_PATH_MANAGER}/bin/classes" />
 		<delete dir="${PRO_PATH_MANAGER}/bin/classes" />
 	</target>
 	<!-- 编译类 platform_restful -->
@@ -111,7 +111,7 @@
 		<!-- mkdir dir="${CLASS_PATH}" -->
 		<echo message="compiling platform_restful..." />
 		<javac encoding="UTF-8" srcdir="${SCR_PATH_RESTFUL}" destdir="${CLASS_PATH}" includeantruntime="on">
-			<classpath refid="LIB_CLASS_PATH" />
+			
 			<classpath refid="LIB_CLASS_PATH_TOM" />
 		</javac>
 	</target>
@@ -125,8 +125,8 @@
 		</copy>
 	</target>
 
-	<!-- Copy所有后台的jar文件 到lib里-->
-	<target name="copy_libraries_to_weblib" depends="copy_properties">
+	<!-- Copy所有后台的jar文件 到Tomcat里要发布的项目的lib里-->
+	<target name="copy_libraries_to_tomlib" depends="copy_properties">
 		<echo message="copy .jar to Lib.." />
 		<copy todir="${DEPLOY_PATH}/WEB-INF/lib">
 			<fileset dir="${PRO_PATH_LIBRARIES}/jersey">
@@ -156,7 +156,7 @@
 	</target>
 
 	<!-- Copy所有后台的class文件 -->
-	<target name="copy_deploy" depends="copy_libraries_to_weblib">
+	<target name="copy_deploy" depends="copy_libraries_to_tomlib">
 		<echo message="copy .class to Tomcat.." />
 		<copy todir="${DEPLOY_PATH}">
 			<fileset dir="${WEB_PATH}">
