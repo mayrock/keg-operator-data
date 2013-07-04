@@ -72,9 +72,8 @@ public class PlatformImpl implements Platform {
 		// Construct a new dataset
 		DataProvider provider = getDataProviderManager().getDefaultSQLProvider(
 				"BeijingData");
-		DataProvider providerOrcl = getDataProviderManager()
-				.getDefaultOracleProvider("orcl", "bj_gb", "root");
-
+		DataProvider orclProvider = getDataProviderManager()
+				.getDefaultOracleProvider("orcl", "bj_tuoming", "root");
 		DataProvider hiveProvider = getDataProviderManager()
 				.getDefaultHiveProvider("default", null, null);
 
@@ -83,48 +82,58 @@ public class PlatformImpl implements Platform {
 		DataSet dsSite = null;
 		DataView dv = null;
 
-		fields = new DataField[3];
+		fields = new DataField[5];
 		fields[0] = new GeneralDataField("EN_NAME", FieldType.ShortString, "",
 				true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("LAC", FieldType.Int, "", false,
 				FieldFunctionality.Value);
 		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false,
 				FieldFunctionality.Value);
-		dsSite = getDataSetManager().createDataSet("TESTF", "liqi", "小区地理位置信息",
-				hiveProvider, true, fields);
+		fields[3] = new GeneralDataField("LONGITUDE", FieldType.Double, "",
+				false, FieldFunctionality.Longitude);
+		fields[4] = new GeneralDataField("LATITUDE", FieldType.Double, "",
+				false, FieldFunctionality.Latitude);
+		dsSite = getDataSetManager().createDataSet("TESTF", "liqi",
+				"小区地理位置信息hadoop", hiveProvider, true, fields);
 		getDataSetManager().setDataSetPermission("TESTF", "liqi",
 				DataSetImpl.PERMISSION_PUBLIC, null);
-
-		// 1st oracle
-		fields = new DataField[6];
-		fields[0] = new GeneralDataField("IMSI", FieldType.ShortString, "",
-				true, FieldFunctionality.Identifier);
-		//
-		fields[1] = new GeneralDataField("HOST", FieldType.LongString, "",
-				false, FieldFunctionality.Other);
-		fields[2] = new GeneralDataField("CONTENTTYPE", FieldType.ShortString,
-				"", false, FieldFunctionality.Other);
-		fields[3] = new GeneralDataField("LATITUDE", FieldType.Double, "",
-				true, FieldFunctionality.Latitude);
-		fields[4] = new GeneralDataField("LONGITUDE", FieldType.Double, "",
-				true, FieldFunctionality.Longitude);
-		fields[5] = new GeneralDataField("REQUESTTIME", FieldType.DateTime, "",
-				false, FieldFunctionality.TimeStamp);
-		dsSite = getDataSetManager().createDataSet("T_GB_CDR_HTTP_LOC", "ybz",
-				"618GPRS数据", providerOrcl, true, fields);
-		getDataSetManager().setDataSetPermission("T_GB_CDR_HTTP_LOC", "ybz",
-				DataSetImpl.PERMISSION_PUBLIC, null);
 		try {
-			q = dsSite.getQuery().select(dsSite.getField("IMSI"),
+			q = dsSite.getQuery().select(dsSite.getField("EN_NAME"),
 					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		dv = getDataSetManager().defineView("618GB_Data", "618区域内用户分布",
+		dv = getDataSetManager().defineView("Lac_Ci_Map_hadoop", "小区分布图hadoop",
 				DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
-		dv.setDescription(Locale.ENGLISH,
-				"618 Distibutuion of the user in th geograph");
+		dv.setDescription(Locale.ENGLISH, "Area distribution hadoop");
+
+		// 1st oracle
+		fields = new DataField[5];
+		fields[0] = new GeneralDataField("AREANAME_EN", FieldType.ShortString,
+				"", true, FieldFunctionality.Identifier);
+		fields[1] = new GeneralDataField("LAC", FieldType.Int, "", false,
+				FieldFunctionality.Value);
+		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false,
+				FieldFunctionality.Value);
+		fields[3] = new GeneralDataField("LONGITUDE", FieldType.Double, "",
+				false, FieldFunctionality.Longitude);
+		fields[4] = new GeneralDataField("LATITUDE", FieldType.Double, "",
+				false, FieldFunctionality.Latitude);
+		dsSite = getDataSetManager().createDataSet("Lac_Ci_Map", "ybz",
+				"小区地理位置信息orcl", orclProvider, true, fields);
+		getDataSetManager().setDataSetPermission("Lac_Ci_Map", "ybz",
+				DataSetImpl.PERMISSION_PUBLIC, null);
+		try {
+			q = dsSite.getQuery().select(dsSite.getField("AREANAME_EN"),
+					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
+		} catch (OperationNotSupportedException | DataProviderException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		dv = getDataSetManager().defineView("Lac_Ci_Map_orcl", "小区分布图",
+				DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
+		dv.setDescription(Locale.ENGLISH, "Area distribution orcl");
 		// 1st DataSet
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true,

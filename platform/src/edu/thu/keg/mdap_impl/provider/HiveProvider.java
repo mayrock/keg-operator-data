@@ -31,11 +31,9 @@ import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
  * 
  * @author Yuanchao Ma
  */
-public class HiveProvider extends JdbcProvider
-{
+public class HiveProvider extends JdbcProvider {
 
-	public HiveProvider(String connString) throws SQLException
-	{
+	public HiveProvider(String connString) throws SQLException {
 		super(connString);
 		// TODO Auto-generated constructor stub
 	}
@@ -48,8 +46,7 @@ public class HiveProvider extends JdbcProvider
 	 * .mdap.datamodel.Query)
 	 */
 	@Override
-	public String getQueryString(Query q)
-	{
+	public String getQueryString(Query q) {
 		return this.getQueryString(q, 0);
 	}
 
@@ -61,10 +58,8 @@ public class HiveProvider extends JdbcProvider
 	 * .datamodel.Query)
 	 */
 	@Override
-	public void openQuery(Query query) throws DataProviderException
-	{
-		if (!super.results.containsKey(query))
-		{
+	public void openQuery(Query query) throws DataProviderException {
+		if (!super.results.containsKey(query)) {
 			String sql = getQueryString(query, 0);
 
 			ResultSet rs = super.executeQuery(sql);
@@ -76,41 +71,33 @@ public class HiveProvider extends JdbcProvider
 	 * absolutely hive don't support nested query so level=0
 	 * 
 	 * */
-	private String getQueryString(Query query, int level)
-	{
-		StringBuilder strBuil=new StringBuilder();
-		
-		
-		String selectStr=getSelectStr(query);
-		String fromStr=getFromStr(query);
-		String whereStr=getWhereStr(query);
-		String orderbyStr=getOrderByStr(query);
-		String groupbyStr=getGroupByStr(query);
-		
-		
+	private String getQueryString(Query query, int level) {
+		StringBuilder strBuil = new StringBuilder();
+
+		String selectStr = getSelectStr(query);
+		String fromStr = getFromStr(query);
+		String whereStr = getWhereStr(query);
+		String orderbyStr = getOrderByStr(query);
+		String groupbyStr = getGroupByStr(query);
+
 		strBuil.append(selectStr);
 		strBuil.append(fromStr);
-		
-		if(!whereStr.equals(""))
-		{
+
+		if (!whereStr.equals("")) {
 			strBuil.append(whereStr);
 
 		}
-		if(!groupbyStr.equals(""))
-		{
+		if (!groupbyStr.equals("")) {
 			strBuil.append(groupbyStr);
 
 		}
-		if(!orderbyStr.equals(""))
-		{
+		if (!orderbyStr.equals("")) {
 			strBuil.append(orderbyStr);
 
-			
 		}
-		
-		
+
 		return strBuil.toString();
-		
+
 	}
 
 	/*
@@ -126,19 +113,16 @@ public class HiveProvider extends JdbcProvider
 		strBuil.append("SELECT ");
 		DataField[] fields = q.getFields();
 
-		if (fields == null || fields.length == 0)
-		{
+		if (fields == null || fields.length == 0) {
 
 			return null;
 		}
 
 		int len = fields.length;
-		for (int i = 0; i < len; i++)
-		{
+		for (int i = 0; i < len; i++) {
 			strBuil.append(fields[i].getQueryName());
 
-			if (i != len - 1)
-			{
+			if (i != len - 1) {
 				strBuil.append(",");
 
 			}
@@ -150,16 +134,13 @@ public class HiveProvider extends JdbcProvider
 
 		// add key "where"
 		List<WhereClause> list_where = q.getWhereClauses();
-		if (list_where != null && list_where.size() != 0)
-		{
+		if (list_where != null && list_where.size() != 0) {
 			int size = list_where.size();
 			strBuil.append(" where ");
 
-			for (int i = 0; i < size; i++)
-			{
+			for (int i = 0; i < size; i++) {
 				strBuil.append(whereConditionToStr(list_where.get(i)));
-				if (i != size - 1)
-				{
+				if (i != size - 1) {
 					strBuil.append(" and ");
 
 				}
@@ -170,13 +151,11 @@ public class HiveProvider extends JdbcProvider
 		// the key "group by"
 
 		List<DataField> list_group = q.getGroupByFields();
-		if (list_group != null && list_group.size() > 0)
-		{
+		if (list_group != null && list_group.size() > 0) {
 			strBuil.append(" GROUP BY ");
 			int size = list_group.size();
 
-			for (int i = 0; i < size - 1; i++)
-			{
+			for (int i = 0; i < size - 1; i++) {
 				strBuil.append(list_group.get(i).getName());
 				strBuil.append(",");
 			}
@@ -187,12 +166,10 @@ public class HiveProvider extends JdbcProvider
 		// the key "order by"
 
 		List<OrderClause> orders = q.getOrderClauses();
-		if (orders != null && orders.size() > 0)
-		{
+		if (orders != null && orders.size() > 0) {
 			strBuil.append(" ORDER BY ");
 			OrderClause order = null;
-			for (int i = 0; i < orders.size() - 1; i++)
-			{
+			for (int i = 0; i < orders.size() - 1; i++) {
 				order = orders.get(i);
 
 				strBuil.append(order.getField().getName());
@@ -213,12 +190,10 @@ public class HiveProvider extends JdbcProvider
 
 	}
 
-	private String getGroupByStr(Query query)
-	{
+	private String getGroupByStr(Query query) {
 
 		List<DataField> list_group = query.getGroupByFields();
-		if (list_group == null || list_group.size() == 0)
-		{
+		if (list_group == null || list_group.size() == 0) {
 			return "";
 
 		}
@@ -228,8 +203,7 @@ public class HiveProvider extends JdbcProvider
 		strBuil.append(" GROUP BY ");
 		int size = list_group.size();
 
-		for (int i = 0; i < size - 1; i++)
-		{
+		for (int i = 0; i < size - 1; i++) {
 			strBuil.append(list_group.get(i).getName());
 			strBuil.append(",");
 		}
@@ -239,13 +213,11 @@ public class HiveProvider extends JdbcProvider
 
 	}
 
-	private String getOrderByStr(Query query)
-	{
+	private String getOrderByStr(Query query) {
 		// the key "order by"
 
 		List<OrderClause> orders = query.getOrderClauses();
-		if (orders == null || orders.size() == 0)
-		{
+		if (orders == null || orders.size() == 0) {
 			System.out.println("ok");
 			return "";
 
@@ -256,8 +228,7 @@ public class HiveProvider extends JdbcProvider
 		strBuil.append(" ORDER BY ");
 		OrderClause order = null;
 
-		for (int i = 0; i < orders.size() - 1; i++)
-		{
+		for (int i = 0; i < orders.size() - 1; i++) {
 			order = orders.get(i);
 
 			strBuil.append(order.getField().getName());
@@ -277,37 +248,32 @@ public class HiveProvider extends JdbcProvider
 
 	}
 
-	private String getWhereStr(Query query)
-	{
+	private String getWhereStr(Query query) {
 		StringBuilder strBuil = new StringBuilder();
 		// add key "where"
 		List<WhereClause> list_where = query.getWhereClauses();
-		if (list_where == null || list_where.size() == 0)
-		{
-			
+		if (list_where == null || list_where.size() == 0) {
+
 			return "";
 		}
-		
-			int size = list_where.size();
-			strBuil.append(" where ");
 
-			for (int i = 0; i < size; i++)
-			{
-				strBuil.append(whereConditionToStr(list_where.get(i)));
-				if (i != size - 1)
-				{
-					strBuil.append(" and ");
+		int size = list_where.size();
+		strBuil.append(" where ");
 
-				}
+		for (int i = 0; i < size; i++) {
+			strBuil.append(whereConditionToStr(list_where.get(i)));
+			if (i != size - 1) {
+				strBuil.append(" and ");
+
 			}
+		}
 
-			strBuil.append(" ");
-			return strBuil.toString();
+		strBuil.append(" ");
+		return strBuil.toString();
 
 	}
 
-	private String getFromStr(Query query)
-	{
+	private String getFromStr(Query query) {
 		// add key from
 		StringBuilder strBuil = new StringBuilder();
 		DataField[] fields = query.getFields();
@@ -317,26 +283,22 @@ public class HiveProvider extends JdbcProvider
 		return strBuil.toString();
 	}
 
-	private String getSelectStr(Query query)
-	{
+	private String getSelectStr(Query query) {
 		// add key select
 		StringBuilder strBuil = new StringBuilder();
 		strBuil.append("SELECT ");
 		DataField[] fields = query.getFields();
 
-		if (fields == null || fields.length == 0)
-		{
+		if (fields == null || fields.length == 0) {
 
 			return null;
 		}
 
 		int len = fields.length;
-		for (int i = 0; i < len; i++)
-		{
+		for (int i = 0; i < len; i++) {
 			strBuil.append(fields[i].getQueryName());
 
-			if (i != len - 1)
-			{
+			if (i != len - 1) {
 				strBuil.append(",");
 
 			}
@@ -345,9 +307,7 @@ public class HiveProvider extends JdbcProvider
 		return strBuil.toString();
 	}
 
-	
-	private String whereConditionToStr(WhereClause where)
-	{
+	private String whereConditionToStr(WhereClause where) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(where.getField().getName()).append(
 				where.getOperator().toString());
@@ -358,12 +318,10 @@ public class HiveProvider extends JdbcProvider
 		return sb.toString();
 	}
 
-
-
-	public static void main(String[] args) throws Exception
-	{PlatformImpl p = new PlatformImpl("config.xml");
+	public static void main(String[] args) throws Exception {
+		PlatformImpl p = new PlatformImpl("config.xml");
 		Class.forName("org.apache.hadoop.hive.jdbc.HiveDriver");
-//		Config.init("./config.xml");
+		// Config.init("./config.xml");
 
 		DataProvider hiveProvider = DataProviderManagerImpl.getInstance()
 				.getDefaultHiveProvider("default", null, null);
@@ -379,7 +337,6 @@ public class HiveProvider extends JdbcProvider
 		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false,
 				FieldFunctionality.Value);
 
-		
 		dsSite = DataSetManagerImpl.getInstance().createDataSet("TESTF",
 				"liqi", "小区地理位置信息", hiveProvider, true, fields);
 		DataSetManagerImpl.getInstance().setDataSetPermission("TESTF", "liqi",
@@ -388,28 +345,27 @@ public class HiveProvider extends JdbcProvider
 		Query q1;
 		DataSet ds = DataSetManagerImpl.getInstance().getDataSet("TESTF");
 		q1 = ds.getQuery();
-		
-		q1=q1.orderBy("LAC", Query.Order.ASC);
-		q1=q1.orderBy("EN_NAME", Query.Order.ASC);
-		q1=q1.where("LAC", Query.Operator.GEQ, 5000);
-		
+
+		q1 = q1.orderBy("LAC", Query.Order.ASC);
+		q1 = q1.orderBy("EN_NAME", Query.Order.ASC);
+		q1 = q1.where("LAC", Query.Operator.GEQ, 5000);
+
 		q1.open();
-		
-		while(q1.next())
-		{
+int i=0;
+		while (q1.next()&& i++<3) {
 			System.out.println(q1.getValue(ds.getField("LAC")) + " "
 					+ q1.getValue(ds.getField("CI")));
 		}
-
+		q1.close();
 	}
-	
+
 	@Override
 	public Object getValue(Query q, DataField field)
 			throws DataProviderException {
 		try {
 			ResultSet rs = results.get(q);
 			FieldType type = field.getFieldType();
-			String fieldName=field.getName().toLowerCase();
+			String fieldName = field.getName().toLowerCase();
 			switch (type) {
 			case ShortString:
 			case LongString:

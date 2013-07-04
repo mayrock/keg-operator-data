@@ -1,6 +1,7 @@
 package edu.thu.keg.mdap_impl.datamodel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.thu.keg.mdap.datamodel.AggregatedDataField;
@@ -143,8 +144,7 @@ public class QueryImpl implements Query {
 
 	@Override
 	public Query orderBy(String fieldName, Order order) {
-		
-		
+
 		DataField field = null;
 		for (DataField tdf : this.fields) {
 			if (tdf.getName().equalsIgnoreCase(fieldName)) {
@@ -218,5 +218,88 @@ public class QueryImpl implements Query {
 	public String toString() {
 		return this.provider.getQueryString(this);
 	}
-
+	//
+	// /*
+	// * (non-Javadoc)
+	// *
+	// * @see java.lang.Object#hashCode()
+	// */
+	// @Override
+	// public int hashCode() {
+	// final int prime = 31;
+	// int result = 1;
+	// result = prime * result + Arrays.hashCode(fields);
+	// result = prime * result
+	// + ((innerQuery == null) ? 0 : innerQuery.hashCode());
+	// result = prime * result + ((orders == null) ? 0 : orders.hashCode());
+	// result = prime * result
+	// + ((provider == null) ? 0 : provider.hashCode());
+	// result = prime * result + ((state == null) ? 0 : state.hashCode());
+	// result = prime * result + ((wheres == null) ? 0 : wheres.hashCode());
+	// return result;
+	// }
+	//
+	// /*
+	// * (non-Javadoc)
+	// *
+	// * @see java.lang.Object#equals(java.lang.Object)
+	// */
+	// @Override
+	// public boolean equals(Object obj) {
+	// if (this == obj)
+	// return true;
+	// if (obj == null)
+	// return false;
+	// if (getClass() != obj.getClass())
+	// return false;
+	// QueryImpl other = (QueryImpl) obj;
+	// if (!Arrays.equals(fields, other.fields))
+	// return false;
+	// if (innerQuery == null) {
+	// if (other.innerQuery != null)
+	// return false;
+	// } else if (!innerQuery.equals(other.innerQuery))
+	// return false;
+	// if (orders == null) {
+	// if (other.orders != null)
+	// return false;
+	// } else {
+	// if (orders.size() != other.orders.size())
+	// return false;
+	// for (int i = 0; i < orders.size(); i++) {
+	// if (!orders.get(i).getField()
+	// .equals(other.orders.get(i).getField()))
+	// return false;
+	// if (orders.get(i).getOrder()
+	// .compareTo(other.orders.get(i).getOrder()) != 0)
+	// return false;
+	// }
+	// }
+	// if (provider == null) {
+	// if (other.provider != null)
+	// return false;
+	// } else if (!provider.getConnectionString().equals(
+	// other.provider.getConnectionString()))
+	// return false;
+	// if (state != other.state)
+	// return false;
+	// if (wheres == null) {
+	// if (other.wheres != null)
+	// return false;
+	// } else {
+	// if (wheres.size() != other.wheres.size())
+	// return false;
+	// for (int i = 0; i < wheres.size(); i++) {
+	// if (!wheres.get(i).getField()
+	// .equals(other.wheres.get(i).getField()))
+	// return false;
+	// if (wheres.get(i).getOperator()
+	// .compareTo(other.wheres.get(i).getOperator()) != 0)
+	// return false;
+	// if (wheres.get(i).getValue() != other.wheres.get(i).getValue())
+	// return false;
+	// }
+	// }
+	// return true;
+	// }
 }

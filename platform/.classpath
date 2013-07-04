@@ -13,17 +13,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/Oracle Thin Driver"/>
 	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/Microsoft SQL Server 2008 JDBC Driver"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/antlr-runtime-3.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hadoop-core-1.0.4.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hive-exec-0.10.0.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hive-jdbc-0.10.0.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hive-metastore-0.10.0.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/hive-service-0.10.0.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/jdo2-api-2.3-ec.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/libfb303-0.9.0.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/log4j-1.2.16.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/slf4j-api-1.6.1.jar"/>
-	<classpathentry kind="lib" path="D:/JavaLibs/HiveLib/core/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Hive-jdbc"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

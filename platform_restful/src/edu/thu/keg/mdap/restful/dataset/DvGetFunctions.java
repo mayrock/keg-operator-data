@@ -30,6 +30,7 @@ import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.Query;
 
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDataset;
@@ -241,7 +242,7 @@ public class DvGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.warn(e.getStackTrace());
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
 				datasetList) {

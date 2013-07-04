@@ -41,6 +41,7 @@
 		<fileset file="${JAR_PATH}/jersey/*.jar" />
 		<fileset file="${JAR_PATH}/xstream/*.jar" />
 		<fileset file="${JAR_PATH}/sqljdbc/*.jar" />
+		<fileset file="${JAR_PATH}/hive-jdbc/*.jar" />
 		<fileset file="${JAR_PATH}/log4j/*.jar" />
 	</path>
 	<path id="LIB_CLASS_PATH_TOM">

@@ -2,49 +2,14 @@
     <wb-module deploy-name="platform_api">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/WebContent/WEB-INF/lib/hive-jdbc"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/WebContent/WEB-INF/lib/jersey"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/WebContent/WEB-INF/lib/sqljdbc"/>
+        <wb-resource deploy-path="/WEB-INF/lib/" source-path="/WebContent/WEB-INF/lib/log4j"/>
         <dependent-module archiveName="platform.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/platform/platform">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="platform_management.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/platform_management/platform_management">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="log4j.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/ybz/GitHub/keg-operator-data/libraries/log4j.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-client-1.17.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jersey-client-1.17.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="asm-3.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/asm-3.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-xc-1.9.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jackson-xc-1.9.2.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-servlet-1.17.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jersey-servlet-1.17.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-json-1.17.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jersey-json-1.17.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-jaxrs-1.9.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jackson-jaxrs-1.9.2.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-core-1.17.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jersey-core-1.17.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-core-asl-1.9.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jackson-core-asl-1.9.2.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jettison-1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jettison-1.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jsr311-api-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jsr311-api-1.1.1.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jackson-mapper-asl-1.9.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jackson-mapper-asl-1.9.2.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="jersey-server-1.17.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/libraries/jersey-archive-1.17/lib/jersey-server-1.17.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/platform_api/build/classes"/>

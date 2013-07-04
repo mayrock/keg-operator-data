@@ -31,6 +31,13 @@ public class ServerInitial implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			Class.forName("org.apache.hadoop.hive.jdbc.HiveDriver");
+		} catch (ClassNotFoundException e) {
+//			 TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ServletContext sc = arg0.getServletContext();
 		String P_Config = ResourceBundle.getBundle("platform_initial")
 				.getString("PlatformImpl_CONFIG");
@@ -40,14 +47,7 @@ public class ServerInitial implements ServletContextListener {
 		sc.setAttribute("platform", p);
 		ManagementPlatform mp = new ManagementPlatform();
 		sc.setAttribute("managementplatform", mp);
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			Class.forName("org.apache.hadoop.hive.jdbc.HiveDriver");
-			// Class.forName("");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		log.info("启动MDAP服务器");
 	}
 }
