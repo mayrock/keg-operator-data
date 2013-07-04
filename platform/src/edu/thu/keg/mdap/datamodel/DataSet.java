@@ -104,12 +104,12 @@ public interface DataSet extends TableStructure {
 	/**
 	 * Get the key DataFields of this dataset
 	 */
-	public Collection<DataField> getKeyFields();
+	public Collection<DataField> getPrimaryKeyFields();
 
 	/**
 	 * Get the value fields of this dataset
 	 */
-	public Collection<DataField> getValueFields();
+	public Collection<DataField> getOtherFields();
 
 	/**
 	 * Get the name of the owner of this dataset

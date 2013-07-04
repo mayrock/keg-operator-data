@@ -3,23 +3,26 @@ package edu.thu.keg.mdap.restful.jerseyclasses.dataset;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Jersey class for dataset's statistic info
+ * 
  * @author Law
- *
+ * 
  */
 @XmlRootElement
 public class JStatistic {
-	private List<String> keys;
+	private List<String> indentifiers;
 	private List<Double> values;
-	
-	public void setKey(List<String> keys) {
-		this.keys=keys;
+
+	public void setIndentifiers(List<String> indentifiers) {
+		this.indentifiers = indentifiers;
 	}
 
-	public List<String> getKey() {
-		return this.keys;
+	public List<String> getIndentifiers() {
+		return this.indentifiers;
 	}
+
 	public void setValue(List<Double> values) {
 		this.values = values;
 	}
@@ -27,5 +30,5 @@ public class JStatistic {
 	public List<Double> getValue() {
 		return this.values;
 	}
-	
+
 }

@@ -23,6 +23,7 @@ public class JDatasetName {
 	private List<String> values;
 	private List<Class> keytypes;
 	private List<Class> valuetypes;
+	private List<String> datafeature;
 
 	public void setDatasetName(String datasetname) {
 		this.datasetName = datasetname;
@@ -118,4 +119,13 @@ public class JDatasetName {
 	public List<Class> getKeytypes() {
 		return this.keytypes;
 	}
+
+	public List<String> getDatafeature() {
+		return datafeature;
+	}
+
+	public void setDatafeature(List<String> datafeature) {
+		this.datafeature = datafeature;
+	}
+
 }

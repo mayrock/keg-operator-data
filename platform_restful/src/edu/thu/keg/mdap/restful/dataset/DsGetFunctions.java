@@ -46,8 +46,7 @@ import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 
 import edu.thu.keg.mdap.provider.DataProviderException;
-import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JColumn;
-import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDataset;
+import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetLine;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JField;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JFieldName;
@@ -109,14 +108,19 @@ public class DsGetFunctions {
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
-				for (DataField df : dataset.getKeyFields()) {
+				for (DataField df : dataset.getPrimaryKeyFields()) {
 					keys.add(df.getName());
 				}
 				dname.setKeys(keys);
-				for (DataField df : dataset.getValueFields()) {
+				for (DataField df : dataset.getOtherFields()) {
 					values.add(df.getName());
 				}
 				dname.setValues(values);
+				ArrayList<String> datafeatures = new ArrayList<>();
+				for (DataFeature df : dataset.getFeatures()) {
+					datafeatures.add(df.getFeatureType().name());
+				}
+				dname.setDatafeature(datafeatures);
 				datasetsName.add(dname);
 			}
 
@@ -157,21 +161,21 @@ public class DsGetFunctions {
 				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				// ArrayList<String> schema = new ArrayList<>();
-				// for (DataField df : dataset.getDataFields()) {
-				// schema.add(df.getName());
-				// }
-				// dname.setSchema(schema);
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
-				for (DataField df : dataset.getKeyFields()) {
+				for (DataField df : dataset.getPrimaryKeyFields()) {
 					keys.add(df.getName());
 				}
 				dname.setKeys(keys);
-				for (DataField df : dataset.getValueFields()) {
+				for (DataField df : dataset.getOtherFields()) {
 					values.add(df.getName());
 				}
 				dname.setValues(values);
+				ArrayList<String> datafeatures = new ArrayList<>();
+				for (DataFeature df : dataset.getFeatures()) {
+					datafeatures.add(df.getFeatureType().name());
+				}
+				dname.setDatafeature(datafeatures);
 				datasetsName.add(dname);
 			}
 
@@ -220,11 +224,11 @@ public class DsGetFunctions {
 				// dname.setSchema(schema);
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
-				for (DataField df : dataset.getKeyFields()) {
+				for (DataField df : dataset.getPrimaryKeyFields()) {
 					keys.add(df.getName());
 				}
 				dname.setKeys(keys);
-				for (DataField df : dataset.getValueFields()) {
+				for (DataField df : dataset.getOtherFields()) {
 					values.add(df.getName());
 				}
 				dname.setValues(values);
@@ -252,7 +256,7 @@ public class DsGetFunctions {
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDataset " + dataset + " "
 				+ uriInfo.getAbsolutePath());
-		List<JDataset> datasetList = new ArrayList<>();
+		List<JDatasetLine> datasetList = new ArrayList<>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
@@ -262,7 +266,7 @@ public class DsGetFunctions {
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
-				JDataset jdataset = new JDataset();
+				JDatasetLine jdataset = new JDatasetLine();
 				List<JField> fields = new ArrayList<>();
 				DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
 				int j = 0;
@@ -286,7 +290,7 @@ public class DsGetFunctions {
 		} catch (OperationNotSupportedException | DataProviderException e) {
 			log.warn(e.getStackTrace());
 		}
-		return new JSONWithPadding(new GenericEntity<List<JDataset>>(
+		return new JSONWithPadding(new GenericEntity<List<JDatasetLine>>(
 				datasetList) {
 		}, jsoncallback);
 	}
@@ -320,6 +324,11 @@ public class DsGetFunctions {
 				JGeograph location = new JGeograph();
 				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
 				location.setLongitude((double) rs.getValue(gds.getKeyFields()[1]));
+				List<String> values = new ArrayList<String>();
+				for (DataField df : gds.getValueFields()) {
+					values.add(rs.getValue(df).toString());
+				}
+				location.setValus(values);
 				datasetList.add(location);
 			}
 			rs.close();
@@ -364,9 +373,9 @@ public class DsGetFunctions {
 				// + " "
 				// + rs.getValue(ds.getDataFields()[1]).toString());
 				JStatistic statistic = new JStatistic();
-				ArrayList<String> keys = new ArrayList<>();
-				for (DataField key : gds.getKeyFields()) {
-					keys.add(rs.getValue(key).toString());
+				ArrayList<String> indentifiers = new ArrayList<>();
+				for (DataField indentifier : gds.getKeyFields()) {
+					indentifiers.add(rs.getValue(indentifier).toString());
 				}
 				ArrayList<Double> values = new ArrayList<>();
 				for (DataField value : gds.getValueFields()) {
@@ -376,7 +385,7 @@ public class DsGetFunctions {
 					else
 						values.add(null);
 				}
-				statistic.setKey(keys);
+				statistic.setIndentifiers(indentifiers);
 				statistic.setValue(values);
 				datasetList.add(statistic);
 			}
@@ -424,15 +433,15 @@ public class DsGetFunctions {
 						+ " "
 						+ rs.getValue(ds.getDataFields().get(1)).toString());
 				JStatistic statistic = new JStatistic();
-				ArrayList<String> keys = new ArrayList<>();
-				for (DataField key : gds.getKeyFields()) {
-					keys.add(rs.getValue(key).toString());
+				ArrayList<String> indentifiers = new ArrayList<>();
+				for (DataField indentifier : gds.getKeyFields()) {
+					indentifiers.add(rs.getValue(indentifier).toString());
 				}
 				ArrayList<Double> values = new ArrayList<>();
 				for (DataField value : gds.getValueFields()) {
 					values.add(Double.valueOf(rs.getValue(value).toString()));
 				}
-				statistic.setKey(keys);
+				statistic.setIndentifiers(indentifiers);
 				statistic.setValue(values);
 				datasetList.add(statistic);
 			}
@@ -471,9 +480,9 @@ public class DsGetFunctions {
 				jfn.setDescription(df.getDescription());
 				jfn.setIsKey(df.isKey());
 				jfn.setType(df.getFieldType().name());
+				jfn.setFunctionality(df.getFunction().name());
 				all_fn.add(jfn);
 			}
-
 		} catch (Exception e) {
 			log.warn(e.getStackTrace());
 		} finally {
@@ -500,7 +509,7 @@ public class DsGetFunctions {
 			@QueryParam("orderby") String orderby) {
 		log.info(uriInfo.getAbsolutePath());
 		String fieldname = null;
-		List<JColumn> all_dfs = null;
+		List<JDatasetLine> all_dfs = null;
 		List<JField> list_df = null;
 		/**
 		 * fields 存储列名的参数jsonarray orderby 排序的域名
@@ -541,8 +550,8 @@ public class DsGetFunctions {
 				// gen.close();
 				// String json = sw.toString();
 				// System.out.println("json: "+json);
-				JColumn jc = new JColumn();
-				jc.setColumn(list_df);
+				JDatasetLine jc = new JDatasetLine();
+				jc.setField(list_df);
 				all_dfs.add(jc);
 			}
 
@@ -559,7 +568,8 @@ public class DsGetFunctions {
 
 		}
 		// return all_dfs;
-		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
+		return new JSONWithPadding(new GenericEntity<List<JDatasetLine>>(
+				all_dfs) {
 		}, callback);
 	}
 
@@ -583,7 +593,7 @@ public class DsGetFunctions {
 		String fieldname = null;
 		String opr = null;
 		String value = null;
-		List<JColumn> all_dfs = null;
+		List<JDatasetLine> all_dfs = null;
 		List<JField> list_df = null;
 		/**
 		 * jsonOper 操作参数jsonarray fieldname 域名 opr 操作符号 value 值
@@ -617,8 +627,8 @@ public class DsGetFunctions {
 					list_df.add(field);
 				}
 				rs.close();
-				JColumn jc = new JColumn();
-				jc.setColumn(list_df);
+				JDatasetLine jc = new JDatasetLine();
+				jc.setField(list_df);
 				all_dfs.add(jc);
 			}
 		} catch (OperationNotSupportedException | DataProviderException e) {
@@ -628,7 +638,8 @@ public class DsGetFunctions {
 			System.out.println("POST: Json form wrong!");
 			e.printStackTrace();
 		}
-		return new JSONWithPadding(new GenericEntity<List<JColumn>>(all_dfs) {
+		return new JSONWithPadding(new GenericEntity<List<JDatasetLine>>(
+				all_dfs) {
 		}, callback);
 	}
 
@@ -656,15 +667,20 @@ public class DsGetFunctions {
 		dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 		ArrayList<String> keys = new ArrayList<>();
 		ArrayList<String> values = new ArrayList<>();
-		for (DataField df : dataset.getKeyFields()) {
+		for (DataField df : dataset.getPrimaryKeyFields()) {
 			keys.add(df.getName());
 		}
 		dname.setKeys(keys);
-		for (DataField df : dataset.getValueFields()) {
+		for (DataField df : dataset.getOtherFields()) {
 			values.add(df.getName());
 		}
 		dname.setValues(values);
 
+		ArrayList<String> datafeatures = new ArrayList<>();
+		for (DataFeature df : dataset.getFeatures()) {
+			datafeatures.add(df.getFeatureType().name());
+		}
+		dname.setDatafeature(datafeatures);
 		// } catch (Exception e) {
 		// log.warn(e.getStackTrace());
 		// // e.printStackTrace();
@@ -699,11 +715,11 @@ public class DsGetFunctions {
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
-				for (DataField df : dataset.getKeyFields()) {
+				for (DataField df : dataset.getPrimaryKeyFields()) {
 					keys.add(df.getName());
 				}
 				dname.setKeys(keys);
-				for (DataField df : dataset.getValueFields()) {
+				for (DataField df : dataset.getOtherFields()) {
 					values.add(df.getName());
 				}
 				dname.setValues(values);
@@ -748,11 +764,11 @@ public class DsGetFunctions {
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
-				for (DataField df : dataset.getKeyFields()) {
+				for (DataField df : dataset.getPrimaryKeyFields()) {
 					keys.add(df.getName());
 				}
 				dname.setKeys(keys);
-				for (DataField df : dataset.getValueFields()) {
+				for (DataField df : dataset.getOtherFields()) {
 					values.add(df.getName());
 				}
 				dname.setValues(values);
@@ -796,11 +812,11 @@ public class DsGetFunctions {
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 				ArrayList<String> keys = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
-				for (DataField df : dataset.getKeyFields()) {
+				for (DataField df : dataset.getPrimaryKeyFields()) {
 					keys.add(df.getName());
 				}
 				dname.setKeys(keys);
-				for (DataField df : dataset.getValueFields()) {
+				for (DataField df : dataset.getOtherFields()) {
 					values.add(df.getName());
 				}
 				dname.setValues(values);

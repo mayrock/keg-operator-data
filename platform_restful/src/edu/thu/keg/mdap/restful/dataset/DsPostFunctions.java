@@ -40,7 +40,6 @@ import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
-import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JColumn;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JField;
 
 /**

@@ -131,7 +131,6 @@ public class JdbcProvider extends AbstractDataProvider {
 			ResultSet rs = stmt.executeQuery(queryStr);
 			return rs;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			throw new IllegalQueryException(ex.getMessage());
 		}
 	}

@@ -1,17 +1,21 @@
 package edu.thu.keg.mdap.restful.jerseyclasses.dataset;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Jersey class for dataset's name of field
+ * 
  * @author Law
- *
+ * 
  */
 @XmlRootElement
 public class JFieldName {
 	private String fieldName;
 	private String description;
 	private String type;
-private boolean isKey;
+	private boolean isKey;
+	private String functionality;
+
 	public void setFieldName(String fieldname) {
 		this.fieldName = fieldname;
 	}
@@ -27,6 +31,7 @@ private boolean isKey;
 	public String getDescription() {
 		return this.description;
 	}
+
 	public void setIsKey(boolean iskey) {
 		this.isKey = iskey;
 	}
@@ -34,12 +39,20 @@ private boolean isKey;
 	public boolean getIsKey() {
 		return this.isKey;
 	}
-	public void setType(String type)
-	{
-		this.type=type;
+
+	public void setType(String type) {
+		this.type = type;
 	}
-	public String getType()
-	{
+
+	public String getType() {
 		return this.type;
+	}
+
+	public String getFunctionality() {
+		return functionality;
+	}
+
+	public void setFunctionality(String functionality) {
+		this.functionality = functionality;
 	}
 }

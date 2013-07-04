@@ -165,16 +165,22 @@ public class DataSetImpl implements DataSet {
 			}
 		}
 		if (flag) {
+			// add all fileds except feature is Geo
 			if (type.equals(DataFeatureType.GeoFeature)) {
 				keys.add(fieldsMap.get(FieldFunctionality.Latitude).get(0));
 				keys.add(fieldsMap.get(FieldFunctionality.Longitude).get(0));
-				values.addAll(this.getValueFields());
+				if (fieldsMap.get(FieldFunctionality.Identifier) != null)
+					values.addAll(fieldsMap.get(FieldFunctionality.Identifier));
+				if (fieldsMap.get(FieldFunctionality.Value) != null)
+					values.addAll(fieldsMap.get(FieldFunctionality.Value));
+				// add all value feature fields
 			} else if (type.equals(DataFeatureType.DistributionFeature)) {
 				keys.addAll(fieldsMap.get(FieldFunctionality.Identifier));
-				values.addAll(fieldsMap.get(FieldFunctionality.Value));
+				if (fieldsMap.get(FieldFunctionality.Value) != null)
+					values.addAll(fieldsMap.get(FieldFunctionality.Value));
 			} else {
-				keys = this.getKeyFields();
-				values = this.getValueFields();
+				keys = this.getPrimaryKeyFields();
+				values = this.getOtherFields();
 			}
 
 			return new DataFeatureImpl(type, keys.toArray(new DataField[0]),
@@ -224,7 +230,7 @@ public class DataSetImpl implements DataSet {
 	}
 
 	@Override
-	public List<DataField> getKeyFields() {
+	public List<DataField> getPrimaryKeyFields() {
 		List<DataField> ret = new ArrayList<DataField>();
 		for (DataField field : fields) {
 			if (field.isKey()) {
@@ -235,7 +241,7 @@ public class DataSetImpl implements DataSet {
 	}
 
 	@Override
-	public List<DataField> getValueFields() {
+	public List<DataField> getOtherFields() {
 		List<DataField> ret = new ArrayList<DataField>();
 		for (DataField field : fields) {
 			if (!field.isKey()) {
