@@ -25,8 +25,6 @@
 	<!-- 源platfrom_management的java文件路径 -->
 	<property name="SCR_PATH_MANAGER" value="${PRO_PATH_MANAGER}/src" />
 
-	<!-- 源所有人的编译的jar包路径 -->
-	<property name="JAR_PATH" value="${WEB_PATH}/WEB-INF/lib" />
 	<!-- 源MDAP前台的路径 -->
 	<property name="MDAP_PATH" value="${GIT_PATH}/MDAP" />
 
@@ -38,7 +36,7 @@
 
 	<!-- 定义classpath -->
 	<path id="LIB_CLASS_PATH">
-		<fileset file="${JAR_PATH}/*.jar" />
+		<fileset file="${DEPLOY_PATH}/WEB-INF/lib/*.jar" />
 		<fileset file="${PRO_PATH_LIBRARIES}/jersey/*.jar" />
 		<fileset file="${PRO_PATH_LIBRARIES}/xstream/*.jar" />
 		<fileset file="${PRO_PATH_LIBRARIES}/sqljdbc/*.jar" />
@@ -111,7 +109,7 @@
 		<!-- mkdir dir="${CLASS_PATH}" -->
 		<echo message="compiling platform_restful..." />
 		<javac encoding="UTF-8" srcdir="${SCR_PATH_RESTFUL}" destdir="${CLASS_PATH}" includeantruntime="on">
-			
+			<classpath refid="LIB_CLASS_PATH" />
 			<classpath refid="LIB_CLASS_PATH_TOM" />
 		</javac>
 	</target>
