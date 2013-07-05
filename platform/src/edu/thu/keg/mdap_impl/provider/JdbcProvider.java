@@ -125,10 +125,13 @@ public class JdbcProvider extends AbstractDataProvider {
 
 	protected ResultSet executeQuery(String queryStr)
 			throws IllegalQueryException {
+		Connection conn = null;
 		try {
 			System.out.println(connString + " : " + queryStr);
-			Statement stmt = getConnection().createStatement();
+			conn = getConnection();
+			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(queryStr);
+			super.rsMapConn.put(rs, conn);
 			return rs;
 		} catch (Exception ex) {
 			throw new IllegalQueryException(ex.getMessage());
@@ -146,15 +149,17 @@ public class JdbcProvider extends AbstractDataProvider {
 
 	public void execute(String text) throws DataProviderException {
 		Statement stmt = null;
+		Connection conn = null;
 		try {
-			stmt = this.getConnection().createStatement();
+			conn = this.getConnection();
+			stmt = conn.createStatement();
 			stmt.executeUpdate(text);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
-				stmt.getConnection().close();
+				conn.close();
 			} catch (SQLException e) {
 				throw new DataProviderException(e.getMessage());
 			}
@@ -279,20 +284,12 @@ public class JdbcProvider extends AbstractDataProvider {
 		Connection conn = null;
 		try {
 			ResultSet rs = results.get(q);
-			Statement sta = rs.getStatement();
-			conn = sta.getConnection();
-			results.get(q).close();
+			rs.close();
 			results.remove(q);
-			// if (results.size() == 0)
-			// getConnection().close();
+			super.rsMapConn.get(rs).close();
+
 		} catch (SQLException e) {
 			throw new DataProviderException(e.getMessage());
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				throw new DataProviderException(e.getMessage());
-			}
 		}
 	}
 

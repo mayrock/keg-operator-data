@@ -2,6 +2,9 @@ package edu.thu.keg.mdap.restful.dataset;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
@@ -183,26 +186,34 @@ public class DsAdFunctions {
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
 			@FormParam("datafeaturetype") String datafuturetype,
-			@FormParam("key") String key, @FormParam("values") JSONArray values) {
+			@FormParam("keys") JSONArray keys,
+			@FormParam("values") JSONArray values) {
 		log.info(uriInfo.getAbsolutePath());
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataView dv = null;
 			DataSet ds = null;
-			DataField[] vs = null;
+			DataField[] ks = null, vs = null, kv = null;
 			Query q = null;
 
 			ds = p.getDataSetManager().getDataSet(dataset);
+			ks = new DataField[keys.length()];
+			for (int i = 0; i < ks.length; i++) {
+				ks[i] = ds.getField(values.getJSONObject(i).getString("key"));
+			}
 			vs = new DataField[values.length()];
 			for (int i = 0; i < vs.length; i++) {
-				vs[i] = ds
-						.getField(values.getJSONObject(i).getString("valuse"));
+				vs[i] = ds.getField(values.getJSONObject(i).getString("value"));
 			}
-			q = ds.getQuery().select();
+
+			kv = Arrays.copyOf(ks, ks.length + vs.length);
+			System.arraycopy(vs, 0, kv, ks.length, vs.length);
+
+			q = ds.getQuery().select(kv);
 			// to-do
 			dv = p.getDataSetManager().defineView(dataview, description,
-					DataView.PERMISSION_PUBLIC, DataFeatureType.ValueFeature,
-					q, ds.getField(key), vs);
+					DataView.PERMISSION_PUBLIC,
+					DataFeatureType.valueOf(datafuturetype), q, ks, vs);
 			p.getDataSetManager().saveChanges();
 		} catch (OperationNotSupportedException | DataProviderException
 				| IOException | JSONException e) {

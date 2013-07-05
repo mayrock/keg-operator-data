@@ -176,6 +176,6 @@ public interface DataSetManager {
 	 * @return
 	 */
 	DataView defineView(String name, String description, int permission,
-			DataFeatureType type, Query q, DataField key, DataField[] values);
+			DataFeatureType type, Query q, DataField[] key, DataField[] values);
 
 }

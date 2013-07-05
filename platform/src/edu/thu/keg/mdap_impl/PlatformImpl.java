@@ -5,6 +5,7 @@ package edu.thu.keg.mdap_impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -251,7 +252,7 @@ public class PlatformImpl implements Platform {
 			dv = getDataSetManager().defineView("UserWebsiteCountView",
 					"用户网站访问数分布", DataView.PERMISSION_PUBLIC,
 					DataFeatureType.ValueFeature, q,
-					dsSite.getField("WebsiteCount"), vas);
+					new DataField[] { dsSite.getField("WebsiteCount") }, vas);
 			dv.setDescription(Locale.ENGLISH, "User website count distribution");
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
