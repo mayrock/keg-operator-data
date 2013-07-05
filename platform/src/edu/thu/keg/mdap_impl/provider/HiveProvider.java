@@ -104,7 +104,13 @@ public class HiveProvider extends JdbcProvider {
 	}
 
 	@Override
-	// ds will be created , argment:data is the resource of data;
+	// ds will be created , argment:data is the source of data;
+	// query of ds will base on table of data and ignore the query operations of ds
+	
+	//eg.  create table tableName as select colName1 ,colName2 from dataTable;
+	//the "dataTable" is the basic table of data 
+	
+	
 	public void writeDataSetContent(DataSet ds, DataContent data)
 			throws DataProviderException {
 
@@ -145,16 +151,14 @@ public class HiveProvider extends JdbcProvider {
 				strBuil.append(str);
 				strBuil.append(" ");
 				strBuil.append(str);
+				
+				String tableName=q.getFields()[0].getDataSet().getName();
+				
+				
+				strBuil.append(" from ");
+				strBuil.append(tableName);
 
-				strBuil.append(" from testF");
-
-				// String sql="create table "+
-				// ds.getName()+" row format delimited fields terminated by ',' as select "+strBuil.toString()+" from testF";
-
-				// String insertQueryStr = "INSERT INTO " + ds.getName() + " ( "
-				// + strBuil.toString() + " ) SELECT "
-				// + strBuil.substring(0, strBuil.length() - 1) + " FROM ( "
-				// + q.toString() + " ) as in0";
+				
 				execute(strBuil.toString());
 			}
 		}
