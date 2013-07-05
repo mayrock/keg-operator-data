@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -43,6 +44,7 @@ public class UserGetFunctions {
 	ServletContext servletcontext;
 	@Context
 	HttpServletRequest httpServletRequest;
+	HttpSession session = null;
 	private static Logger log = Logger.getLogger(UserGetFunctions.class);
 
 	@GET
@@ -77,6 +79,7 @@ public class UserGetFunctions {
 			@QueryParam("password") String password,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback) {
 		log.info(uriInfo.getAbsolutePath());
+		session = httpServletRequest.getSession();
 		JSONObject job = null;
 		JUser juser = new JUser();
 		try {
@@ -87,6 +90,8 @@ public class UserGetFunctions {
 				juser.setStatus(true);
 				juser.setUser(ium.getUser(userid));
 				System.out.println("用户名密码正确:" + userid);
+				session.setAttribute("userid", userid);
+				mp.addUserToPool(userid);
 			} else {
 				juser.setStatus(false);
 				System.out.println("用户名不存在:" + userid);

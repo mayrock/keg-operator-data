@@ -30,7 +30,7 @@ import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 /**
  * This class is responsible for interacting with Hive
  * 
- * @author Yuanchao Ma
+ * @author Qi Li, Bozhi Yuan
  */
 
 public class HiveProvider extends JdbcProvider {

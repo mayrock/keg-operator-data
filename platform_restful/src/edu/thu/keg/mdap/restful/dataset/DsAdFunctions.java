@@ -10,6 +10,7 @@ import java.util.List;
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -39,8 +40,10 @@ import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
+import edu.thu.keg.mdap.management.ManagementPlatform;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
+import edu.thu.keg.mdap.restful.exceptions.UserNotInPoolException;
 import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
 import edu.thu.keg.mdap_impl.provider.JdbcProvider;
 
@@ -60,6 +63,8 @@ public class DsAdFunctions {
 	ServletContext servletcontext;
 	@Context
 	HttpServletRequest httpServletRequest;
+	HttpSession session = null;
+
 	private static Logger log = Logger.getLogger(DsAdFunctions.class);
 
 	@POST
@@ -128,7 +133,10 @@ public class DsAdFunctions {
 		 * fieldType description isKey
 		 */
 		log.info(uriInfo.getAbsolutePath());
+		session = httpServletRequest.getSession();
 		try {
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException("user is not login!");
 
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataProvider provider = p.getDataProviderManager()
@@ -137,7 +145,6 @@ public class DsAdFunctions {
 				return Response.status(409).entity("provider not found!\n")
 						.build();
 			}
-			// JSONArray datafields = JContent.getJSONArray("dsFields");
 			String fieldname = null;
 			FieldType fieldtype = null;
 			String df_description = null;
@@ -170,7 +177,7 @@ public class DsAdFunctions {
 			p.getDataSetManager().setDataSetPermission(dataset, owner,
 					DataSetImpl.parsePermission(permission), users_list);
 			p.getDataSetManager().saveChanges();
-		} catch (JSONException | IOException e) {
+		} catch (UserNotInPoolException | JSONException | IOException e) {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
 		}
@@ -189,8 +196,14 @@ public class DsAdFunctions {
 			@FormParam("keys") JSONArray keys,
 			@FormParam("values") JSONArray values) {
 		log.info(uriInfo.getAbsolutePath());
+		session = httpServletRequest.getSession();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
+			ManagementPlatform mp = (ManagementPlatform) servletcontext
+					.getAttribute("managementplatform");
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException("user is not login!");
+
 			DataView dv = null;
 			DataSet ds = null;
 			DataField[] ks = null, vs = null, kv = null;
@@ -205,18 +218,15 @@ public class DsAdFunctions {
 			for (int i = 0; i < vs.length; i++) {
 				vs[i] = ds.getField(values.getJSONObject(i).getString("value"));
 			}
-
 			kv = Arrays.copyOf(ks, ks.length + vs.length);
 			System.arraycopy(vs, 0, kv, ks.length, vs.length);
-
 			q = ds.getQuery().select(kv);
-			// to-do
-			dv = p.getDataSetManager().defineView(dataview, description,
+			dv = p.getDataSetManager().defineView(dataview, "", description,
 					DataView.PERMISSION_PUBLIC,
 					DataFeatureType.valueOf(datafuturetype), q, ks, vs);
 			p.getDataSetManager().saveChanges();
-		} catch (OperationNotSupportedException | DataProviderException
-				| IOException | JSONException e) {
+		} catch (UserNotInPoolException | OperationNotSupportedException
+				| DataProviderException | IOException | JSONException e) {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
 		}
@@ -236,7 +246,10 @@ public class DsAdFunctions {
 			@FormParam("permisson") String permission,
 			@FormParam("limitedusers") JSONArray limitedusers) {
 		log.info(uriInfo.getAbsolutePath());
+		session = httpServletRequest.getSession();
 		try {
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException("user is not login!");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			List<String> users = null;
 			users = new ArrayList<String>();
@@ -246,7 +259,7 @@ public class DsAdFunctions {
 			}
 			p.getDataSetManager().setDataSetPermission(dataset, owner,
 					DataSetImpl.parsePermission(permission), users);
-		} catch (JSONException e) {
+		} catch (UserNotInPoolException | JSONException e) {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
 		}
@@ -256,12 +269,15 @@ public class DsAdFunctions {
 	@DELETE
 	@Path("/rmds")
 	public void removeDataset(@PathParam("dataset") String dataset) {
+		session = httpServletRequest.getSession();
 		try {
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException("user is not login!");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			datasetManager.removeDataSet(datasetManager.getDataSet(dataset));
 			datasetManager.saveChanges();
-		} catch (DataProviderException | IOException e) {
+		} catch (UserNotInPoolException | DataProviderException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -270,12 +286,15 @@ public class DsAdFunctions {
 	@DELETE
 	@Path("/rmdv")
 	public void removeDataview(@PathParam("dataset") String dataview) {
+		session = httpServletRequest.getSession();
 		try {
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException("user is not logged!");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			datasetManager.removeDataView(datasetManager.getDataView(dataview));
 			datasetManager.saveChanges();
-		} catch (DataProviderException | IOException e) {
+		} catch (UserNotInPoolException | DataProviderException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

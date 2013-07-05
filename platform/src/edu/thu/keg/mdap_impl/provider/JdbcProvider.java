@@ -23,7 +23,7 @@ import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.provider.IllegalQueryException;
 
 /**
- * @author Yuanchao Ma
+ * @author Yuanchao Ma, Bozhi Yuan
  * 
  */
 public class JdbcProvider extends AbstractDataProvider {
@@ -281,13 +281,11 @@ public class JdbcProvider extends AbstractDataProvider {
 
 	@Override
 	public void closeQuery(Query q) throws DataProviderException {
-		Connection conn = null;
 		try {
 			ResultSet rs = results.get(q);
 			rs.close();
 			results.remove(q);
 			super.rsMapConn.get(rs).close();
-
 		} catch (SQLException e) {
 			throw new DataProviderException(e.getMessage());
 		}
