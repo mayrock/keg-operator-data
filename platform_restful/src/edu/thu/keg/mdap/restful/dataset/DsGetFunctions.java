@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -74,6 +75,8 @@ public class DsGetFunctions {
 	ServletContext servletcontext;
 	@Context
 	HttpServletRequest httpServletRequest;
+
+	HttpSession session = null;
 	private static Logger log = Logger.getLogger(DsGetFunctions.class);
 
 	/**
@@ -87,9 +90,10 @@ public class DsGetFunctions {
 	public JSONWithPadding getDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
+		session = httpServletRequest.getSession();
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		JDatasetName datasetName = new JDatasetName();
-
+		System.out.println(session.getId());
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
@@ -536,7 +540,7 @@ public class DsGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(dataset);
-
+			Query q = ds.getQuery();
 			for (int i = 0; i < jsonOper.length(); i++) {
 				JSONObject job = (JSONObject) jsonOper.get(i);
 				fieldname = job.getString("fieldname");
@@ -547,27 +551,27 @@ public class DsGetFunctions {
 						+ uriInfo.getAbsolutePath());
 				list_df = new ArrayList<JField>();
 				DataField df = ds.getField(fieldname);
-				DataContent rs = ds.getQuery().where(fieldname,
-						Operator.parse(opr), value);
-				rs.open();
-				int ii = 0;
-				while (rs.next() && ii++ < 2) {
-					JField field = new JField();
-					field.setValue(rs.getValue(df).toString());
-					field.setType(rs.getValue(df).getClass().getSimpleName());
-					list_df.add(field);
-				}
-				rs.close();
-				JDatasetLine jc = new JDatasetLine();
-				jc.setField(list_df);
-				all_dfs.add(jc);
+				q = q.where(fieldname, Operator.parse(opr), value);
 			}
-		} catch (OperationNotSupportedException | DataProviderException e) {
+			q.open();
+			int ii = 0;
+			List<JField> line_dfs = new ArrayList<>();
+			JField line_df = null;
+			while (q.next() && ii++ < 2) {
+				for (DataField df : q.getFields()) {
+					line_df = new JField();
+					line_df.setValue(q.getValue(df).toString());
+					line_df.setType(df.getClass().getSimpleName());
+					line_dfs.add(line_df);
+				}
+				JDatasetLine jdsl = new JDatasetLine();
+				jdsl.setField(line_dfs);
+				all_dfs.add(jdsl);
+			}
+		} catch (OperationNotSupportedException | DataProviderException
+				| JSONException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			System.out.println("POST: Json form wrong!");
-			e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetLine>>(
 				all_dfs) {
