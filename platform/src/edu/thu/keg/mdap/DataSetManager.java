@@ -66,9 +66,6 @@ public interface DataSetManager {
 	public DataSet createDataSet(String name, String owner, String description,
 			DataProvider provider, boolean loadable, DataField... fields);
 
-	public DataView defineView(String name, String description, int permission,
-			DataFeatureType type, Query q);
-
 	/**
 	 * Remove a DataSet from the platform, as well as remove its actual data
 	 * from its provider. No operation is performed if the DataSet does not
@@ -175,7 +172,11 @@ public interface DataSetManager {
 	 *            the value field
 	 * @return
 	 */
-	DataView defineView(String name, String description, int permission,
-			DataFeatureType type, Query q, DataField[] key, DataField[] values);
+	DataView defineView(String name, String owner, String description,
+			int permission, DataFeatureType type, Query q, DataField[] key,
+			DataField[] values);
+
+	public DataView defineView(String name, String owner, String description,
+			int permission, DataFeatureType type, Query q);
 
 }

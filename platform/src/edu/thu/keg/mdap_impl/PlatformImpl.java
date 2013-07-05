@@ -105,8 +105,9 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		dv = getDataSetManager().defineView("Lac_Ci_Map_hadoop", "小区分布图hadoop",
-				DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
+		dv = getDataSetManager().defineView("Lac_Ci_Map_hadoop",
+				dsSite.getOwner(), "小区分布图hadoop", DataView.PERMISSION_PUBLIC,
+				DataFeatureType.GeoFeature, q);
 		dv.setDescription(Locale.ENGLISH, "Area distribution hadoop");
 
 		// 1st oracle
@@ -132,8 +133,9 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		dv = getDataSetManager().defineView("Lac_Ci_Map_orcl", "小区分布图",
-				DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
+		dv = getDataSetManager().defineView("Lac_Ci_Map_orcl",
+				dsSite.getOwner(), "小区分布图", DataView.PERMISSION_PUBLIC,
+				DataFeatureType.GeoFeature, q);
 		dv.setDescription(Locale.ENGLISH, "Area distribution orcl");
 		// 1st DataSet
 		fields = new DataField[2];
@@ -186,8 +188,9 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		dv = getDataSetManager().defineView("RegionSta", "区域内基站数统计",
-				DataView.PERMISSION_PUBLIC, DataFeatureType.ValueFeature, q);
+		dv = getDataSetManager().defineView("RegionSta", dsSite.getOwner(),
+				"区域内基站数统计", DataView.PERMISSION_PUBLIC,
+				DataFeatureType.ValueFeature, q);
 		dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
 		// 4th DataSet
 		fields = new DataField[6];
@@ -223,8 +226,8 @@ public class PlatformImpl implements Platform {
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
 		}
-		dv = getDataSetManager().defineView("ContentTypeView", "ContentType分布",
-				DataView.PERMISSION_PUBLIC,
+		dv = getDataSetManager().defineView("ContentTypeView",
+				dsSite.getOwner(), "ContentType分布", DataView.PERMISSION_PUBLIC,
 				DataFeatureType.DistributionFeature, q);
 		dv.setDescription(Locale.ENGLISH, "ContentType distribution");
 		// 6th DataSet
@@ -250,7 +253,7 @@ public class PlatformImpl implements Platform {
 					.orderBy("WebsiteCount", Order.ASC);
 			DataField[] vas = { va };
 			dv = getDataSetManager().defineView("UserWebsiteCountView",
-					"用户网站访问数分布", DataView.PERMISSION_PUBLIC,
+					dsSite.getOwner(), "用户网站访问数分布", DataView.PERMISSION_PUBLIC,
 					DataFeatureType.ValueFeature, q,
 					new DataField[] { dsSite.getField("WebsiteCount") }, vas);
 			dv.setDescription(Locale.ENGLISH, "User website count distribution");
@@ -280,8 +283,9 @@ public class PlatformImpl implements Platform {
 		} catch (OperationNotSupportedException | DataProviderException e1) {
 			e1.printStackTrace();
 		}
-		getDataSetManager().defineView("ConnHourView", "每小时连接数统计",
-				DataView.PERMISSION_PUBLIC, DataFeatureType.ValueFeature, q);
+		getDataSetManager().defineView("ConnHourView", dsSite.getOwner(),
+				"每小时连接数统计", DataView.PERMISSION_PUBLIC,
+				DataFeatureType.ValueFeature, q);
 
 		// fields = new DataField[2];
 		// fields[0] = new GeneralDataField("ContentType", FieldType.LongString,

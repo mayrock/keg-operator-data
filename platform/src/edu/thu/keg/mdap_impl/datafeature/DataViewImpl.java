@@ -17,6 +17,7 @@ public class DataViewImpl implements DataView {
 
 	private Query q;
 	private String name;
+	private String owner;
 	private LocalizedMessage desps;
 	private DataFeatureType type;
 	private List<DataField> keyFields;
@@ -29,22 +30,25 @@ public class DataViewImpl implements DataView {
 	 * @param name
 	 * @param desps
 	 */
-	public DataViewImpl(String name, int permission, DataFeatureType type,
-			Query q) {
+	public DataViewImpl(String name, String owner, int permission,
+			DataFeatureType type, Query q) {
 		super();
 		this.q = q;
 		this.name = name;
+		this.owner = owner;
 		this.permission = permission;
 		this.desps = new LocalizedMessage();
 		this.type = type;
 		initKeyValueFields();
 	}
 
-	public DataViewImpl(String name, int permission, DataFeatureType type,
-			Query q, DataField[] keyFields, DataField[] valueFields) {
+	public DataViewImpl(String name, String owner, int permission,
+			DataFeatureType type, Query q, DataField[] keyFields,
+			DataField[] valueFields) {
 		super();
 		this.q = q;
 		this.name = name;
+		this.owner = owner;
 		this.permission = permission;
 		this.desps = new LocalizedMessage();
 		this.type = type;
@@ -67,6 +71,17 @@ public class DataViewImpl implements DataView {
 	@Override
 	public int getPermission() {
 		return this.permission;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.thu.keg.mdap.datafeature.DataView#getOwner()
+	 */
+	@Override
+	public String getOwner() {
+
+		return this.owner;
 	}
 
 	@Override
