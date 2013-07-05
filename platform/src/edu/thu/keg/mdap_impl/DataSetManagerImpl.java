@@ -4,8 +4,11 @@
 package edu.thu.keg.mdap_impl;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.security.acl.Owner;
 import java.util.Collection;
 import java.util.HashMap;
@@ -220,11 +223,10 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	@Override
 	public void saveChanges() throws IOException {
-		FileWriter fw;
+		Writer fw;
 		Storage sto = new Storage(datasets.values().toArray(new DataSet[0]),
-				views.values().toArray(new DataView[0]));
-
-		fw = new FileWriter(Config.getDataSetFile(), false);
+				views.values().toArray(new DataView[0])); 
+		fw = new OutputStreamWriter(new FileOutputStream(Config.getDataSetFile()), "UTF-8");
 		getXstream().marshal(sto, new PrettyPrintWriter(fw));
 		fw.close();
 	}
