@@ -29,17 +29,12 @@ import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
-import edu.thu.keg.mdap.datamodel.DataSet;
-import edu.thu.keg.mdap.datamodel.Query;
 
 import edu.thu.keg.mdap.provider.DataProviderException;
-import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetLine;
-import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDataviewLine;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDataviewName;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JField;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JFieldName;
-import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JStatistic;
 
 /**
  * the functions of dataview's get operations
@@ -72,27 +67,20 @@ public class DvGetFunctions {
 	@Path("/getdvs")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetViewsNames(
+			@QueryParam("featuretype") String featureType,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		System.out.println("getDatasetViewsNames " + uriInfo.getAbsolutePath());
 		List<JDataviewName> dataviewList = new ArrayList<JDataviewName>();
-		JDatasetName datasetName = new JDatasetName();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			Collection<DataView> dataviews = datasetManager.getDataViewList();
-			int i = 0;
+			Collection<DataView> dataviews = datasetManager
+					.getDataViewList(DataFeatureType.valueOf(featureType));
 			for (DataView dataview : dataviews) {
-				// if(i++>=1)
-				// break;
 				JDataviewName dname = new JDataviewName();
 				dname.setDataviewName(dataview.getName());
 				dname.setDescriptionEn(dataview.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataview.getDescription(Locale.CHINESE));
-				ArrayList<String> schema = new ArrayList<>();
-				// for (DataField df : dataset.getAllFields()) {
-				// schema.add(df.getName());
-				// }
-				// dname.setSchema(schema);
 				ArrayList<String> identifiers = new ArrayList<>();
 				ArrayList<String> values = new ArrayList<>();
 				for (DataField df : dataview.getKeyFields()) {
@@ -107,7 +95,7 @@ public class DvGetFunctions {
 				dataviewList.add(dname);
 			}
 		} catch (Exception e) {
-			log.warn(e.getStackTrace());
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDataviewName>>(
 				dataviewList) {

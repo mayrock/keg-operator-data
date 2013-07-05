@@ -96,8 +96,6 @@ public class DsGetFunctions {
 			Collection<DataSet> datasets = datasetManager.getDataSetList();
 			int i = 0;
 			for (DataSet dataset : datasets) {
-				// if(i++>=1)
-				// break;
 				JDatasetName dname = new JDatasetName();
 				dname.setDatasetName(dataset.getName());
 				dname.setOwner(dataset.getOwner());
@@ -106,16 +104,16 @@ public class DsGetFunctions {
 				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> keys = new ArrayList<>();
-				ArrayList<String> values = new ArrayList<>();
+				ArrayList<String> keyFields = new ArrayList<>();
+				ArrayList<String> otherFields = new ArrayList<>();
 				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keys.add(df.getName());
+					keyFields.add(df.getName());
 				}
-				dname.setKeys(keys);
+				dname.setKeyFields(keyFields);
 				for (DataField df : dataset.getOtherFields()) {
-					values.add(df.getName());
+					otherFields.add(df.getName());
 				}
-				dname.setValues(values);
+				dname.setOtherFields(otherFields);
 				ArrayList<String> datafeatures = new ArrayList<>();
 				for (DataFeature df : dataset.getFeatures()) {
 					datafeatures.add(df.getFeatureType().name());
@@ -161,16 +159,16 @@ public class DsGetFunctions {
 				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> keys = new ArrayList<>();
-				ArrayList<String> values = new ArrayList<>();
+				ArrayList<String> keyFields = new ArrayList<>();
+				ArrayList<String> otherFields = new ArrayList<>();
 				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keys.add(df.getName());
+					keyFields.add(df.getName());
 				}
-				dname.setKeys(keys);
+				dname.setKeyFields(keyFields);
 				for (DataField df : dataset.getOtherFields()) {
-					values.add(df.getName());
+					otherFields.add(df.getName());
 				}
-				dname.setValues(values);
+				dname.setOtherFields(otherFields);
 				ArrayList<String> datafeatures = new ArrayList<>();
 				for (DataFeature df : dataset.getFeatures()) {
 					datafeatures.add(df.getFeatureType().name());
@@ -218,20 +216,16 @@ public class DsGetFunctions {
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
 
 				ArrayList<String> schema = new ArrayList<>();
-				// for (DataField df : dataset.getDataFields()) {
-				// schema.add(df.getName());
-				// }
-				// dname.setSchema(schema);
-				ArrayList<String> keys = new ArrayList<>();
-				ArrayList<String> values = new ArrayList<>();
+				ArrayList<String> keyFields = new ArrayList<>();
+				ArrayList<String> otherFields = new ArrayList<>();
 				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keys.add(df.getName());
+					keyFields.add(df.getName());
 				}
-				dname.setKeys(keys);
+				dname.setKeyFields(keyFields);
 				for (DataField df : dataset.getOtherFields()) {
-					values.add(df.getName());
+					otherFields.add(df.getName());
 				}
-				dname.setValues(values);
+				dname.setOtherFields(otherFields);
 				datasetsName.add(dname);
 			}
 
@@ -400,61 +394,6 @@ public class DsGetFunctions {
 	}
 
 	/**
-	 * get the location fields form the dataset
-	 * 
-	 * @param dataset
-	 * @return a json or xml format statistics array
-	 */
-	@GET
-	@Path("/getstatds")
-	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getStaTimeDataset(
-			@QueryParam("dataset") String dataset,
-			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getStaTimeDataset " + dataset + " "
-				+ uriInfo.getAbsolutePath());
-		List<JStatistic> datasetList = new ArrayList<JStatistic>();
-		try {
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
-			DataContent rs = ds.getQuery();
-			DataFeature gds = ds.getFeature(DataFeatureType.TimeSeriesFeature);
-			// TimeSeriesFeature gds = (TimeSeriesFeature) ds
-			// .getFeature(TimeSeriesFeature.class);
-			if (gds == null)
-				throw new OperationNotSupportedException(
-						"can't find the statisticTime Exception");
-			rs.open();
-			int i = 0;
-			while (rs.next() && i++ < 20) {
-				System.out.println(rs.getValue(ds.getDataFields().get(0))
-						.toString()
-						+ " "
-						+ rs.getValue(ds.getDataFields().get(1)).toString());
-				JStatistic statistic = new JStatistic();
-				ArrayList<String> indentifiers = new ArrayList<>();
-				for (DataField indentifier : gds.getKeyFields()) {
-					indentifiers.add(rs.getValue(indentifier).toString());
-				}
-				ArrayList<Double> values = new ArrayList<>();
-				for (DataField value : gds.getValueFields()) {
-					values.add(Double.valueOf(rs.getValue(value).toString()));
-				}
-				statistic.setIndentifiers(indentifiers);
-				statistic.setValue(values);
-				datasetList.add(statistic);
-			}
-			rs.close();
-		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.warn(e.getStackTrace());
-		}
-		return new JSONWithPadding(new GenericEntity<List<JStatistic>>(
-				datasetList) {
-		}, jsoncallback);
-	}
-
-	/**
 	 * get all of the dataset's fields
 	 * 
 	 * @param dataset
@@ -542,14 +481,6 @@ public class DsGetFunctions {
 					list_df.add(field);
 				}
 				rs.close();
-				// ObjectMapper mapper = new ObjectMapper();
-				// StringWriter sw = new StringWriter();
-				// JsonGenerator gen = new
-				// JsonFactory().createJsonGenerator(sw);
-				// mapper.writeValue(gen, list_df);
-				// gen.close();
-				// String json = sw.toString();
-				// System.out.println("json: "+json);
 				JDatasetLine jc = new JDatasetLine();
 				jc.setField(list_df);
 				all_dfs.add(jc);
@@ -665,16 +596,16 @@ public class DsGetFunctions {
 		dname.setLimitedUsers(dataset.getLimitedUsers());
 		dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 		dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-		ArrayList<String> keys = new ArrayList<>();
-		ArrayList<String> values = new ArrayList<>();
+		ArrayList<String> keyFields = new ArrayList<>();
+		ArrayList<String> otherFields = new ArrayList<>();
 		for (DataField df : dataset.getPrimaryKeyFields()) {
-			keys.add(df.getName());
+			keyFields.add(df.getName());
 		}
-		dname.setKeys(keys);
+		dname.setKeyFields(keyFields);
 		for (DataField df : dataset.getOtherFields()) {
-			values.add(df.getName());
+			otherFields.add(df.getName());
 		}
-		dname.setValues(values);
+		dname.setOtherFields(otherFields);
 
 		ArrayList<String> datafeatures = new ArrayList<>();
 		for (DataFeature df : dataset.getFeatures()) {
@@ -713,16 +644,16 @@ public class DsGetFunctions {
 				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> keys = new ArrayList<>();
-				ArrayList<String> values = new ArrayList<>();
+				ArrayList<String> keyFields = new ArrayList<>();
+				ArrayList<String> otherFields = new ArrayList<>();
 				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keys.add(df.getName());
+					keyFields.add(df.getName());
 				}
-				dname.setKeys(keys);
+				dname.setKeyFields(keyFields);
 				for (DataField df : dataset.getOtherFields()) {
-					values.add(df.getName());
+					otherFields.add(df.getName());
 				}
-				dname.setValues(values);
+				dname.setOtherFields(otherFields);
 				datasetsName.add(dname);
 			}
 
@@ -762,16 +693,16 @@ public class DsGetFunctions {
 				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> keys = new ArrayList<>();
-				ArrayList<String> values = new ArrayList<>();
+				ArrayList<String> keyFields = new ArrayList<>();
+				ArrayList<String> otherFields = new ArrayList<>();
 				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keys.add(df.getName());
+					keyFields.add(df.getName());
 				}
-				dname.setKeys(keys);
+				dname.setKeyFields(keyFields);
 				for (DataField df : dataset.getOtherFields()) {
-					values.add(df.getName());
+					otherFields.add(df.getName());
 				}
-				dname.setValues(values);
+				dname.setOtherFields(otherFields);
 				datasetsName.add(dname);
 			}
 
@@ -810,16 +741,16 @@ public class DsGetFunctions {
 				dname.setLimitedUsers(dataset.getLimitedUsers());
 				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
 				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> keys = new ArrayList<>();
-				ArrayList<String> values = new ArrayList<>();
+				ArrayList<String> keyFields = new ArrayList<>();
+				ArrayList<String> otherFields = new ArrayList<>();
 				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keys.add(df.getName());
+					keyFields.add(df.getName());
 				}
-				dname.setKeys(keys);
+				dname.setKeyFields(keyFields);
 				for (DataField df : dataset.getOtherFields()) {
-					values.add(df.getName());
+					otherFields.add(df.getName());
 				}
-				dname.setValues(values);
+				dname.setOtherFields(otherFields);
 				datasetsName.add(dname);
 			}
 

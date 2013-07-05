@@ -19,10 +19,8 @@ public class JDatasetName {
 	private String descriptionEn = "玛胖没有给吴超添加英文介绍";
 	private String descriptionZh = "玛胖没有给吴超添加中文介绍";
 
-	private List<String> keys;
-	private List<String> values;
-	private List<Class> keytypes;
-	private List<Class> valuetypes;
+	private List<String> keyFields;
+	private List<String> otherFields;
 	private List<String> datafeature;
 
 	public void setDatasetName(String datasetname) {
@@ -96,28 +94,20 @@ public class JDatasetName {
 		return this.descriptionZh;
 	}
 
-	public void setKeys(List<String> keys) {
-		this.keys = keys;
+	public void setKeyFields(List<String> keyFields) {
+		this.keyFields = keyFields;
 	}
 
-	public List<String> getKeys() {
-		return this.keys;
+	public List<String> getKeyFields() {
+		return this.keyFields;
 	}
 
-	public void setValues(List<String> values) {
-		this.values = values;
+	public void setOtherFields(List<String> otherFields) {
+		this.otherFields = otherFields;
 	}
 
-	public List<String> getValues() {
-		return this.values;
-	}
-
-	public void setKeytypes(List<Class> keytypes) {
-		this.keytypes = keytypes;
-	}
-
-	public List<Class> getKeytypes() {
-		return this.keytypes;
+	public List<String> getOtherFields() {
+		return this.otherFields;
 	}
 
 	public List<String> getDatafeature() {
