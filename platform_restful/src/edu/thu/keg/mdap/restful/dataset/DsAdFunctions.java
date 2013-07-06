@@ -1,8 +1,10 @@
 package edu.thu.keg.mdap.restful.dataset;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,6 +16,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.parser.Entity;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -141,9 +144,8 @@ public class DsAdFunctions {
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
 		try {
-			if (session.getAttribute("userid") == null) {
-				throw new UserNotInPoolException("user is not login!");
-			}
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException("the cookies is timeout!");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataProvider provider = p.getDataProviderManager()
 					.getDefaultSQLProvider(connstr);
@@ -191,8 +193,11 @@ public class DsAdFunctions {
 			System.out.println("cating...");
 			// return Response.status(Status.OK).build();
 			try {
-				return Response.seeOther(new URI("www.baidu.com")).build();
-			} catch (URISyntaxException e1) {
+				return Response
+						.created(new URI("http://www.baidu.com"))
+						.entity((new JSONObject()).put("status", "false")
+								.put("msg", e.getMessage()).toString()).build();
+			} catch (JSONException | URISyntaxException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -215,21 +220,23 @@ public class DsAdFunctions {
 		session = httpServletRequest.getSession();
 		System.out.println("POST create dataview:\n" + dataset + " " + dataview
 				+ "\n " + keys.toString() + "\n" + values.toString());
-//		if (session.getId() != null) {
-//
-//			try {
-//				// Response resp = Response.status(Status.MOVED_PERMANENTLY)
-//				// .build();
-//				// Response.temporaryRedirect(new URI("www.baidu.com"));
-//				return Response.temporaryRedirect(new URI("http://www.baidu.com")).build();
-//			} catch (URISyntaxException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		}
+		// if (session.getId() != null) {
+		// //
+		// try {
+		// URL url = new URL("http://www.baidu.com");
+		// return Response.temporaryRedirect(url.toURI()).build();
+		// } catch (URISyntaxException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (MalformedURLException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		//
+		// }
 		try {
-
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException("the cookies is timeout!");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
 					.getAttribute("managementplatform");
@@ -255,19 +262,28 @@ public class DsAdFunctions {
 			kv = Arrays.copyOf(ks, ks.length + vs.length);
 			System.arraycopy(vs, 0, kv, ks.length, vs.length);
 			q = ds.getQuery().select(kv);
-			dv = p.getDataSetManager().defineView(dataview, "", description,
+			dv = p.getDataSetManager().defineView(dataview,
+					(String) session.getAttribute("userid"), description,
 					DataView.PERMISSION_PUBLIC,
 					DataFeatureType.valueOf(datafuturetype), q, ks, vs);
+
 			p.getDataSetManager().saveChanges();
-		} catch (UserNotInPoolException | OperationNotSupportedException
-				| DataProviderException | IOException | JSONException e) {
-			// TODO Auto-generated catch block
-			log.warn(e.getMessage());
+		} catch (IOException | UserNotInPoolException
+				| OperationNotSupportedException | DataProviderException
+				| JSONException | IllegalArgumentException e) {
+			try {
+				return Response
+						.created(new URI("http://www.baidu.com"))
+						.entity((new JSONObject()).put("status", "false")
+								.put("msg", e.getMessage()).toString()).build();
+			} catch (JSONException | URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
-		return Response.status(Status.OK).build();
-		// return Response.status(Status.OK).build();
-		//
-		// // return Response.created(uriInfo.getAbsolutePath()).build();
+
+		return Response.ok().build();
+
 	}
 
 	@POST
@@ -283,7 +299,7 @@ public class DsAdFunctions {
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)
-				throw new UserNotInPoolException("user is not login!");
+				throw new UserNotInPoolException("the cookies is timeout!");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			List<String> users = null;
 			users = new ArrayList<String>();
@@ -296,6 +312,15 @@ public class DsAdFunctions {
 		} catch (UserNotInPoolException | JSONException e) {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
+			try {
+				return Response
+						.created(new URI("http://www.baidu.com"))
+						.entity((new JSONObject()).put("status", "false")
+								.put("msg", e.getMessage()).toString()).build();
+			} catch (URISyntaxException | JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		return Response.status(Status.OK).build();
 	}

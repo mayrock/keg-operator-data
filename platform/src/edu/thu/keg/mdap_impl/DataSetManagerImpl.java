@@ -225,8 +225,9 @@ public class DataSetManagerImpl implements DataSetManager {
 	public void saveChanges() throws IOException {
 		Writer fw;
 		Storage sto = new Storage(datasets.values().toArray(new DataSet[0]),
-				views.values().toArray(new DataView[0])); 
-		fw = new OutputStreamWriter(new FileOutputStream(Config.getDataSetFile()), "UTF-8");
+				views.values().toArray(new DataView[0]));
+		fw = new OutputStreamWriter(new FileOutputStream(
+				Config.getDataSetFile()), "UTF-8");
 		getXstream().marshal(sto, new PrettyPrintWriter(fw));
 		fw.close();
 	}
@@ -313,7 +314,12 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	@Override
 	public DataView defineView(String name, String owner, String description,
-			int permission, DataFeatureType type, Query q) {
+			int permission, DataFeatureType type, Query q)
+			throws IllegalArgumentException {
+		if (name == null || owner == null || name.equals("")
+				|| owner.equals(""))
+			throw new IllegalArgumentException(
+					"Dataview name & owner can't be empty!");
 		DataView v = new DataViewImpl(name, owner, permission, type, q);
 		v.setDescription(description);
 		addDataView(v);
@@ -323,7 +329,11 @@ public class DataSetManagerImpl implements DataSetManager {
 	@Override
 	public DataView defineView(String name, String owner, String description,
 			int permission, DataFeatureType type, Query q, DataField[] keys,
-			DataField[] values) {
+			DataField[] values) throws IllegalArgumentException {
+		if (name == null || owner == null || name.equals("")
+				|| owner.equals(""))
+			throw new IllegalArgumentException(
+					"Dataview name & owner can't be empty!");
 		DataView v = new DataViewImpl(name, owner, permission, type, q, keys,
 				values);
 		v.setDescription(description);

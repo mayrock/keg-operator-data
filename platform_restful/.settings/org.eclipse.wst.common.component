@@ -7,6 +7,7 @@
         <wb-resource deploy-path="/WEB-INF/lib/" source-path="/localLib/log4j"/>
         <wb-resource deploy-path="/WEB-INF/lib/" source-path="/localLib/sqljdbc"/>
         <wb-resource deploy-path="/WEB-INF/lib/" source-path="/localLib/xstream"/>
+        <wb-resource deploy-path="/" source-path="/js/MDAP"/>
         <dependent-module archiveName="platform.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/platform/platform">
             <dependency-type>uses</dependency-type>
         </dependent-module>

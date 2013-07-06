@@ -172,11 +172,12 @@ public interface DataSetManager {
 	 *            the value field
 	 * @return
 	 */
-	DataView defineView(String name, String owner, String description,
+	public DataView defineView(String name, String owner, String description,
 			int permission, DataFeatureType type, Query q, DataField[] key,
-			DataField[] values);
+			DataField[] values) throws IllegalArgumentException;
 
 	public DataView defineView(String name, String owner, String description,
-			int permission, DataFeatureType type, Query q);
+			int permission, DataFeatureType type, Query q)
+			throws IllegalArgumentException;
 
 }
