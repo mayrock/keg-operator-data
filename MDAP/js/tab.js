@@ -40,7 +40,8 @@ Tab.createFrame = function(tabType){
 	}else{
 		li.innerHTML = "<a href = '#tab" + tabIndex + "'>manage</a>";
 	}
-	tab = document.createElement("div");
+	
+	var tab = document.createElement("div");
 	tab.setAttribute("id","tab" + tabIndex);
 	tab.setAttribute("class","tab");
 	$(tab).appendTo("#tabs");
@@ -50,15 +51,18 @@ Tab.createFrame = function(tabType){
 		"padding-bottom": 0,
 		"padding-left": "10px"
 	});
+	
 	if(tabType == "geo"){
 		var option = document.createElement("div");
-		option.setAttribute("id","option" + tabIndex);
-		option.setAttribute("class","option");
+		option.setAttribute("id","geo-option-" + tabIndex);
+		option.setAttribute("class","geo-option");
 		$(option).appendTo(tab);
+		
 		var view = document.createElement("div");
-		view.setAttribute("id","view" + tabIndex);
-		view.setAttribute("class","view");
+		view.setAttribute("id","geo-view-" + tabIndex);
+		view.setAttribute("class","geo-view");
 		$(view).appendTo(tab);
+		
 		Tab.loadGeo(tabIndex);
 	}else if(tabType == "sta"){
 		Common.chartIndex[tabIndex] = new Array();
@@ -115,8 +119,10 @@ Tab.createFrame = function(tabType){
 		accordion.setAttribute("id","accordion" + tabIndex);
 		accordion.setAttribute("class","accordion");
 		$(accordion).appendTo(tab);
+		
 		Mgt.accordion(tabIndex,"dv");
 		Mgt.accordion(tabIndex,"ds");
+		
 		google.load("visualization","1",{packages:["table"],"callback":drawTable});
 		function drawTable(){
 			Mgt.subTab(tabIndex,"dv","sta");
@@ -125,6 +131,7 @@ Tab.createFrame = function(tabType){
 			Mgt.subTab(tabIndex,"ds","lim");
 			Mgt.subTab(tabIndex,"ds","own");
 		}
+		
 		$("#accordion" + tabIndex).accordion({
 			collapsible: true,
 			activate: function(event,ui){
@@ -164,52 +171,70 @@ Tab.createFrame = function(tabType){
 };
 
 Tab.loadGeo = function(tabIndex){
-	checkbox = document.createElement("div");
-	checkbox.setAttribute("id","checkbox" + tabIndex);
-	checkbox.setAttribute("class","checkbox");
-	$(checkbox).appendTo("#option" + tabIndex);
-	select = document.createElement("div");
-	select.setAttribute("id","select" + tabIndex);
-	select.setAttribute("class","select");
-	$(select).appendTo("#option" + tabIndex);
-	$.getJSON(Common.dataviewUrl().replace("tabType","geo"),function(data){
+	var checkbox = document.createElement("div");
+	checkbox.setAttribute("id","geo-checkbox" + tabIndex);
+	checkbox.setAttribute("class","geo-checkbox");
+	$(checkbox).appendTo("#geo-option-" + tabIndex);
+	
+	var select = document.createElement("div");
+	select.setAttribute("id","geo-select" + tabIndex);
+	select.setAttribute("class","geo-select");
+	$(select).appendTo("#geo-option-" + tabIndex);
+	
+	$.getJSON(Common.dataviewUrl(),{
+		featuretype: "GeoFeature"
+	},function(data){
 		var len = data.length;
 		if(len == 0){
-			$("#view" + tabIndex).css({
+			$("#geo-view-" + tabIndex).css({
 				"left": "40px"
 			});
 			Geo.initMap(tabIndex);
 			return;
 		}
-		$("#option" + tabIndex).css({
+		$("#geo-option-" + tabIndex).css({
 			"height": "400px"
 		});
+		
+		Common.mapInfoArr[tabIndex] = new Array();
 		for(var i = 0; i < len; i++){
 			var des = data[i].descriptionZh;
-			var name = data[i].datasetName;
-			var keys = data[i].keys;
+			var dvName = data[i].dataviewName;
+			var keys = data[i].identifiers;
 			var type = "points";
 			if(keys[0] == "Region"){
 				type = "regions";
 			}
-			Geo.loadData(tabIndex,i,name,type);
-			$("<input type = 'checkbox' id = 'checkbox" + tabIndex + "_" + i + "' " +
+			Geo.loadData(tabIndex,i,dvName,type);
+			$("<input type = 'checkbox' id = 'geo-checkbox-" + tabIndex + "-" + i + "' " +
 				"onclick = \"Geo.clickEvent(" + tabIndex + "," + i + ",'" + type + "');\"/>" + des + "<br/>").appendTo(checkbox);
 		}
 		$("<input type = 'button' style = 'font-family: Times New Roman;font-size: 16px' value = 'selectAll' " +
 			"onclick = \"Geo.selectAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
 		$("<span>&nbsp;&nbsp;</span><input type = 'button' style = 'font-family: Times New Roman;font-size: 16px;' value = 'invertAll' " +
 			"onclick = \"Geo.invertAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
-		if($("#option" + tabIndex).width() < 160){
-			$("#option" + tabIndex).css({
+		
+		if($("#geo-option-" + tabIndex).width() < 160){
+			$("#geo-option-" + tabIndex).css({
 				"width": "160px",
 				"border": "1px solid #000000"
 			});
 		}
-		$("#view" + tabIndex).css({
-			"left": $("#option" + tabIndex).width() + 40
+		$("#geo-view-" + tabIndex).css({
+			"left": $("#geo-option-" + tabIndex).width() + 40
 		});
 		Geo.initMap(tabIndex);
+		
+		var tabHeight = 400;
+		if((tabHeight + 25) > Common.tabHeight){
+			$("#tab_bg").css({
+				"height": tabHeight + 25
+			});
+		}else{
+			$("#tab_bg").css({
+				"height": Common.tabHeight
+			});
+		}
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
@@ -220,8 +245,16 @@ Tab.loadGeo = function(tabIndex){
 Tab.close = function(tabType,tabIndex){
 	$("#tabs_li" + tabIndex).remove();
 	$("#tab" + tabIndex).remove();
+	if(tabType == "sta"){
+		Common.chartIndex[tabIndex] = new Object;
+		Common.chartType[tabIndex] = new Object;
+		Common.xAxis[tabIndex] = new Object;
+		Common.yAxis[tabIndex] = new Object;
+	}else if(tabType == "geo"){
+		Common.mapArr[tabIndex] = new Object;
+		Common.mapInfoArr[tabIndex] = new Object;
+	}
 	Common.tabIndex.splice(tabIndex,1);
-	Common.adjunct();
 	$("#tabs").tabs("refresh");
 };
 
