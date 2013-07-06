@@ -208,7 +208,10 @@ public class DvGetFunctions {
 				jfn.setDescription(df.getDescription());
 				jfn.setIsKey(df.isKey());
 				jfn.setType(df.getFieldType().name());
+
 				jfn.setFunctionality(df.getFunction().name());
+				jfn.setDatasetName(df.getDataSet().getName());
+				jfn.setDatasetOwner(df.getDataSet().getOwner());
 				all_fn.add(jfn);
 			}
 

@@ -1,6 +1,8 @@
 package edu.thu.keg.mdap.restful.dataset;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,6 +12,7 @@ import java.util.List;
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -63,6 +66,8 @@ public class DsAdFunctions {
 	ServletContext servletcontext;
 	@Context
 	HttpServletRequest httpServletRequest;
+	@Context
+	HttpServletResponse httpServletResponse;
 	HttpSession session = null;
 
 	private static Logger log = Logger.getLogger(DsAdFunctions.class);
@@ -132,12 +137,13 @@ public class DsAdFunctions {
 		 * description 数据集描述 loadable 是否可以加载 dsFields 数据域的jsonarray fieldName
 		 * fieldType description isKey
 		 */
+		System.out.println("create dataset");
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
 		try {
-			if (session.getAttribute("userid") == null)
+			if (session.getAttribute("userid") == null) {
 				throw new UserNotInPoolException("user is not login!");
-
+			}
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataProvider provider = p.getDataProviderManager()
 					.getDefaultSQLProvider(connstr);
@@ -177,9 +183,19 @@ public class DsAdFunctions {
 			p.getDataSetManager().setDataSetPermission(dataset, owner,
 					DataSetImpl.parsePermission(permission), users_list);
 			p.getDataSetManager().saveChanges();
-		} catch (UserNotInPoolException | JSONException | IOException e) {
+		} catch (JSONException | IOException e) {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
+		} catch (UserNotInPoolException e) {
+			log.warn(e.getMessage());
+			System.out.println("cating...");
+			// return Response.status(Status.OK).build();
+			try {
+				return Response.seeOther(new URI("www.baidu.com")).build();
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		return Response.status(Status.OK).build();
 		// return Response.created(uriInfo.getAbsolutePath()).build();
@@ -187,7 +203,7 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/adddv")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	// @Consumes({ MediaType.APPLICATION_JSON })
 	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public Response createDataview(@FormParam("dataset") String dataset,
 			@FormParam("dataview") String dataview,
@@ -197,10 +213,28 @@ public class DsAdFunctions {
 			@FormParam("values") JSONArray values) {
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
+		System.out.println("POST create dataview:\n" + dataset + " " + dataview
+				+ "\n " + keys.toString() + "\n" + values.toString());
+//		if (session.getId() != null) {
+//
+//			try {
+//				// Response resp = Response.status(Status.MOVED_PERMANENTLY)
+//				// .build();
+//				// Response.temporaryRedirect(new URI("www.baidu.com"));
+//				return Response.temporaryRedirect(new URI("http://www.baidu.com")).build();
+//			} catch (URISyntaxException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		}
 		try {
+
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
 					.getAttribute("managementplatform");
+			System.out
+					.println("session user=" + session.getAttribute("userid"));
 			if (session.getAttribute("userid") == null)
 				throw new UserNotInPoolException("user is not login!");
 
@@ -212,11 +246,11 @@ public class DsAdFunctions {
 			ds = p.getDataSetManager().getDataSet(dataset);
 			ks = new DataField[keys.length()];
 			for (int i = 0; i < ks.length; i++) {
-				ks[i] = ds.getField(values.getJSONObject(i).getString("key"));
+				ks[i] = ds.getField(keys.getString(i));
 			}
 			vs = new DataField[values.length()];
 			for (int i = 0; i < vs.length; i++) {
-				vs[i] = ds.getField(values.getJSONObject(i).getString("value"));
+				vs[i] = ds.getField(values.getString(i));
 			}
 			kv = Arrays.copyOf(ks, ks.length + vs.length);
 			System.arraycopy(vs, 0, kv, ks.length, vs.length);

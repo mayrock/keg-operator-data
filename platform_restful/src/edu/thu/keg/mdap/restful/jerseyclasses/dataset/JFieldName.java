@@ -15,6 +15,8 @@ public class JFieldName {
 	private String type;
 	private boolean isKey;
 	private String functionality;
+	private String datasetName;
+	private String datasetOwner;
 
 	public void setFieldName(String fieldname) {
 		this.fieldName = fieldname;
@@ -55,4 +57,35 @@ public class JFieldName {
 	public void setFunctionality(String functionality) {
 		this.functionality = functionality;
 	}
+
+	/**
+	 * @return the datasetName
+	 */
+	public String getDatasetName() {
+		return datasetName;
+	}
+
+	/**
+	 * @param datasetName
+	 *            the datasetName to set
+	 */
+	public void setDatasetName(String datasetName) {
+		this.datasetName = datasetName;
+	}
+
+	/**
+	 * @return the datasetOwner
+	 */
+	public String getDatasetOwner() {
+		return datasetOwner;
+	}
+
+	/**
+	 * @param datasetOwner
+	 *            the datasetOwner to set
+	 */
+	public void setDatasetOwner(String datasetOwner) {
+		this.datasetOwner = datasetOwner;
+	}
+
 }

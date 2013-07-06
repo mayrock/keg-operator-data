@@ -7,7 +7,7 @@
 	<!-- 发布WEB路径 -->
 	<property name="DEPLOY_PATH" value="${TOMCAT_PATH}/webapps/${WEBAPP_NAME}" />
 	<!-- 备份WEB路径 -->
-	<property name="BACKUP_PATH" value="${TOMCAT_PATH}/webapps/${WEBAPP_NAME}_backup/" />
+	<property name="BACKUP_PATH" value="${TOMCAT_PATH}/${WEBAPP_NAME}_backup/" />
 
 	<!-- 所有PROJECT的路径 -->
 	<property name="PRO_PATH_RESTFUL" value="${GIT_PATH}/platform_restful" />

@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <!-- 在eclipse里运行请到用户目录下查看，如果在tomcat里运行请到tomcat主目录下查看 -->
-	<entry key="DataSetFile">..\datasets</entry>
+	<entry key="DataSetFile">..\datasets2</entry>
 	<entry key="SqlAddress">sqlserver://10.1.1.55:1433</entry>
 	<entry key="OracleAddress">10.1.1.110:1521</entry>
 	<entry key="HiveAddress">10.1.1.165:10000</entry>

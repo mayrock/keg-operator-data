@@ -1,5 +1,7 @@
 package edu.thu.keg.mdap.restful.dataset;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,7 +9,9 @@ import java.util.Locale;
 
 import javax.naming.OperationNotSupportedException;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -22,6 +26,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
@@ -29,7 +34,9 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.json.JSONWithPadding;
+import com.sun.org.apache.xerces.internal.util.URI;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.util.QEncoderStream;
 
 import edu.thu.keg.mdap.DataSetManager;
@@ -47,6 +54,7 @@ import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 
 import edu.thu.keg.mdap.provider.DataProviderException;
+import edu.thu.keg.mdap.restful.exceptions.UserNotInPoolException;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetLine;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetName;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JField;
@@ -75,6 +83,8 @@ public class DsGetFunctions {
 	ServletContext servletcontext;
 	@Context
 	HttpServletRequest httpServletRequest;
+	@Context
+	HttpServletResponse httpServletResponse;
 
 	HttpSession session = null;
 	private static Logger log = Logger.getLogger(DsGetFunctions.class);
@@ -94,41 +104,45 @@ public class DsGetFunctions {
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		JDatasetName datasetName = new JDatasetName();
 		System.out.println(session.getId());
-		try {
-			Platform p = (Platform) servletcontext.getAttribute("platform");
-			DataSetManager datasetManager = p.getDataSetManager();
-			Collection<DataSet> datasets = datasetManager.getDataSetList();
-			int i = 0;
-			for (DataSet dataset : datasets) {
-				JDatasetName dname = new JDatasetName();
-				dname.setDatasetName(dataset.getName());
-				dname.setOwner(dataset.getOwner());
-				dname.setPermission(DataSetImpl.permissionToString(dataset
-						.getPermission()));
-				dname.setLimitedUsers(dataset.getLimitedUsers());
-				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
-				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> keyFields = new ArrayList<>();
-				ArrayList<String> otherFields = new ArrayList<>();
-				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keyFields.add(df.getName());
-				}
-				dname.setKeyFields(keyFields);
-				for (DataField df : dataset.getOtherFields()) {
-					otherFields.add(df.getName());
-				}
-				dname.setOtherFields(otherFields);
-				ArrayList<String> datafeatures = new ArrayList<>();
-				for (DataFeature df : dataset.getFeatures()) {
-					datafeatures.add(df.getFeatureType().name());
-				}
-				dname.setDatafeature(datafeatures);
-				datasetsName.add(dname);
+		// if (session.getId() != null) {
+		//
+		// try {
+		// throw new UserNotInPoolException(httpServletResponse,
+		// "the user is not logged!");
+		// } catch (UserNotInPoolException e) {
+		// // TODO Auto-generated catch block
+		// log.warn(e.getMessage());
+		// }
+		// }
+		Platform p = (Platform) servletcontext.getAttribute("platform");
+		DataSetManager datasetManager = p.getDataSetManager();
+		Collection<DataSet> datasets = datasetManager.getDataSetList();
+		int i = 0;
+		for (DataSet dataset : datasets) {
+			JDatasetName dname = new JDatasetName();
+			dname.setDatasetName(dataset.getName());
+			dname.setOwner(dataset.getOwner());
+			dname.setPermission(DataSetImpl.permissionToString(dataset
+					.getPermission()));
+			dname.setLimitedUsers(dataset.getLimitedUsers());
+			dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
+			dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
+			ArrayList<String> keyFields = new ArrayList<>();
+			ArrayList<String> otherFields = new ArrayList<>();
+			for (DataField df : dataset.getPrimaryKeyFields()) {
+				keyFields.add(df.getName());
 			}
-
-		} catch (Exception e) {
-			log.warn(e.getStackTrace());
-			// e.printStackTrace();
+			dname.setKeyFields(keyFields);
+			for (DataField df : dataset.getOtherFields()) {
+				otherFields.add(df.getName());
+			}
+			dname.setOtherFields(otherFields);
+			ArrayList<String> datafeatures = new ArrayList<>();
+			for (DataFeature df : dataset.getFeatures()) {
+				datafeatures.add(df.getFeatureType().name());
+			}
+			dname.setDatafeature(datafeatures);
+			datasetsName.add(dname);
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
@@ -424,6 +438,7 @@ public class DsGetFunctions {
 				jfn.setIsKey(df.isKey());
 				jfn.setType(df.getFieldType().name());
 				jfn.setFunctionality(df.getFunction().name());
+
 				all_fn.add(jfn);
 			}
 		} catch (Exception e) {
