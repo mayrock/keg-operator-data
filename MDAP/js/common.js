@@ -79,7 +79,6 @@ Common.mapInfoArr = new Array();
 
 Common.chartIndex = new Array();
 Common.chartType = new Array();
-Common.xAxis = new Array();
 Common.yAxis = new Array();
 
 /*****initialize page after set language*****/

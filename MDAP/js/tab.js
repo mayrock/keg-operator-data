@@ -65,55 +65,69 @@ Tab.createFrame = function(tabType){
 		
 		Tab.loadGeo(tabIndex);
 	}else if(tabType == "sta"){
-		Common.chartIndex[tabIndex] = new Array();
-		Common.chartType[tabIndex] = new Array();
-		Common.xAxis[tabIndex] = new Array();
-		Common.yAxis[tabIndex] = new Array();
-		
 		var staList = document.createElement("div");
 		staList.setAttribute("id","staList" + tabIndex);
 		staList.setAttribute("class","staList");
 		$(staList).appendTo(tab);
+		
 		var accordion = document.createElement("div");
 		accordion.setAttribute("id","accordion" + tabIndex);
 		accordion.setAttribute("class","accordion");
 		$(accordion).appendTo(staList);
-		Sta.accordion(tabIndex,0);//dv
-		Sta.accordion(tabIndex,1);//ds
+		
+		var head = document.createElement("h3");
+		head.setAttribute("id","sta-dv-head-" + tabIndex);
+		head.setAttribute("class","head");
+		$(head).appendTo("#accordion" + tabIndex);
+		$(head).css({
+			"padding-top": 0,
+			"padding-right": "10px",
+			"padding-bottom": 0,
+		});
+		$(head).html("data view");
+		
+		var content = document.createElement("div");
+		content.setAttribute("id","sta-dv-content-" + tabIndex);
+		content.setAttribute("class","content");
+		$(content).appendTo("#accordion" + tabIndex);
+		$(content).css({
+			"padding-top": "5px",
+			"padding-right": "10px",
+			"padding-bottom": 0,
+			"padding-left": "25px"
+		});
+		
+		var list = document.createElement("div");
+		list.setAttribute("id","sta-dv-list-" + tabIndex);
+		list.setAttribute("class","sta-list");
+		$(list).appendTo(content);
+		
 		$("#accordion" + tabIndex).accordion({
 			collapsible: true,
 			activate: function(event,ui){
 				var activeTab = $("#tabs").tabs("option","active");
 				var tabIndex = Common.tabIndex[activeTab];
-				var type = $("#accordion" + tabIndex).accordion("option","active");
-				if(typeof(type) == "boolean"){
-					$("#staList" + tabIndex).css({
-						"width": "200px"
-					});
-					var staListHeight = $("#staList" + tabIndex).height();
+				var listHeight = $("#staList" + tabIndex).height();
+				var viewHeight = $("#staView" + tabIndex).height();
+				if(listHeight > viewHeight){
 					$("#tab" + tabIndex).css({
-						"height": staListHeight + 10
+						"height": listHeight + 10
 					});
-					Tab.adjustHeight(tabIndex);
-					return;
+				}else{
+					$("#tab" + tabIndex).css({
+						"height": viewHeight + 10
+					});
 				}
-				var permit = $("#sta-" + type + "-accordion-" + tabIndex).accordion("option","active");
-				if(typeof(permit) == "number"){
-					Sta.adjustAccWidth(tabIndex,type,permit);
-				}
-				var staListHeight = $("#staList" + tabIndex).height();
-				$("#tab" + tabIndex).css({
-					"height": staListHeight + 10
-				});
 				Tab.adjustHeight(tabIndex);
 			}
 		});
-		$("#accordion" + tabIndex).accordion("option","active",false);
 		
 		var staView = document.createElement("div");
 		staView.setAttribute("id","staView" + tabIndex);
 		staView.setAttribute("class","staView");
 		$(staView).appendTo(tab);
+		
+		Tab.loadSta(tabIndex);
 	}else{
 		var accordion = document.createElement("div");
 		accordion.setAttribute("id","accordion" + tabIndex);
@@ -225,16 +239,92 @@ Tab.loadGeo = function(tabIndex){
 		});
 		Geo.initMap(tabIndex);
 		
-		var tabHeight = 400;
-		if((tabHeight + 25) > Common.tabHeight){
-			$("#tab_bg").css({
-				"height": tabHeight + 25
+		$("#tab" + tabIndex).css({
+			"height": "400px"
+		});
+		Tab.adjustHeight(tabIndex);
+	}).error(function(){
+		alert("Oops, we got an error...");
+		return;
+	});
+};
+
+Tab.loadSta = function(tabIndex){
+	Common.chartIndex[tabIndex] = new Array();
+	Common.chartType[tabIndex] = new Array();
+	Common.yAxis[tabIndex] = new Array();
+	$.getJSON(Common.dataviewUrl(),{
+		featuretype: "DistributionFeature"
+	},function(data){
+		var len = data.length;
+		for(var i = 0; i < len; i++){
+			Common.chartIndex[tabIndex][i] = new Array();
+			Common.chartIndex[tabIndex][i][0] = 0;
+			Common.chartType[tabIndex][i] = new Array();
+			Common.yAxis[tabIndex][i] = new Array();
+			
+			var des = data[i].descriptionZh;
+			var dvName = data[i].dataviewName;
+			
+			var nameCtnr = document.createElement("div");
+			nameCtnr.setAttribute("id","sta-dvName-" + tabIndex + "-" + i);
+			nameCtnr.setAttribute("class","sta-dvName");
+			$(nameCtnr).appendTo("#sta-dv-list-" + tabIndex);
+			$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ",'" + dvName + "');\">" +
+				des + "</a>").appendTo(nameCtnr);
+			
+			var view_dv = document.createElement("div");
+			view_dv.setAttribute("id","sta-view-dv-" + tabIndex + "-" + i);
+			view_dv.setAttribute("class","view_dv");
+			$(view_dv).appendTo("#staView" + tabIndex);
+			$(view_dv).css({
+				"display": "none"
 			});
-		}else{
-			$("#tab_bg").css({
-				"height": Common.tabHeight
-			});
+			
+			var dvTitle = document.createElement("div");
+			dvTitle.setAttribute("id","dvTitle-" + tabIndex + "-" + i);
+			dvTitle.setAttribute("class","dvTitle");
+			$(dvTitle).appendTo(view_dv);
+			
+			var titleContent = document.createElement("div");
+			titleContent.setAttribute("id","titleContent-" + tabIndex + "-" + i);
+			titleContent.setAttribute("class","titleContent");
+			$(titleContent).appendTo(dvTitle);
+			$(titleContent).html(des);
+			
+			$("<img src = 'css/images/close_256x256.png' onclick = \"Sta.closeAllChart(" + tabIndex + "," + i + ");\"/>")
+				.appendTo(dvTitle)
+				.css({
+					"position": "absolute",
+					"right": "5px",
+					"bottom": "5px",
+					"width": "16px"
+				});
+			
+			var dvContainer = document.createElement("div");
+			dvContainer.setAttribute("id","dvContainer-" + tabIndex + "-" + i);
+			dvContainer.setAttribute("class","dvContainer");
+			$(dvContainer).appendTo(view_dv);
 		}
+		
+		var ctnrHeight = 25 * len;
+		$("#sta-dv-content-" + tabIndex).css({
+			"height": ctnrHeight + 5,
+			"border": "1px solid blue"
+		});
+		var listWidth = $("#staList" + tabIndex).width();
+		$("#staList" + tabIndex).css({
+			"width": listWidth
+		});
+		var viewWidth = Common.width() - listWidth - 100;
+		$("#staView" + tabIndex).css({
+			"width": viewWidth
+		});
+		var listHeight = $("#staList" + tabIndex).height();
+		$("#tab" + tabIndex).css({
+			"height": listHeight + 10
+		});
+		Tab.adjustHeight(tabIndex);
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
@@ -248,7 +338,6 @@ Tab.close = function(tabType,tabIndex){
 	if(tabType == "sta"){
 		Common.chartIndex[tabIndex] = new Object;
 		Common.chartType[tabIndex] = new Object;
-		Common.xAxis[tabIndex] = new Object;
 		Common.yAxis[tabIndex] = new Object;
 	}else if(tabType == "geo"){
 		Common.mapArr[tabIndex] = new Object;
