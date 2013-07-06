@@ -763,14 +763,19 @@ Mgt.saveDataview = function(dvType,dsName,arr){
 	}
 	value += "\"" + jsonArr[len - 1] + "\"]";
 	console.log(value);
+	var dfType = "";
+	if(dvType == "sta"){
+		dfType = "DistributionFeature";
+	}
 	$.post(Common.addDvUrl(),{
 		dataset: dsName,
 		dataview: dvName,
 		description: dvDes,
-		datafeaturetype: dvType,
+		datafeaturetype: dfType,
 		keys: key,
 		values: value
-	},function(){
+	},function(response,status){
+		console.log(response.status);
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
