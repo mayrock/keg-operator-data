@@ -112,13 +112,6 @@ body{
 	font-family: Times New Roman,'楷体';
 }
 
-.select{
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	text-align: center;
-}
-
 .view{
 	position: absolute;
 	text-align: center;
@@ -175,6 +168,26 @@ body{
 	text-align: center;
 	font-family: Times New Roman,'楷体';
 	font-size: 16px;
+}
+
+/*****geo tab*****/
+
+.geo-option{
+	position: absolute;
+	left: 20px;
+	font-size: 16px;
+	font-family: Times New Roman,'楷体';
+}
+
+.geo-view{
+	position: absolute;
+}
+
+.geo-select{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
 }
 
 /*****sta tab*****/

@@ -350,7 +350,7 @@ Mgt.loadDs = function(tabIndex,dsIndex,dsName,subType){
 };
 
 Mgt.adjustHeight = function(){
-	console.log("Information:");
+	console.log("Manage Tab Adjust Height Information:");
 	var activeTab = $("#tabs").tabs("option","active");
 	var tabIndex = Common.tabIndex[activeTab];
 	console.log("tabIndex:" + tabIndex);
