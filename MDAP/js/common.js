@@ -49,19 +49,24 @@ Common.setLanUrl = function(){return Common.ip() + "up/setlanguage";};
 /*****get*****/
 Common.loginUrl = function(){return Common.ip() + "ug/login?jsoncallback=?";};
 
-Common.dataviewUrl = function(){return Common.ip() + "dvg/gettabTypedvs?jsoncallback=?"};
-Common.dvDataUrl = function(){return Common.ip() + "dvg/gettabTypedv?jsoncallback=?";};
-
-Common.allDatasetUrl = function(){return Common.ip() + "dsg/getdss?jsoncallback=?"};
-Common.dsFieldUrl = function(){return Common.ip() + "dsg/getdsfds?jsoncallback=?"};
-Common.dsInfoUrl = function(){return Common.ip() + "dsg/getdsinfo?jsoncallback=?"};
+/*****ds*****/
 Common.pubDsUrl = function(){return Common.ip() + "dsg/getpubdss?jsoncallback=?";};
 Common.limDsUrl = function(){return Common.ip() + "dsg/getlimdss?jsoncallback=?";};
 Common.ownDsUrl = function(){return Common.ip() + "dsg/getowndss?jsoncallback=?";};
 
-Common.allDataviewUrl = function(){return Common.ip() + "dvg/getdvs?jsoncallback=?"};
-Common.dvFieldUrl = function(){return Common.ip() + "dvg/getdvfds?jsoncallback=?"};
-Common.dvInfoUrl = function(){return Common.ip() + "dvg/getdvinfo?jsoncallback=?"};
+Common.dsDataUrl = function(){return Common.ip() + "dsg/getds?jsoncallback=?";};
+Common.dsInfoUrl = function(){return Common.ip() + "dsg/getdsinfo?jsoncallback=?";};
+Common.dsFieldUrl = function(){return Common.ip() + "dsg/getdsfds?jsoncallback=?";};
+
+/*****dv get*****/
+Common.dataviewUrl = function(){return Common.ip() + "dvg/getdvs?jsoncallback=?";};
+
+Common.dvDataUrl = function(){return Common.ip() + "dvg/getdv?jsoncallback=?";};
+Common.dvInfoUrl = function(){return Common.ip() + "dvg/getdvinfo?jsoncallback=?";};
+Common.dvFieldUrl = function(){return Common.ip() + "dvg/getdvfds?jsoncallback=?";};
+
+/*****dv post*****/
+Common.addDvUrl = function(){return Common.ip() + "dsa/adddv";};
 
 Common.favListUrl = function(){return Common.ip() + "favg/getfavs?jsoncallback=?";};
 Common.favDataUrl = function(){return Common.ip() + "favg/getfav?jsoncallback=?";};

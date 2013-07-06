@@ -182,11 +182,12 @@ Sta.loadList = function(tabIndex,type,permit){
 			Common.yAxis[tabIndex][type][permit][i] = new Array();
 			
 			var des = data[i].descriptionZh;
+			var name = data[i].datasetName;
 			var dsName = document.createElement("div");
 			dsName.setAttribute("id","sta-" + type + "-" + permit + "-dsName-" + tabIndex + "-" + i);
 			dsName.setAttribute("class","dsName");
 			$(dsName).appendTo("#sta-" + type + "-" + permit + "-list-" + tabIndex);
-			$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + type + "," + permit + "," + i + ");\">" +
+			$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + type + "," + permit + "," + i + ",'" + name + "');\">" +
 				des + "</a>").appendTo(dsName);
 			var view_ds = document.createElement("div");
 			view_ds.setAttribute("id","sta-view-ds-" + tabIndex + "-" + type + "-" + permit + "-" + i);
@@ -237,36 +238,38 @@ Sta.loadList = function(tabIndex,type,permit){
 };
 
 /*****initialize chartType and yAxis of a chart*****/
-Sta.guide = function(tabIndex,type,permit,dsIndex){
-	var url = Common.dataviewUrl().replace("tabType","sta");
-	/*****Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.*****/
-	$.getJSON(url,function(data){
-		var values = data[dsIndex].values;
-		var len = values.length;
-		var l = Common.chartIndex[tabIndex][type][permit][dsIndex].length;
-		var chartIndex = Common.chartIndex[tabIndex][type][permit][dsIndex][l - 1];
-		if(l == 1){
-			$("#sta-view-ds-" + tabIndex + "-" + type + "-" + permit + "-" + dsIndex).css("display","block");
-		}
-		Common.chartIndex[tabIndex][type][permit][dsIndex][l] = chartIndex + 1;
-		Common.chartType[tabIndex][type][permit][dsIndex][chartIndex] = "lineChart";
-		Common.xAxis[tabIndex][type][permit][dsIndex][chartIndex] = new Array();
-		Common.yAxis[tabIndex][type][permit][dsIndex][chartIndex] = new Array();
-		if(type == 1){
-			for(var i = 0; i < len; i++){
-				Common.xAxis[tabIndex][type][permit][dsIndex][chartIndex][i] = true;
+Sta.guide = function(tabIndex,type,permit,dsIndex,name){
+	var url = "";
+	if(type == 0){
+		url = Common.dataviewUrl().replace("tabType","sta");
+		/*****Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.*****/
+		$.getJSON(url,function(data){
+			var values = data[dsIndex].values;
+			var len = values.length;
+			var l = Common.chartIndex[tabIndex][type][permit][dsIndex].length;
+			var chartIndex = Common.chartIndex[tabIndex][type][permit][dsIndex][l - 1];
+			if(l == 1){
+				$("#sta-view-ds-" + tabIndex + "-" + type + "-" + permit + "-" + dsIndex).css("display","block");
 			}
+			Common.chartIndex[tabIndex][type][permit][dsIndex][l] = chartIndex + 1;
+			Common.chartType[tabIndex][type][permit][dsIndex][chartIndex] = "lineChart";
+			Common.yAxis[tabIndex][type][permit][dsIndex][chartIndex] = new Array();
+			for(var i = 0; i < len; i++){
+				Common.yAxis[tabIndex][type][permit][dsIndex][chartIndex][i] = true;
+			}
+			google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
+			function drawChart(){
+				Sta.createChart(tabIndex,type,permit,dsIndex,chartIndex);
+			}
+		}).error(function(){
+			alert("Oops, we got an error...");
+		});
+	}else{
+		google.load("visualization","1",{packages:["table"],"callback":drawTable});
+		function drawTable(){
+			Sta.showTable(tabIndex,type,permit,dsIndex,name);
 		}
-		for(var i = 0; i < len; i++){
-			Common.yAxis[tabIndex][type][permit][dsIndex][chartIndex][i] = true;
-		}
-		google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
-		function drawChart(){
-			Sta.createChart(tabIndex,type,permit,dsIndex,chartIndex);
-		}
-	}).error(function(){
-		alert("Oops, we got an error...");
-	});
+	}
 };
 
 /*****create one chart container*****/

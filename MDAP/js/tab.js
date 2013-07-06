@@ -117,13 +117,14 @@ Tab.createFrame = function(tabType){
 		$(accordion).appendTo(tab);
 		Mgt.accordion(tabIndex,"dv");
 		Mgt.accordion(tabIndex,"ds");
-		
 		google.load("visualization","1",{packages:["table"],"callback":drawTable});
 		function drawTable(){
-			Mgt.loadSubTab(tabIndex,"dv");
-			Mgt.loadSubTab(tabIndex,"ds");
+			Mgt.subTab(tabIndex,"dv","sta");
+			Mgt.subTab(tabIndex,"dv","geo");
+			Mgt.subTab(tabIndex,"ds","pub");
+			Mgt.subTab(tabIndex,"ds","lim");
+			Mgt.subTab(tabIndex,"ds","own");
 		}
-		
 		$("#accordion" + tabIndex).accordion({
 			collapsible: true,
 			activate: function(event,ui){

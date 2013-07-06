@@ -262,7 +262,7 @@ body{
 
 /*****mgt tab*****/
 
-.dvTabs,.dsTabs{
+.mgt-tabs{
 	position: absolute;
 	top: 10px;
 	left: 10px;
@@ -272,7 +272,7 @@ body{
 	border-width: 0;
 }
 
-.dvTabs_ul,.dsTabs_ul{
+.mgt-tabs-ul{
 	background-image: none;
 	background-color: transparent;
 	border-width: 0;
@@ -282,18 +282,111 @@ body{
 	border-top-left-radius: 0;
 }
 
-.dvTabs_ul a,.dsTabs_ul a{
+.mgt-tabs-ul a{
 	text-align: center;
 	font-family: Times New Roman,'楷体';
 	font-size: 12px;
 }
 
-.dvDataMgt,.dsDataMgt{
+.mgt-content{
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+	border: 1px solid #282828;
+	overflow: auto;
+}
+
+.mgt-title{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
+	border-top: 1px solid #282828;
+	border-right: 1px solid #282828;
+	border-left: 1px solid #282828;
+}
+
+.mgt-info,.mgt-field{
+	margin-bottom: 5px;
+	border-right: 1px solid #282828;
+	border-bottom: 1px solid #282828;
+	border-left: 1px solid #282828;
+}
+
+.mgt-detail-data-title{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
+	border-top: 1px solid #282828;
+	border-right: 1px solid #282828;
+	border-left: 1px solid #282828;
+}
+
+.mgt-detail-data{
+	margin-bottom: 5px;
+	text-align: center;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
+	border-right: 1px solid #282828;
+	border-left: 1px solid #282828;
+	border-bottom: 1px solid #282828;
+}
+
+.mgt-select-column-title{
+	margin-bottom: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
 	border: 1px solid #282828;
 }
 
-.dvInfoTable,.dvFieldTable,.dsInfoTable,.dsFieldTable{
-	width: 100px;
+.mgt-selector{
+	margin-bottom: 5px;
+	padding: 5px;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
+	border: 1px solid #282828;
+}
+
+.mgt-selector-title,.mgt-save-data-view-title{
+	padding-top: 5px;
+	text-align: center;
+}
+.mgt-selector-key,.mgt-selector-value,.mgt-save-data-view-text{
+	padding-top: 5px;
+	padding-left: 20px;
+}
+
+.mgt-selector-button,.mgt-save-data-view-button{
+	padding-left: 40px;
+}
+
+.mgt-data-view{
+	position: relative;
+	height: 480px;
+	margin-bottom: 5px;
+	border: 1px solid #282828;
+}
+
+.mgt-data-view-container{
+	float: left;
+	width: 480px;
+	height: 480px;
+	border-right: 1px solid #282828;
+}
+
+.mgt-save-data-view{
+	position: absolute;
+	right: 0;
+	padding: 5px;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
+	border: 1px solid #282828;
 }
 
 /*****accordion*****/
