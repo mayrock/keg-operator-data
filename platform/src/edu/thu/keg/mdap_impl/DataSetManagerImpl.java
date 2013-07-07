@@ -320,6 +320,9 @@ public class DataSetManagerImpl implements DataSetManager {
 				|| owner.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
+		if (this.views.containsKey(name))
+			throw new IllegalArgumentException("Dataview name: " + name
+					+ " exists!");
 		DataView v = new DataViewImpl(name, owner, permission, type, q);
 		v.setDescription(description);
 		addDataView(v);
@@ -334,6 +337,9 @@ public class DataSetManagerImpl implements DataSetManager {
 				|| owner.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
+		if (this.views.containsKey(name))
+			throw new IllegalArgumentException("Dataview name: " + name
+					+ " exists!");
 		DataView v = new DataViewImpl(name, owner, permission, type, q, keys,
 				values);
 		v.setDescription(description);

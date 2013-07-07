@@ -46,6 +46,7 @@ import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
+import edu.thu.keg.mdap.init.MessageInfo;
 import edu.thu.keg.mdap.management.ManagementPlatform;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
@@ -71,6 +72,7 @@ public class DsAdFunctions {
 	HttpServletRequest httpServletRequest;
 	@Context
 	HttpServletResponse httpServletResponse;
+
 	HttpSession session = null;
 
 	private static Logger log = Logger.getLogger(DsAdFunctions.class);
@@ -210,7 +212,7 @@ public class DsAdFunctions {
 	@Path("/adddv")
 	// @Consumes({ MediaType.APPLICATION_JSON })
 	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public Response createDataview(@FormParam("dataset") String dataset,
+	public void createDataview(@FormParam("dataset") String dataset,
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
 			@FormParam("datafeaturetype") String datafuturetype,
@@ -220,30 +222,15 @@ public class DsAdFunctions {
 		session = httpServletRequest.getSession();
 		System.out.println("POST create dataview:\n" + dataset + " " + dataview
 				+ "\n " + keys.toString() + "\n" + values.toString());
-		// if (session.getId() != null) {
-		// //
-		// try {
-		// URL url = new URL("http://www.baidu.com");
-		// return Response.temporaryRedirect(url.toURI()).build();
-		// } catch (URISyntaxException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (MalformedURLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		//
-		// }
+
 		try {
 			if (session.getAttribute("userid") == null)
-				throw new UserNotInPoolException("the cookies is timeout!");
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
 					.getAttribute("managementplatform");
 			System.out
 					.println("session user=" + session.getAttribute("userid"));
-			if (session.getAttribute("userid") == null)
-				throw new UserNotInPoolException("user is not login!");
 
 			DataView dv = null;
 			DataSet ds = null;
@@ -271,18 +258,18 @@ public class DsAdFunctions {
 		} catch (IOException | UserNotInPoolException
 				| OperationNotSupportedException | DataProviderException
 				| JSONException | IllegalArgumentException e) {
+
 			try {
-				return Response
-						.created(new URI("http://www.baidu.com"))
-						.entity((new JSONObject()).put("status", "false")
-								.put("msg", e.getMessage()).toString()).build();
-			} catch (JSONException | URISyntaxException e1) {
+				httpServletResponse.sendError(
+						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+						e.getMessage());
+			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}
 
-		return Response.ok().build();
+		}
+		httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 
 	}
 
@@ -299,7 +286,7 @@ public class DsAdFunctions {
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)
-				throw new UserNotInPoolException("the cookies is timeout!");
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			List<String> users = null;
 			users = new ArrayList<String>();
@@ -331,7 +318,7 @@ public class DsAdFunctions {
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)
-				throw new UserNotInPoolException("user is not login!");
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			datasetManager.removeDataSet(datasetManager.getDataSet(dataset));
@@ -348,14 +335,20 @@ public class DsAdFunctions {
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)
-				throw new UserNotInPoolException("user is not logged!");
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			datasetManager.removeDataView(datasetManager.getDataView(dataview));
 			datasetManager.saveChanges();
 		} catch (UserNotInPoolException | DataProviderException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			try {
+				httpServletResponse.sendError(
+						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+						e.getMessage());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 }

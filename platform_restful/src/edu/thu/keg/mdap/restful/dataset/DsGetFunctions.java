@@ -34,7 +34,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.sun.jersey.api.client.ClientResponse.Status;
+import javax.ws.rs.core.Response.Status;
 import com.sun.jersey.api.json.JSONWithPadding;
 import com.sun.org.apache.xerces.internal.util.URI;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.util.QEncoderStream;
@@ -52,6 +52,7 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
+import edu.thu.keg.mdap.init.MessageInfo;
 
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.exceptions.UserNotInPoolException;
@@ -692,12 +693,14 @@ public class DsGetFunctions {
 	public JSONWithPadding getLimitedDatasetNames(
 			@QueryParam("userid") String userid,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
+		session = httpServletRequest.getSession();
 		log.info(uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		JDatasetName datasetName = new JDatasetName();
 		try {
-			if (userid == null)
-				throw new IllegalArgumentException("can't find userid");
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
+			userid = (String) session.getAttribute("userid");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
@@ -725,8 +728,17 @@ public class DsGetFunctions {
 				datasetsName.add(dname);
 			}
 
-		} catch (Exception e) {
+		} catch (IllegalArgumentException | UserNotInPoolException e) {
 			log.warn(e.getStackTrace());
+			try {
+				httpServletResponse.sendError(
+						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+						e.getMessage());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
@@ -740,12 +752,14 @@ public class DsGetFunctions {
 	public JSONWithPadding getOwnDatasetNames(
 			@QueryParam("userid") String userid,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
+		session = httpServletRequest.getSession();
 		log.info(uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		JDatasetName datasetName = new JDatasetName();
 		try {
-			if (userid == null)
-				throw new IllegalArgumentException("can't find userid");
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
+			userid = (String) session.getAttribute("userid");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
@@ -773,8 +787,17 @@ public class DsGetFunctions {
 				datasetsName.add(dname);
 			}
 
-		} catch (Exception e) {
+		} catch (IllegalArgumentException | UserNotInPoolException e) {
 			log.warn(e.getStackTrace());
+			try {
+				httpServletResponse.sendError(
+						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+						e.getMessage());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
