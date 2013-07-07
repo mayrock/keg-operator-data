@@ -985,7 +985,14 @@ Mgt.saveDataview = function(dvType,dsName,arr){
 		datafeaturetype: dfType,
 		keys: key,
 		values: value
-	},function(data){
+	},function(data,msg,res){
+		console.log(res.status);
+		console.log(res.status == 201);
+		if(res.status == 201){
+			var errorInfo = $.parseJSON(data);
+			alert(errorInfo.msg);
+			return;
+		}
 		$("#dv-" + dvType + "-content-" + tabIndex).empty();
 		
 		var tabs = document.createElement("div");
@@ -999,7 +1006,7 @@ Mgt.saveDataview = function(dvType,dsName,arr){
 		$(tabs_ul).appendTo(tabs);
 		
 		Mgt.subTab(tabIndex,"dv",dvType);
-	},"json").error(function(){
+	}).error(function(data,msg,res){
 		alert("Oops, we got an error...");
 		return;
 	});
