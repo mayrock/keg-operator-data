@@ -88,7 +88,8 @@ public class DsGetFunctions {
 	HttpServletResponse httpServletResponse;
 
 	HttpSession session = null;
-	private static Logger log = Logger.getLogger(DsGetFunctions.class);
+	private static Logger log = Logger.getLogger(DsGetFunctions.class
+			.getSimpleName());
 
 	/**
 	 * get all dataset names list
@@ -105,16 +106,6 @@ public class DsGetFunctions {
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		JDatasetName datasetName = new JDatasetName();
 		System.out.println(session.getId());
-		// if (session.getId() != null) {
-		//
-		// try {
-		// throw new UserNotInPoolException(httpServletResponse,
-		// "the user is not logged!");
-		// } catch (UserNotInPoolException e) {
-		// // TODO Auto-generated catch block
-		// log.warn(e.getMessage());
-		// }
-		// }
 		Platform p = (Platform) servletcontext.getAttribute("platform");
 		DataSetManager datasetManager = p.getDataSetManager();
 		Collection<DataSet> datasets = datasetManager.getDataSetList();
@@ -162,7 +153,7 @@ public class DsGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getGeoDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getGeoDatasetsNames " + uriInfo.getAbsolutePath());
+		log.info("getGeoDatasetsNames " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -197,7 +188,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			log.warn(e.getStackTrace());
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -214,7 +205,7 @@ public class DsGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaDatasetsNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getStaDatasetsNames " + uriInfo.getAbsolutePath());
+		log.info("getStaDatasetsNames " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -249,7 +240,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			log.warn(e.getStackTrace());
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
 				datasetsName) {
@@ -267,8 +258,7 @@ public class DsGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDataset(@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDataset " + dataset + " "
-				+ uriInfo.getAbsolutePath());
+		log.info("getDataset " + dataset + " " + uriInfo.getAbsolutePath());
 		List<JDatasetLine> datasetList = new ArrayList<>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -301,7 +291,7 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
-			log.warn(e.getStackTrace());
+			log.warn(e.getMessage());
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetLine>>(
 				datasetList) {
@@ -319,8 +309,7 @@ public class DsGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getGeoDataset(@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getLocDataset " + dataset + " "
-				+ uriInfo.getAbsolutePath());
+		log.info("getLocDataset " + dataset + " " + uriInfo.getAbsolutePath());
 		List<JGeograph> datasetList = new ArrayList<JGeograph>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -365,8 +354,7 @@ public class DsGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getStaDataset(@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getStaDataset " + dataset + " "
-				+ uriInfo.getAbsolutePath());
+		log.info("getStaDataset " + dataset + " " + uriInfo.getAbsolutePath());
 		List<JStatistic> datasetList = new ArrayList<JStatistic>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -424,7 +412,7 @@ public class DsGetFunctions {
 	public JSONWithPadding getDatasetFieldsNames(
 			@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDatasetFieldsNames " + dataset + " "
+		log.info("getDatasetFieldsNames " + dataset + " "
 				+ uriInfo.getAbsolutePath());
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
 		try {
@@ -444,8 +432,6 @@ public class DsGetFunctions {
 			}
 		} catch (Exception e) {
 			log.warn(e.getStackTrace());
-		} finally {
-
 		}
 		return new JSONWithPadding(new GenericEntity<List<JFieldName>>(all_fn) {
 		}, jsoncallback);
@@ -506,17 +492,10 @@ public class DsGetFunctions {
 				all_dfs.add(jc);
 			}
 
-		} catch (JSONException e) {
-			System.out.println("POST: Json form wrong!");
-			e.printStackTrace();
-		} catch (OperationNotSupportedException e) {
+		} catch (JSONException | OperationNotSupportedException
+				| DataProviderException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DataProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
+			log.warn(e.getMessage());
 		}
 		// return all_dfs;
 		return new JSONWithPadding(new GenericEntity<List<JDatasetLine>>(
@@ -599,9 +578,7 @@ public class DsGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetInfo(@QueryParam("dataset") String ds,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDatasetInfo " + ds + " "
-				+ uriInfo.getAbsolutePath());
-		log.info(uriInfo.getAbsolutePath());
+		log.info("getDatasetInfo " + ds + " " + uriInfo.getAbsolutePath());
 		Platform p = (Platform) servletcontext.getAttribute("platform");
 		DataSetManager datasetManager = p.getDataSetManager();
 		DataSet dataset = datasetManager.getDataSet(ds);
@@ -646,7 +623,7 @@ public class DsGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getPublicDatasetNames(
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		log.info(uriInfo.getAbsolutePath());
+		log.info("getPublicDatasetNames(String) " + uriInfo.getAbsolutePath());
 		List<JDatasetName> datasetsName = new ArrayList<JDatasetName>();
 		JDatasetName datasetName = new JDatasetName();
 		try {
@@ -678,8 +655,7 @@ public class DsGetFunctions {
 			}
 
 		} catch (Exception e) {
-			log.warn(e.getStackTrace());
-			// e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
@@ -729,14 +705,13 @@ public class DsGetFunctions {
 			}
 
 		} catch (IllegalArgumentException | UserNotInPoolException e) {
-			log.warn(e.getStackTrace());
+			log.info(e.getStackTrace());
 			try {
 				httpServletResponse.sendError(
 						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 						e.getMessage());
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				log.warn(e.getMessage());
 			}
 
 		}
@@ -795,7 +770,7 @@ public class DsGetFunctions {
 						e.getMessage());
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				log.warn(e.getMessage());
 			}
 
 		}

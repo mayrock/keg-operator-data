@@ -45,7 +45,8 @@ public class UserGetFunctions {
 	@Context
 	HttpServletRequest httpServletRequest;
 	HttpSession session = null;
-	private static Logger log = Logger.getLogger(UserGetFunctions.class);
+	private static Logger log = Logger.getLogger(UserGetFunctions.class
+			.getSimpleName());
 
 	@GET
 	@Path("/verifyuser")
@@ -63,7 +64,7 @@ public class UserGetFunctions {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			System.out.println("用户名密码错误:" + userid);
-			e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 		System.out.println(job.toString());
 		// return Response.created(uriInfo.getAbsolutePath()).build();

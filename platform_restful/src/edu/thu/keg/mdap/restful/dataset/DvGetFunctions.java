@@ -69,7 +69,7 @@ public class DvGetFunctions {
 	public JSONWithPadding getDatasetViewsNames(
 			@QueryParam("featuretype") String featureType,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDatasetViewsNames " + uriInfo.getAbsolutePath());
+		log.info(uriInfo.getAbsolutePath());
 		List<JDataviewName> dataviewList = new ArrayList<JDataviewName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -108,8 +108,7 @@ public class DvGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDataview(@QueryParam("dataset") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDataview " + dataview + " "
-				+ uriInfo.getAbsolutePath());
+		log.info(uriInfo.getAbsolutePath());
 		List<JDataviewLine> dataviewList = new ArrayList<>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
@@ -156,8 +155,6 @@ public class DvGetFunctions {
 	public JSONWithPadding getDataviewInfo(
 			@QueryParam("dataset") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDatasetInfo " + dataview + " "
-				+ uriInfo.getAbsolutePath());
 		log.info(uriInfo.getAbsolutePath());
 		Platform p = (Platform) servletcontext.getAttribute("platform");
 		DataSetManager datasetManager = p.getDataSetManager();
@@ -166,8 +163,6 @@ public class DvGetFunctions {
 		dname.setDataviewName(dv.getName());
 		dname.setDescriptionEn(dv.getDescription(Locale.ENGLISH));
 		dname.setDescriptionZh(dv.getDescription(Locale.CHINESE));
-		System.out.println(dname.getDescriptionEn());
-		System.out.println(dname.getDescriptionZh());
 		ArrayList<String> identifiers = new ArrayList<>();
 		ArrayList<String> values = new ArrayList<>();
 		for (DataField df : dv.getKeyFields()) {
@@ -194,8 +189,7 @@ public class DvGetFunctions {
 	public JSONWithPadding getDataviewFieldsNames(
 			@QueryParam("dataset") String dataview,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		System.out.println("getDatasetFieldsNames " + dataview + " "
-				+ uriInfo.getAbsolutePath());
+		log.info(uriInfo.getAbsolutePath());
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
