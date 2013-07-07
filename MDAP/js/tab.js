@@ -29,7 +29,8 @@ Tab.createFrame = function(tabType){
 		return;
 	}
 	Common.tabIndex[length + 1] = tabIndex + 1;
-	li = document.createElement("li");
+	
+	var li = document.createElement("li");
 	li.setAttribute("id","tabs_li" + tabIndex);
 	li.setAttribute("class","tabs_li");
 	$(li).appendTo("#tabs_ul");
@@ -128,6 +129,13 @@ Tab.createFrame = function(tabType){
 		$(staView).appendTo(tab);
 		
 		Tab.loadSta(tabIndex);
+		
+		$("<img src = 'css/images/save_256x256.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>")
+			.appendTo(li)
+			.css({
+				"width": "16px",
+				"margin-right": "5px"
+			});
 	}else{
 		var accordion = document.createElement("div");
 		accordion.setAttribute("id","accordion" + tabIndex);
@@ -154,14 +162,7 @@ Tab.createFrame = function(tabType){
 		});
 		$("#accordion" + tabIndex).accordion("option","active",false);
 	}
-	if(tabType == "sta"){
-		$("<img src = 'css/images/save_256x256.png' onclick = \"Fav.createFrame(" + tabIndex + ");\"/>")
-			.appendTo(li)
-			.css({
-				"width": "16px",
-				"margin-right": "5px"
-			});
-	}
+	
 	var permit = Common.permit;
 	if(permit == 2){
 		if((tabType == "sta") || (tabType == "geo")){
@@ -180,6 +181,7 @@ Tab.createFrame = function(tabType){
 			"margin-top": "8px",
 			"margin-right": "5px"
 		});
+	
 	$("#tabs").tabs("refresh");
 	$("#tabs").tabs("option","active",length);
 };

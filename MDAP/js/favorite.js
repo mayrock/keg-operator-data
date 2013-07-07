@@ -27,11 +27,13 @@ Fav.closeFrame = function(){
 
 /*****save one sta tab*****/
 Fav.saveSta = function(tabIndex){
-	$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
+	$.getJSON(Common.dataviewUrl(),{
+		featuretype: "DistributionFeature"
+	},function(data){
 		var len = data.length;
-		var datasetData = JSON.parse("[]");
+		var dataviewData = JSON.parse("[]");
 		for(var i = 0; i < len; i++){
-			var name = data[i].datasetName;
+			var name = data[i].dataviewName;
 			var l = Common.chartIndex[tabIndex][i].length;
 			if(l == 1){
 				continue;
@@ -53,18 +55,18 @@ Fav.saveSta = function(tabIndex){
 				chartData.splice(chartLen,0,cData);
 			}
 			/*****dataset name and chart array make up a dataset*****/
-			var dsData = JSON.parse("{}");
-			dsData.name = name;
-			dsData.chart = chartData;
+			var dvData = JSON.parse("{}");
+			dvData.name = name;
+			dvData.chart = chartData;
 			/*****dataset array*****/
-			var dsLen = datasetData.length;
-			datasetData.splice(dsLen,0,dsData);
+			var dvLen = dataviewData.length;
+			dataviewData.splice(dvLen,0,dvData);
 		}
 		/*****tab name and dataset array make up a tab*****/
 		var tabData = JSON.parse("{}");
 		var tabName = $("#favName").val();
 		tabData.name = tabName;
-		tabData.dataset = datasetData;
+		tabData.dataset = dataviewData;
 		
 		var username = Common.username;
 		$.post(Common.addFavUrl(),{
@@ -86,6 +88,7 @@ Fav.saveSta = function(tabIndex){
 		});
 	}).error(function(){
 		alert("Oops, we got an error...");
+		return;
 	});
 };
 
@@ -141,40 +144,48 @@ Fav.revertSta = function(favid){
 		favid: favid
 	},function(data){
 		var tabData = JSON.parse(data.favstring);
-		var datasetData = tabData.dataset;
-		var dsLen = datasetData.length;
-		$.getJSON(Common.dataviewUrl().replace("tabType","sta"),function(data){
+		var dataviewData = tabData.dataset;
+		var dvLen = dataviewData.length;
+		$.getJSON(Common.dataviewUrl(),{
+			featuretype: "DistributionFeature"
+		},function(data){
 			var len = data.length;
 			google.load("visualization","1",{packages:["corechart"],"callback":drawChart});
 			
 			function drawChart(){
-				for(var i = 0; i < dsLen; i++){
-					var dsData = datasetData[i];
-					var dsName = dsData.name;
-					var dsIndex = new Object;
+				for(var i = 0; i < dvLen; i++){
+					var dvData = dataviewData[i];
+					var dvName = dvData.name;
+					var dvIndex = -1;
 					for(var j = 0; j < len; j++){
-						var name = data[j].datasetName;
-						if(dsName == name){
-							dsIndex = j;
+						var name = data[j].dataviewName;
+						if(dvName == name){
+							dvIndex = j;
 							break;
 						}
 					}
-					var chartData = dsData.chart;
+					if(dvIndex == -1){
+						alert("The data view this favorite saved from isn't the current data view!");
+						Fav.delSta(favid);
+						Tab.close("sta",tabIndex);
+						return;
+					}
+					var chartData = dvData.chart;
 					var chartLen = chartData.length;
 					for(var j = 0; j < chartLen; j++){
-						Common.chartIndex[tabIndex][dsIndex][j + 1] = j + 1;
+						Common.chartIndex[tabIndex][dvIndex][j + 1] = j + 1;
 					}
-					$("#view_ds" + tabIndex + "_" + dsIndex).css("display","block");
+					$("#sta-view-dv-" + tabIndex + "-" + dvIndex).css("display","block");
 					for(var j = 0; j < chartLen; j++){
 						var cData = chartData[j];
-						Common.chartType[tabIndex][dsIndex][j] = cData.type;
+						Common.chartType[tabIndex][dvIndex][j] = cData.type;
 						var yAxisData = cData.yAxis;
 						var yAxisLen = yAxisData.length;
-						Common.yAxis[tabIndex][dsIndex][j] = new Array();
+						Common.yAxis[tabIndex][dvIndex][j] = new Array();
 						for(var k = 0; k < yAxisLen; k++){
-							Common.yAxis[tabIndex][dsIndex][j][k] = yAxisData[k];
+							Common.yAxis[tabIndex][dvIndex][j][k] = yAxisData[k];
 						}
-						Sta.createChart(tabIndex,dsIndex,j);
+						Sta.createChart(tabIndex,dvIndex,j);
 					}
 				}
 			}
