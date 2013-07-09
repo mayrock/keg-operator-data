@@ -44,7 +44,7 @@ public class MyJAXBContextResolver implements ContextResolver<JAXBContext> {
 
 		for (Class<?> c : types) {
 			if (c.equals(objectType)) {
-				log.info("用到小弟吳超了");
+				// log.info("用到小弟吳超了");
 				return context;
 			}
 		}

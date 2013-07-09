@@ -68,14 +68,29 @@ public class DvGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetViewsNames(
 			@QueryParam("featuretype") String featureType,
+			@QueryParam("featuretype") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
 		List<JDataviewName> dataviewList = new ArrayList<JDataviewName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			Collection<DataView> dataviews = datasetManager
-					.getDataViewList(DataFeatureType.valueOf(featureType));
+
+			Collection<DataView> dataviews = null;
+			if (dataset == null && featureType == null)
+				dataviews = datasetManager.getDataViewList();
+			else if (dataset == null && featureType != null)
+				dataviews = datasetManager.getDataViewList(DataFeatureType
+						.valueOf(featureType));
+			else if (dataset != null && featureType == null)
+				dataviews = datasetManager.getDataViewList(dataset);
+			else {
+				dataviews = datasetManager.getDataViewList(DataFeatureType
+						.valueOf(featureType));
+				Collection<DataView> dataviews1 = datasetManager
+						.getDataViewList(dataset);
+				dataviews.retainAll(dataviews1);
+			}
 			for (DataView dataview : dataviews) {
 				JDataviewName dname = new JDataviewName();
 				dname.setDataviewName(dataview.getName());

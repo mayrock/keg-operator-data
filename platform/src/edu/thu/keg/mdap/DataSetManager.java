@@ -128,6 +128,8 @@ public interface DataSetManager {
 	 */
 	public Collection<DataView> getDataViewList(DataFeatureType type);
 
+	public Collection<DataView> getDataViewList(String dataset);
+
 	/**
 	 * set the dataset's permission
 	 * 
@@ -172,12 +174,13 @@ public interface DataSetManager {
 	 *            the value field
 	 * @return
 	 */
-	public DataView defineView(String name, String owner, String description,
-			int permission, DataFeatureType type, Query q, DataField[] key,
-			DataField[] values) throws IllegalArgumentException;
+	public DataView defineView(String name, String owner, String dataset,
+			String description, int permission, DataFeatureType type, Query q,
+			DataField[] key, DataField[] values)
+			throws IllegalArgumentException;
 
-	public DataView defineView(String name, String owner, String description,
-			int permission, DataFeatureType type, Query q)
+	public DataView defineView(String name, String owner, String dataset,
+			String description, int permission, DataFeatureType type, Query q)
 			throws IllegalArgumentException;
 
 }

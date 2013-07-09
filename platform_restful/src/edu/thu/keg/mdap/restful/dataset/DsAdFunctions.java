@@ -212,7 +212,7 @@ public class DsAdFunctions {
 	@Path("/adddv")
 	// @Consumes({ MediaType.APPLICATION_JSON })
 	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public void createDataview(@FormParam("dataset") String dataset,
+	public Response createDataview(@FormParam("dataset") String dataset,
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
 			@FormParam("datafeaturetype") String datafuturetype,
@@ -250,8 +250,8 @@ public class DsAdFunctions {
 			System.arraycopy(vs, 0, kv, ks.length, vs.length);
 			q = ds.getQuery().select(kv);
 			dv = p.getDataSetManager().defineView(dataview,
-					(String) session.getAttribute("userid"), description,
-					DataView.PERMISSION_PUBLIC,
+					(String) session.getAttribute("userid"), dataset,
+					description, DataView.PERMISSION_PUBLIC,
 					DataFeatureType.valueOf(datafuturetype), q, ks, vs);
 
 			p.getDataSetManager().saveChanges();
@@ -260,17 +260,16 @@ public class DsAdFunctions {
 				| JSONException | IllegalArgumentException e) {
 
 			try {
-				httpServletResponse.sendError(
-						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-						e.getMessage());
-			} catch (IOException e1) {
+				return Response
+						.ok()
+						.entity(new JSONObject().put("error", e.getMessage())
+								.toString()).build();
+			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
 		}
-		httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-
+		return Response.ok().build();
 	}
 
 	@POST

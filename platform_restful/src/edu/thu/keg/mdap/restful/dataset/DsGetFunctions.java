@@ -682,38 +682,43 @@ public class DsGetFunctions {
 			Collection<DataSet> datasets = datasetManager
 					.getLimitedDataSetList(userid);
 			int i = 0;
-			for (DataSet dataset : datasets) {
-				JDatasetName dname = new JDatasetName();
-				dname.setDatasetName(dataset.getName());
-				dname.setOwner(dataset.getOwner());
-				dname.setPermission(DataSetImpl.permissionToString(dataset
-						.getPermission()));
-				dname.setLimitedUsers(dataset.getLimitedUsers());
-				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
-				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> keyFields = new ArrayList<>();
-				ArrayList<String> otherFields = new ArrayList<>();
-				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keyFields.add(df.getName());
+			if (datasets != null)
+				for (DataSet dataset : datasets) {
+					JDatasetName dname = new JDatasetName();
+					dname.setDatasetName(dataset.getName());
+					dname.setOwner(dataset.getOwner());
+					dname.setPermission(DataSetImpl.permissionToString(dataset
+							.getPermission()));
+					dname.setLimitedUsers(dataset.getLimitedUsers());
+					dname.setDescriptionEn(dataset
+							.getDescription(Locale.ENGLISH));
+					dname.setDescriptionZh(dataset
+							.getDescription(Locale.CHINESE));
+					ArrayList<String> keyFields = new ArrayList<>();
+					ArrayList<String> otherFields = new ArrayList<>();
+					for (DataField df : dataset.getPrimaryKeyFields()) {
+						keyFields.add(df.getName());
+					}
+					dname.setKeyFields(keyFields);
+					for (DataField df : dataset.getOtherFields()) {
+						otherFields.add(df.getName());
+					}
+					dname.setOtherFields(otherFields);
+					datasetsName.add(dname);
 				}
-				dname.setKeyFields(keyFields);
-				for (DataField df : dataset.getOtherFields()) {
-					otherFields.add(df.getName());
-				}
-				dname.setOtherFields(otherFields);
-				datasetsName.add(dname);
-			}
 
 		} catch (IllegalArgumentException | UserNotInPoolException e) {
 			log.info(e.getStackTrace());
-			try {
-				httpServletResponse.sendError(
-						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-						e.getMessage());
-			} catch (IOException e1) {
-				log.warn(e.getMessage());
-			}
 
+			try {
+				return new JSONWithPadding(new GenericEntity<String>(
+						new JSONObject().put("error", e.getMessage())
+								.toString()) {
+				}, jsoncallback);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		return new JSONWithPadding(new GenericEntity<List<JDatasetName>>(
@@ -739,38 +744,41 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			Collection<DataSet> datasets = datasetManager
 					.getOwnDataSetList(userid);
-			int i = 0;
-			for (DataSet dataset : datasets) {
-				JDatasetName dname = new JDatasetName();
-				dname.setDatasetName(dataset.getName());
-				dname.setOwner(dataset.getOwner());
-				dname.setPermission(DataSetImpl.permissionToString(dataset
-						.getPermission()));
-				dname.setLimitedUsers(dataset.getLimitedUsers());
-				dname.setDescriptionEn(dataset.getDescription(Locale.ENGLISH));
-				dname.setDescriptionZh(dataset.getDescription(Locale.CHINESE));
-				ArrayList<String> keyFields = new ArrayList<>();
-				ArrayList<String> otherFields = new ArrayList<>();
-				for (DataField df : dataset.getPrimaryKeyFields()) {
-					keyFields.add(df.getName());
+			if (datasets != null)
+				for (DataSet dataset : datasets) {
+					JDatasetName dname = new JDatasetName();
+					dname.setDatasetName(dataset.getName());
+					dname.setOwner(dataset.getOwner());
+					dname.setPermission(DataSetImpl.permissionToString(dataset
+							.getPermission()));
+					dname.setLimitedUsers(dataset.getLimitedUsers());
+					dname.setDescriptionEn(dataset
+							.getDescription(Locale.ENGLISH));
+					dname.setDescriptionZh(dataset
+							.getDescription(Locale.CHINESE));
+					ArrayList<String> keyFields = new ArrayList<>();
+					ArrayList<String> otherFields = new ArrayList<>();
+					for (DataField df : dataset.getPrimaryKeyFields()) {
+						keyFields.add(df.getName());
+					}
+					dname.setKeyFields(keyFields);
+					for (DataField df : dataset.getOtherFields()) {
+						otherFields.add(df.getName());
+					}
+					dname.setOtherFields(otherFields);
+					datasetsName.add(dname);
 				}
-				dname.setKeyFields(keyFields);
-				for (DataField df : dataset.getOtherFields()) {
-					otherFields.add(df.getName());
-				}
-				dname.setOtherFields(otherFields);
-				datasetsName.add(dname);
-			}
 
 		} catch (IllegalArgumentException | UserNotInPoolException e) {
 			log.warn(e.getStackTrace());
 			try {
-				httpServletResponse.sendError(
-						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-						e.getMessage());
-			} catch (IOException e1) {
+				return new JSONWithPadding(new GenericEntity<String>(
+						new JSONObject().put("error", e.getMessage())
+								.toString()) {
+				}, jsoncallback);
+			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
-				log.warn(e.getMessage());
+				e1.printStackTrace();
 			}
 
 		}

@@ -77,6 +77,8 @@ public class DataSetManagerImpl implements DataSetManager {
 	private HashMap<String, DataView> views = null;
 	private HashMap<DataFeatureType, Set<DataView>> viewsMap = null;
 
+	private HashMap<String, Set<DataView>> datasetMapViews = null;
+
 	private HashMap<String, Set<DataSet>> ownerMap = null;
 	private HashMap<String, Set<DataSet>> limitedMap = null;
 	private HashSet<DataSet> publicMap = null;
@@ -109,7 +111,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		features = new HashMap<DataFeatureType, Set<DataSet>>();
 		views = new HashMap<String, DataView>();
 		viewsMap = new HashMap<DataFeatureType, Set<DataView>>();
-
+		datasetMapViews = new HashMap<String, Set<DataView>>();
 		ownerMap = new HashMap<String, Set<DataSet>>();
 		limitedMap = new HashMap<String, Set<DataSet>>();
 		publicMap = new HashSet<DataSet>();
@@ -126,10 +128,10 @@ public class DataSetManagerImpl implements DataSetManager {
 	 * @see edu.thu.keg.mdap.DataSetFactory#getDataSet(java.lang.String)
 	 */
 	@Override
-	public DataSet getDataSet(String name) {
-		DataSet ds = datasets.get(name);
+	public DataSet getDataSet(String id) {
+		DataSet ds = datasets.get(id);
 		if (ds == null) {
-			throw new IllegalArgumentException("the dataset \"" + name
+			throw new IllegalArgumentException("the dataset \"" + id
 					+ "\" does not exist.");
 		}
 		return ds;
@@ -245,6 +247,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		if (!views.containsValue(dv))
 			return;
 		// dv.getProvider().removeContent(dv);
+		datasetMapViews.get(dv.getDataSet()).remove(dv);
 		removeDSMeta(dv);
 	}
 
@@ -254,7 +257,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	private void addDataSet(DataSet ds) {
-		datasets.put(ds.getName(), ds);
+		datasets.put(ds.getId(), ds);
 
 		for (DataFeature feature : ds.getFeatures()) {
 			DataFeatureType type = feature.getFeatureType();
@@ -284,7 +287,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	private void removeDSMeta(DataSet ds) {
-		datasets.remove(ds.getName());
+		datasets.remove(ds.getId());
 		ownerMap.get(ds.getOwner()).remove(ds);
 		publicMap.remove(ds);
 		for (Set<DataSet> list : limitedMap.values()) {
@@ -305,7 +308,8 @@ public class DataSetManagerImpl implements DataSetManager {
 	@Override
 	public DataSet createDataSet(String name, String owner, String description,
 			DataProvider provider, boolean loadable, DataField... fields) {
-		DataSet ds = new DataSetImpl(name, owner, provider, loadable, fields);
+		DataSet ds = new DataSetImpl(name, name, owner, provider, loadable,
+				fields);
 		ds.setDescription(description);
 		ds.setPermission(DataSetImpl.PERMISSION_PRIVATE);
 		addDataSet(ds);
@@ -313,42 +317,52 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	@Override
-	public DataView defineView(String name, String owner, String description,
-			int permission, DataFeatureType type, Query q)
+	public DataView defineView(String name, String owner, String dataset,
+			String description, int permission, DataFeatureType type, Query q)
 			throws IllegalArgumentException {
 		if (name == null || owner == null || name.equals("")
 				|| owner.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		if (this.views.containsKey(name))
-			throw new IllegalArgumentException("Dataview name: " + name
+		String id = name;
+		if (this.views.containsKey(id))
+			throw new IllegalArgumentException("Dataview name: " + id
 					+ " exists!");
-		DataView v = new DataViewImpl(name, owner, permission, type, q);
+		DataView v = new DataViewImpl(id, name, owner, dataset, permission,
+				type, q);
+		if (!datasetMapViews.containsKey(dataset))
+			datasetMapViews.put(dataset, new HashSet<DataView>());
+		datasetMapViews.get(dataset).add(v);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
 	}
 
 	@Override
-	public DataView defineView(String name, String owner, String description,
-			int permission, DataFeatureType type, Query q, DataField[] keys,
-			DataField[] values) throws IllegalArgumentException {
+	public DataView defineView(String name, String owner, String dataset,
+			String description, int permission, DataFeatureType type, Query q,
+			DataField[] keys, DataField[] values)
+			throws IllegalArgumentException {
 		if (name == null || owner == null || name.equals("")
 				|| owner.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		if (this.views.containsKey(name))
-			throw new IllegalArgumentException("Dataview name: " + name
+		String id = name;
+		if (this.views.containsKey(id))
+			throw new IllegalArgumentException("Dataview name: " + id
 					+ " exists!");
-		DataView v = new DataViewImpl(name, owner, permission, type, q, keys,
-				values);
+		DataView v = new DataViewImpl(id, name, owner, dataset, permission,
+				type, q, keys, values);
+		if (!datasetMapViews.containsKey(dataset))
+			datasetMapViews.put(dataset, new HashSet<DataView>());
+		datasetMapViews.get(dataset).add(v);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
 	}
 
 	private void addDataView(DataView v) {
-		views.put(v.getName(), v);
+		views.put(v.getId(), v);
 		DataFeatureType type = v.getFeatureType();
 		if (!viewsMap.containsKey(v.getFeatureType())) {
 			viewsMap.put(type, new HashSet<DataView>());
@@ -368,11 +382,23 @@ public class DataSetManagerImpl implements DataSetManager {
 		return viewsMap.get(type);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.thu.keg.mdap.DataSetManager#getDataViewList(java.lang.String)
+	 */
 	@Override
-	public DataView getDataView(String name) {
-		DataView ds = views.get(name);
+	public Collection<DataView> getDataViewList(String dataset) {
+		if (dataset == null)
+			return views.values();
+		return datasetMapViews.get(dataset);
+	}
+
+	@Override
+	public DataView getDataView(String id) {
+		DataView ds = views.get(id);
 		if (ds == null) {
-			throw new IllegalArgumentException("the dataview \"" + name
+			throw new IllegalArgumentException("the dataview \"" + id
 					+ "\" does not exist.");
 		}
 		return ds;

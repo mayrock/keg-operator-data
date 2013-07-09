@@ -111,6 +111,8 @@ public interface DataSet extends TableStructure {
 	 */
 	public Collection<DataField> getOtherFields();
 
+	public String getId();
+
 	/**
 	 * Get the name of the owner of this dataset
 	 */

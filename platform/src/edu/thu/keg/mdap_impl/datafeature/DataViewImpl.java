@@ -14,7 +14,7 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
 import edu.thu.keg.mdap_impl.datamodel.QueryImpl;
 
 public class DataViewImpl implements DataView {
-
+	private String id;
 	private Query q;
 	private String name;
 	private String owner;
@@ -23,32 +23,72 @@ public class DataViewImpl implements DataView {
 	private List<DataField> keyFields;
 	private List<DataField> valueFields;
 	private int permission;
+	private String dataset;
 	private List<String> users;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DataViewImpl other = (DataViewImpl) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
 	/**
 	 * @param q
 	 * @param name
 	 * @param desps
 	 */
-	public DataViewImpl(String name, String owner, int permission,
-			DataFeatureType type, Query q) {
+	public DataViewImpl(String id, String name, String owner, String dataset,
+			int permission, DataFeatureType type, Query q) {
 		super();
+		this.id = id;
 		this.q = q;
 		this.name = name;
 		this.owner = owner;
+		this.dataset = dataset;
 		this.permission = permission;
 		this.desps = new LocalizedMessage();
 		this.type = type;
 		initKeyValueFields();
 	}
 
-	public DataViewImpl(String name, String owner, int permission,
-			DataFeatureType type, Query q, DataField[] keyFields,
-			DataField[] valueFields) {
+	public DataViewImpl(String id, String name, String owner, String dataset,
+			int permission, DataFeatureType type, Query q,
+			DataField[] keyFields, DataField[] valueFields) {
 		super();
+		this.id = id;
 		this.q = q;
 		this.name = name;
 		this.owner = owner;
+		this.dataset = dataset;
 		this.permission = permission;
 		this.desps = new LocalizedMessage();
 		this.type = type;
@@ -69,8 +109,18 @@ public class DataViewImpl implements DataView {
 	}
 
 	@Override
+	public String getDataSet() {
+		return this.dataset;
+	}
+
+	@Override
 	public int getPermission() {
 		return this.permission;
+	}
+
+	@Override
+	public String getId() {
+		return this.id;
 	}
 
 	/*
