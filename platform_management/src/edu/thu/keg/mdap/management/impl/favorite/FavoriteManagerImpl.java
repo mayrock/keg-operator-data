@@ -39,6 +39,7 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		pstmt.setString(2, favstr);
 		pstmt.executeUpdate();
 		List<Integer> favid_list = getFavid(userid, favstr);
+		pstmt.getConnection().close();
 		return favid_list.get(favid_list.size() - 1);
 	}
 
@@ -48,8 +49,9 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		AbsSqlServerProvider ssp = null;
 		ssp = SqlServerProviderImpl.getInstance();
 		List<Integer> favid_list = new ArrayList<>();
+		PreparedStatement pstmt = null;
 		try {
-			PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql);
+			pstmt = ssp.getConnection().prepareStatement(sql);
 			pstmt.setString(1, userid);
 			pstmt.setString(2, favstr);
 			ResultSet rs = pstmt.executeQuery();
@@ -59,7 +61,15 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.getConnection().close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+
 		return favid_list;
 	}
 
@@ -75,7 +85,7 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		pstmt.setString(2, favid);
 		ResultSet rs = pstmt.executeQuery();
 		rs.next();
-
+		pstmt.getConnection().close();
 		return new Favorite(userid, favid, rs.getString("favstring"));
 	}
 
@@ -94,6 +104,7 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 			favs.add(new Favorite(userid, rs.getString("favid"), rs
 					.getString("favstring")));
 		}
+		pstmt.getConnection().close();
 		return favs;
 	}
 
@@ -111,7 +122,7 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		pstmt.setString(3, oldfavid);
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
-
+		pstmt.getConnection().close();
 		return true;
 	}
 
@@ -131,11 +142,9 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		pstmt.setString(3, favid);
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
-
+		pstmt.getConnection().close();
 		return true;
 	}
-
-	
 
 	@Override
 	public boolean removeFav(String userid, String favid) throws SQLException,
@@ -151,7 +160,7 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		pstmt.setString(1, userid);
 		pstmt.setString(2, favid);
 		pstmt.executeUpdate();
-
+		pstmt.getConnection().close();
 		return true;
 	}
 
@@ -167,7 +176,7 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		pstmt.setString(1, userid);
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
-
+		pstmt.getConnection().close();
 		return true;
 	}
 
@@ -183,9 +192,11 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		pstmt.setString(1, userid);
 		pstmt.setString(2, favid);
 		ResultSet rs = pstmt.executeQuery();
-		if (rs.next())
+		if (rs.next()) {
+			pstmt.getConnection().close();
 			return true;
-
+		}
+		pstmt.getConnection().close();
 		return false;
 	}
 

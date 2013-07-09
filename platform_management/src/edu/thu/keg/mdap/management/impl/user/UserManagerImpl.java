@@ -44,6 +44,7 @@ public class UserManagerImpl implements IUserManager {
 		pstmt.setInt(5, user.getLanguage());
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
+		pstmt.getConnection().close();
 		return true;
 	}
 
@@ -65,7 +66,7 @@ public class UserManagerImpl implements IUserManager {
 		} else
 			throw new IllegalUserManageException(
 					"UserManager: the userid don't exist");
-
+		pstmt.getConnection().close();
 		return user;
 	}
 
@@ -84,7 +85,7 @@ public class UserManagerImpl implements IUserManager {
 		pstmt.setString(2, userid);
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
-
+		pstmt.getConnection().close();
 		return true;
 	}
 
@@ -101,9 +102,12 @@ public class UserManagerImpl implements IUserManager {
 		if (rs.next()) {
 			String databasepass = rs.getString(1);
 			System.out.println(databasepass + "  " + password);
-			if (databasepass.equals(password))
+			if (databasepass.equals(password)) {
+				pstmt.getConnection().close();
 				return true;
+			}
 		}
+		pstmt.getConnection().close();
 		return false;
 	}
 
@@ -120,7 +124,9 @@ public class UserManagerImpl implements IUserManager {
 		pstmt.setString(1, userid);
 		ResultSet rs = pstmt.executeQuery();
 		rs.next();
-		return rs.getInt(1);
+		int result = rs.getInt(1);
+		pstmt.getConnection().close();
+		return result;
 	}
 
 	@Override
@@ -137,7 +143,7 @@ public class UserManagerImpl implements IUserManager {
 		pstmt.setString(2, userid);
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
-
+		pstmt.getConnection().close();
 		return true;
 	}
 
@@ -151,9 +157,11 @@ public class UserManagerImpl implements IUserManager {
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql);
 		pstmt.setString(1, userid);
 		ResultSet rs = pstmt.executeQuery();
-		if (rs.next())
+		if (rs.next()) {
+			pstmt.getConnection().close();
 			return true;
-
+		}
+		pstmt.getConnection().close();
 		return false;
 	}
 
@@ -171,7 +179,7 @@ public class UserManagerImpl implements IUserManager {
 		pstmt.setString(1, userid);
 		pstmt.executeUpdate();
 		ResultSet rs = pstmt.getGeneratedKeys();
-
+		pstmt.getConnection().close();
 		return true;
 	}
 
