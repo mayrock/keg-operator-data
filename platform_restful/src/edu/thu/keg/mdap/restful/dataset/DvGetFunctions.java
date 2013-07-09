@@ -68,14 +68,14 @@ public class DvGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetViewsNames(
 			@QueryParam("featuretype") String featureType,
-			@QueryParam("featuretype") String dataset,
+			@QueryParam("dataset") String dataset,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
 		List<JDataviewName> dataviewList = new ArrayList<JDataviewName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-
+			System.out.println(dataset + " " + featureType);
 			Collection<DataView> dataviews = null;
 			if (dataset == null && featureType == null)
 				dataviews = datasetManager.getDataViewList();
@@ -91,24 +91,28 @@ public class DvGetFunctions {
 						.getDataViewList(dataset);
 				dataviews.retainAll(dataviews1);
 			}
-			for (DataView dataview : dataviews) {
-				JDataviewName dname = new JDataviewName();
-				dname.setDataviewName(dataview.getName());
-				dname.setDescriptionEn(dataview.getDescription(Locale.ENGLISH));
-				dname.setDescriptionZh(dataview.getDescription(Locale.CHINESE));
-				ArrayList<String> identifiers = new ArrayList<>();
-				ArrayList<String> values = new ArrayList<>();
-				for (DataField df : dataview.getKeyFields()) {
-					identifiers.add(df.getName());
+			if (dataviews != null)
+				for (DataView dataview : dataviews) {
+					JDataviewName dname = new JDataviewName();
+					dname.setDataviewName(dataview.getName());
+					dname.setDescriptionEn(dataview
+							.getDescription(Locale.ENGLISH));
+					dname.setDescriptionZh(dataview
+							.getDescription(Locale.CHINESE));
+					ArrayList<String> identifiers = new ArrayList<>();
+					ArrayList<String> values = new ArrayList<>();
+					for (DataField df : dataview.getKeyFields()) {
+						identifiers.add(df.getName());
+					}
+					dname.setIdentifiers(identifiers);
+					for (DataField df : dataview.getValueFields()) {
+						values.add(df.getName());
+					}
+					dname.setValues(values);
+					dname.setDatafeature(dataview.getFeatureType().name());
+					dname.setDataset(dataview.getDataSet());
+					dataviewList.add(dname);
 				}
-				dname.setIdentifiers(identifiers);
-				for (DataField df : dataview.getValueFields()) {
-					values.add(df.getName());
-				}
-				dname.setValues(values);
-				dname.setDatafeature(dataview.getFeatureType().name());
-				dataviewList.add(dname);
-			}
 		} catch (Exception e) {
 			log.warn(e.getMessage());
 		}

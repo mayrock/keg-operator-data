@@ -330,9 +330,7 @@ public class DataSetManagerImpl implements DataSetManager {
 					+ " exists!");
 		DataView v = new DataViewImpl(id, name, owner, dataset, permission,
 				type, q);
-		if (!datasetMapViews.containsKey(dataset))
-			datasetMapViews.put(dataset, new HashSet<DataView>());
-		datasetMapViews.get(dataset).add(v);
+
 		v.setDescription(description);
 		addDataView(v);
 		return v;
@@ -353,9 +351,6 @@ public class DataSetManagerImpl implements DataSetManager {
 					+ " exists!");
 		DataView v = new DataViewImpl(id, name, owner, dataset, permission,
 				type, q, keys, values);
-		if (!datasetMapViews.containsKey(dataset))
-			datasetMapViews.put(dataset, new HashSet<DataView>());
-		datasetMapViews.get(dataset).add(v);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
@@ -363,6 +358,10 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	private void addDataView(DataView v) {
 		views.put(v.getId(), v);
+		if (!datasetMapViews.containsKey(v.getDataSet()))
+			datasetMapViews.put(v.getDataSet(), new HashSet<DataView>());
+		datasetMapViews.get(v.getDataSet()).add(v);
+
 		DataFeatureType type = v.getFeatureType();
 		if (!viewsMap.containsKey(v.getFeatureType())) {
 			viewsMap.put(type, new HashSet<DataView>());
