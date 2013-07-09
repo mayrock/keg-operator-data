@@ -309,10 +309,12 @@ Tab.loadSta = function(tabIndex){
 			$(dvContainer).appendTo(view_dv);
 		}
 		
-		var ctnrHeight = 25 * len;
+		var ctnrHeight = 24 * len;
 		$("#sta-dv-content-" + tabIndex).css({
 			"height": ctnrHeight + 5,
-			"border": "1px solid blue"
+			"border-right": "1px solid #282828",
+			"border-bottom": "1px solid #282828",
+			"border-left": "1px solid #282828"
 		});
 		var listWidth = $("#staList" + tabIndex).width();
 		$("#staList" + tabIndex).css({

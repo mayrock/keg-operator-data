@@ -346,32 +346,65 @@ body{
 }
 
 .mgt-selector{
+	position: relative;
 	margin-bottom: 5px;
-	padding: 5px;
 	font-family: Times New Roman,'楷体';
 	font-size: 16px;
 	border: 1px solid #282828;
 }
 
-.mgt-selector-title,.mgt-save-data-view-title{
+.mgt-selector-title{
 	padding-top: 5px;
+	padding-bottom: 5px;
 	text-align: center;
+	border-bottom: 1px solid #282828;
 }
 
-.mgt-selector-key,.mgt-selector-value,.mgt-save-data-view-text{
+.mgt-options{
+	padding: 5px;
+}
+
+.mgt-options-key,.mgt-options-value,.mgt-save-data-view-text{
 	padding-top: 5px;
 	padding-left: 20px;
 }
 
-.mgt-selector-button,.mgt-save-data-view-button{
+.mgt-options-button,.mgt-save-data-view-button{
 	padding-left: 40px;
+}
+
+.mgt-dv-list{
+	position: relative;
+	z-index: 10;
+	float: right;
+	padding: 5px;
+	background-color: white;
+}
+
+.mgt-dv-list-name{
+	padding-left: 10px;
+	padding-right: 10px;
+	border-bottom: 1px solid white;
+	background-color: #282828;
+}
+
+.mgt-dv-list-name a{
+	font-family: Times New Roman,'楷体';
+	font-size: 12px;
+	text-decoration: none;
+}
+
+.mgt-dv-list-name a:link{
+	color: white;
+}
+
+.mgt-dv-list-name a:hover{
+	color: #008000;
 }
 
 .mgt-data-view{
 	position: relative;
 	height: 500px;
-	margin-bottom: 5px;
-	border: 1px solid #282828;
 }
 
 .mgt-data-view-container{
@@ -387,10 +420,14 @@ body{
 	position: absolute;
 	top: 9px;
 	left: 500px;
+	width: 360px;
 	padding: 5px;
-	font-family: Times New Roman,'楷体';
-	font-size: 16px;
 	border: 1px solid #282828;
+}
+
+.mgt-save-data-view-title{
+	padding-top: 5px;
+	text-align: center;
 }
 
 /*****accordion*****/
