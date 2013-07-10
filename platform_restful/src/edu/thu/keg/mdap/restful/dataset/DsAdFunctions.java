@@ -362,7 +362,7 @@ public class DsAdFunctions {
 			fs = new DataField[fields.length()];
 			for (int i = 0; i < fs.length; i++) {
 				String fun = funcs.getString(i);
-				if (fun.equals("groupby"))
+				if (fun.toLowerCase().equals("gb"))
 					fs[i] = ds.getField(fields.getString(i));
 				else
 					fs[i] = new AggregatedDataField(ds.getField(fields
@@ -426,7 +426,7 @@ public class DsAdFunctions {
 			fs = new DataField[fields.length()];
 			for (int i = 0; i < fs.length; i++) {
 				String fun = funcs.getString(i);
-				if (fun.equals("groupby"))
+				if (fun.toLowerCase().equals("gb"))
 					fs[i] = ds.getField(fields.getString(i));
 				else
 					fs[i] = new AggregatedDataField(ds.getField(fields
