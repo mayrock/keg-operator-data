@@ -68,6 +68,7 @@ Common.dvFieldUrl = function(){return Common.ip() + "dvg/getdvfds?jsoncallback=?
 /*****dv post*****/
 Common.addDvUrl = function(){return Common.ip() + "dsa/adddv";};
 Common.modifyDvUrl = function(){return Common.ip() + "dsa/adddv";};
+Common.delDvUrl = function(){return Common.ip() + "";};
 
 Common.favListUrl = function(){return Common.ip() + "favg/getfavs?jsoncallback=?";};
 Common.favDataUrl = function(){return Common.ip() + "favg/getfav?jsoncallback=?";};

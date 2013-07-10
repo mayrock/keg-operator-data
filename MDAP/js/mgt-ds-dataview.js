@@ -47,11 +47,24 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
 		
 		Mgt.dataview(tabIndex,subType,dsIndex,dvType,dsName);
 		
+		var title = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
+		title.empty();
+		$("<span>modify/delete this data view</span><span>").appendTo(title);
 		var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex).find("input");
 		text.eq(0).val(dvName);
 		text.eq(1).val(dvDes);
 		$("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex)
-			.find("input").eq(0).val("modify data view");
+			.find("input").eq(0).val("modify");
+		
+		var button = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
+		$("<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>").appendTo(button);
+		var input = $("<input/>");
+		input.attr("type","button");
+		input.attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
+		input.val("delete");
+		input.attr("onclick","Mgt.deleteDataview(" + tabIndex + ",'" + subType + "'," +
+			dsIndex + ",'" + dvType + "','" + dvName + "','" + dsName + "')");
+		input.appendTo(button);
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
@@ -137,7 +150,7 @@ Mgt.dataview = function(tabIndex,subType,dsIndex,dvType,dsName){
 	var input = document.createElement("input");
 	$(input).attr("type","button");
 	$(input).attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
-	$(input).val("save data view");
+	$(input).val("save");
 	$(input).appendTo(button);
 	
 	Mgt.adjustHeight();
@@ -183,14 +196,9 @@ Mgt.loadChart = function(tabIndex,subType,dsIndex,dsName){
 		arr += "],";
 		jsonArr += "]";
 		
-		var dvOperate = "";
 		var input = $("#" + type + "-" + subType + "-mgt-sta-save-data-view-button-" + tabIndex + "-" + dsIndex).find("input").eq(0);
-		if(input.val() == "save data view"){
-			dvOperate = "save";
-		}else{
-			dvOperate = "modify";
-		}
-		input.attr("onclick","Mgt.saveDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'sta','" +
+		var dvOperate = input.val();
+		input.attr("onclick","Mgt.opDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'sta','" +
 			dsName + "','" + jsonArr + "');");
 		
 		$.getJSON(Common.dsDataUrl(),{
@@ -269,14 +277,9 @@ Mgt.loadMap = function(tabIndex,subType,dsIndex,dsName){
 		}
 		jsonArr += "]";
 		
-		var dvOperate = "";
 		var input = $("#" + type + "-" + subType + "-mgt-geo-save-data-view-button-" + tabIndex + "-" + dsIndex).find("input").eq(0);
-		if(input.val() == "save data view"){
-			dvOperate = "save";
-		}else{
-			dvOperate = "modify";
-		}
-		input.attr("onclick","Mgt.saveDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'geo','" +
+		var dvOperate = input.val();
+		input.attr("onclick","Mgt.opDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'geo','" +
 			dsName + "','" + jsonArr + "');");
 		
 		$.getJSON(Common.dsDataUrl(),{
@@ -307,7 +310,7 @@ Mgt.loadMap = function(tabIndex,subType,dsIndex,dsName){
 	});
 };
 
-Mgt.saveDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
+Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 	var type = "ds";
 	
 	var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex).find("input");
@@ -389,6 +392,42 @@ Mgt.saveDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr
 			alert(data.error);
 			return;
 		}
+	}).fail(function(jqXHR,textStatus,errorThrown){
+		console.log(jqXHR);
+		console.log(textStatus);
+		console.log(errorThrown);
+		alert("Oops, we got an error...");
+		return;
+	});
+};
+
+Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvName,dsName){
+	var type = "ds";
+	
+	$.post(Common.delDvUrl(),{
+		dataset: dvName
+	}).done(function(data,textStatus,jqXHR){
+		if(dvType == "sta"){
+			var radio = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-key-" + tabIndex + "-" + dsIndex).find("input");
+			for(var i = 0; i < radio.length; i++){
+				if(radio.eq(i).prop("checked") == true){
+					radio.eq(i).prop("checked",false);
+					break;
+				}
+			}
+		}
+		var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
+		for(var i = 0; i < checkbox.length; i++){
+			if(checkbox.eq(i).prop("checked") == true){
+				checkbox.eq(i).prop("checked","false");
+			}
+		}
+		
+		var dataview = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
+		dataview.css("display","none")
+		dataview.empty();
+		
+		Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
 	}).fail(function(jqXHR,textStatus,errorThrown){
 		console.log(jqXHR);
 		console.log(textStatus);
