@@ -201,6 +201,7 @@ public class DataViewImpl implements DataView {
 	 * @param name
 	 *            the name to set
 	 */
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -233,6 +234,7 @@ public class DataViewImpl implements DataView {
 	/**
 	 * @return the q
 	 */
+	@Override
 	public Query getQ() {
 		return q;
 	}
@@ -241,6 +243,7 @@ public class DataViewImpl implements DataView {
 	 * @param q
 	 *            the q to set
 	 */
+	@Override
 	public void setQ(Query q) {
 		this.q = q;
 	}

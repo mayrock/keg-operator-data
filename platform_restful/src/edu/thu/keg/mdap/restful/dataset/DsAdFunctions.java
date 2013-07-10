@@ -271,9 +271,10 @@ public class DsAdFunctions {
 		}
 		return Response.ok().build();
 	}
+
 	@POST
 	@Path("/setdv")
-	public Response setDataview(@FormParam("olddataview") String oldDv,
+	public Response setDataview(@FormParam("olddataview") String olddv,
 			@FormParam("dataset") String dataset,
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
@@ -310,7 +311,7 @@ public class DsAdFunctions {
 			kv = Arrays.copyOf(ks, ks.length + vs.length);
 			System.arraycopy(vs, 0, kv, ks.length, vs.length);
 			q = ds.getQuery().select(kv);
-			p.getDataSetManager().redefineView(oldDv, dataview, description, q,
+			p.getDataSetManager().redefineView(olddv, dataview, description, q,
 					ks, vs);
 
 			p.getDataSetManager().saveChanges();
