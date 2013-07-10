@@ -24,6 +24,7 @@ public class GeneralDataField implements DataField {
 	protected FieldType type;
 	protected boolean allowNull;
 	protected FieldFunctionality func;
+	protected Query query;
 	private boolean isDim;
 	@Override
 	public String getQueryName() {
@@ -52,13 +53,14 @@ public class GeneralDataField implements DataField {
 	 * @param allowNull Whether the field allows null value
 	 */
 	public GeneralDataField(String name, FieldType type, String description,
-			boolean isKey, boolean allowNull, boolean isDim, FieldFunctionality func) {
+			boolean isKey, boolean allowNull, boolean isDim, FieldFunctionality func, Query query) {
 		if (isKey == true && allowNull == true)
 			throw new IllegalArgumentException();
 		this.name = name;
 		this.queryName = name;
 		this.type = type;
 		this.dataset = null;
+		this.query = query;
 		
 		this.desps = new LocalizedMessage();
 		this.desps.setMessage(description);
@@ -83,6 +85,7 @@ public class GeneralDataField implements DataField {
 		this.type = type;
 		this.dataset = null;
 		this.desps = new LocalizedMessage();
+		this.query = null;
 		
 		this.desps.setMessage(description);
 		this.isKey = isKey;
@@ -154,6 +157,10 @@ public class GeneralDataField implements DataField {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+	@Override
+	public Query getQuery() {
+		return this.query;
 	}
 	
 }

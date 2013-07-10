@@ -2,7 +2,10 @@ package edu.thu.keg.mdap_impl.datamodel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import edu.thu.keg.mdap.datamodel.AggregatedDataField;
 import edu.thu.keg.mdap.datamodel.DataField;
@@ -25,6 +28,7 @@ public class QueryImpl implements Query {
 		this.fields = ds.getDataFields().toArray(new DataField[0]);
 		this.wheres = new ArrayList<WhereClause>();
 		this.orders = new ArrayList<OrderClause>();
+		this.join = null;
 		this.innerQuery = null;
 		this.setProvider(ds.getProvider());
 
@@ -35,18 +39,29 @@ public class QueryImpl implements Query {
 		this.fields = q.getFields();
 		this.wheres = q.getWhereClauses();
 		this.orders = q.getOrderClauses();
+		this.join = q.getJoinOnClause();
 		this.provider = q.getProvider();
 		this.innerQuery = q.getInnerQuery();
 		this.state = DataContentState.Ready;
 	}
 
 	QueryImpl(DataField[] fields, List<WhereClause> wheres,
-			List<OrderClause> orders, DataProvider provider, Query innerQuery) {
-		this.fields = fields;
-		this.wheres = wheres;
-		this.orders = orders;
-		this.provider = provider;
-		this.innerQuery = innerQuery;
+			List<OrderClause> orders,JoinOnClause join, DataProvider provider, Query innerQuery) {
+		if (innerQuery == null) {
+			this.fields = fields;
+			this.wheres = wheres;
+			this.orders = orders;
+			this.join = join;
+			this.provider = provider;
+			this.innerQuery = innerQuery;
+		} else {
+			this.fields = fields.clone();
+			this.wheres = wheres;
+			this.orders = orders;
+			this.join = join;
+			this.provider = provider;
+			this.innerQuery = innerQuery;
+		}
 		this.state = DataContentState.Ready;
 	}
 
@@ -56,6 +71,7 @@ public class QueryImpl implements Query {
 	private DataField[] fields;
 	private List<WhereClause> wheres;
 	private List<OrderClause> orders;
+	private JoinOnClause join;
 
 	@Override
 	public DataField[] getFields() {
@@ -98,12 +114,16 @@ public class QueryImpl implements Query {
 
 	@Override
 	public Query select(DataField... fields) {
-		if (this.getGroupByFields() != null)
-			return new QueryImpl(transformFields(fields), this.wheres,
-					this.orders, this.provider, this);
-		else
-			return new QueryImpl(fields, this.wheres, this.orders,
-					this.provider, null);
+		Query q = null;
+		if (this.getGroupByFields() != null) {
+			q = new QueryImpl(fields, null,
+					null, null, this.provider, this);
+			transformFields(q);
+		} else {
+			q = new QueryImpl(fields, this.wheres, this.orders,
+					this.join, this.provider, null);
+		}
+		return q;
 	}
 
 	@Override
@@ -121,20 +141,25 @@ public class QueryImpl implements Query {
 		List<WhereClause> wheres = new ArrayList<WhereClause>();
 		if (field instanceof AggregatedDataField) {
 			wheres.add(new WhereClause(field, op, value));
-			return new QueryImpl(transformFields(fields), wheres, this.orders,
-					this.provider, this);
+			Query q = new QueryImpl(fields, wheres, null,
+					null, this.provider, this);
+			transformFields(q);
+			return q;
 		} else {
 			wheres.addAll(this.wheres);
 			wheres.add(new WhereClause(field, op, value));
-			return new QueryImpl(fields, wheres, this.orders, this.provider,
+			return new QueryImpl(fields, wheres, this.orders, this.join, this.provider,
 					null);
 		}
 	}
 
 	@Override
-	public Query join(Query q2, DataField f1, DataField f2) {
-		// TODO Auto-generated method stub
-		return null;
+	public Query join(Query q2, Map<DataField, DataField> fieldsMap) {
+		JoinOnClause newJoin = new JoinOnClause(q2, fieldsMap);
+		Query q = new QueryImpl(this.fields, null, null, newJoin,
+				this.provider, this);
+		transformFields(q);
+		return q;
 	}
 
 	@Override
@@ -158,7 +183,7 @@ public class QueryImpl implements Query {
 		List<OrderClause> orders = new ArrayList<OrderClause>();
 		orders.addAll(this.orders);
 		orders.add(new OrderClause(field, order));
-		return new QueryImpl(this.fields, this.wheres, orders, this.provider,
+		return new QueryImpl(this.fields, this.wheres, orders, this.join, this.provider,
 				null);
 	}
 
@@ -188,20 +213,26 @@ public class QueryImpl implements Query {
 		return gf;
 	}
 
-	private DataField[] transformFields(DataField... dataFields) {
-		DataField[] nfs = new DataField[dataFields.length];
-		for (int i = 0; i < dataFields.length; i++) {
-			DataField df = dataFields[i];
-			if (df instanceof AggregatedDataField) {
-				DataField ndf = new GeneralDataField(df.getName(),
+	private void transformFields(Query q) {
+		for (int i = 0; i < q.getFields().length; i++) {
+			DataField df = q.getFields()[i];
+				q.getFields()[i] = new GeneralDataField(df.getName(),
 						df.getFieldType(), df.getDescription(), df.isKey(),
-						df.allowNull(), df.isDim(), df.getFunction());
-				nfs[i] = ndf;
-			} else {
-				nfs[i] = df;
-			}
+						df.allowNull(), df.isDim(), df.getFunction(), q.getInnerQuery());
 		}
-		return nfs;
+		HashMap<DataField, DataField> nfs = new HashMap<DataField, DataField>();
+		for (DataField fs : q.getJoinOnClause().getOns().keySet()) {
+			DataField nk = new GeneralDataField(fs.getName(),
+					fs.getFieldType(), fs.getDescription(), fs.isKey(),
+					fs.allowNull(), fs.isDim(), fs.getFunction(), q.getJoinOnClause().getQuery());
+			DataField df = q.getJoinOnClause().getOns().get(fs);
+			DataField nv = new GeneralDataField(df.getName(),
+					df.getFieldType(), df.getDescription(), df.isKey(),
+					df.allowNull(), df.isDim(), df.getFunction(), q.getInnerQuery());
+			
+			nfs.put(nk,nv);		
+		}
+		q.getJoinOnClause().setOns(nfs);
 	}
 
 	@Override
@@ -302,4 +333,9 @@ public class QueryImpl implements Query {
 	// }
 	// return true;
 	// }
+
+	@Override
+	public JoinOnClause getJoinOnClause() {
+		return this.join;
+	}
 }

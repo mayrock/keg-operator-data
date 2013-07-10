@@ -143,4 +143,9 @@ public class AggregatedDataField implements DataField {
 		return desps.getMessage(locale);
 	}
 
+	@Override
+	public Query getQuery() {
+		return null;
+	}
+
 }

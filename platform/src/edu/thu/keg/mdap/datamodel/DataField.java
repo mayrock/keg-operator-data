@@ -103,6 +103,8 @@ public interface DataField {
 	 * @return Reference of the dataset
 	 */
 	public DataSet getDataSet();
+	
+	public Query getQuery();
 
 	/**
 	 * Get the description of the field, containing information about the column

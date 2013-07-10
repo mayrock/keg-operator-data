@@ -4,10 +4,8 @@
 package edu.thu.keg.mdap_impl.datafeature;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import oracle.sql.ARRAY;
 
 import edu.thu.keg.mdap.datafeature.DataFeature;
 import edu.thu.keg.mdap.datafeature.DataFeatureType;

@@ -5,22 +5,21 @@ package edu.thu.keg.mdap_impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.naming.OperationNotSupportedException;
 
-import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.Log;
 
 import edu.thu.keg.mdap.DataProviderManager;
 import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
-import edu.thu.keg.mdap.datafeature.DataFeature;
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datafeature.DataView;
 import edu.thu.keg.mdap.datamodel.AggregatedDataField;
-import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.AggregatedDataField.AggrFunction;
 import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
@@ -28,7 +27,6 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
-import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
@@ -178,7 +176,7 @@ public class PlatformImpl implements Platform {
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "",
 				false, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false,
-				false, true, FieldFunctionality.Other);
+				false, true, FieldFunctionality.Other, null);
 		dsSite = getDataSetManager().createDataSet("RegionInfo2", "xm", "基站信息",
 				provider, true, fields);
 		// 3rd DataView
@@ -189,15 +187,21 @@ public class PlatformImpl implements Platform {
 							new AggregatedDataField(dsSite.getField("SiteId"),
 									AggrFunction.COUNT, "SiteCount"))
 					.orderBy("SiteCount", Order.DESC);
-			dv = getDataSetManager()
-					.defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
-							dsSite.getId(), DataFeatureType.ValueFeature, q);
-			dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
+//			dv = getDataSetManager()
+	//				.defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
+		//					dsSite.getId(), DataFeatureType.ValueFeature, q);
+		//	dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
+			Map<DataField, DataField> fm = new HashMap<DataField, DataField>();
+			Query q2 = dsSite.getQuery();
+			fm.put(q2.getFields()[0], q.getFields()[0]);
+			q = q.join(q2, fm);
+			System.out.println("JOIN: " + q.toString());
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
 			// TODO Auto-generated catch block
 			System.out.println(e1.getMessage());
 		}
+		
 
 		// 4th DataSet
 		fields = new DataField[6];

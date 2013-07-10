@@ -4,6 +4,7 @@
 package edu.thu.keg.mdap.datamodel;
 
 import java.util.List;
+import java.util.Map;
 
 import edu.thu.keg.mdap.provider.DataProvider;
 
@@ -86,6 +87,40 @@ public interface Query extends DataContent {
 			return order;
 		}
 		
+	}
+	
+	class JoinOnClause {
+		Query query;
+		Map<DataField, DataField> ons;
+		
+		
+		/**
+		 * @param query
+		 * @param ons
+		 */
+		public JoinOnClause(Query query, Map<DataField, DataField> ons) {
+			super();
+			this.query = query;
+			this.ons = ons;
+		}
+		/**
+		 * @param ons the ons to set
+		 */
+		public void setOns(Map<DataField, DataField> ons) {
+			this.ons = ons;
+		}
+		/**
+		 * @return the query
+		 */
+		public Query getQuery() {
+			return query;
+		}
+		/**
+		 * @return the ons
+		 */
+		public Map<DataField, DataField> getOns() {
+			return ons;
+		}
 	}
 	
 
@@ -181,7 +216,7 @@ public interface Query extends DataContent {
 	 * @param f2 DataField from the second query to join on
 	 * @return a new joined Query
 	 */
-	public Query join(Query q2, DataField f1, DataField f2);
+	public Query join(Query q2, Map<DataField, DataField> fieldsMap);
 	/**
 	 * Set the provider used for executing this query and getting data.
 	 * @param provider The provider.
@@ -214,5 +249,7 @@ public interface Query extends DataContent {
 	 * Get the groupBy key fields of this query, if any
 	 */
 	public List<DataField> getGroupByFields();
+	
+	public JoinOnClause getJoinOnClause();
 	
 }

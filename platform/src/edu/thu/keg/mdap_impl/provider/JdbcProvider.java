@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
@@ -53,34 +55,66 @@ public class JdbcProvider extends AbstractDataProvider {
 	public String getQueryString(Query q) {
 		return this.getQueryString(q, 0);
 	}
-
 	private String getQueryString(Query q, int level) {
+		HashMap<Query, String> aliasMap = new HashMap<Query, String>();
+		if (q.getInnerQuery() != null) {
+			String alias = "t_" + level;
+			aliasMap.put(q.getInnerQuery(), alias);
+		}
+
+		if (q.getJoinOnClause() != null) {
+			String alias = "tj_" + level;
+			aliasMap.put(q.getJoinOnClause().getQuery(), alias);
+		}
+		
 		DataField[] fields = q.getFields();
 		StringBuffer sb = new StringBuffer("SELECT ");
 
 		for (int i = 0; i < fields.length - 1; i++) {
 			DataField df = fields[i];
-			sb.append(df.getQueryName()).append(" AS ").append(df.getName())
-					.append(",");
+			if (df.getQuery() == null) {
+				sb.append(df.getQueryName()).append(" AS ").append(df.getName())
+						.append(",");
+			} else {
+				sb.append(getFieldAliasName(df, aliasMap)).append(" AS ").append(df.getName())
+				.append(",");
+			}
 		}
-		sb.append(fields[fields.length - 1].getQueryName()).append(" AS ")
-				.append(fields[fields.length - 1].getName());
+		DataField df = fields[fields.length - 1];
+		if (df.getQuery() == null) {
+			sb.append(df.getQueryName()).append(" AS ").append(df.getName());
+		} else {
+			sb.append(getFieldAliasName(df, aliasMap)).append(" AS ").append(df.getName());
+		}
 
 		if (q.getInnerQuery() == null)
 			sb.append(" FROM ").append(fields[0].getDataSet().getName());
-		else
+		else {
+			
 			sb.append(" FROM ( ")
 					.append(getQueryString(q.getInnerQuery(), level + 1))
-					.append(" ) as t_").append(level);
+					.append(" ) as ").append(aliasMap.get(q.getInnerQuery()));
+		}
+		if (q.getJoinOnClause() != null) {
+			sb.append(" INNER JOIN (").append(getQueryString(q.getJoinOnClause().getQuery(), level + 1)).append(") AS ")
+				.append(aliasMap.get(q.getJoinOnClause().getQuery())).append(" ON ");
+			for (Entry<DataField, DataField> fs : q.getJoinOnClause().getOns().entrySet()) {
+				sb.append(getFieldAliasName(fs.getKey(), aliasMap)).append("=")
+				.append(getFieldAliasName(fs.getValue(), aliasMap)).append(" AND ");
+			}
+			sb.delete(sb.length() - 4, sb.length());
+		}
+		
+		
 		List<WhereClause> wheres = q.getWhereClauses();
-		if (wheres.size() > 0) {
+		if (wheres != null && wheres.size() > 0) {
 			sb.append(" WHERE ");
 			for (int i = 0; i < wheres.size() - 1; i++) {
 				WhereClause where = wheres.get(i);
-				sb.append(whereToSB(where));
+				sb.append(whereToSB(where, aliasMap));
 				sb.append(" AND ");
 			}
-			sb.append(whereToSB(wheres.get(wheres.size() - 1)));
+			sb.append(whereToSB(wheres.get(wheres.size() - 1), aliasMap));
 		}
 
 		List<DataField> gb = q.getGroupByFields();
@@ -94,15 +128,15 @@ public class JdbcProvider extends AbstractDataProvider {
 
 		if (level == 0) {
 			List<OrderClause> orders = q.getOrderClauses();
-			if (orders.size() > 0) {
+			if (orders != null && orders.size() > 0) {
 				sb.append(" ORDER BY ");
 				for (int i = 0; i < orders.size() - 1; i++) {
 					OrderClause order = orders.get(i);
-					sb.append(order.getField().getName()).append(" ")
+					sb.append(getFieldAliasName(order.getField(), aliasMap)).append(" ")
 							.append(order.getOrder().toString());
 					sb.append(", ");
 				}
-				sb.append(orders.get(orders.size() - 1).getField().getName())
+				sb.append(getFieldAliasName(orders.get(orders.size() - 1).getField(), aliasMap))
 						.append(" ")
 						.append(orders.get(orders.size() - 1).getOrder()
 								.toString());
@@ -111,10 +145,16 @@ public class JdbcProvider extends AbstractDataProvider {
 
 		return sb.toString();
 	}
-
-	private StringBuilder whereToSB(WhereClause where) {
+	private String getFieldAliasName(DataField f, Map<Query, String> aliasMap) {
+		if (f.getQuery() == null) {
+			return f.getName();
+		} else {
+			return aliasMap.get(f.getQuery()) + "." + f.getName();
+		}
+	}
+	private StringBuilder whereToSB(WhereClause where,  Map<Query, String> aliasMap) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(where.getField().getName()).append(
+		sb.append(getFieldAliasName(where.getField(), aliasMap)).append(
 				where.getOperator().toString());
 		if (where.getField().getFieldType().isNumber())
 			sb.append(where.getValue().toString());
