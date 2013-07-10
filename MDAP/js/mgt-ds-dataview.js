@@ -441,6 +441,22 @@ Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvName,dsName){
 			
 			$("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex).css("display","none");
 			Mgt.adjustHeight();
+			var title = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
+			title.empty();
+			$("<span>save this data view</span><span>").appendTo(title);
+			
+			var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex);
+			text.empty();
+			$("<span>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type = 'text' maxlength = '16'/><br/>").appendTo(text);
+			$("<span>Description:</span><input type = 'text'/>").appendTo(text);
+			
+			var button = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
+			button.empty();
+			var input = $("<input/>");
+			input.attr("type","button");
+			input.attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
+			input.val("save");
+			input.appendTo(button);
 			
 			var content = $("#dv-" + dvType + "-content-" + tabIndex);
 			content.empty();
