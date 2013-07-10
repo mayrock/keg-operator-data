@@ -481,15 +481,17 @@ public class DsAdFunctions {
 		} catch (UserNotInPoolException | JSONException e) {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
+
 			try {
 				return Response
-						.created(new URI("http://www.baidu.com"))
-						.entity((new JSONObject()).put("status", "false")
-								.put("msg", e.getMessage()).toString()).build();
-			} catch (URISyntaxException | JSONException e1) {
+						.ok()
+						.entity(new JSONObject().put("error", e.getMessage())
+								.toString()).build();
+			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+
 		}
 		return Response.status(Status.OK).build();
 	}
@@ -513,7 +515,7 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/rmdv")
-	public void removeDataview(@FormParam("dataset") String dataview) {
+	public Response removeDataview(@FormParam("dataset") String dataview) {
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)
@@ -524,13 +526,15 @@ public class DsAdFunctions {
 			datasetManager.saveChanges();
 		} catch (UserNotInPoolException | DataProviderException | IOException e) {
 			try {
-				httpServletResponse.sendError(
-						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-						e.getMessage());
-			} catch (IOException e1) {
+				return Response
+						.ok()
+						.entity(new JSONObject().put("error", e.getMessage())
+								.toString()).build();
+			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
+		return Response.status(Status.OK).build();
 	}
 }
