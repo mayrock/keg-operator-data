@@ -349,12 +349,18 @@ Mgt.saveDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr
 		dfType = "GeoFeature";
 	}
 	
+	var url = "";
+	var msg = JSON.parse("{}");
 	if(dvOperate == "save"){
 		url = Common.addDvUrl();
-		msg = "{\"dataset\":\"" + dsName + "\",\"dataview\":\"" + dvName + "\",\"description\":\"" + dvDes +
-			"\",\"datafeaturetype\":\"" + dfType + "\",\"keys\":" + key + ",\"values\":" + value + "}";
+		msg.dataset = dsName;
+		msg.dataview = dvName;
+		msg.description = dvDes;
+		msg.datafeaturetype = dfType;
+		msg.keys = key;
+		msg.values = value;
 	}
-	$.post(url,$.parseJSON(msg))
+	$.post(url,msg)
 	.done(function(data,textStatus,jqXHR){
 		console.log(data);
 		console.log(textStatus);
