@@ -350,6 +350,8 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 	
 	var url = "";
 	var msg = JSON.parse("{}");
+	var newDvName = "";
+	var newDvDes = "";
 	if(dvOperate == "save"){
 		url = Common.addDvUrl();
 		msg.dataset = dsName;
@@ -362,8 +364,10 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 		url = Common.modifyDvUrl();
 		msg.olddataview = span.eq(1).text();
 		msg.dataset = dsName;
-		msg.dataview = text.eq(0).val();
-		msg.description = text.eq(1).val();
+		newDvName = text.eq(0).val();
+		msg.dataview = newDvName;
+		newDvDes = text.eq(1).val();
+		msg.description = newDvDes;
 		msg.keys = key;
 		msg.values = value;
 	}
@@ -372,14 +376,14 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 		console.log(data);
 		console.log(textStatus);
 		console.log(jqXHR);
-		console.log(data == "");
 		if(data == ""){
-			$("#dv-" + dvType + "-content-" + tabIndex).empty();
+			var content = $("#dv-" + dvType + "-content-" + tabIndex);
+			content.empty();
 			
 			var tabs = document.createElement("div");
 			tabs.setAttribute("id","dv-" + dvType + "-tabs-" + tabIndex);
 			tabs.setAttribute("class","mgt-tabs");
-			$(tabs).appendTo("#dv-" + dvType + "-content-" + tabIndex);
+			$(tabs).appendTo(content);
 			
 			var tabs_ul = document.createElement("ul");
 			tabs_ul.setAttribute("id","dv-" + dvType + "-tabs-ul-" + tabIndex);
@@ -389,6 +393,9 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 			Mgt.subTab(tabIndex,"dv",dvType);
 			Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
 			
+			if(dvOperate == "modify"){
+				Mgt.drawOptions(tabIndex,subType,dsIndex,dvType,newDvName,newDvDes,dsName);
+			}
 			return;
 		}
 		data = $.parseJSON(data);
@@ -411,27 +418,52 @@ Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvName,dsName){
 	$.post(Common.delDvUrl(),{
 		dataset: dvName
 	}).done(function(data,textStatus,jqXHR){
-		if(dvType == "sta"){
-			var radio = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-key-" + tabIndex + "-" + dsIndex).find("input");
-			for(var i = 0; i < radio.length; i++){
-				if(radio.eq(i).prop("checked") == true){
-					radio.eq(i).prop("checked",false);
-					break;
+		console.log(data);
+		console.log(textStatus);
+		console.log(jqXHR);
+		console.log(data == "");
+		if(data == ""){
+			if(dvType == "sta"){
+				var radio = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-key-" + tabIndex + "-" + dsIndex).find("input");
+				for(var i = 0; i < radio.length; i++){
+					if(radio.eq(i).prop("checked") == true){
+						radio.eq(i).prop("checked",false);
+						break;
+					}
 				}
 			}
-		}
-		var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
-		for(var i = 0; i < checkbox.length; i++){
-			if(checkbox.eq(i).prop("checked") == true){
-				checkbox.eq(i).prop("checked","false");
+			var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
+			for(var i = 0; i < checkbox.length; i++){
+				if(checkbox.eq(i).prop("checked") == true){
+					checkbox.eq(i).prop("checked",false);
+				}
 			}
+			
+			$("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex).css("display","none");
+			Mgt.adjustHeight();
+			
+			var content = $("#dv-" + dvType + "-content-" + tabIndex);
+			content.empty();
+			
+			var tabs = document.createElement("div");
+			tabs.setAttribute("id","dv-" + dvType + "-tabs-" + tabIndex);
+			tabs.setAttribute("class","mgt-tabs");
+			$(tabs).appendTo(content);
+			
+			var tabs_ul = document.createElement("ul");
+			tabs_ul.setAttribute("id","dv-" + dvType + "-tabs-ul-" + tabIndex);
+			tabs_ul.setAttribute("class","mgt-tabs-ul");
+			$(tabs_ul).appendTo(tabs);
+			
+			Mgt.subTab(tabIndex,"dv",dvType);
+			Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
+			return;
 		}
-		
-		var dataview = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
-		dataview.css("display","none")
-		dataview.empty();
-		
-		Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
+		data = $.parseJSON(data);
+		if(data.hasOwnProperty("error")){
+			alert(data.error);
+			return;
+		}
 	}).fail(function(jqXHR,textStatus,errorThrown){
 		console.log(jqXHR);
 		console.log(textStatus);
