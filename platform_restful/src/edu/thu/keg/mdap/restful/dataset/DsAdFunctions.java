@@ -496,7 +496,7 @@ public class DsAdFunctions {
 
 	@DELETE
 	@Path("/rmds")
-	public void removeDataset(@PathParam("dataset") String dataset) {
+	public void removeDataset(@FormParam("dataset") String dataset) {
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)
@@ -511,9 +511,9 @@ public class DsAdFunctions {
 		}
 	}
 
-	@DELETE
+	@POST
 	@Path("/rmdv")
-	public void removeDataview(@PathParam("dataset") String dataview) {
+	public void removeDataview(@FormParam("dataset") String dataview) {
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)

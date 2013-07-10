@@ -251,6 +251,8 @@ public class DataViewImpl implements DataView {
 	public void resetView(String description, String name, Query q,
 			List<DataField> key, List<DataField> values) {
 		this.setDescription(description);
+		//to-do
+		this.id = name;
 		this.setName(name);
 		this.setQ(q);
 		this.setKeyFields(key);
@@ -259,6 +261,7 @@ public class DataViewImpl implements DataView {
 
 	public void resetView(String description, String name, Query q) {
 		this.setDescription(description);
+		this.id = name;
 		this.setName(name);
 		this.setQ(q);
 		this.initKeyValueFields();

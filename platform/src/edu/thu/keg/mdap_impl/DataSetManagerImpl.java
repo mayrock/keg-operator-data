@@ -248,7 +248,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		if (!views.containsValue(dv))
 			return;
 		// dv.getProvider().removeContent(dv);
-		datasetMapViews.get(dv.getDataSet()).remove(dv);
+
 		removeDSMeta(dv);
 	}
 
@@ -301,6 +301,7 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	private void removeDSMeta(DataView dv) {
 		views.remove(dv);
+		datasetMapViews.get(dv.getDataSet()).remove(dv);
 		for (Set<DataView> list : viewsMap.values()) {
 			list.remove(dv);
 		}
@@ -365,31 +366,42 @@ public class DataSetManagerImpl implements DataSetManager {
 	 * edu.thu.keg.mdap.datamodel.Query)
 	 */
 	@Override
-	public void redefineView(String id, String name, String description,
+	public void redefineView(String oldId, String name, String description,
 			Query q, DataField[] key, DataField[] values)
 			throws IllegalArgumentException {
 		if (name == null || name.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		if (!this.views.containsKey(id))
-			throw new IllegalArgumentException("Dataview name: " + id
+		if (this.views.containsKey(name))
+			throw new IllegalArgumentException("new dataview name: " + name
+					+ " exists!");
+		if (!this.views.containsKey(oldId))
+			throw new IllegalArgumentException("old dataview name: " + oldId
 					+ " not exists!");
-		DataView v = this.views.get(id);
+		DataView v = this.views.get(oldId);
 		v.resetView(description, name, q, Arrays.asList(key),
 				Arrays.asList(values));
+		this.views.remove(oldId);
+		this.views.put(v.getId(), v);
+		// this.views.put(, value)
 	}
 
 	@Override
-	public void redefineView(String id, String name, String description, Query q)
-			throws IllegalArgumentException {
+	public void redefineView(String oldId, String name, String description,
+			Query q) throws IllegalArgumentException {
 		if (name == null || name.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		if (!this.views.containsKey(id))
-			throw new IllegalArgumentException("Dataview name: " + id
+		if (this.views.containsKey(name))
+			throw new IllegalArgumentException("new dataview name: " + name
+					+ " exists!");
+		if (!this.views.containsKey(oldId))
+			throw new IllegalArgumentException("Dataview name: " + oldId
 					+ " not exists!");
-		DataView v = this.views.get(id);
+		DataView v = this.views.get(oldId);
 		v.resetView(description, name, q);
+		this.views.remove(oldId);
+		this.views.put(v.getId(), v);
 	}
 
 	private void addDataView(DataView v) {
