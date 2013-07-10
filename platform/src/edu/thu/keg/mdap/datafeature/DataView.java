@@ -3,6 +3,9 @@
  */
 package edu.thu.keg.mdap.datafeature;
 
+import java.util.List;
+
+import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.TableStructure;
 
@@ -45,4 +48,9 @@ public interface DataView extends DataFeature, TableStructure {
 	 * @param q
 	 */
 	public void setQ(Query q);
+
+	public void resetView(String description, String name, Query q,
+			List<DataField> key, List<DataField> values);
+
+	public void resetView(String description, String name, Query q);
 }

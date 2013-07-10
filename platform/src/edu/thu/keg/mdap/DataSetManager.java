@@ -185,4 +185,7 @@ public interface DataSetManager {
 	public void redefineView(String Id, String name, String description,
 			Query q, DataField[] key, DataField[] values)
 			throws IllegalArgumentException;
+
+	public void redefineView(String Id, String name, String description, Query q)
+			throws IllegalArgumentException;
 }

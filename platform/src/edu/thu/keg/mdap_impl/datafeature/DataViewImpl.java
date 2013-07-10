@@ -248,4 +248,20 @@ public class DataViewImpl implements DataView {
 		this.q = q;
 	}
 
+	public void resetView(String description, String name, Query q,
+			List<DataField> key, List<DataField> values) {
+		this.setDescription(description);
+		this.setName(name);
+		this.setQ(q);
+		this.setKeyFields(key);
+		this.setValueFields(values);
+	}
+
+	public void resetView(String description, String name, Query q) {
+		this.setDescription(description);
+		this.setName(name);
+		this.setQ(q);
+		this.initKeyValueFields();
+	}
+
 }

@@ -375,11 +375,21 @@ public class DataSetManagerImpl implements DataSetManager {
 			throw new IllegalArgumentException("Dataview name: " + id
 					+ " not exists!");
 		DataView v = this.views.get(id);
-		v.setDescription(description);
-		v.setName(name);
-		v.setQ(q);
-		v.setKeyFields(Arrays.asList(key));
-		v.setValueFields(Arrays.asList(values));
+		v.resetView(description, name, q, Arrays.asList(key),
+				Arrays.asList(values));
+	}
+
+	@Override
+	public void redefineView(String id, String name, String description, Query q)
+			throws IllegalArgumentException {
+		if (name == null || name.equals(""))
+			throw new IllegalArgumentException(
+					"Dataview name & owner can't be empty!");
+		if (!this.views.containsKey(id))
+			throw new IllegalArgumentException("Dataview name: " + id
+					+ " not exists!");
+		DataView v = this.views.get(id);
+		v.resetView(description, name, q);
 	}
 
 	private void addDataView(DataView v) {

@@ -40,6 +40,7 @@ import edu.thu.keg.mdap.DataSetManager;
 import edu.thu.keg.mdap.Platform;
 import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.datafeature.DataView;
+import edu.thu.keg.mdap.datamodel.AggregatedDataField;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
@@ -210,8 +211,6 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/adddv")
-	// @Consumes({ MediaType.APPLICATION_JSON })
-	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public Response createDataview(@FormParam("dataset") String dataset,
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
@@ -314,6 +313,130 @@ public class DsAdFunctions {
 			p.getDataSetManager().redefineView(olddv, dataview, description, q,
 					ks, vs);
 
+			p.getDataSetManager().saveChanges();
+		} catch (IOException | UserNotInPoolException
+				| OperationNotSupportedException | DataProviderException
+				| JSONException | IllegalArgumentException e) {
+
+			try {
+				return Response
+						.ok()
+						.entity(new JSONObject().put("error", e.getMessage())
+								.toString()).build();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		return Response.ok().build();
+	}
+
+	@POST
+	@Path("/adddvagg")
+	public Response createDataviewAggregated(
+			@FormParam("dataset") String dataset,
+			@FormParam("dataview") String dataview,
+			@FormParam("description") String description,
+			@FormParam("fields") JSONArray fields,
+			@FormParam("funcs") JSONArray funcs) {
+		log.info(uriInfo.getAbsolutePath());
+		session = httpServletRequest.getSession();
+		System.out.println("POST create dataview:\n" + dataset + " " + dataview
+				+ "\n " + fields.toString() + "\n" + funcs.toString());
+
+		try {
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			ManagementPlatform mp = (ManagementPlatform) servletcontext
+					.getAttribute("managementplatform");
+			System.out
+					.println("session user=" + session.getAttribute("userid"));
+
+			DataView dv = null;
+			DataSet ds = null;
+			DataField[] fs = null;
+			Query q = null;
+
+			ds = p.getDataSetManager().getDataSet(dataset);
+			fs = new DataField[fields.length()];
+			for (int i = 0; i < fs.length; i++) {
+				String fun = funcs.getString(i);
+				if (fun.equals("groupby"))
+					fs[i] = ds.getField(fields.getString(i));
+				else
+					fs[i] = new AggregatedDataField(ds.getField(fields
+							.getString(i)),
+							AggregatedDataField.AggrFunction.valueOf(funcs
+									.getString(i)), fields.getString(i) + " "
+									+ funcs.getString(i));
+			}
+			q = ds.getQuery().select(fs);
+			dv = p.getDataSetManager().defineView(dataview,
+					(String) session.getAttribute("userid"), dataset,
+					description, DataFeatureType.ValueFeature, q);
+
+			p.getDataSetManager().saveChanges();
+		} catch (IOException | UserNotInPoolException
+				| OperationNotSupportedException | DataProviderException
+				| JSONException | IllegalArgumentException e) {
+
+			try {
+				return Response
+						.ok()
+						.entity(new JSONObject().put("error", e.getMessage())
+								.toString()).build();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		return Response.ok().build();
+	}
+
+	@POST
+	@Path("/setdvagg")
+	public Response setDataviewAggregated(
+			@FormParam("olddataview") String olddv,
+			@FormParam("dataset") String dataset,
+			@FormParam("dataview") String dataview,
+			@FormParam("description") String description,
+			@FormParam("fields") JSONArray fields,
+			@FormParam("funcs") JSONArray funcs) {
+		log.info(uriInfo.getAbsolutePath());
+		session = httpServletRequest.getSession();
+		System.out.println("POST create dataview:\n" + dataset + " " + dataview
+				+ "\n " + fields.toString() + "\n" + funcs.toString());
+
+		try {
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			ManagementPlatform mp = (ManagementPlatform) servletcontext
+					.getAttribute("managementplatform");
+			System.out
+					.println("session user=" + session.getAttribute("userid"));
+
+			DataView dv = null;
+			DataSet ds = null;
+			DataField[] fs = null;
+			Query q = null;
+
+			ds = p.getDataSetManager().getDataSet(dataset);
+			fs = new DataField[fields.length()];
+			for (int i = 0; i < fs.length; i++) {
+				String fun = funcs.getString(i);
+				if (fun.equals("groupby"))
+					fs[i] = ds.getField(fields.getString(i));
+				else
+					fs[i] = new AggregatedDataField(ds.getField(fields
+							.getString(i)),
+							AggregatedDataField.AggrFunction.valueOf(funcs
+									.getString(i)), fields.getString(i) + " "
+									+ funcs.getString(i));
+			}
+			q = ds.getQuery().select(fs);
+			p.getDataSetManager().redefineView(olddv, dataview, description, q);
 			p.getDataSetManager().saveChanges();
 		} catch (IOException | UserNotInPoolException
 				| OperationNotSupportedException | DataProviderException
