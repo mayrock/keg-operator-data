@@ -33,9 +33,9 @@ Common.favWidth = function(){return 200;};
 
 Common.ip = function(){
 	/*****aplha*****/
-	return "http://10.1.1.55:8080/keg2/rest/";
+//	return "http://10.1.1.55:8080/keg2/rest/";
 	/*****release*****/
-//	return "http://10.1.1.55:8080/keg1/rest/";
+	return "http://10.1.1.55:8080/keg1/rest/";
 };
 
 /*****post*****/
@@ -67,8 +67,8 @@ Common.dvFieldUrl = function(){return Common.ip() + "dvg/getdvfds?jsoncallback=?
 
 /*****dv post*****/
 Common.addDvUrl = function(){return Common.ip() + "dsa/adddv";};
-Common.modifyDvUrl = function(){return Common.ip() + "dsa/adddv";};
-Common.delDvUrl = function(){return Common.ip() + "";};
+Common.modifyDvUrl = function(){return Common.ip() + "dsa/setdv";};
+Common.delDvUrl = function(){return Common.ip() + "dsa/rmdv";};
 
 Common.favListUrl = function(){return Common.ip() + "favg/getfavs?jsoncallback=?";};
 Common.favDataUrl = function(){return Common.ip() + "favg/getfav?jsoncallback=?";};

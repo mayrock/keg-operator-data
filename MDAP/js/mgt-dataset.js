@@ -116,11 +116,13 @@ Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
 				
 				for(var i = 0; i < data.length; i++){
 					if(data[i].functionality == "Identifier"){
-						$("<input type = 'radio' name = 'key' value = '" + i + "'/><span>" + data[i].fieldName + " </span>")
-							.appendTo("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex);
+						$("<input type = 'radio' name = 'key' value = '" + i + "' " +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "','sta');\"/><span>" +
+							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex);
 					}else{
-						$("<input type = 'checkbox' value = '" + i + "'/><span>" + data[i].fieldName + " </span>")
-							.appendTo("#" + type + "-" + subType + "-mgt-sta-options-value-" + tabIndex + "-" + dsIndex);
+						$("<input type = 'checkbox' value = '" + i + "' " +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "','sta');\"/><span>" +
+							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-value-" + tabIndex + "-" + dsIndex);
 					}
 				}
 			}
@@ -137,8 +139,9 @@ Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
 							.appendTo("#" + type + "-" + subType + "-mgt-geo-options-key-" + tabIndex + "-" + dsIndex);
 					}
 					if((data[i].functionality != "Latitude") && (data[i].functionality != "Longitude")){
-						$("<input type = 'checkbox' value = '" + i + "'/><span>" + data[i].fieldName + " </span>")
-							.appendTo("#" + type + "-" + subType + "-mgt-geo-options-value-" + tabIndex + "-" + dsIndex);
+						$("<input type = 'checkbox' value = '" + i + "' " +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "','geo');\"/><span>" +
+							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-geo-options-value-" + tabIndex + "-" + dsIndex);
 					}
 				}
 				for(var i = 0; i < data.length; i++){
@@ -199,7 +202,7 @@ Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsName){
 	button.setAttribute("class","mgt-options-button");
 	$(button).appendTo(options);
 	$("<input type = 'button' value = 'show this data view' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;' " +
-		"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dsName + "');\"/>").appendTo(button);
+		"onclick = \"Mgt.showDataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dsName + "');\"/>").appendTo(button);
 	
 	var dataview = document.createElement("div");
 	dataview.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
@@ -208,6 +211,40 @@ Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsName){
 	$(dataview).css({
 		"display": "none"
 	});
+	
+	var dvContainer = document.createElement("div");
+	dvContainer.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-data-view-container-" + tabIndex + "-" + dsIndex);
+	dvContainer.setAttribute("class","mgt-data-view-container");
+	$(dvContainer).appendTo(dataview);
+	
+	var saveDv = document.createElement("div");
+	saveDv.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-save-data-view-" + tabIndex + "-" + dsIndex);
+	saveDv.setAttribute("class","mgt-save-data-view");
+	$(saveDv).appendTo(dataview);
+	
+	title = document.createElement("div");
+	title.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
+	title.setAttribute("class","mgt-save-data-view-title");
+	$(title).appendTo(saveDv);
+	$("<span>save this data view</span><span>").appendTo(title);
+	
+	var text = document.createElement("div");
+	text.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex);
+	text.setAttribute("class","mgt-save-data-view-text");
+	$(text).appendTo(saveDv);
+	$("<span>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type = 'text' maxlength = '16' id = 'dvName'/><br/>").appendTo(text);
+	$("<span>Description:</span><input type = 'text' id = 'dvDes'/>").appendTo(text);
+	
+	button = document.createElement("div");
+	button.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
+	button.setAttribute("class","mgt-save-data-view-button");
+	$(button).appendTo(saveDv);
+	
+	var input = document.createElement("input");
+	$(input).attr("type","button");
+	$(input).attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
+	$(input).val("save");
+	$(input).appendTo(button);
 	
 	Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
 };
