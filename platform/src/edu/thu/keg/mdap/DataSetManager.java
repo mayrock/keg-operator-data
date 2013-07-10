@@ -175,12 +175,14 @@ public interface DataSetManager {
 	 * @return
 	 */
 	public DataView defineView(String name, String owner, String dataset,
-			String description, int permission, DataFeatureType type, Query q,
-			DataField[] key, DataField[] values)
-			throws IllegalArgumentException;
+			String description, DataFeatureType type, Query q, DataField[] key,
+			DataField[] values) throws IllegalArgumentException;
 
 	public DataView defineView(String name, String owner, String dataset,
-			String description, int permission, DataFeatureType type, Query q)
+			String description, DataFeatureType type, Query q)
 			throws IllegalArgumentException;
 
+	public void redefineView(String Id, String name, String description,
+			Query q, DataField[] key, DataField[] values)
+			throws IllegalArgumentException;
 }

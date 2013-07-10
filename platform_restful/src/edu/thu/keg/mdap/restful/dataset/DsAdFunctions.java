@@ -251,8 +251,67 @@ public class DsAdFunctions {
 			q = ds.getQuery().select(kv);
 			dv = p.getDataSetManager().defineView(dataview,
 					(String) session.getAttribute("userid"), dataset,
-					description, DataView.PERMISSION_PUBLIC,
-					DataFeatureType.valueOf(datafuturetype), q, ks, vs);
+					description, DataFeatureType.valueOf(datafuturetype), q,
+					ks, vs);
+
+			p.getDataSetManager().saveChanges();
+		} catch (IOException | UserNotInPoolException
+				| OperationNotSupportedException | DataProviderException
+				| JSONException | IllegalArgumentException e) {
+
+			try {
+				return Response
+						.ok()
+						.entity(new JSONObject().put("error", e.getMessage())
+								.toString()).build();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		return Response.ok().build();
+	}
+	@POST
+	@Path("/setdv")
+	public Response setDataview(@FormParam("olddataview") String oldDv,
+			@FormParam("dataset") String dataset,
+			@FormParam("dataview") String dataview,
+			@FormParam("description") String description,
+			@FormParam("keys") JSONArray keys,
+			@FormParam("values") JSONArray values) {
+		log.info(uriInfo.getAbsolutePath());
+		session = httpServletRequest.getSession();
+		System.out.println("POST create dataview:\n" + dataset + " " + dataview
+				+ "\n " + keys.toString() + "\n" + values.toString());
+
+		try {
+			if (session.getAttribute("userid") == null)
+				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			ManagementPlatform mp = (ManagementPlatform) servletcontext
+					.getAttribute("managementplatform");
+			System.out
+					.println("session user=" + session.getAttribute("userid"));
+
+			DataView dv = null;
+			DataSet ds = null;
+			DataField[] ks = null, vs = null, kv = null;
+			Query q = null;
+
+			ds = p.getDataSetManager().getDataSet(dataset);
+			ks = new DataField[keys.length()];
+			for (int i = 0; i < ks.length; i++) {
+				ks[i] = ds.getField(keys.getString(i));
+			}
+			vs = new DataField[values.length()];
+			for (int i = 0; i < vs.length; i++) {
+				vs[i] = ds.getField(values.getString(i));
+			}
+			kv = Arrays.copyOf(ks, ks.length + vs.length);
+			System.arraycopy(vs, 0, kv, ks.length, vs.length);
+			q = ds.getQuery().select(kv);
+			p.getDataSetManager().redefineView(oldDv, dataview, description, q,
+					ks, vs);
 
 			p.getDataSetManager().saveChanges();
 		} catch (IOException | UserNotInPoolException

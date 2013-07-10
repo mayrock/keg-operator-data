@@ -22,9 +22,7 @@ public class DataViewImpl implements DataView {
 	private DataFeatureType type;
 	private List<DataField> keyFields;
 	private List<DataField> valueFields;
-	private int permission;
 	private String dataset;
-	private List<String> users;
 
 	/*
 	 * (non-Javadoc)
@@ -67,29 +65,27 @@ public class DataViewImpl implements DataView {
 	 * @param desps
 	 */
 	public DataViewImpl(String id, String name, String owner, String dataset,
-			int permission, DataFeatureType type, Query q) {
+			DataFeatureType type, Query q) {
 		super();
 		this.id = id;
 		this.q = q;
 		this.name = name;
 		this.owner = owner;
 		this.dataset = dataset;
-		this.permission = permission;
 		this.desps = new LocalizedMessage();
 		this.type = type;
 		initKeyValueFields();
 	}
 
 	public DataViewImpl(String id, String name, String owner, String dataset,
-			int permission, DataFeatureType type, Query q,
-			DataField[] keyFields, DataField[] valueFields) {
+			DataFeatureType type, Query q, DataField[] keyFields,
+			DataField[] valueFields) {
 		super();
 		this.id = id;
 		this.q = q;
 		this.name = name;
 		this.owner = owner;
 		this.dataset = dataset;
-		this.permission = permission;
 		this.desps = new LocalizedMessage();
 		this.type = type;
 		this.keyFields = Arrays.asList(keyFields);
@@ -109,13 +105,75 @@ public class DataViewImpl implements DataView {
 	}
 
 	@Override
-	public String getDataSet() {
-		return this.dataset;
+	public List<DataField> getKeyFields() {
+		return keyFields;
+	}
+
+	private boolean isKeyField(DataField f) {
+		// TODO: not right!
+		if (this.type.equals(DataFeatureType.GeoFeature)) {
+			return f.getFunction().equals(FieldFunctionality.Latitude)
+					|| f.getFunction().equals(FieldFunctionality.Longitude);
+		} else if (this.type.equals(DataFeatureType.DistributionFeature)) {
+			return f.getFunction().equals(FieldFunctionality.Identifier);
+		} else {
+			return !f.getFunction().equals(FieldFunctionality.Value);
+		}
 	}
 
 	@Override
-	public int getPermission() {
-		return this.permission;
+	public DataField getKeyField() throws IllegalStateException {
+		List<DataField> fs = getKeyFields();
+		if (fs.size() != 1)
+			throw new IllegalStateException();
+		else
+			return fs.get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.thu.keg.mdap.datafeature.DataFeature#setKeyFields(edu.thu.keg.mdap
+	 * .datamodel.DataField[])
+	 */
+	@Override
+	public void setKeyFields(List<DataField> keyFields) {
+		this.keyFields = keyFields;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.thu.keg.mdap.datafeature.DataFeature#setValueFields(edu.thu.keg.mdap
+	 * .datamodel.DataField[])
+	 */
+	@Override
+	public void setValueFields(List<DataField> valueFields) {
+		this.valueFields = valueFields;
+
+	}
+
+	@Override
+	public List<DataField> getValueFields() {
+		return valueFields;
+	}
+
+	@Override
+	public List<DataField> getAllFields() {
+		return Arrays.asList(q.getFields());
+	}
+
+	@Override
+	public DataFeatureType getFeatureType() {
+		return this.type;
+	}
+
+	@Override
+	public String getDataSet() {
+		return this.dataset;
 	}
 
 	@Override
@@ -135,49 +193,16 @@ public class DataViewImpl implements DataView {
 	}
 
 	@Override
-	public DataField[] getKeyFields() {
-		return keyFields.toArray(new DataField[0]);
-	}
-
-	private boolean isKeyField(DataField f) {
-		// TODO: not right!
-		if (this.type.equals(DataFeatureType.GeoFeature)) {
-			return f.getFunction().equals(FieldFunctionality.Latitude)
-					|| f.getFunction().equals(FieldFunctionality.Longitude);
-		} else if (this.type.equals(DataFeatureType.DistributionFeature)) {
-			return f.getFunction().equals(FieldFunctionality.Identifier);
-		} else {
-			return !f.getFunction().equals(FieldFunctionality.Value);
-		}
-	}
-
-	@Override
-	public DataField getKeyField() throws IllegalStateException {
-		DataField[] fs = getKeyFields();
-		if (fs.length != 1)
-			throw new IllegalStateException();
-		else
-			return fs[0];
-	}
-
-	@Override
-	public DataField[] getValueFields() {
-		return valueFields.toArray(new DataField[0]);
-	}
-
-	@Override
-	public DataField[] getAllFields() {
-		return q.getFields();
-	}
-
-	@Override
-	public DataFeatureType getFeatureType() {
-		return this.type;
-	}
-
-	@Override
 	public Query getQuery() {
 		return new QueryImpl(this.q);
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -203,6 +228,21 @@ public class DataViewImpl implements DataView {
 	@Override
 	public void setDescription(Locale locale, String desp) {
 		this.desps.setMessage(locale, desp);
+	}
+
+	/**
+	 * @return the q
+	 */
+	public Query getQ() {
+		return q;
+	}
+
+	/**
+	 * @param q
+	 *            the q to set
+	 */
+	public void setQ(Query q) {
+		this.q = q;
 	}
 
 }

@@ -121,6 +121,17 @@ public class DataSetImpl implements DataSet {
 		return this.id;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.thu.keg.mdap.datamodel.TableStructure#setName(java.lang.String)
+	 */
+	@Override
+	public void setName(String name) {
+		this.name = name;
+
+	}
+
 	@Override
 	public String getName() {
 		return this.name;
@@ -184,8 +195,7 @@ public class DataSetImpl implements DataSet {
 				values = this.getOtherFields();
 			}
 
-			return new DataFeatureImpl(type, keys.toArray(new DataField[0]),
-					values.toArray(new DataField[0]));
+			return new DataFeatureImpl(type, keys, values);
 		} else {
 			return null;
 		}
@@ -201,9 +211,9 @@ public class DataSetImpl implements DataSet {
 			throws OperationNotSupportedException, DataProviderException {
 		DataFeature feature = this.getFeature(featureType);
 		Query q = this.getQuery();
-		q = q.select(feature.getAllFields());
+		q = q.select(feature.getAllFields().toArray(new DataField[0]));
 		if (feature.getValueFields() != null) {
-			q = q.orderBy(feature.getValueFields()[0].getName(), Order.DESC);
+			q = q.orderBy(feature.getValueFields().get(0).getName(), Order.DESC);
 		}
 		return q;
 	}

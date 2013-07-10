@@ -3,6 +3,8 @@
  */
 package edu.thu.keg.mdap.datafeature;
 
+import java.util.List;
+
 import edu.thu.keg.mdap.datamodel.DataField;
 
 /**
@@ -14,12 +16,17 @@ import edu.thu.keg.mdap.datamodel.DataField;
  * 
  */
 public interface DataFeature {
+	/**
+	 * 
+	 * @return the key DataFields
+	 */
+	public void setKeyFields(List<DataField> keyFields);
 
 	/**
 	 * 
 	 * @return the key DataFields
 	 */
-	public DataField[] getKeyFields();
+	public List<DataField> getKeyFields();
 
 	/**
 	 * @throws IllegalStateException
@@ -32,13 +39,19 @@ public interface DataFeature {
 	 * 
 	 * @return value fields
 	 */
-	public DataField[] getValueFields();
+	public void setValueFields(List<DataField> valueFields);
+
+	/**
+	 * 
+	 * @return value fields
+	 */
+	public List<DataField> getValueFields();
 
 	/**
 	 * 
 	 * @return All DataField's including keys and values
 	 */
-	public DataField[] getAllFields();
+	public List<DataField> getAllFields();
 
 	/**
 	 * Get the unique type standing for type of this feature.

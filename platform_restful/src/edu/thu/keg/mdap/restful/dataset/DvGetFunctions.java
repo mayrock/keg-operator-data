@@ -1,6 +1,7 @@
 package edu.thu.keg.mdap.restful.dataset;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -139,7 +140,7 @@ public class DvGetFunctions {
 			while (rs.next() && i++ < 20) {
 				JDataviewLine jdataview = new JDataviewLine();
 				List<JField> indentifiers = new ArrayList<>();
-				DataField[] dfs = dv.getKeyFields();
+				DataField[] dfs = dv.getKeyFields().toArray(new DataField[0]);
 				for (DataField df : dfs) {
 					JField indentifier = new JField();
 					indentifier.setValue(rs.getValue(df).toString());
@@ -148,7 +149,7 @@ public class DvGetFunctions {
 					indentifiers.add(indentifier);
 				}
 				List<JField> values = new ArrayList<>();
-				dfs = dv.getValueFields();
+				dfs = dv.getValueFields().toArray(new DataField[0]);
 				for (DataField df : dfs) {
 					JField value = new JField();
 					value.setValue(rs.getValue(df).toString());
@@ -214,7 +215,7 @@ public class DvGetFunctions {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataView dv = datasetManager.getDataView(dataview);
-			DataField[] dfs = dv.getAllFields();
+			DataField[] dfs = dv.getAllFields().toArray(new DataField[0]);
 			for (DataField df : dfs) {
 				JFieldName jfn = new JFieldName();
 				jfn.setFieldName(df.getName());

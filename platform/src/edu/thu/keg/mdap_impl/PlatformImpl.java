@@ -105,7 +105,7 @@ public class PlatformImpl implements Platform {
 					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
 			dv = getDataSetManager().defineView("Lac_Ci_Map_hadoop",
 					dsSite.getOwner(), dsSite.getId(), "小区分布图hadoop",
-					DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
+					DataFeatureType.GeoFeature, q);
 			dv.setDescription(Locale.ENGLISH, "Area distribution hadoop");
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
@@ -134,7 +134,7 @@ public class PlatformImpl implements Platform {
 					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
 			dv = getDataSetManager().defineView("Lac_Ci_Map_orcl",
 					dsSite.getOwner(), dsSite.getId(), "小区分布图",
-					DataView.PERMISSION_PUBLIC, DataFeatureType.GeoFeature, q);
+					DataFeatureType.GeoFeature, q);
 			dv.setDescription(Locale.ENGLISH, "Area distribution orcl");
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
@@ -189,9 +189,9 @@ public class PlatformImpl implements Platform {
 							new AggregatedDataField(dsSite.getField("SiteId"),
 									AggrFunction.COUNT, "SiteCount"))
 					.orderBy("SiteCount", Order.DESC);
-			dv = getDataSetManager().defineView("RegionSta", dsSite.getOwner(),
-					"区域内基站数统计", dsSite.getId(), DataView.PERMISSION_PUBLIC,
-					DataFeatureType.ValueFeature, q);
+			dv = getDataSetManager()
+					.defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
+							dsSite.getId(), DataFeatureType.ValueFeature, q);
 			dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
@@ -232,7 +232,7 @@ public class PlatformImpl implements Platform {
 			q = dsSite.getQuery().orderBy("times", Order.DESC);
 			dv = getDataSetManager().defineView("ContentTypeView",
 					dsSite.getOwner(), dsSite.getId(), "ContentType分布",
-					DataView.PERMISSION_PUBLIC,
+
 					DataFeatureType.DistributionFeature, q);
 			dv.setDescription(Locale.ENGLISH, "ContentType distribution");
 		} catch (OperationNotSupportedException | IllegalArgumentException
@@ -262,17 +262,10 @@ public class PlatformImpl implements Platform {
 			q = dsSite.getQuery().select(dsSite.getField("WebsiteCount"), va)
 					.orderBy("WebsiteCount", Order.ASC);
 			DataField[] vas = { va };
-			dv = getDataSetManager()
-					.defineView(
-							"UserWebsiteCountView",
-							dsSite.getOwner(),
-							dsSite.getId(),
-							"用户网站访问数分布",
-							DataView.PERMISSION_PUBLIC,
-							DataFeatureType.ValueFeature,
-							q,
-							new DataField[] { dsSite.getField("WebsiteCount") },
-							vas);
+			dv = getDataSetManager().defineView("UserWebsiteCountView",
+					dsSite.getOwner(), dsSite.getId(), "用户网站访问数分布",
+					DataFeatureType.ValueFeature, q,
+					new DataField[] { dsSite.getField("WebsiteCount") }, vas);
 			dv.setDescription(Locale.ENGLISH, "User website count distribution");
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
@@ -298,9 +291,10 @@ public class PlatformImpl implements Platform {
 									.getField("TotalCount"), AggrFunction.MAX,
 									"TotalCount"))
 					.orderBy("ConnHour", Order.ASC);
-			getDataSetManager().defineView("ConnHourView", dsSite.getOwner(),
-					dsSite.getId(), "每小时连接数统计", DataView.PERMISSION_PUBLIC,
-					DataFeatureType.ValueFeature, q);
+			getDataSetManager()
+					.defineView("ConnHourView", dsSite.getOwner(),
+							dsSite.getId(), "每小时连接数统计",
+							DataFeatureType.ValueFeature, q);
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
 			System.out.println(e1.getMessage());

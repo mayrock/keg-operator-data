@@ -324,8 +324,10 @@ public class DsGetFunctions {
 			int i = 0;
 			while (rs.next() && i++ < 20) {
 				JGeograph location = new JGeograph();
-				location.setLatitude((double) rs.getValue(gds.getKeyFields()[0]));
-				location.setLongitude((double) rs.getValue(gds.getKeyFields()[1]));
+				location.setLatitude((double) rs.getValue(gds.getKeyFields()
+						.get(0)));
+				location.setLongitude((double) rs.getValue(gds.getKeyFields()
+						.get(1)));
 				List<String> values = new ArrayList<String>();
 				for (DataField df : gds.getValueFields()) {
 					values.add(rs.getValue(df).toString());

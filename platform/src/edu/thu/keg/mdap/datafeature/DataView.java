@@ -3,6 +3,7 @@
  */
 package edu.thu.keg.mdap.datafeature;
 
+import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.TableStructure;
 
 /**
@@ -10,9 +11,6 @@ import edu.thu.keg.mdap.datamodel.TableStructure;
  * 
  */
 public interface DataView extends DataFeature, TableStructure {
-	public static int PERMISSION_PUBLIC = 0;
-	public static int PERMISSION_LIMITED = 1;
-	public static int PERMISSION_PRIVATE = 2;
 
 	public String getId();
 
@@ -20,6 +18,7 @@ public interface DataView extends DataFeature, TableStructure {
 
 	public String getOwner();
 
-	public int getPermission();
+	public Query getQ();
 
+	public void setQ(Query q);
 }

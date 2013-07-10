@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.security.acl.Owner;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -318,7 +319,7 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	@Override
 	public DataView defineView(String name, String owner, String dataset,
-			String description, int permission, DataFeatureType type, Query q)
+			String description, DataFeatureType type, Query q)
 			throws IllegalArgumentException {
 		if (name == null || owner == null || name.equals("")
 				|| owner.equals(""))
@@ -328,8 +329,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		if (this.views.containsKey(id))
 			throw new IllegalArgumentException("Dataview name: " + id
 					+ " exists!");
-		DataView v = new DataViewImpl(id, name, owner, dataset, permission,
-				type, q);
+		DataView v = new DataViewImpl(id, name, owner, dataset, type, q);
 
 		v.setDescription(description);
 		addDataView(v);
@@ -338,7 +338,7 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	@Override
 	public DataView defineView(String name, String owner, String dataset,
-			String description, int permission, DataFeatureType type, Query q,
+			String description, DataFeatureType type, Query q,
 			DataField[] keys, DataField[] values)
 			throws IllegalArgumentException {
 		if (name == null || owner == null || name.equals("")
@@ -349,11 +349,37 @@ public class DataSetManagerImpl implements DataSetManager {
 		if (this.views.containsKey(id))
 			throw new IllegalArgumentException("Dataview name: " + id
 					+ " exists!");
-		DataView v = new DataViewImpl(id, name, owner, dataset, permission,
-				type, q, keys, values);
+		DataView v = new DataViewImpl(id, name, owner, dataset, type, q, keys,
+				values);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.thu.keg.mdap.DataSetManager#redefineView(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
+	 * int, edu.thu.keg.mdap.datafeature.DataFeatureType,
+	 * edu.thu.keg.mdap.datamodel.Query)
+	 */
+	@Override
+	public void redefineView(String id, String name, String description,
+			Query q, DataField[] key, DataField[] values)
+			throws IllegalArgumentException {
+		if (name == null || name.equals(""))
+			throw new IllegalArgumentException(
+					"Dataview name & owner can't be empty!");
+		if (!this.views.containsKey(id))
+			throw new IllegalArgumentException("Dataview name: " + id
+					+ " not exists!");
+		DataView v = this.views.get(id);
+		v.setDescription(description);
+		v.setName(name);
+		v.setQ(q);
+		v.setKeyFields(Arrays.asList(key));
+		v.setValueFields(Arrays.asList(values));
 	}
 
 	private void addDataView(DataView v) {
