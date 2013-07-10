@@ -4,10 +4,17 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
 	$.getJSON(Common.dvFieldUrl(),{
 		dataset: dvName
 	},function(data){
+		var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
+		for(var i = 0; i < checkbox.length; i++){
+			checkbox.eq(i).prop("checked",false);
+		}
 		if(dvType == "sta"){
+			var radio = $("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex).find("input");
+			for(var j = 0; j < radio.length; j++){
+				radio.eq(j).prop("checked",false);
+			}
 			for(var i = 0; i < data.length; i++){
 				if(data[i].functionality == "Identifier"){
-					var radio = $("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex).find("input");
 					var span = $("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex).find("span");
 					var keyName = data[i].fieldName;
 					for(var j = 1; j < span.length; j++){
@@ -16,10 +23,8 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
 							break;
 						}
 					}
-				}
-				else{
-					var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
-					var span = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("span");
+				}else{
+					var span = $("#" + type + "-" + subType + "-mgt-sta-options-value-" + tabIndex + "-" + dsIndex).find("span");
 					var valueName = data[i].fieldName;
 					for(var j = 1; j < span.length; j++){
 						if((valueName + " ") == span.eq(j).text()){
@@ -32,8 +37,7 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
 		}else{
 			for(var i = 0; i < data.length; i++){
 				if((data[i].functionality != "Latitude") && (data[i].functionality != "Longitude")){
-					var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
-					var span = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("span");
+					var span = $("#" + type + "-" + subType + "-mgt-geo-options-value-" + tabIndex + "-" + dsIndex).find("span");
 					var valueName = data[i].fieldName;
 					for(var j = 1; j < span.length; j++){
 						if((valueName + " ") == span.eq(j).text()){
@@ -276,9 +280,10 @@ Mgt.loadMap = function(tabIndex,subType,dsIndex,dsName){
 			jsonArr += ",\\\"" + fieldData[value[i]].fieldName + "\\\"";
 		}
 		jsonArr += "]";
-		
+		console.log(jsonArr);
 		var input = $("#" + type + "-" + subType + "-mgt-geo-save-data-view-button-" + tabIndex + "-" + dsIndex).find("input").eq(0);
 		var dvOperate = input.val();
+		console.log(dvOperate);
 		input.attr("onclick","Mgt.opDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'geo','" +
 			dsName + "','" + jsonArr + "');");
 		
