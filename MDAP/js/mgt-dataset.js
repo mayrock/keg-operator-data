@@ -68,7 +68,7 @@ Mgt.showTable = function(tabIndex,subType,dsIndex,dsName){
 			selectTitle.setAttribute("class","mgt-select-column-title");
 			$(selectTitle).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
 			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showColumn(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "');\" " +
-				"style = 'cursor: pointer;'>create data view from " + dsName + "</a>").appendTo(selectTitle);
+				"style = 'cursor: pointer;'>create/show data view from " + dsName + "</a>").appendTo(selectTitle);
 			
 			Mgt.adjustHeight();
 		}).error(function(){
@@ -110,7 +110,8 @@ Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
 		},function(data){
 			if(sta == 1){
 				Mgt.selector(tabIndex,subType,dsIndex,"sta",dsName);
-				$("<span>create a stat data view</span>").appendTo("#" + type + "-" + subType + "-mgt-sta-selector-title-" + tabIndex + "-" + dsIndex);
+				$("<span>create/show a stat data view</span>")
+					.appendTo("#" + type + "-" + subType + "-mgt-sta-selector-title-" + tabIndex + "-" + dsIndex);
 				$("<span>choose a key: </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex);
 				
 				for(var i = 0; i < data.length; i++){
@@ -125,7 +126,8 @@ Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
 			}
 			if(geo == 1){
 				Mgt.selector(tabIndex,subType,dsIndex,"geo",dsName);
-				$("<span>create a geo data view</span>").appendTo("#" + type + "-" + subType + "-mgt-geo-selector-title-" + tabIndex + "-" + dsIndex);
+				$("<span>create/show a geo data view</span>")
+					.appendTo("#" + type + "-" + subType + "-mgt-geo-selector-title-" + tabIndex + "-" + dsIndex);
 				$("<span>keys:&nbsp;&nbsp;&nbsp;&nbsp;</span>")
 					.appendTo("#" + type + "-" + subType + "-mgt-geo-options-key-" + tabIndex + "-" + dsIndex);
 				
@@ -197,7 +199,7 @@ Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsName){
 	button.setAttribute("class","mgt-options-button");
 	$(button).appendTo(options);
 	$("<input type = 'button' value = 'show this data view' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;' " +
-		"onclick = \"Mgt.dataview('" + dvType + "','" + dsName + "');\"/>").appendTo(button);
+		"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dsName + "');\"/>").appendTo(button);
 	
 	var dataview = document.createElement("div");
 	dataview.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
@@ -207,5 +209,108 @@ Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsName){
 		"display": "none"
 	});
 	
-	Mgt.showDvList(dvType,dsName);
+	Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
+};
+
+Mgt.showDvList = function(tabIndex,subType,dsIndex,dvType,dsName){
+	var type = "ds";
+	
+	var dvList = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-list-" + tabIndex + "-" + dsIndex);
+	dvList.empty();
+	
+	var accordion = document.createElement("div");
+	accordion.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-accordion-" + tabIndex + "-" + dsIndex);
+	accordion.setAttribute("class","accordion");
+	$(accordion).appendTo(dvList);
+	
+	var head = document.createElement("h3");
+	head.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-head-" + tabIndex + "-" + dsIndex);
+	head.setAttribute("class","head");
+	$(head).appendTo(accordion);
+	$(head).css({
+		"padding-top": 0,
+		"padding-right": "10px",
+		"padding-bottom": 0,
+	});
+	$(head).html("data view");
+	
+	var content = document.createElement("div");
+	content.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-content-" + tabIndex + "-" + dsIndex);
+	content.setAttribute("class","content");
+	$(content).appendTo(accordion);
+	$(content).css({
+		"padding-top": "5px",
+		"padding-right": "10px",
+		"padding-bottom": "5px",
+		"padding-left": "25px",
+		"border-right": "1px solid #282828",
+		"border-bottom": "1px solid #282828",
+		"border-left": "1px solid #282828"
+	});
+	
+	var list = document.createElement("div");
+	list.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex);
+	list.setAttribute("class","mgt-data-view-list");
+	$(list).appendTo(content);
+	
+	$(accordion).accordion({
+		collapsible: true,
+		activate: function(event,ui){
+			var list = $("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex);
+			var listWidth = list.width();
+			var listHeight = list.height();
+			var cntWidth = listWidth;
+			var cntHeight = listHeight;
+			if($("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex).css("display") == "none"){
+				if(listHeight > 45){
+					cntWidth += 15;
+					cntHeight = 45;
+				}
+			}
+			$("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-content-" + tabIndex + "-" + dsIndex).css({
+				"height": cntHeight,
+				"width": cntWidth
+			});
+		}
+	});
+	
+	if(dvType == "sta"){
+		dfType = "DistributionFeature";
+	}else{
+		dfType = "GeoFeature";
+	}
+	
+	$.getJSON(Common.dataviewUrl(),{
+		featuretype: dfType,
+		dataset: dsName
+	}).done(function(data,textStatus,jqXHR){
+		var len = data.length;
+		var list = $("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex);
+		for(var i = 0; i < len; i++){
+			var des = data[i].descriptionZh;
+			var dvName = data[i].dataviewName;
+			
+			var nameCtnr = document.createElement("div");
+			nameCtnr.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex + "-" + i);
+			nameCtnr.setAttribute("class","mgt-dv-list-name");
+			$(nameCtnr).appendTo(list);
+			$("<a href = 'javascript:void(0);' onClick = \"Mgt.drawOptions(" +
+				tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dvName + "','" + des + "','" + dsName + "');\">" +
+				des + "</a>").appendTo(nameCtnr);
+		}
+		var listWidth = list.width() + 20;
+		var listHeight = 21 * len;
+		list.css({
+			"width": listWidth,
+			"height": listHeight
+		});
+		$(accordion).accordion("option","active",false);
+		$(accordion).accordion("option","active",0);
+	}).fail(function(jqXHR,textStatus,errorThrown){
+		console.log(jqXHR);
+		console.log(textStatus);
+		console.log(errorThrown);
+		alert("Oops, we got an error...");
+		return;
+	});
 };

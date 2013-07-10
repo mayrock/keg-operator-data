@@ -1,150 +1,5 @@
-Mgt.showDvList = function(dvType,dsName){
-	var activeTab = $("#tabs").tabs("option","active");
-	var tabIndex = Common.tabIndex[activeTab];
+Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
 	var type = "ds";
-	var subAcc = $("#" + type + "-accordion-" + tabIndex).accordion("option","active");
-	var subType = "";
-	if(subAcc == 0){
-		subType = "pub";
-	}else if(subAcc == 1){
-		subType = "lim";
-	}else{
-		subType = "own";
-	}
-	var dsIndex = $("#" + type + "-" + subType + "-tabs-" + tabIndex).tabs("option","active");
-	
-	var dvList = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-list-" + tabIndex + "-" + dsIndex);
-	dvList.empty();
-	
-	var accordion = document.createElement("div");
-	accordion.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-accordion-" + tabIndex + "-" + dsIndex);
-	accordion.setAttribute("class","accordion");
-	$(accordion).appendTo(dvList);
-	
-	var head = document.createElement("h3");
-	head.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-head-" + tabIndex + "-" + dsIndex);
-	head.setAttribute("class","head");
-	$(head).appendTo(accordion);
-	$(head).css({
-		"padding-top": 0,
-		"padding-right": "10px",
-		"padding-bottom": 0,
-	});
-	$(head).html("data view");
-	
-	var content = document.createElement("div");
-	content.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-content-" + tabIndex + "-" + dsIndex);
-	content.setAttribute("class","content");
-	$(content).appendTo(accordion);
-	$(content).css({
-		"padding-top": "5px",
-		"padding-right": "10px",
-		"padding-bottom": "5px",
-		"padding-left": "25px",
-		"border-right": "1px solid #282828",
-		"border-bottom": "1px solid #282828",
-		"border-left": "1px solid #282828"
-	});
-	
-	var list = document.createElement("div");
-	list.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex);
-	list.setAttribute("class","mgt-data-view-list");
-	$(list).appendTo(content);
-	
-	$(accordion).accordion({
-		collapsible: true,
-		activate: function(event,ui){
-			Mgt.adjustSubAcc(dvType);
-		}
-	});
-	
-	if(dvType == "sta"){
-		dfType = "DistributionFeature";
-	}else{
-		dfType = "GeoFeature";
-	}
-	
-	$.getJSON(Common.dataviewUrl(),{
-		featuretype: dfType,
-		dataset: dsName
-	}).done(function(data,textStatus,jqXHR){
-		var len = data.length;
-		var list = $("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex);
-		for(var i = 0; i < len; i++){
-			var des = data[i].descriptionZh;
-			var dvName = data[i].dataviewName;
-			
-			var nameCtnr = document.createElement("div");
-			nameCtnr.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex + "-" + i);
-			nameCtnr.setAttribute("class","mgt-dv-list-name");
-			$(nameCtnr).appendTo(list);
-			$("<a href = 'javascript:void(0);' onClick = \"Mgt.drawOptions('" + dvType + "','" + dvName + "','" + dsName + "');\">" +
-				des + "</a>").appendTo(nameCtnr);
-		}
-		var listWidth = list.width() + 20;
-		var listHeight = 21 * len;
-		list.css({
-			"width": listWidth,
-			"height": listHeight
-		});
-		Mgt.adjustSubAcc(dvType);
-		$(accordion).accordion("option","active",false);
-		$(accordion).accordion("option","active",0);
-	}).fail(function(jqXHR,textStatus,errorThrown){
-		console.log(jqXHR);
-		console.log(textStatus);
-		console.log(errorThrown);
-		alert("Oops, we got an error...");
-		return;
-	});
-};
-
-Mgt.adjustSubAcc = function(dvType){
-	var activeTab = $("#tabs").tabs("option","active");
-	var tabIndex = Common.tabIndex[activeTab];
-	var type = "ds";
-	var subAcc = $("#" + type + "-accordion-" + tabIndex).accordion("option","active");
-	var subType = "";
-	if(subAcc == 0){
-		subType = "pub";
-	}else if(subAcc == 1){
-		subType = "lim";
-	}else{
-		subType = "own";
-	}
-	var dsIndex = $("#" + type + "-" + subType + "-tabs-" + tabIndex).tabs("option","active");
-	
-	var list = $("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex);
-	var listWidth = list.width();
-	var listHeight = list.height();
-	var cntWidth = listWidth;
-	var cntHeight = listHeight;
-	if($("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex).css("display") == "none"){
-		if(listHeight > 45){
-			cntWidth += 15;
-			cntHeight = 45;
-		}
-	}
-	$("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-content-" + tabIndex + "-" + dsIndex).css({
-		"height": cntHeight,
-		"width": cntWidth
-	});
-};
-
-Mgt.drawOptions = function(dvType,dvName,dsName){
-	var activeTab = $("#tabs").tabs("option","active");
-	var tabIndex = Common.tabIndex[activeTab];
-	var type = "ds";
-	var subAcc = $("#" + type + "-accordion-" + tabIndex).accordion("option","active");
-	var subType = "";
-	if(subAcc == 0){
-		subType = "pub";
-	}else if(subAcc == 1){
-		subType = "lim";
-	}else{
-		subType = "own";
-	}
-	var dsIndex = $("#" + type + "-" + subType + "-tabs-" + tabIndex).tabs("option","active");
 	
 	$.getJSON(Common.dvFieldUrl(),{
 		dataset: dvName
@@ -190,27 +45,21 @@ Mgt.drawOptions = function(dvType,dvName,dsName){
 			}
 		}
 		
-		Mgt.dataview(dvType,dsName);
+		Mgt.dataview(tabIndex,subType,dsIndex,dvType,dsName);
+		
+		var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex).find("input");
+		text.eq(0).val(dvName);
+		text.eq(1).val(dvDes);
+		$("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex)
+			.find("input").eq(0).val("modify data view");
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
 	});
 };
 
-Mgt.dataview = function(dvType,dsName){
-	var activeTab = $("#tabs").tabs("option","active");
-	var tabIndex = Common.tabIndex[activeTab];
+Mgt.dataview = function(tabIndex,subType,dsIndex,dvType,dsName){
 	var type = "ds";
-	var subAcc = $("#" + type + "-accordion-" + tabIndex).accordion("option","active");
-	var subType = "";
-	if(subAcc == 0){
-		subType = "pub";
-	}else if(subAcc == 1){
-		subType = "lim";
-	}else{
-		subType = "own";
-	}
-	var dsIndex = $("#" + type + "-" + subType + "-tabs-" + tabIndex).tabs("option","active");
 	
 	var key = -1;
 	var value = -1;
@@ -285,29 +134,23 @@ Mgt.dataview = function(dvType,dsName){
 	button.setAttribute("class","mgt-save-data-view-button");
 	$(button).appendTo(saveDv);
 	
+	var input = document.createElement("input");
+	$(input).attr("type","button");
+	$(input).attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
+	$(input).val("save data view");
+	$(input).appendTo(button);
+	
 	Mgt.adjustHeight();
 	
 	if(dvType == "sta"){
-		Mgt.loadChart(dsName);
+		Mgt.loadChart(tabIndex,subType,dsIndex,dsName);
 	}else{
-		Mgt.loadMap(dsName);
+		Mgt.loadMap(tabIndex,subType,dsIndex,dsName);
 	}
 };
 
-Mgt.loadChart = function(dsName){
-	var activeTab = $("#tabs").tabs("option","active");
-	var tabIndex = Common.tabIndex[activeTab];
+Mgt.loadChart = function(tabIndex,subType,dsIndex,dsName){
 	var type = "ds";
-	var subAcc = $("#" + type + "-accordion-" + tabIndex).accordion("option","active");
-	var subType = "";
-	if(subAcc == 0){
-		subType = "pub";
-	}else if(subAcc == 1){
-		subType = "lim";
-	}else{
-		subType = "own";
-	}
-	var dsIndex = $("#" + type + "-" + subType + "-tabs-" + tabIndex).tabs("option","active");
 	
 	var key = -1;
 	var value = new Array();
@@ -340,9 +183,15 @@ Mgt.loadChart = function(dsName){
 		arr += "],";
 		jsonArr += "]";
 		
-		$("<input type = 'button' value = 'save data view' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;' " +
-			"onclick = 'Mgt.saveDataview(\"sta\",\"" + dsName + "\",\"" + jsonArr + "\");'/>")
-			.appendTo("#" + type + "-" + subType + "-mgt-sta-save-data-view-button-" + tabIndex + "-" + dsIndex);
+		var dvOperate = "";
+		var input = $("#" + type + "-" + subType + "-mgt-sta-save-data-view-button-" + tabIndex + "-" + dsIndex).find("input").eq(0);
+		if(input.val() == "save data view"){
+			dvOperate = "save";
+		}else{
+			dvOperate = "modify";
+		}
+		input.attr("onclick","Mgt.saveDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'sta','" +
+			dsName + "','" + jsonArr + "');");
 		
 		$.getJSON(Common.dsDataUrl(),{
 			dataset: dsName
@@ -380,20 +229,8 @@ Mgt.loadChart = function(dsName){
 	});
 };
 
-Mgt.loadMap = function(dsName){
-	var activeTab = $("#tabs").tabs("option","active");
-	var tabIndex = Common.tabIndex[activeTab];
+Mgt.loadMap = function(tabIndex,subType,dsIndex,dsName){
 	var type = "ds";
-	var subAcc = $("#" + type + "-accordion-" + tabIndex).accordion("option","active");
-	var subType = "";
-	if(subAcc == 0){
-		subType = "pub";
-	}else if(subAcc == 1){
-		subType = "lim";
-	}else{
-		subType = "own";
-	}
-	var dsIndex = $("#" + type + "-" + subType + "-tabs-" + tabIndex).tabs("option","active");
 	
 	var key = new Array();
 	var value = new Array();
@@ -432,9 +269,15 @@ Mgt.loadMap = function(dsName){
 		}
 		jsonArr += "]";
 		
-		$("<input type = 'button' value = 'save data view' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;' " +
-			"onclick = 'Mgt.saveDataview(\"geo\",\"" + dsName + "\",\"" + jsonArr + "\");'/>")
-			.appendTo("#" + type + "-" + subType + "-mgt-geo-save-data-view-button-" + tabIndex + "-" + dsIndex);
+		var dvOperate = "";
+		var input = $("#" + type + "-" + subType + "-mgt-geo-save-data-view-button-" + tabIndex + "-" + dsIndex).find("input").eq(0);
+		if(input.val() == "save data view"){
+			dvOperate = "save";
+		}else{
+			dvOperate = "modify";
+		}
+		input.attr("onclick","Mgt.saveDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'geo','" +
+			dsName + "','" + jsonArr + "');");
 		
 		$.getJSON(Common.dsDataUrl(),{
 			dataset: dsName
@@ -464,20 +307,8 @@ Mgt.loadMap = function(dsName){
 	});
 };
 
-Mgt.saveDataview = function(dvType,dsName,arr){
-	var activeTab = $("#tabs").tabs("option","active");
-	var tabIndex = Common.tabIndex[activeTab];
+Mgt.saveDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 	var type = "ds";
-	var subAcc = $("#" + type + "-accordion-" + tabIndex).accordion("option","active");
-	var subType = "";
-	if(subAcc == 0){
-		subType = "pub";
-	}else if(subAcc == 1){
-		subType = "lim";
-	}else{
-		subType = "own";
-	}
-	var dsIndex = $("#" + type + "-" + subType + "-tabs-" + tabIndex).tabs("option","active");
 	
 	var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex).find("input");
 	if(text.eq(0).val() == ""){
@@ -491,7 +322,10 @@ Mgt.saveDataview = function(dvType,dsName,arr){
 	
 	var dvName = text.eq(0).val();
 	var dvDes = text.eq(1).val();
+	console.log(dvName);
+	console.log(dvDes);
 	var jsonArr = $.parseJSON(arr);
+	console.log(jsonArr);
 	var key = "";
 	var value = "";
 	var dfType = "";
@@ -515,14 +349,13 @@ Mgt.saveDataview = function(dvType,dsName,arr){
 		dfType = "GeoFeature";
 	}
 	
-	$.post(Common.addDvUrl(),{
-		dataset: dsName,
-		dataview: dvName,
-		description: dvDes,
-		datafeaturetype: dfType,
-		keys: key,
-		values: value
-	}).done(function(data,textStatus,jqXHR){
+	if(dvOperate == "save"){
+		url = Common.addDvUrl();
+		msg = "{\"dataset\":\"" + dsName + "\",\"dataview\":\"" + dvName + "\",\"description\":\"" + dvDes +
+			"\",\"datafeaturetype\":\"" + dfType + "\",\"keys\":" + key + ",\"values\":" + value + "}";
+	}
+	$.post(url,$.parseJSON(msg))
+	.done(function(data,textStatus,jqXHR){
 		console.log(data);
 		console.log(textStatus);
 		console.log(jqXHR);
@@ -541,7 +374,7 @@ Mgt.saveDataview = function(dvType,dsName,arr){
 			$(tabs_ul).appendTo(tabs);
 			
 			Mgt.subTab(tabIndex,"dv",dvType);
-			Mgt.showDvList(dvType,dsName);
+			Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
 			
 			return;
 		}
