@@ -120,13 +120,10 @@ public class QueryImpl implements Query {
 	@Override
 	public Query select(DataField... fields) {
 		Query q = null;
-		if (this.getGroupByFields() != null) {
-			q = new QueryImpl(fields, null, null, null, this.provider, this);
-			transformFields(q);
-		} else {
-			q = new QueryImpl(fields, this.wheres, this.orders, this.join,
-					this.provider, null);
-		}
+
+		q = new QueryImpl(fields, new ArrayList<WhereClause>(),
+				new ArrayList<OrderClause>(), null, this.provider, this);
+		transformFieldsSelect(q);
 		return q;
 	}
 
@@ -160,8 +157,8 @@ public class QueryImpl implements Query {
 	@Override
 	public Query join(Query q2, Map<DataField, DataField> fieldsMap) {
 		JoinOnClause newJoin = new JoinOnClause(q2, fieldsMap);
-		Query q = new QueryImpl(this.fields, null, null, newJoin,
-				this.provider, this);
+		Query q = new QueryImpl(this.fields, new ArrayList<WhereClause>(),
+				new ArrayList<OrderClause>(), newJoin, this.provider, this);
 		transformFields(q);
 		return q;
 	}
@@ -217,28 +214,48 @@ public class QueryImpl implements Query {
 		return gf;
 	}
 
+	private void transformFieldsSelect(Query q) {
+		DataField[] df_all = new DataField[q.getFields().length];
+		for (int i = 0; i < q.getFields().length; i++) {
+			DataField df = q.getFields()[i];
+			if (df instanceof AggregatedDataField) {
+				// df = (AggregatedDataField) df;
+				df_all[i] = df;
+//						new AggregatedDataField(
+//						((AggregatedDataField) df).getField(),
+//						((AggregatedDataField) df).getFunc(), df.getName(),
+//						q.getInnerQuery());
+
+			} else {
+				df_all[i] = new GeneralDataField(df.getName(),
+						df.getFieldType(), df.getDescription(), df.isKey(),
+						df.allowNull(), df.isDim(), df.getFunction(),
+						q.getInnerQuery());
+				df_all[i].setDataSet(df.getDataSet());
+			}
+		}
+		q.setFields(df_all);
+	}
+
 	private void transformFields(Query q) {
-		// 将所有要join的DataField的query设置成自己来自表的query
-		// for (int i = 0; i < q.getFields().length; i++) {
-		// DataField df = q.getFields()[i];
-		// q.getFields()[i] = new GeneralDataField(df.getName(),
-		// df.getFieldType(), df.getDescription(), df.isKey(),
-		// df.allowNull(), df.isDim(), df.getFunction(), q.getInnerQuery());
-		// }
-		DataField[] df_all = new DataField[q.getFields().length
-				+ q.getJoinOnClause().getQuery().getFields().length];
+		int joinClauseLen = q.getJoinOnClause().getQuery().getFields().length;
+		DataField[] df_all = new DataField[q.getFields().length + joinClauseLen];
 		for (int i = 0; i < q.getFields().length; i++) {
 			DataField df = q.getFields()[i];
 			df_all[i] = new GeneralDataField(df.getName(), df.getFieldType(),
 					df.getDescription(), df.isKey(), df.allowNull(),
 					df.isDim(), df.getFunction(), q.getInnerQuery());
+			df_all[i].setDataSet(df.getDataSet());
+
 		}
-		for (int i = 0; i < q.getJoinOnClause().getQuery().getFields().length; i++) {
+		for (int i = 0; i < joinClauseLen; i++) {
 			DataField df = q.getJoinOnClause().getQuery().getFields()[i];
+
 			df_all[i + q.getFields().length] = new GeneralDataField(
 					df.getName(), df.getFieldType(), df.getDescription(),
 					df.isKey(), df.allowNull(), df.isDim(), df.getFunction(), q
 							.getJoinOnClause().getQuery());
+			df_all[i + q.getFields().length].setDataSet(df.getDataSet());
 		}
 		q.setFields(df_all);
 

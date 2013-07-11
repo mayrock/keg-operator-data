@@ -5,57 +5,65 @@ package edu.thu.keg.mdap.datamodel;
 
 import java.util.Locale;
 
-
-
 /**
  * @author myc
- *
+ * 
  */
 public class AggregatedDataField implements DataField {
 
 	public enum AggrFunction {
 		MAX, MIN, AVG, SUM, COUNT;
-		
+
 		private String s;
+
 		AggrFunction(String s) {
 			this.s = s;
 		}
+
 		AggrFunction() {
 			this.s = this.name();
 		}
+
 		@Override
 		public String toString() {
 			return this.s;
 		}
+
 		public static AggrFunction parse(String s)
-			throws IllegalArgumentException {
+				throws IllegalArgumentException {
 			for (AggrFunction func : AggrFunction.values()) {
 				if (func.toString().trim().equals(s.trim()))
 					return func;
 			}
 			throw new IllegalArgumentException(s
-				+ " cannot be parsed to a AggrFunction");
+					+ " cannot be parsed to a AggrFunction");
 		}
 	}
-	
+
 	private DataField field;
 	private AggrFunction func;
 	private String name;
 	private LocalizedMessage desps;
-	
-	public AggregatedDataField(DataField field, AggrFunction func, String name) {
+	private DataSet dataset;
+	private Query query;
+
+	public AggregatedDataField(DataField field, AggrFunction func, String name,
+			Query query) {
 		this.field = field;
 		this.func = func;
 		this.name = name;
-		
+
 		this.desps = new LocalizedMessage();
-		
+		this.dataset = field.getDataSet();
+		this.query = query;
 		desps.setMessage(Locale.ENGLISH, func.toString() + " of the field "
-			+ field.getDescription(Locale.ENGLISH) 
-			+ " in " + field.getDataSet().getDescription(Locale.ENGLISH));
+				+ field.getDescription(Locale.ENGLISH) + " in "
+				+ field.getDataSet().getDescription(Locale.ENGLISH));
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.thu.keg.mdap.datamodel.DataField#getColumnName()
 	 */
 	@Override
@@ -63,15 +71,19 @@ public class AggregatedDataField implements DataField {
 		return func.toString() + " ( " + field.getQueryName() + " ) ";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.thu.keg.mdap.datamodel.DataField#getDataSet()
 	 */
 	@Override
 	public DataSet getDataSet() {
-		return field.getDataSet();
+		return this.dataset;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.thu.keg.mdap.datamodel.DataField#getDescription()
 	 */
 	@Override
@@ -79,7 +91,9 @@ public class AggregatedDataField implements DataField {
 		return desps.getMessage();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.thu.keg.mdap.datamodel.DataField#isKey()
 	 */
 	@Override
@@ -87,7 +101,9 @@ public class AggregatedDataField implements DataField {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.thu.keg.mdap.datamodel.DataField#allowNull()
 	 */
 	@Override
@@ -95,7 +111,9 @@ public class AggregatedDataField implements DataField {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.thu.keg.mdap.datamodel.DataField#getFieldType()
 	 */
 	@Override
@@ -114,13 +132,17 @@ public class AggregatedDataField implements DataField {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.thu.keg.mdap.datamodel.DataField#setDataSet(edu.thu.keg.mdap.datamodel.DataSet)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.thu.keg.mdap.datamodel.DataField#setDataSet(edu.thu.keg.mdap.datamodel
+	 * .DataSet)
 	 */
 	@Override
 	public void setDataSet(DataSet ds) {
-		throw new UnsupportedOperationException("Cannot setDataSet of" +
-				" a AggreatedDataField");
+		throw new UnsupportedOperationException("Cannot setDataSet of"
+				+ " a AggreatedDataField");
 	}
 
 	@Override
@@ -148,4 +170,11 @@ public class AggregatedDataField implements DataField {
 		return null;
 	}
 
+	// public DataField getField() {
+	// return this.field;
+	// }
+	//
+	// public AggrFunction getFunc() {
+	// return this.func;
+	// }
 }

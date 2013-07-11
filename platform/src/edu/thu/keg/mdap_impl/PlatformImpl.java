@@ -27,6 +27,7 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.DataSet;
 import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
+import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
@@ -185,18 +186,20 @@ public class PlatformImpl implements Platform {
 					.getQuery()
 					.select(dsSite.getField("Region"),
 							new AggregatedDataField(dsSite.getField("SiteId"),
-									AggrFunction.COUNT, "SiteCount"))
+									AggrFunction.COUNT, "SiteCount", null))
 					.orderBy("SiteCount", Order.DESC);
-//			dv = getDataSetManager()
-//					.defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
-//							dsSite.getId(), DataFeatureType.ValueFeature, q);
-//			dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
-			 Map<DataField, DataField> fm = new HashMap<DataField,
-			 DataField>();
+			// dv = getDataSetManager()
+			// .defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
+			// dsSite.getId(), DataFeatureType.ValueFeature, q);
+			// dv.setDescription(Locale.ENGLISH,
+			// "Cell tower count within regions");
+			Map<DataField, DataField> fm = new HashMap<DataField, DataField>();
 			Query q2 = dsSite.getQuery();
-			 fm.put(q2.getFields()[0], q.getFields()[0]);
-			 q = q.join(q2, fm);
-			 System.out.println("JOIN: " + q.toString());
+			fm.put(q2.getFields()[0], q.getFields()[0]);
+			q = q.join(q2, fm);
+//			.where("Region", Operator.EQ, 139);
+			// q=q.select(dsSite.getField("Longitude"));
+			System.out.println("JOIN: " + q.toString());
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
 			// TODO Auto-generated catch block
@@ -262,7 +265,7 @@ public class PlatformImpl implements Platform {
 		// 6th DataView
 		try {
 			DataField va = new AggregatedDataField(dsSite.getField("Imsi"),
-					AggrFunction.COUNT, "UserCount");
+					AggrFunction.COUNT, "UserCount", null);
 			q = dsSite.getQuery().select(dsSite.getField("WebsiteCount"), va)
 					.orderBy("WebsiteCount", Order.ASC);
 			DataField[] vas = { va };
@@ -293,7 +296,7 @@ public class PlatformImpl implements Platform {
 					.select(dsSite.getField("ConnHour"),
 							new AggregatedDataField(dsSite
 									.getField("TotalCount"), AggrFunction.MAX,
-									"TotalCount"))
+									"TotalCount", null))
 					.orderBy("ConnHour", Order.ASC);
 			getDataSetManager()
 					.defineView("ConnHourView", dsSite.getOwner(),
