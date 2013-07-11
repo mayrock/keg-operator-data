@@ -112,6 +112,7 @@ public class DsGetFunctions {
 		int i = 0;
 		for (DataSet dataset : datasets) {
 			JDatasetName dname = new JDatasetName();
+			dname.setId(dataset.getId());
 			dname.setDatasetName(dataset.getName());
 			dname.setOwner(dataset.getOwner());
 			dname.setPermission(DataSetImpl.permissionToString(dataset
@@ -162,6 +163,7 @@ public class DsGetFunctions {
 					.getDataSetList(DataFeatureType.GeoFeature);
 			for (DataSet dataset : datasets) {
 				JDatasetName dname = new JDatasetName();
+				dname.setId(dataset.getId());
 				dname.setDatasetName(dataset.getName());
 				dname.setOwner(dataset.getOwner());
 				dname.setPermission(DataSetImpl.permissionToString(dataset
@@ -214,9 +216,8 @@ public class DsGetFunctions {
 					.getDataSetList(DataFeatureType.DistributionFeature);
 			int i = 0;
 			for (DataSet dataset : datasets) {
-				// if(i++>=2)
-				// break;
 				JDatasetName dname = new JDatasetName();
+				dname.setId(dataset.getId());
 				dname.setDatasetName(dataset.getName());
 				dname.setOwner(dataset.getOwner());
 				dname.setPermission(DataSetImpl.permissionToString(dataset
@@ -256,14 +257,14 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getds")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataset(@QueryParam("dataset") String dataset,
+	public JSONWithPadding getDataset(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		log.info("getDataset " + dataset + " " + uriInfo.getAbsolutePath());
+		log.info("getDataset " + id + " " + uriInfo.getAbsolutePath());
 		List<JDatasetLine> datasetList = new ArrayList<>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
+			DataSet ds = datasetManager.getDataSet(id);
 			Query rs = ds.getQuery();
 			System.out.println(rs.toString());
 			rs.open();
@@ -274,8 +275,6 @@ public class DsGetFunctions {
 				DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
 				int j = 0;
 				for (DataField df : dfs) {
-					// if(j++>=2)
-					// break;
 					JField field = new JField();
 					if (rs.getValue(df) == null) {
 						field.setValue("null");
@@ -307,14 +306,14 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getgeods")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getGeoDataset(@QueryParam("dataset") String dataset,
+	public JSONWithPadding getGeoDataset(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		log.info("getLocDataset " + dataset + " " + uriInfo.getAbsolutePath());
+		log.info("getLocDataset " + id + " " + uriInfo.getAbsolutePath());
 		List<JGeograph> datasetList = new ArrayList<JGeograph>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
+			DataSet ds = datasetManager.getDataSet(id);
 			DataContent rs = ds.getQuery();
 			DataFeature gds = ds.getFeature(DataFeatureType.GeoFeature);
 			if (gds == null)
@@ -354,14 +353,14 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getstads")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getStaDataset(@QueryParam("dataset") String dataset,
+	public JSONWithPadding getStaDataset(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		log.info("getStaDataset " + dataset + " " + uriInfo.getAbsolutePath());
+		log.info("getStaDataset " + id + " " + uriInfo.getAbsolutePath());
 		List<JStatistic> datasetList = new ArrayList<JStatistic>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
+			DataSet ds = datasetManager.getDataSet(id);
 			DataContent rs = ds.getQuery();
 			DataFeature gds = ds
 					.getFeature(DataFeatureType.DistributionFeature);
@@ -411,16 +410,15 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getdsfds")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDatasetFieldsNames(
-			@QueryParam("dataset") String dataset,
+	public JSONWithPadding getDatasetFieldsNames(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		log.info("getDatasetFieldsNames " + dataset + " "
+		log.info("getDatasetFieldsNames " + id + " "
 				+ uriInfo.getAbsolutePath());
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
+			DataSet ds = datasetManager.getDataSet(id);
 			DataField[] dfs = ds.getDataFields().toArray(new DataField[0]);
 			for (DataField df : dfs) {
 				JFieldName jfn = new JFieldName();
@@ -449,8 +447,7 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getdscs")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDatasetField(
-			@QueryParam("dataset") String dataset,
+	public JSONWithPadding getDatasetField(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@QueryParam("fields") JSONArray jsonFileds,
 			@QueryParam("orderby") String orderby) {
@@ -467,7 +464,7 @@ public class DsGetFunctions {
 			all_dfs = new ArrayList<>();
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
+			DataSet ds = datasetManager.getDataSet(id);
 			DataContent rs;
 			if (orderby != null)
 				rs = ds.getQuery().orderBy(orderby, Order.parse(orderby));
@@ -475,8 +472,8 @@ public class DsGetFunctions {
 				rs = ds.getQuery();
 			for (int i = 0; i < jsonFileds.length(); i++) {
 				fieldname = (String) jsonFileds.get(i);
-				System.out.println("getDatasetField " + dataset + " "
-						+ fieldname + " " + uriInfo.getAbsolutePath());
+				System.out.println("getDatasetField " + id + " " + fieldname
+						+ " " + uriInfo.getAbsolutePath());
 				list_df = new ArrayList<JField>();
 				DataField df = ds.getField(fieldname);
 
@@ -517,8 +514,7 @@ public class DsGetFunctions {
 	@POST
 	@Path("/getdsres")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDatasetValueOfOpr(
-			@QueryParam("dataset") String dataset,
+	public JSONWithPadding getDatasetValueOfOpr(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@QueryParam("jsonoper") JSONArray jsonOper) {
 		log.info(uriInfo.getAbsolutePath());
@@ -536,14 +532,14 @@ public class DsGetFunctions {
 			all_dfs = new ArrayList<>();
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataSet ds = datasetManager.getDataSet(dataset);
+			DataSet ds = datasetManager.getDataSet(id);
 			Query q = ds.getQuery();
 			for (int i = 0; i < jsonOper.length(); i++) {
 				JSONObject job = (JSONObject) jsonOper.get(i);
 				fieldname = job.getString("fieldname");
 				opr = job.getString("opr");
 				value = job.getString("value");
-				System.out.println("getDatasetValueOfOpr " + dataset + " "
+				System.out.println("getDatasetValueOfOpr " + id + " "
 						+ fieldname + " " + opr + " " + value + " "
 						+ uriInfo.getAbsolutePath());
 				list_df = new ArrayList<JField>();
@@ -578,16 +574,14 @@ public class DsGetFunctions {
 	@GET
 	@Path("/getdsinfo")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDatasetInfo(@QueryParam("dataset") String ds,
+	public JSONWithPadding getDatasetInfo(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
-		log.info("getDatasetInfo " + ds + " " + uriInfo.getAbsolutePath());
+		log.info("getDatasetInfo " + id + " " + uriInfo.getAbsolutePath());
 		Platform p = (Platform) servletcontext.getAttribute("platform");
 		DataSetManager datasetManager = p.getDataSetManager();
-		DataSet dataset = datasetManager.getDataSet(ds);
-
-		// if(i++>=1)
-		// break;
+		DataSet dataset = datasetManager.getDataSet(id);
 		JDatasetName dname = new JDatasetName();
+		dname.setId(dataset.getId());
 		dname.setDatasetName(dataset.getName());
 		dname.setOwner(dataset.getOwner());
 		dname.setPermission(DataSetImpl.permissionToString(dataset
@@ -636,6 +630,7 @@ public class DsGetFunctions {
 			int i = 0;
 			for (DataSet dataset : datasets) {
 				JDatasetName dname = new JDatasetName();
+				dname.setId(dataset.getId());
 				dname.setDatasetName(dataset.getName());
 				dname.setOwner(dataset.getOwner());
 				dname.setPermission(DataSetImpl.permissionToString(dataset
@@ -687,6 +682,7 @@ public class DsGetFunctions {
 			if (datasets != null)
 				for (DataSet dataset : datasets) {
 					JDatasetName dname = new JDatasetName();
+					dname.setId(dataset.getId());
 					dname.setDatasetName(dataset.getName());
 					dname.setOwner(dataset.getOwner());
 					dname.setPermission(DataSetImpl.permissionToString(dataset
@@ -749,6 +745,7 @@ public class DsGetFunctions {
 			if (datasets != null)
 				for (DataSet dataset : datasets) {
 					JDatasetName dname = new JDatasetName();
+					dname.setId(dataset.getId());
 					dname.setDatasetName(dataset.getName());
 					dname.setOwner(dataset.getOwner());
 					dname.setPermission(DataSetImpl.permissionToString(dataset

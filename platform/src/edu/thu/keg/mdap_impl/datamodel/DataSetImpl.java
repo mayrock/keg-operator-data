@@ -55,7 +55,7 @@ public class DataSetImpl implements DataSet {
 		return true;
 	}
 
-	private String id;
+	private String id = null;
 	private String name = null;
 	private String owner = null;
 

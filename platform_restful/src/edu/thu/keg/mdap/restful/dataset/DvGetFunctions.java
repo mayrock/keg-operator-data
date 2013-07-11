@@ -69,27 +69,27 @@ public class DvGetFunctions {
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetViewsNames(
 			@QueryParam("featuretype") String featureType,
-			@QueryParam("dataset") String dataset,
+			@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
 		List<JDataviewName> dataviewList = new ArrayList<JDataviewName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			System.out.println(dataset + " " + featureType);
+			System.out.println(id + " " + featureType);
 			Collection<DataView> dataviews = null;
-			if (dataset == null && featureType == null)
+			if (id == null && featureType == null)
 				dataviews = datasetManager.getDataViewList();
-			else if (dataset == null && featureType != null)
+			else if (id == null && featureType != null)
 				dataviews = datasetManager.getDataViewList(DataFeatureType
 						.valueOf(featureType));
-			else if (dataset != null && featureType == null)
-				dataviews = datasetManager.getDataViewList(dataset);
+			else if (id != null && featureType == null)
+				dataviews = datasetManager.getDataViewList(id);
 			else {
 				dataviews = datasetManager.getDataViewList(DataFeatureType
 						.valueOf(featureType));
 				Collection<DataView> dataviews1 = datasetManager
-						.getDataViewList(dataset);
+						.getDataViewList(id);
 				dataviews.retainAll(dataviews1);
 			}
 			if (dataviews != null)
@@ -127,14 +127,14 @@ public class DvGetFunctions {
 	@GET
 	@Path("/getdv")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataview(@QueryParam("dataset") String dataview,
+	public JSONWithPadding getDataview(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
 		List<JDataviewLine> dataviewList = new ArrayList<>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataView dv = datasetManager.getDataView(dataview);
+			DataView dv = datasetManager.getDataView(id);
 			DataContent rs = dv.getQuery();
 			rs.open();
 			int i = 0;
@@ -173,14 +173,14 @@ public class DvGetFunctions {
 	@GET
 	@Path("/getdvinfo")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataviewInfo(
-			@QueryParam("dataset") String dataview,
+	public JSONWithPadding getDataviewInfo(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
 		Platform p = (Platform) servletcontext.getAttribute("platform");
 		DataSetManager datasetManager = p.getDataSetManager();
-		DataView dv = datasetManager.getDataView(dataview);
+		DataView dv = datasetManager.getDataView(id);
 		JDataviewName dname = new JDataviewName();
+		dname.setId(dv.getId());
 		dname.setDataviewName(dv.getName());
 		dname.setDescriptionEn(dv.getDescription(Locale.ENGLISH));
 		dname.setDescriptionZh(dv.getDescription(Locale.CHINESE));
@@ -207,15 +207,14 @@ public class DvGetFunctions {
 	@GET
 	@Path("/getdvfds")
 	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public JSONWithPadding getDataviewFieldsNames(
-			@QueryParam("dataset") String dataview,
+	public JSONWithPadding getDataviewFieldsNames(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			DataView dv = datasetManager.getDataView(dataview);
+			DataView dv = datasetManager.getDataView(id);
 			DataField[] dfs = dv.getAllFields().toArray(new DataField[0]);
 			for (DataField df : dfs) {
 				JFieldName jfn = new JFieldName();

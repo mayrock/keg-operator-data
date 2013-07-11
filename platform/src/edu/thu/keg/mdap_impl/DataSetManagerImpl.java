@@ -16,8 +16,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.jws.Oneway;
+
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
@@ -47,6 +50,7 @@ import edu.thu.keg.mdap_impl.provider.JdbcProvider;
  * 
  */
 public class DataSetManagerImpl implements DataSetManager {
+	private static Logger log = Logger.getLogger(DataSetManagerImpl.class);
 
 	public static class Storage {
 		DataSet[] datasets;
@@ -117,9 +121,10 @@ public class DataSetManagerImpl implements DataSetManager {
 		limitedMap = new HashMap<String, Set<DataSet>>();
 		publicMap = new HashSet<DataSet>();
 		try {
-			loadDataSets();
+//			loadDataSets();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.warn(ex.getMessage());
+			
 		}
 	}
 
@@ -172,12 +177,12 @@ public class DataSetManagerImpl implements DataSetManager {
 	 * java.lang.String, int, java.util.List)
 	 */
 	@Override
-	public void setDataSetPermission(String name, String owner, int permisson,
+	public void setDataSetPermission(String id, String owner, int permisson,
 			List<String> limitedUsers) {
-		DataSet ds = getDataSet(name);
+		DataSet ds = getDataSet(id);
 		if (!ds.getOwner().equals(owner))
 			throw new IllegalArgumentException("the " + owner + " dataset \""
-					+ name + "\" does not compareble.");
+					+ id + "\" does not compareble.");
 		switch (permisson) {
 		case DataSet.PERMISSION_PUBLIC:
 			publicMap.add(ds);
@@ -273,7 +278,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		if (!ownerMap.get(ds.getOwner()).contains(ds))
 			ownerMap.get(ds.getOwner()).add(ds);
 
-		setDataSetPermission(ds.getName(), ds.getOwner(), ds.getPermission(),
+		setDataSetPermission(ds.getId(), ds.getOwner(), ds.getPermission(),
 				ds.getLimitedUsers());
 		// if (ds.getPermission() == DataSet.PERMISSION_PUBLIC) {
 		// if (!publicMap.contains(ds))
@@ -310,8 +315,8 @@ public class DataSetManagerImpl implements DataSetManager {
 	@Override
 	public DataSet createDataSet(String name, String owner, String description,
 			DataProvider provider, boolean loadable, DataField... fields) {
-		DataSet ds = new DataSetImpl(name, name, owner, provider, loadable,
-				fields);
+		DataSet ds = new DataSetImpl("DS" + getUUID(), name, owner, provider,
+				loadable, fields);
 		ds.setDescription(description);
 		ds.setPermission(DataSetImpl.PERMISSION_PRIVATE);
 		addDataSet(ds);
@@ -326,11 +331,12 @@ public class DataSetManagerImpl implements DataSetManager {
 				|| owner.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		String id = name;
-		if (this.views.containsKey(id))
-			throw new IllegalArgumentException("Dataview name: " + id
-					+ " exists!");
-		DataView v = new DataViewImpl(id, name, owner, dataset, type, q);
+
+		// if (this.views.containsKey(id))
+		// throw new IllegalArgumentException("Dataview name: " + id
+		// + " exists!");
+		DataView v = new DataViewImpl("DV" + getUUID(), name, owner, dataset,
+				type, q);
 
 		v.setDescription(description);
 		addDataView(v);
@@ -346,12 +352,11 @@ public class DataSetManagerImpl implements DataSetManager {
 				|| owner.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		String id = name;
-		if (this.views.containsKey(id))
-			throw new IllegalArgumentException("Dataview name: " + id
-					+ " exists!");
-		DataView v = new DataViewImpl(id, name, owner, dataset, type, q, keys,
-				values);
+		// if (this.views.containsKey(id))
+		// throw new IllegalArgumentException("Dataview name: " + id
+		// + " exists!");
+		DataView v = new DataViewImpl("DV" + getUUID(), name, owner, dataset,
+				type, q, keys, values);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
@@ -381,9 +386,6 @@ public class DataSetManagerImpl implements DataSetManager {
 		DataView v = this.views.get(oldId);
 		v.resetView(description, name, q, Arrays.asList(key),
 				Arrays.asList(values));
-		this.views.remove(oldId);
-		this.views.put(v.getId(), v);
-		// this.views.put(, value)
 	}
 
 	@Override
@@ -400,8 +402,6 @@ public class DataSetManagerImpl implements DataSetManager {
 					+ " not exists!");
 		DataView v = this.views.get(oldId);
 		v.resetView(description, name, q);
-		this.views.remove(oldId);
-		this.views.put(v.getId(), v);
 	}
 
 	private void addDataView(DataView v) {
@@ -451,4 +451,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		return ds;
 	}
 
+	private String getUUID() {
+		return UUID.randomUUID().toString();
+	}
 }

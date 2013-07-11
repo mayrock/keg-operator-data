@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class JDatasetName {
+	private String id;
 	private String datasetName;
 	private String permission;
 	private String owner;
@@ -23,12 +24,34 @@ public class JDatasetName {
 	private List<String> otherFields;
 	private List<String> datafeature;
 
-	public void setDatasetName(String datasetname) {
-		this.datasetName = datasetname;
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
 	}
 
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the datasetName
+	 */
 	public String getDatasetName() {
-		return this.datasetName;
+		return datasetName;
+	}
+
+	/**
+	 * @param datasetName
+	 *            the datasetName to set
+	 */
+	public void setDatasetName(String datasetName) {
+		this.datasetName = datasetName;
 	}
 
 	/**
@@ -76,44 +99,77 @@ public class JDatasetName {
 		this.limitedUsers = limitedUsers;
 	}
 
+	/**
+	 * @return the descriptionEn
+	 */
+	public String getDescriptionEn() {
+		return descriptionEn;
+	}
+
+	/**
+	 * @param descriptionEn
+	 *            the descriptionEn to set
+	 */
 	public void setDescriptionEn(String descriptionEn) {
-		if (descriptionEn == null)
-			return;
 		this.descriptionEn = descriptionEn;
 	}
 
-	public String getDescriptionEn() {
-		return this.descriptionEn;
+	/**
+	 * @return the descriptionZh
+	 */
+	public String getDescriptionZh() {
+		return descriptionZh;
 	}
 
+	/**
+	 * @param descriptionZh
+	 *            the descriptionZh to set
+	 */
 	public void setDescriptionZh(String descriptionZh) {
 		this.descriptionZh = descriptionZh;
 	}
 
-	public String getDescriptionZh() {
-		return this.descriptionZh;
+	/**
+	 * @return the keyFields
+	 */
+	public List<String> getKeyFields() {
+		return keyFields;
 	}
 
+	/**
+	 * @param keyFields
+	 *            the keyFields to set
+	 */
 	public void setKeyFields(List<String> keyFields) {
 		this.keyFields = keyFields;
 	}
 
-	public List<String> getKeyFields() {
-		return this.keyFields;
+	/**
+	 * @return the otherFields
+	 */
+	public List<String> getOtherFields() {
+		return otherFields;
 	}
 
+	/**
+	 * @param otherFields
+	 *            the otherFields to set
+	 */
 	public void setOtherFields(List<String> otherFields) {
 		this.otherFields = otherFields;
 	}
 
-	public List<String> getOtherFields() {
-		return this.otherFields;
-	}
-
+	/**
+	 * @return the datafeature
+	 */
 	public List<String> getDatafeature() {
 		return datafeature;
 	}
 
+	/**
+	 * @param datafeature
+	 *            the datafeature to set
+	 */
 	public void setDatafeature(List<String> datafeature) {
 		this.datafeature = datafeature;
 	}

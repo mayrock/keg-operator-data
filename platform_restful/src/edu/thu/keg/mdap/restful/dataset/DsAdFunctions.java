@@ -273,16 +273,15 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/setdv")
-	public Response setDataview(@FormParam("olddataview") String olddv,
-			@FormParam("dataset") String dataset,
+	public Response setDataview(@FormParam("oldid") String olddv,
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
 			@FormParam("keys") JSONArray keys,
 			@FormParam("values") JSONArray values) {
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
-		System.out.println("POST create dataview:\n" + dataset + " " + dataview
-				+ "\n " + keys.toString() + "\n" + values.toString());
+		System.out.println("POST create dataview:\n" + " " + dataview + "\n "
+				+ keys.toString() + "\n" + values.toString());
 
 		try {
 			if (session.getAttribute("userid") == null)
@@ -298,7 +297,9 @@ public class DsAdFunctions {
 			DataField[] ks = null, vs = null, kv = null;
 			Query q = null;
 
-			ds = p.getDataSetManager().getDataSet(dataset);
+			String ds_name = p.getDataSetManager().getDataView(olddv)
+					.getDataSet();
+			ds = p.getDataSetManager().getDataSet(ds_name);
 			ks = new DataField[keys.length()];
 			for (int i = 0; i < ks.length; i++) {
 				ks[i] = ds.getField(keys.getString(i));
@@ -396,8 +397,7 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/setdvagg")
-	public Response setDataviewAggregated(
-			@FormParam("olddataview") String olddv,
+	public Response setDataviewAggregated(@FormParam("oldid") String olddv,
 			@FormParam("dataset") String dataset,
 			@FormParam("dataview") String dataview,
 			@FormParam("description") String description,
@@ -422,7 +422,9 @@ public class DsAdFunctions {
 			DataField[] fs = null;
 			Query q = null;
 
-			ds = p.getDataSetManager().getDataSet(dataset);
+			String ds_name = p.getDataSetManager().getDataView(olddv)
+					.getDataSet();
+			ds = p.getDataSetManager().getDataSet(ds_name);
 			fs = new DataField[fields.length()];
 			for (int i = 0; i < fs.length; i++) {
 				String fun = funcs.getString(i);
@@ -459,7 +461,7 @@ public class DsAdFunctions {
 	@Path("/setdsp")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public Response setDatasetPermission(@FormParam("dataset") String dataset,
+	public Response setDatasetPermission(@FormParam("id") String id,
 			@FormParam("dataview") String dataview,
 			@FormParam("owner") String owner,
 			@FormParam("permisson") String permission,
@@ -476,7 +478,7 @@ public class DsAdFunctions {
 				users.add(limitedusers.getJSONObject(i)
 						.getString("limiteduser"));
 			}
-			p.getDataSetManager().setDataSetPermission(dataset, owner,
+			p.getDataSetManager().setDataSetPermission(id, owner,
 					DataSetImpl.parsePermission(permission), users);
 		} catch (UserNotInPoolException | JSONException e) {
 			// TODO Auto-generated catch block

@@ -96,7 +96,7 @@ public class PlatformImpl implements Platform {
 				false, FieldFunctionality.Latitude);
 		dsSite = getDataSetManager().createDataSet("TESTF", "liqi",
 				"小区地理位置信息hadoop", hiveProvider, true, fields);
-		getDataSetManager().setDataSetPermission("TESTF", "liqi",
+		getDataSetManager().setDataSetPermission(dsSite.getId(), "liqi",
 				DataSetImpl.PERMISSION_PUBLIC, null);
 		try {
 			q = dsSite.getQuery().select(dsSite.getField("EN_NAME"),
@@ -125,7 +125,7 @@ public class PlatformImpl implements Platform {
 				false, FieldFunctionality.Latitude);
 		dsSite = getDataSetManager().createDataSet("Lac_Ci_Map", "ybz",
 				"小区地理位置信息orcl", orclProvider, true, fields);
-		getDataSetManager().setDataSetPermission("Lac_Ci_Map", "ybz",
+		getDataSetManager().setDataSetPermission(dsSite.getId(), "ybz",
 				DataSetImpl.PERMISSION_PUBLIC, null);
 		try {
 			q = dsSite.getQuery().select(dsSite.getField("AREANAME_EN"),
@@ -146,12 +146,12 @@ public class PlatformImpl implements Platform {
 				FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false,
 				FieldFunctionality.Other);
-		getDataSetManager().createDataSet("WebsiteId_URL", "myc", "网站信息",
-				provider, true, fields);
+		dsSite = getDataSetManager().createDataSet("WebsiteId_URL", "myc",
+				"网站信息", provider, true, fields);
 		List<String> users = new ArrayList<>();
 		users.add("wc");
 		users.add("xm");
-		getDataSetManager().setDataSetPermission("WebsiteId_URL", "myc",
+		getDataSetManager().setDataSetPermission(dsSite.getId(), "myc",
 				DataSetImpl.PERMISSION_LIMITED, users);
 		// 2nd DataSet
 		fields = new DataField[4];
@@ -188,20 +188,20 @@ public class PlatformImpl implements Platform {
 									AggrFunction.COUNT, "SiteCount"))
 					.orderBy("SiteCount", Order.DESC);
 //			dv = getDataSetManager()
-	//				.defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
-		//					dsSite.getId(), DataFeatureType.ValueFeature, q);
-		//	dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
-			Map<DataField, DataField> fm = new HashMap<DataField, DataField>();
+//					.defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
+//							dsSite.getId(), DataFeatureType.ValueFeature, q);
+//			dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
+			 Map<DataField, DataField> fm = new HashMap<DataField,
+			 DataField>();
 			Query q2 = dsSite.getQuery();
-			fm.put(q2.getFields()[0], q.getFields()[0]);
-			q = q.join(q2, fm);
-			System.out.println("JOIN: " + q.toString());
+			 fm.put(q2.getFields()[0], q.getFields()[0]);
+			 q = q.join(q2, fm);
+			 System.out.println("JOIN: " + q.toString());
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
 			// TODO Auto-generated catch block
 			System.out.println(e1.getMessage());
 		}
-		
 
 		// 4th DataSet
 		fields = new DataField[6];
@@ -340,21 +340,22 @@ public class PlatformImpl implements Platform {
 		System.out.println("----------------------------"
 				+ getDataSetManager().getDataSetList().size());
 		for (DataSet ds : getDataSetManager().getDataSetList()) {
-			System.out.println(ds.getOwner() + " "
+			System.out.println(ds.getId() + " " + ds.getOwner() + " "
 					+ DataSetImpl.permissionToString(ds.getPermission()) + " "
 					+ ds.getName() + " " + ds.getDescription());
 		}
 		System.out.println("PUBLIC----------------------------- "
 				+ getDataSetManager().getPublicDataSetList().size());
 		for (DataSet ds : getDataSetManager().getPublicDataSetList()) {
-			System.out.println(ds.getOwner() + " " + ds.getName() + " "
-					+ ds.getDescription());
+			System.out.println(ds.getId() + " " + ds.getOwner() + " "
+					+ ds.getName() + " " + ds.getDescription());
 		}
 		System.out.println("LIMITED----------------------------- "
 				+ getDataSetManager().getLimitedDataSetList("wc").size());
 		for (DataSet ds : getDataSetManager().getLimitedDataSetList("wc")) {
-			System.out.println(ds.getOwner() + " " + ds.getName() + " "
-					+ ds.getLimitedUsers() + " " + ds.getDescription());
+			System.out.println(ds.getId() + " " + ds.getOwner() + " "
+					+ ds.getName() + " " + ds.getLimitedUsers() + " "
+					+ ds.getDescription());
 		}
 
 		System.out.println("END-----------------------------");
