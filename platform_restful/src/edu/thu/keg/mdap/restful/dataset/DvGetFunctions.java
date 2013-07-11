@@ -95,6 +95,7 @@ public class DvGetFunctions {
 			if (dataviews != null)
 				for (DataView dataview : dataviews) {
 					JDataviewName dname = new JDataviewName();
+					dname.setId(dataview.getId());
 					dname.setDataviewName(dataview.getName());
 					dname.setDescriptionEn(dataview
 							.getDescription(Locale.ENGLISH));

@@ -175,8 +175,8 @@ public class DsAdFunctions {
 				isDim = field.getBoolean("isdim");
 				func = field.getString("func");
 				fields[i] = new GeneralDataField(fieldname, fieldtype,
-						df_description, isKey, allowNull, isDim,
-						FieldFunctionality.parse(func));
+						df_description, isKey, FieldFunctionality.valueOf(func));
+
 			}
 			p.getDataSetManager().createDataSet(dataset, owner, description,
 					provider, loadable, fields);
@@ -508,14 +508,14 @@ public class DsAdFunctions {
 			datasetManager.removeDataSet(datasetManager.getDataSet(dataset));
 			datasetManager.saveChanges();
 		} catch (UserNotInPoolException | DataProviderException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn(e.getMessage());
 		}
 	}
 
 	@POST
 	@Path("/rmdv")
 	public Response removeDataview(@FormParam("dataset") String dataview) {
+		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)
@@ -526,6 +526,7 @@ public class DsAdFunctions {
 			datasetManager.saveChanges();
 		} catch (UserNotInPoolException | DataProviderException | IOException e) {
 			try {
+				log.warn(e.getMessage());
 				return Response
 						.ok()
 						.entity(new JSONObject().put("error", e.getMessage())

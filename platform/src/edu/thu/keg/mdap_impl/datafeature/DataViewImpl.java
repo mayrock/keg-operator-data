@@ -27,19 +27,6 @@ public class DataViewImpl implements DataView {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -251,7 +238,7 @@ public class DataViewImpl implements DataView {
 	public void resetView(String description, String name, Query q,
 			List<DataField> key, List<DataField> values) {
 		this.setDescription(description);
-		//to-do
+		// to-do
 		this.id = name;
 		this.setName(name);
 		this.setQ(q);

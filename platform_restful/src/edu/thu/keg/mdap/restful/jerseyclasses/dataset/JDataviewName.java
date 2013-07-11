@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class JDataviewName {
+	private String id;
 	private String dataviewName;
 	private String permission;
 	private String owner;
@@ -17,6 +18,20 @@ public class JDataviewName {
 	private List<String> values;
 	private String datafeature;
 	private String dataset;
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	/**
 	 * @return the dataviewName
@@ -131,12 +146,11 @@ public class JDataviewName {
 	}
 
 	/**
-	 * @param dataset the dataset to set
+	 * @param dataset
+	 *            the dataset to set
 	 */
 	public void setDataset(String dataset) {
 		this.dataset = dataset;
 	}
-	
-	
 
 }

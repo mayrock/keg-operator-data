@@ -245,7 +245,7 @@ public class DataSetManagerImpl implements DataSetManager {
 
 	@Override
 	public void removeDataView(DataView dv) throws DataProviderException {
-		if (!views.containsValue(dv))
+		if (!views.containsKey(dv.getId()))
 			return;
 		// dv.getProvider().removeContent(dv);
 
@@ -300,7 +300,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	}
 
 	private void removeDSMeta(DataView dv) {
-		views.remove(dv);
+		views.remove(dv.getId());
 		datasetMapViews.get(dv.getDataSet()).remove(dv);
 		for (Set<DataView> list : viewsMap.values()) {
 			list.remove(dv);

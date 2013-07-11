@@ -14,6 +14,10 @@ import edu.thu.keg.mdap.datamodel.TableStructure;
  * 
  */
 public interface DataView extends DataFeature, TableStructure {
+	public boolean equals(Object obj);
+
+	public int hashCode();
+
 	/**
 	 * get dataview id
 	 * 
