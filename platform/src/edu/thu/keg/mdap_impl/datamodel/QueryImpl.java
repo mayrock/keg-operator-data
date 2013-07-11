@@ -46,7 +46,8 @@ public class QueryImpl implements Query {
 	}
 
 	QueryImpl(DataField[] fields, List<WhereClause> wheres,
-			List<OrderClause> orders,JoinOnClause join, DataProvider provider, Query innerQuery) {
+			List<OrderClause> orders, JoinOnClause join, DataProvider provider,
+			Query innerQuery) {
 		if (innerQuery == null) {
 			this.fields = fields;
 			this.wheres = wheres;
@@ -72,6 +73,10 @@ public class QueryImpl implements Query {
 	private List<WhereClause> wheres;
 	private List<OrderClause> orders;
 	private JoinOnClause join;
+
+	public void setFields(DataField[] fields) {
+		this.fields = fields;
+	}
 
 	@Override
 	public DataField[] getFields() {
@@ -116,12 +121,11 @@ public class QueryImpl implements Query {
 	public Query select(DataField... fields) {
 		Query q = null;
 		if (this.getGroupByFields() != null) {
-			q = new QueryImpl(fields, null,
-					null, null, this.provider, this);
+			q = new QueryImpl(fields, null, null, null, this.provider, this);
 			transformFields(q);
 		} else {
-			q = new QueryImpl(fields, this.wheres, this.orders,
-					this.join, this.provider, null);
+			q = new QueryImpl(fields, this.wheres, this.orders, this.join,
+					this.provider, null);
 		}
 		return q;
 	}
@@ -141,15 +145,15 @@ public class QueryImpl implements Query {
 		List<WhereClause> wheres = new ArrayList<WhereClause>();
 		if (field instanceof AggregatedDataField) {
 			wheres.add(new WhereClause(field, op, value));
-			Query q = new QueryImpl(fields, wheres, null,
-					null, this.provider, this);
+			Query q = new QueryImpl(fields, wheres, null, null, this.provider,
+					this);
 			transformFields(q);
 			return q;
 		} else {
 			wheres.addAll(this.wheres);
 			wheres.add(new WhereClause(field, op, value));
-			return new QueryImpl(fields, wheres, this.orders, this.join, this.provider,
-					null);
+			return new QueryImpl(fields, wheres, this.orders, this.join,
+					this.provider, null);
 		}
 	}
 
@@ -183,8 +187,8 @@ public class QueryImpl implements Query {
 		List<OrderClause> orders = new ArrayList<OrderClause>();
 		orders.addAll(this.orders);
 		orders.add(new OrderClause(field, order));
-		return new QueryImpl(this.fields, this.wheres, orders, this.join, this.provider,
-				null);
+		return new QueryImpl(this.fields, this.wheres, orders, this.join,
+				this.provider, null);
 	}
 
 	@Override
@@ -214,24 +218,46 @@ public class QueryImpl implements Query {
 	}
 
 	private void transformFields(Query q) {
+		// 将所有要join的DataField的query设置成自己来自表的query
+		// for (int i = 0; i < q.getFields().length; i++) {
+		// DataField df = q.getFields()[i];
+		// q.getFields()[i] = new GeneralDataField(df.getName(),
+		// df.getFieldType(), df.getDescription(), df.isKey(),
+		// df.allowNull(), df.isDim(), df.getFunction(), q.getInnerQuery());
+		// }
+		DataField[] df_all = new DataField[q.getFields().length
+				+ q.getJoinOnClause().getQuery().getFields().length];
 		for (int i = 0; i < q.getFields().length; i++) {
 			DataField df = q.getFields()[i];
-				q.getFields()[i] = new GeneralDataField(df.getName(),
-						df.getFieldType(), df.getDescription(), df.isKey(),
-						df.allowNull(), df.isDim(), df.getFunction(), q.getInnerQuery());
+			df_all[i] = new GeneralDataField(df.getName(), df.getFieldType(),
+					df.getDescription(), df.isKey(), df.allowNull(),
+					df.isDim(), df.getFunction(), q.getInnerQuery());
 		}
+		for (int i = 0; i < q.getJoinOnClause().getQuery().getFields().length; i++) {
+			DataField df = q.getJoinOnClause().getQuery().getFields()[i];
+			df_all[i + q.getFields().length] = new GeneralDataField(
+					df.getName(), df.getFieldType(), df.getDescription(),
+					df.isKey(), df.allowNull(), df.isDim(), df.getFunction(), q
+							.getJoinOnClause().getQuery());
+		}
+		q.setFields(df_all);
+
+		// 将所有要join里实现on的DataField的query设置成自己来自表的query
 		HashMap<DataField, DataField> nfs = new HashMap<DataField, DataField>();
 		for (DataField fs : q.getJoinOnClause().getOns().keySet()) {
 			DataField nk = new GeneralDataField(fs.getName(),
 					fs.getFieldType(), fs.getDescription(), fs.isKey(),
-					fs.allowNull(), fs.isDim(), fs.getFunction(), q.getJoinOnClause().getQuery());
+					fs.allowNull(), fs.isDim(), fs.getFunction(), q
+							.getJoinOnClause().getQuery());
 			DataField df = q.getJoinOnClause().getOns().get(fs);
 			DataField nv = new GeneralDataField(df.getName(),
 					df.getFieldType(), df.getDescription(), df.isKey(),
-					df.allowNull(), df.isDim(), df.getFunction(), q.getInnerQuery());
-			
-			nfs.put(nk,nv);		
+					df.allowNull(), df.isDim(), df.getFunction(),
+					q.getInnerQuery());
+
+			nfs.put(nk, nv);
 		}
+		// 重新设置join的on的属性
 		q.getJoinOnClause().setOns(nfs);
 	}
 
@@ -249,6 +275,7 @@ public class QueryImpl implements Query {
 	public String toString() {
 		return this.provider.getQueryString(this);
 	}
+
 	//
 	// /*
 	// * (non-Javadoc)
