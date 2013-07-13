@@ -204,7 +204,7 @@ public class GeneralDataField implements DataField {
 	public Query getQuery() {
 		return this.query;
 	}
-
+	@Override
 	public void setQuery(Query query) {
 		this.query = query;
 	}

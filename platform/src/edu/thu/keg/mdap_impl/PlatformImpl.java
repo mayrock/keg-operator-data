@@ -145,7 +145,7 @@ public class PlatformImpl implements Platform {
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true,
 				FieldFunctionality.Identifier);
-		fields[1] = new GeneralDataField("URL", FieldType.Double, "", false,
+		fields[1] = new GeneralDataField("URL", FieldType.ShortString, "", false,
 				FieldFunctionality.Other);
 		dsSite = getDataSetManager().createDataSet("WebsiteId_URL", "myc",
 				"网站信息", provider, true, fields);
@@ -182,35 +182,34 @@ public class PlatformImpl implements Platform {
 				provider, true, fields);
 		// 3rd DataView
 		try {
-			q = dsSite.getQuery().select(
-					dsSite.getField("Region"),
-					new AggregatedDataField(dsSite.getField("SiteId"),
-							AggrFunction.COUNT, "SiteCount", null));
-			// .orderBy("SiteCount", Order.DESC);
-			// dv = getDataSetManager()
-			// .defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
-			// dsSite.getId(), DataFeatureType.ValueFeature, q);
-			// dv.setDescription(Locale.ENGLISH,
-			// "Cell tower count within regions");
+			q = dsSite
+					.getQuery()
+					.select(dsSite.getField("Region"),
+							new AggregatedDataField(dsSite.getField("SiteId"),
+									AggrFunction.COUNT, "SiteCount", null))
+					.orderBy("SiteCount", Order.DESC);
+			dv = getDataSetManager()
+					.defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
+							dsSite.getId(), DataFeatureType.ValueFeature, q);
+			dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
+			// ----------------------------------------测试查询
 			System.out.println("select1: "
 					+ q.where(q.getFields()[0].getName(), Operator.EQ, 1)
 							.toString());
 			Map<DataField, DataField> fm1 = new HashMap<DataField, DataField>();
 			Map<DataField, DataField> fm2 = new HashMap<DataField, DataField>();
 			Query q2 = dsSite.getQuery();
-			System.out.println("select1: "
+			System.out.println("select2: "
 					+ q2.where(q2.getFields()[0].getName(), Operator.EQ, 3439)
 							.where(q2.getFields()[0].getName(), Operator.EQ,
 									3435).toString());
 			fm1.put(q2.getFields()[0].clone(), q.getFields()[0].clone());
 			fm2.put(q.getFields()[0].clone(), q2.getFields()[0].clone());
-			// q2 = q2.select(q2.getFields()[0]);
-			// System.out.println("select2: " + q2.toString());
-			// q = q.join(q2, fm);
-			// .where("Region", Operator.EQ, 139);
-			// q=q.select(dsSite.getField("Longitude"));
-			System.out.println("JOIN: " + q2.join(q, fm1).where("SiteId", Operator.EQ, 193).toString());
-			System.out.println("JOIN: " + q.join(q2, fm2).toString());
+
+			System.out.println("JOIN1: "
+					+ q2.join(q, fm1).where("SiteId", Operator.EQ, 193)
+							.toString());
+			System.out.println("JOIN2: " + q.join(q2, fm2).toString());
 
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {

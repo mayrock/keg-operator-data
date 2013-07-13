@@ -154,7 +154,7 @@ public class QueryImpl implements Query {
 		JoinOnClause newJoin = new JoinOnClause(q2, fieldsMap);
 		Query q = new QueryImpl(this.fields, new ArrayList<WhereClause>(),
 				new ArrayList<OrderClause>(), newJoin, this.provider, this);
-		transformFields(q);
+		transformJoinFields(q);
 		return q;
 	}
 
@@ -234,24 +234,15 @@ public class QueryImpl implements Query {
 		q.setFields(df_all);
 	}
 
-	private void transformFieldsWhere(Query q, WhereClause where) {
-		DataField df = where.getField();
-		df = df.clone();
-		if (q.getInnerQuery() != null)
-			df.setQuery(q.getInnerQuery());
-		else
-			df.setDataSet(q.getFields()[0].getDataSet());
-	}
-
-	private void transformFields(Query q) {
+	private void transformJoinFields(Query q) {
 		int joinClauseLen = q.getJoinOnClause().getQuery().getFields().length;
 		DataField[] df_all = new DataField[q.getFields().length + joinClauseLen];
+		// 复制所有q1,q2的fields到select中
 		for (int i = 0; i < q.getFields().length; i++) {
 			DataField df = q.getFields()[i];
 			df_all[i] = new GeneralDataField(df.getName(), df.getFieldType(),
 					df.getDescription(), df.isKey(), df.allowNull(),
 					df.isDim(), df.getFunction(), q.getInnerQuery());
-			// df_all[i].setDataSet(df.getDataSet());
 			if (q.getInnerQuery() == null) {
 				df.setDataSet(df.getDataSet());
 			}
@@ -259,7 +250,6 @@ public class QueryImpl implements Query {
 		for (int i = 0; i < joinClauseLen; i++) {
 			Query q2 = q.getJoinOnClause().getQuery();
 			DataField df = q2.getFields()[i];
-
 			df_all[i + q.getFields().length] = new GeneralDataField(
 					df.getName(), df.getFieldType(), df.getDescription(),
 					df.isKey(), df.allowNull(), df.isDim(), df.getFunction(),

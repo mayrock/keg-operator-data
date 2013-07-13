@@ -290,7 +290,9 @@ public class DsGetFunctions {
 			}
 			rs.close();
 		} catch (OperationNotSupportedException | DataProviderException e) {
+
 			log.warn(e.getMessage());
+			e.printStackTrace();
 		}
 		return new JSONWithPadding(new GenericEntity<List<JDatasetLine>>(
 				datasetList) {
