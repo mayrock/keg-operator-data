@@ -546,7 +546,7 @@ public class DsGetFunctions {
 						+ uriInfo.getAbsolutePath());
 				list_df = new ArrayList<JField>();
 				DataField df = ds.getField(fieldname);
-				q = q.where(fieldname, Operator.parse(opr), value);
+				q = q.whereOr(fieldname, Operator.parse(opr), value);
 			}
 			q.open();
 			int ii = 0;
