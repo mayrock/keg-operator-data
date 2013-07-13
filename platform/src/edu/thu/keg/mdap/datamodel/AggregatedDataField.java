@@ -176,6 +176,11 @@ public class AggregatedDataField implements DataField {
 		return this.query;
 	}
 
+	@Override
+	public void setQuery(Query query) {
+		this.query = query;
+	}
+
 	public DataField getField() {
 		return this.field;
 	}

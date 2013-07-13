@@ -182,32 +182,36 @@ public class PlatformImpl implements Platform {
 				provider, true, fields);
 		// 3rd DataView
 		try {
-			q = dsSite
-					.getQuery()
-					.select(dsSite.getField("Region"),
-							new AggregatedDataField(dsSite.getField("SiteId"),
-									AggrFunction.COUNT, "SiteCount", null));
-//					.orderBy("SiteCount", Order.DESC);
+			q = dsSite.getQuery().select(
+					dsSite.getField("Region"),
+					new AggregatedDataField(dsSite.getField("SiteId"),
+							AggrFunction.COUNT, "SiteCount", null));
+			// .orderBy("SiteCount", Order.DESC);
 			// dv = getDataSetManager()
 			// .defineView("RegionSta", dsSite.getOwner(), "区域内基站数统计",
 			// dsSite.getId(), DataFeatureType.ValueFeature, q);
 			// dv.setDescription(Locale.ENGLISH,
 			// "Cell tower count within regions");
-			System.out.println("select1: " + q.toString());
+			System.out.println("select1: "
+					+ q.where(q.getFields()[0].getName(), Operator.EQ, 1)
+							.toString());
 			Map<DataField, DataField> fm1 = new HashMap<DataField, DataField>();
-			Map<DataField, DataField> fm2= new HashMap<DataField, DataField>();
+			Map<DataField, DataField> fm2 = new HashMap<DataField, DataField>();
 			Query q2 = dsSite.getQuery();
-			System.out.println("select1: " + q2.toString());
+			System.out.println("select1: "
+					+ q2.where(q2.getFields()[0].getName(), Operator.EQ, 3439)
+							.where(q2.getFields()[0].getName(), Operator.EQ,
+									3435).toString());
 			fm1.put(q2.getFields()[0].clone(), q.getFields()[0].clone());
 			fm2.put(q.getFields()[0].clone(), q2.getFields()[0].clone());
-//			q2 = q2.select(q2.getFields()[0]);
-//			System.out.println("select2: " + q2.toString());
-//			q = q.join(q2, fm);
+			// q2 = q2.select(q2.getFields()[0]);
+			// System.out.println("select2: " + q2.toString());
+			// q = q.join(q2, fm);
 			// .where("Region", Operator.EQ, 139);
 			// q=q.select(dsSite.getField("Longitude"));
-			System.out.println("JOIN: " + q2.join(q, fm1).toString());
+			System.out.println("JOIN: " + q2.join(q, fm1).where("SiteId", Operator.EQ, 193).toString());
 			System.out.println("JOIN: " + q.join(q2, fm2).toString());
-			
+
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
 			// TODO Auto-generated catch block
@@ -388,7 +392,7 @@ public class PlatformImpl implements Platform {
 
 		PlatformImpl p = new PlatformImpl("config.xml");
 		p.crud();
-//		p.query();
+		// p.query();
 	}
 
 	private void query() {

@@ -140,18 +140,13 @@ public class QueryImpl implements Query {
 					+ " does not exist in the field list of this query");
 		}
 		List<WhereClause> wheres = new ArrayList<WhereClause>();
-		if (field instanceof AggregatedDataField) {
-			wheres.add(new WhereClause(field, op, value));
-			Query q = new QueryImpl(fields, wheres, null, null, this.provider,
-					this);
-			transformFields(q);
-			return q;
-		} else {
-			wheres.addAll(this.wheres);
-			wheres.add(new WhereClause(field, op, value));
-			return new QueryImpl(fields, wheres, this.orders, this.join,
-					this.provider, null);
-		}
+		wheres.addAll(this.wheres);
+		wheres.add(new WhereClause(field, op, value));
+		Query q = new QueryImpl(this.fields, wheres, this.orders, this.join,
+				this.provider, this.getInnerQuery());
+		// transformFields(q);
+		return q;
+
 	}
 
 	@Override
@@ -237,6 +232,15 @@ public class QueryImpl implements Query {
 			}
 		}
 		q.setFields(df_all);
+	}
+
+	private void transformFieldsWhere(Query q, WhereClause where) {
+		DataField df = where.getField();
+		df = df.clone();
+		if (q.getInnerQuery() != null)
+			df.setQuery(q.getInnerQuery());
+		else
+			df.setDataSet(q.getFields()[0].getDataSet());
 	}
 
 	private void transformFields(Query q) {

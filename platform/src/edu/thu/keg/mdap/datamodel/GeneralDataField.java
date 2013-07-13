@@ -205,6 +205,10 @@ public class GeneralDataField implements DataField {
 		return this.query;
 	}
 
+	public void setQuery(Query query) {
+		this.query = query;
+	}
+
 	public GeneralDataField clone() {
 		return new GeneralDataField(this.getName(), this.getFieldType(),
 				this.getDescription(), this.isKey(), this.allowNull(),
