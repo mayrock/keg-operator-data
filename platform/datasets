@@ -1,15 +1,15 @@
 <edu.thu.keg.mdap__impl.DataSetManagerImpl_-Storage>
   <datasets>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>slot_Imsi_All</id>
-      <name>slot_Imsi_All</name>
-      <owner>myc</owner>
+      <id>DSa7b5e4b2-9541-415c-845f-3ee15d13e8f6</id>
+      <name>RegionInfo3</name>
+      <owner>xm</owner>
       <provider class="Jdbc">jdbc:sqlserver://10.1.1.55:1433;databaseName=BeijingData;integratedSecurity=true;</provider>
       <descriptions>
         <messages>
           <entry>
             <locale>zh</locale>
-            <string>User statistics by time slot</string>
+            <string>地理区域</string>
           </entry>
         </messages>
         <defaultLocale reference="../messages/entry/locale"/>
@@ -17,298 +17,44 @@
       <loadable>true</loadable>
       <fieldsMap>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Other</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>WebsiteCount</name>
-              <queryName>WebsiteCount</queryName>
+              <name>Region</name>
+              <queryName>Region</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
                   <entry>
                     <locale reference="../../../../../../../../descriptions/messages/entry/locale"/>
-                    <string>Total count of visited websites</string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Int</type>
-              <allowNull>true</allowNull>
-              <func>Value</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>RegionCount</name>
-              <queryName>RegionCount</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../descriptions/messages/entry/locale"/>
-                    <string>Total count of appeared regions</string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Int</type>
-              <allowNull>true</allowNull>
-              <func>Value</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>TotalCount</name>
-              <queryName>TotalCount</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../descriptions/messages/entry/locale"/>
-                    <string>Total count of requests</string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Int</type>
-              <allowNull>true</allowNull>
-              <func>Value</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Imsi</name>
-              <queryName>Imsi</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../descriptions/messages/entry/locale"/>
-                    <string>User IMSI</string>
+                    <string></string>
                   </entry>
                 </messages>
                 <defaultLocale reference="../../../../../../descriptions/messages/entry/locale"/>
               </desps>
               <isKey>true</isKey>
-              <type>ShortString</type>
+              <type>Int</type>
               <allowNull>false</allowNull>
-              <func>Identifier</func>
+              <func>Other</func>
               <isDim>true</isDim>
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-      </fieldsMap>
-      <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
-      </fields>
-      <permission>2</permission>
-    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>SiteId_ConnHour</id>
-      <name>SiteId_ConnHour</name>
-      <owner>myc</owner>
-      <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
-      <descriptions>
-        <messages>
-          <entry>
-            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-            <string>每小时每基站连接数</string>
-          </entry>
-        </messages>
-        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-      </descriptions>
-      <loadable>true</loadable>
-      <fieldsMap>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>TotalCount</name>
-              <queryName>TotalCount</queryName>
+              <name>Name</name>
+              <queryName>Name</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
                   <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string>连接数</string>
+                    <locale reference="../../../../../../../../descriptions/messages/entry/locale"/>
+                    <string></string>
                   </entry>
                 </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                <defaultLocale reference="../../../../../../descriptions/messages/entry/locale"/>
               </desps>
               <isKey>false</isKey>
-              <type>Int</type>
-              <allowNull>true</allowNull>
-              <func>Value</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>SiteId</name>
-              <queryName>SiteId</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string>基站ID</string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>true</isKey>
               <type>ShortString</type>
-              <allowNull>false</allowNull>
-              <func>Identifier</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>ConnHour</name>
-              <queryName>ConnHour</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string>时间段(小时)</string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Int</type>
               <allowNull>true</allowNull>
-              <func>Identifier</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-      </fieldsMap>
-      <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-      </fields>
-      <permission>2</permission>
-    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>TESTF</id>
-      <name>TESTF</name>
-      <owner>liqi</owner>
-      <provider class="edu.thu.keg.mdap_impl.provider.HiveProvider">
-        <connString>jdbc:hive://10.1.1.165:10000/default</connString>
-        <rsMapConn/>
-        <results/>
-      </provider>
-      <descriptions>
-        <messages>
-          <entry>
-            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-            <string>小区地理位置信息hadoop</string>
-          </entry>
-        </messages>
-        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-      </descriptions>
-      <loadable>true</loadable>
-      <fieldsMap>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>LONGITUDE</name>
-              <queryName>LONGITUDE</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Double</type>
-              <allowNull>true</allowNull>
-              <func>Longitude</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>LAC</name>
-              <queryName>LAC</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Int</type>
-              <allowNull>true</allowNull>
-              <func>Value</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>CI</name>
-              <queryName>CI</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Int</type>
-              <allowNull>true</allowNull>
-              <func>Value</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>EN_NAME</name>
-              <queryName>EN_NAME</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>true</isKey>
-              <type>ShortString</type>
-              <allowNull>false</allowNull>
-              <func>Identifier</func>
+              <func>Other</func>
               <isDim>true</isDim>
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
@@ -317,17 +63,17 @@
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Latitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>LATITUDE</name>
-              <queryName>LATITUDE</queryName>
+              <name>Latitude</name>
+              <queryName>Latitude</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
                   <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <locale reference="../../../../../../../../descriptions/messages/entry/locale"/>
                     <string></string>
                   </entry>
                 </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                <defaultLocale reference="../../../../../../descriptions/messages/entry/locale"/>
               </desps>
               <isKey>false</isKey>
               <type>Double</type>
@@ -337,89 +83,41 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
-      </fieldsMap>
-      <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-      </fields>
-      <permission>0</permission>
-    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>DataAggr_ContentTypes_Up90</id>
-      <name>DataAggr_ContentTypes_Up90</name>
-      <owner>wc</owner>
-      <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
-      <descriptions>
-        <messages>
-          <entry>
-            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-            <string>ContentType分布集</string>
-          </entry>
-        </messages>
-        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-      </descriptions>
-      <loadable>true</loadable>
-      <fieldsMap>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>times</name>
-              <queryName>times</queryName>
+              <name>Longitude</name>
+              <queryName>Longitude</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
                   <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string>appear times of the ContentType</string>
+                    <locale reference="../../../../../../../../descriptions/messages/entry/locale"/>
+                    <string></string>
                   </entry>
                 </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                <defaultLocale reference="../../../../../../descriptions/messages/entry/locale"/>
               </desps>
               <isKey>false</isKey>
-              <type>Int</type>
+              <type>Double</type>
               <allowNull>true</allowNull>
-              <func>Value</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>ContentType</name>
-              <queryName>ContentType</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string>Content Type of websites</string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>true</isKey>
-              <type>LongString</type>
-              <allowNull>false</allowNull>
-              <func>Identifier</func>
+              <func>Longitude</func>
               <isDim>true</isDim>
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
       </fieldsMap>
       <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </fields>
       <permission>2</permission>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>FilteredByCT_Domain</id>
+      <id>DS3d5a8116-21fd-49c1-b5c2-a14e01466a38</id>
       <name>FilteredByCT_Domain</name>
       <owner>wc</owner>
       <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
@@ -570,15 +268,15 @@
       <permission>2</permission>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>Lac_Ci_Map</id>
-      <name>Lac_Ci_Map</name>
-      <owner>ybz</owner>
-      <provider class="Jdbc">jdbc:oracle:thin:bj_tuoming/root@10.1.1.110:1521:orcl</provider>
+      <id>DS879928d8-fbcf-4445-be20-feb99c29d685</id>
+      <name>WebsiteId_URL</name>
+      <owner>myc</owner>
+      <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
       <descriptions>
         <messages>
           <entry>
             <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-            <string>小区地理位置信息orcl</string>
+            <string>网站信息</string>
           </entry>
         </messages>
         <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
@@ -586,11 +284,11 @@
       <loadable>true</loadable>
       <fieldsMap>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Other</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>LONGITUDE</name>
-              <queryName>LONGITUDE</queryName>
+              <name>URL</name>
+              <queryName>URL</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
@@ -604,11 +302,157 @@
               <isKey>false</isKey>
               <type>Double</type>
               <allowNull>true</allowNull>
-              <func>Longitude</func>
+              <func>Other</func>
               <isDim>true</isDim>
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>WebsiteId</name>
+              <queryName>WebsiteId</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string></string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>true</isKey>
+              <type>Int</type>
+              <allowNull>false</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+      </fieldsMap>
+      <fields>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+      </fields>
+      <permission>1</permission>
+      <limitedUsers>
+        <string>wc</string>
+        <string>xm</string>
+      </limitedUsers>
+    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+      <id>DS46e46e93-1a60-46ce-b721-98a568ac652b</id>
+      <name>SiteId_ConnHour</name>
+      <owner>myc</owner>
+      <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
+      <descriptions>
+        <messages>
+          <entry>
+            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            <string>每小时每基站连接数</string>
+          </entry>
+        </messages>
+        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+      </descriptions>
+      <loadable>true</loadable>
+      <fieldsMap>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>TotalCount</name>
+              <queryName>TotalCount</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>连接数</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Value</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>SiteId</name>
+              <queryName>SiteId</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>基站ID</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>true</isKey>
+              <type>ShortString</type>
+              <allowNull>false</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>ConnHour</name>
+              <queryName>ConnHour</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>时间段(小时)</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+      </fieldsMap>
+      <fields>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+      </fields>
+      <permission>2</permission>
+    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+      <id>DS5b773dde-9cc3-41dd-ad82-3d752a59205a</id>
+      <name>TESTF</name>
+      <owner>liqi</owner>
+      <provider class="edu.thu.keg.mdap_impl.provider.HiveProvider">
+        <connString>jdbc:hive://10.1.1.165:10000/default</connString>
+        <rsMapConn/>
+        <results/>
+      </provider>
+      <descriptions>
+        <messages>
+          <entry>
+            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            <string>小区地理位置信息hadoop</string>
+          </entry>
+        </messages>
+        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+      </descriptions>
+      <loadable>true</loadable>
+      <fieldsMap>
         <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
@@ -653,30 +497,6 @@
           </list>
         </entry>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>AREANAME_EN</name>
-              <queryName>AREANAME_EN</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>true</isKey>
-              <type>ShortString</type>
-              <allowNull>false</allowNull>
-              <func>Identifier</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Latitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
@@ -700,18 +520,177 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>EN_NAME</name>
+              <queryName>EN_NAME</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string></string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>true</isKey>
+              <type>ShortString</type>
+              <allowNull>false</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>LONGITUDE</name>
+              <queryName>LONGITUDE</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string></string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Double</type>
+              <allowNull>true</allowNull>
+              <func>Longitude</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
       </fieldsMap>
       <fields>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </fields>
       <permission>0</permission>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
     <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>RegionInfo2</id>
+      <id>DSdc9de817-4ea6-4b10-84f5-f660b5a94fb9</id>
+      <name>slot_Imsi_All</name>
+      <owner>myc</owner>
+      <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
+      <descriptions>
+        <messages>
+          <entry>
+            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            <string>User statistics by time slot</string>
+          </entry>
+        </messages>
+        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+      </descriptions>
+      <loadable>true</loadable>
+      <fieldsMap>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>WebsiteCount</name>
+              <queryName>WebsiteCount</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>Total count of visited websites</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Value</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>RegionCount</name>
+              <queryName>RegionCount</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>Total count of appeared regions</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Value</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>TotalCount</name>
+              <queryName>TotalCount</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>Total count of requests</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Value</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>Imsi</name>
+              <queryName>Imsi</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>User IMSI</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>true</isKey>
+              <type>ShortString</type>
+              <allowNull>false</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+      </fieldsMap>
+      <fields>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
+      </fields>
+      <permission>2</permission>
+    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+      <id>DSac2293fb-97d6-45b1-96c0-a2ecb5b41405</id>
       <name>RegionInfo2</name>
       <owner>xm</owner>
       <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
@@ -727,11 +706,35 @@
       <loadable>true</loadable>
       <fieldsMap>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Other</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Longitude</name>
-              <queryName>Longitude</queryName>
+              <name>Region</name>
+              <queryName>Region</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string></string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>false</allowNull>
+              <func>Other</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Latitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>Latitude</name>
+              <queryName>Latitude</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
@@ -745,7 +748,7 @@
               <isKey>false</isKey>
               <type>Double</type>
               <allowNull>true</allowNull>
-              <func>Longitude</func>
+              <func>Latitude</func>
               <isDim>true</isDim>
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
@@ -794,155 +797,6 @@
           </list>
         </entry>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Latitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Latitude</name>
-              <queryName>Latitude</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Double</type>
-              <allowNull>true</allowNull>
-              <func>Latitude</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Other</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Region</name>
-              <queryName>Region</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Int</type>
-              <allowNull>false</allowNull>
-              <func>Other</func>
-              <isDim>false</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-      </fieldsMap>
-      <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-      </fields>
-      <permission>2</permission>
-    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>WebsiteId_URL</id>
-      <name>WebsiteId_URL</name>
-      <owner>myc</owner>
-      <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
-      <descriptions>
-        <messages>
-          <entry>
-            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-            <string>网站信息</string>
-          </entry>
-        </messages>
-        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-      </descriptions>
-      <loadable>true</loadable>
-      <fieldsMap>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>WebsiteId</name>
-              <queryName>WebsiteId</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>true</isKey>
-              <type>Int</type>
-              <allowNull>false</allowNull>
-              <func>Identifier</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-        <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Other</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
-          <list>
-            <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>URL</name>
-              <queryName>URL</queryName>
-              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
-              <desps>
-                <messages>
-                  <entry>
-                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-                    <string></string>
-                  </entry>
-                </messages>
-                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-              </desps>
-              <isKey>false</isKey>
-              <type>Double</type>
-              <allowNull>true</allowNull>
-              <func>Other</func>
-              <isDim>true</isDim>
-            </edu.thu.keg.mdap.datamodel.GeneralDataField>
-          </list>
-        </entry>
-      </fieldsMap>
-      <fields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-      </fields>
-      <permission>1</permission>
-      <limitedUsers>
-        <string>wc</string>
-        <string>xm</string>
-      </limitedUsers>
-    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
-      <id>RegionInfo3</id>
-      <name>RegionInfo3</name>
-      <owner>xm</owner>
-      <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
-      <descriptions>
-        <messages>
-          <entry>
-            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-            <string>地理区域</string>
-          </entry>
-        </messages>
-        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-      </descriptions>
-      <loadable>true</loadable>
-      <fieldsMap>
-        <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
@@ -966,12 +820,152 @@
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
         </entry>
+      </fieldsMap>
+      <fields>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+      </fields>
+      <permission>2</permission>
+    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+      <id>DS04a0d2c3-0703-4142-ae5a-f90586d336d4</id>
+      <name>DataAggr_ContentTypes_Up90</name>
+      <owner>wc</owner>
+      <provider class="Jdbc" reference="../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
+      <descriptions>
+        <messages>
+          <entry>
+            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            <string>ContentType分布集</string>
+          </entry>
+        </messages>
+        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+      </descriptions>
+      <loadable>true</loadable>
+      <fieldsMap>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>times</name>
+              <queryName>times</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>appear times of the ContentType</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Value</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>ContentType</name>
+              <queryName>ContentType</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string>Content Type of websites</string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>true</isKey>
+              <type>LongString</type>
+              <allowNull>false</allowNull>
+              <func>Identifier</func>
+              <isDim>true</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+      </fieldsMap>
+      <fields>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+      </fields>
+      <permission>2</permission>
+    </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+    <edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
+      <id>DSdffd5190-3762-45db-bdee-c0bcdc184e81</id>
+      <name>Lac_Ci_Map</name>
+      <owner>ybz</owner>
+      <provider class="Jdbc">jdbc:oracle:thin:bj_tuoming/root@10.1.1.110:1521:orcl</provider>
+      <descriptions>
+        <messages>
+          <entry>
+            <locale reference="../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            <string>小区地理位置信息orcl</string>
+          </entry>
+        </messages>
+        <defaultLocale reference="../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+      </descriptions>
+      <loadable>true</loadable>
+      <fieldsMap>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Value</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>LAC</name>
+              <queryName>LAC</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string></string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Value</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField>
+              <name>CI</name>
+              <queryName>CI</queryName>
+              <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
+              <desps>
+                <messages>
+                  <entry>
+                    <locale reference="../../../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                    <string></string>
+                  </entry>
+                </messages>
+                <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+              </desps>
+              <isKey>false</isKey>
+              <type>Int</type>
+              <allowNull>true</allowNull>
+              <func>Value</func>
+              <isDim>false</isDim>
+            </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
         <entry>
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Latitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Latitude</name>
-              <queryName>Latitude</queryName>
+              <name>LATITUDE</name>
+              <queryName>LATITUDE</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
@@ -991,11 +985,11 @@
           </list>
         </entry>
         <entry>
-          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Other</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Region</name>
-              <queryName>Region</queryName>
+              <name>AREANAME_EN</name>
+              <queryName>AREANAME_EN</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
@@ -1007,14 +1001,19 @@
                 <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
               </desps>
               <isKey>true</isKey>
-              <type>Int</type>
+              <type>ShortString</type>
               <allowNull>false</allowNull>
-              <func>Other</func>
+              <func>Identifier</func>
               <isDim>true</isDim>
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          </list>
+        </entry>
+        <entry>
+          <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Longitude</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
+          <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>Name</name>
-              <queryName>Name</queryName>
+              <name>LONGITUDE</name>
+              <queryName>LONGITUDE</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
@@ -1026,9 +1025,9 @@
                 <defaultLocale reference="../../../../../../../edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
               </desps>
               <isKey>false</isKey>
-              <type>ShortString</type>
+              <type>Double</type>
               <allowNull>true</allowNull>
-              <func>Other</func>
+              <func>Longitude</func>
               <isDim>true</isDim>
             </edu.thu.keg.mdap.datamodel.GeneralDataField>
           </list>
@@ -1036,26 +1035,94 @@
       </fieldsMap>
       <fields>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </fields>
-      <permission>2</permission>
+      <permission>0</permission>
     </edu.thu.keg.mdap__impl.datamodel.DataSetImpl>
   </datasets>
   <views>
     <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
-      <id>Lac_Ci_Map_orcl</id>
+      <id>DV70e8b99f-1247-4633-95d7-a9deb03854a0</id>
       <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+        <innerQuery class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+          <state>Ready</state>
+          <fields>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[9]/fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[9]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[9]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[9]/fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[9]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          </fields>
+          <wheres/>
+          <orders/>
+          <provider class="Jdbc" reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[9]/provider"/>
+        </innerQuery>
         <state>Ready</state>
         <fields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <name>AREANAME_EN</name>
+            <queryName>AREANAME_EN</queryName>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                  <string></string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <isKey>true</isKey>
+            <type>ShortString</type>
+            <allowNull>false</allowNull>
+            <func>Identifier</func>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
+            <isDim>false</isDim>
+          </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <name>LATITUDE</name>
+            <queryName>LATITUDE</queryName>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                  <string></string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <isKey>false</isKey>
+            <type>Double</type>
+            <allowNull>true</allowNull>
+            <func>Latitude</func>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
+            <isDim>false</isDim>
+          </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <name>LONGITUDE</name>
+            <queryName>LONGITUDE</queryName>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                  <string></string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <isKey>false</isKey>
+            <type>Double</type>
+            <allowNull>true</allowNull>
+            <func>Longitude</func>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
+            <isDim>false</isDim>
+          </edu.thu.keg.mdap.datamodel.GeneralDataField>
         </fields>
         <wheres/>
         <orders/>
-        <provider class="Jdbc" reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/provider"/>
+        <provider class="Jdbc" reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[9]/provider"/>
       </q>
       <name>Lac_Ci_Map_orcl</name>
       <owner>ybz</owner>
@@ -1074,22 +1141,156 @@
       </desps>
       <type>GeoFeature</type>
       <keyFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
       </keyFields>
       <valueFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </valueFields>
-      <dataset>Lac_Ci_Map</dataset>
+      <dataset>DSdffd5190-3762-45db-bdee-c0bcdc184e81</dataset>
     </edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
     <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
-      <id>ConnHourView</id>
+      <id>DV9ad28430-47d1-472e-9670-b37ff137ba7f</id>
       <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+        <innerQuery class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+          <state>Ready</state>
+          <fields>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          </fields>
+          <wheres/>
+          <orders/>
+          <provider class="edu.thu.keg.mdap_impl.provider.HiveProvider" reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/provider"/>
+        </innerQuery>
         <state>Ready</state>
         <fields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <name>EN_NAME</name>
+            <queryName>EN_NAME</queryName>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                  <string></string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <isKey>true</isKey>
+            <type>ShortString</type>
+            <allowNull>false</allowNull>
+            <func>Identifier</func>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
+            <isDim>false</isDim>
+          </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <name>LATITUDE</name>
+            <queryName>LATITUDE</queryName>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                  <string></string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <isKey>false</isKey>
+            <type>Double</type>
+            <allowNull>true</allowNull>
+            <func>Latitude</func>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
+            <isDim>false</isDim>
+          </edu.thu.keg.mdap.datamodel.GeneralDataField>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <name>LONGITUDE</name>
+            <queryName>LONGITUDE</queryName>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                  <string></string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <isKey>false</isKey>
+            <type>Double</type>
+            <allowNull>true</allowNull>
+            <func>Longitude</func>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
+            <isDim>false</isDim>
+          </edu.thu.keg.mdap.datamodel.GeneralDataField>
+        </fields>
+        <wheres/>
+        <orders/>
+        <provider class="edu.thu.keg.mdap_impl.provider.HiveProvider" reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[5]/provider"/>
+      </q>
+      <name>Lac_Ci_Map_hadoop</name>
+      <owner>liqi</owner>
+      <desps>
+        <messages>
+          <entry>
+            <locale reference="../../../../../edu.thu.keg.mdap__impl.datafeature.DataViewImpl/desps/messages/entry/locale"/>
+            <string>Area distribution hadoop</string>
+          </entry>
+          <entry>
+            <locale reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            <string>小区分布图hadoop</string>
+          </entry>
+        </messages>
+        <defaultLocale reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+      </desps>
+      <type>GeoFeature</type>
+      <keyFields>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
+      </keyFields>
+      <valueFields>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+      </valueFields>
+      <dataset>DS5b773dde-9cc3-41dd-ad82-3d752a59205a</dataset>
+    </edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
+    <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
+      <id>DVec256f34-328b-4624-a05f-9ae24589864d</id>
+      <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+        <innerQuery class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+          <state>Ready</state>
+          <fields>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          </fields>
+          <wheres/>
+          <orders/>
+          <provider class="Jdbc" reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
+        </innerQuery>
+        <state>Ready</state>
+        <fields>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <name>ConnHour</name>
+            <queryName>ConnHour</queryName>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                  <string>时间段(小时)</string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <isKey>false</isKey>
+            <type>Int</type>
+            <allowNull>true</allowNull>
+            <func>Identifier</func>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
+            <isDim>false</isDim>
+          </edu.thu.keg.mdap.datamodel.GeneralDataField>
           <edu.thu.keg.mdap.datamodel.AggregatedDataField>
-            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
             <func>MAX</func>
             <name>TotalCount</name>
             <desps>
@@ -1101,12 +1302,13 @@
               </messages>
               <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
             </desps>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
           </edu.thu.keg.mdap.datamodel.AggregatedDataField>
         </fields>
         <wheres/>
         <orders>
           <edu.thu.keg.mdap.datamodel.Query_-OrderClause>
-            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
             <order>ASC</order>
           </edu.thu.keg.mdap.datamodel.Query_-OrderClause>
         </orders>
@@ -1125,21 +1327,51 @@
       </desps>
       <type>ValueFeature</type>
       <keyFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[2]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </keyFields>
       <valueFields>
         <edu.thu.keg.mdap.datamodel.AggregatedDataField reference="../../q/fields/edu.thu.keg.mdap.datamodel.AggregatedDataField"/>
       </valueFields>
-      <dataset>SiteId_ConnHour</dataset>
+      <dataset>DS46e46e93-1a60-46ce-b721-98a568ac652b</dataset>
     </edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
     <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
-      <id>UserWebsiteCountView</id>
+      <id>DV7d40b87d-7abb-43aa-a12d-9809cc7fecaa</id>
       <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+        <innerQuery class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
+          <state>Ready</state>
+          <fields>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[2]"/>
+            <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField[3]"/>
+          </fields>
+          <wheres/>
+          <orders/>
+          <provider class="Jdbc" reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/provider"/>
+        </innerQuery>
         <state>Ready</state>
         <fields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField>
+            <name>WebsiteCount</name>
+            <queryName>WebsiteCount</queryName>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+                  <string>Total count of visited websites</string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <isKey>false</isKey>
+            <type>Int</type>
+            <allowNull>true</allowNull>
+            <func>Value</func>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
+            <isDim>false</isDim>
+          </edu.thu.keg.mdap.datamodel.GeneralDataField>
           <edu.thu.keg.mdap.datamodel.AggregatedDataField>
-            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
             <func>COUNT</func>
             <name>UserCount</name>
             <desps>
@@ -1151,12 +1383,13 @@
               </messages>
               <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
             </desps>
+            <query class="edu.thu.keg.mdap_impl.datamodel.QueryImpl" reference="../../../innerQuery"/>
           </edu.thu.keg.mdap.datamodel.AggregatedDataField>
         </fields>
         <wheres/>
         <orders>
           <edu.thu.keg.mdap.datamodel.Query_-OrderClause>
-            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../fields/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
             <order>ASC</order>
           </edu.thu.keg.mdap.datamodel.Query_-OrderClause>
         </orders>
@@ -1180,28 +1413,42 @@
       <type>ValueFeature</type>
       <keyFields class="java.util.Arrays$ArrayList">
         <a class="edu.thu.keg.mdap.datamodel.DataField-array">
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         </a>
       </keyFields>
       <valueFields class="java.util.Arrays$ArrayList">
         <a class="edu.thu.keg.mdap.datamodel.DataField-array">
-          <edu.thu.keg.mdap.datamodel.AggregatedDataField reference="../../../q/fields/edu.thu.keg.mdap.datamodel.AggregatedDataField"/>
+          <edu.thu.keg.mdap.datamodel.AggregatedDataField>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <func>COUNT</func>
+            <name>UserCount</name>
+            <desps>
+              <messages>
+                <entry>
+                  <locale reference="../../../../../../../../edu.thu.keg.mdap__impl.datafeature.DataViewImpl/desps/messages/entry/locale"/>
+                  <string>COUNT of the field null in null</string>
+                </entry>
+              </messages>
+              <defaultLocale reference="../../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
+            </desps>
+            <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[6]"/>
+          </edu.thu.keg.mdap.datamodel.AggregatedDataField>
         </a>
       </valueFields>
-      <dataset>slot_Imsi_All</dataset>
+      <dataset>DSdc9de817-4ea6-4b10-84f5-f660b5a94fb9</dataset>
     </edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
     <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
-      <id>ContentTypeView</id>
+      <id>DV4000663a-7e87-4184-b13b-1cbe7ba36786</id>
       <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
         <state>Ready</state>
         <fields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[8]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[8]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
         </fields>
         <wheres/>
         <orders>
           <edu.thu.keg.mdap.datamodel.Query_-OrderClause>
-            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+            <field class="edu.thu.keg.mdap.datamodel.GeneralDataField" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[8]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
             <order>DESC</order>
           </edu.thu.keg.mdap.datamodel.Query_-OrderClause>
         </orders>
@@ -1224,50 +1471,12 @@
       </desps>
       <type>DistributionFeature</type>
       <keyFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[8]/fieldsMap/entry[2]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </keyFields>
       <valueFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[4]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
+        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[8]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
       </valueFields>
-      <dataset>DataAggr_ContentTypes_Up90</dataset>
-    </edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
-    <edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
-      <id>Lac_Ci_Map_hadoop</id>
-      <q class="edu.thu.keg.mdap_impl.datamodel.QueryImpl">
-        <state>Ready</state>
-        <fields>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-          <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        </fields>
-        <wheres/>
-        <orders/>
-        <provider class="edu.thu.keg.mdap_impl.provider.HiveProvider" reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/provider"/>
-      </q>
-      <name>Lac_Ci_Map_hadoop</name>
-      <owner>liqi</owner>
-      <desps>
-        <messages>
-          <entry>
-            <locale reference="../../../../../edu.thu.keg.mdap__impl.datafeature.DataViewImpl/desps/messages/entry/locale"/>
-            <string>Area distribution hadoop</string>
-          </entry>
-          <entry>
-            <locale reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-            <string>小区分布图hadoop</string>
-          </entry>
-        </messages>
-        <defaultLocale reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl/descriptions/messages/entry/locale"/>
-      </desps>
-      <type>GeoFeature</type>
-      <keyFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[4]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-      </keyFields>
-      <valueFields>
-        <edu.thu.keg.mdap.datamodel.GeneralDataField reference="../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[3]/fieldsMap/entry[3]/list/edu.thu.keg.mdap.datamodel.GeneralDataField"/>
-      </valueFields>
-      <dataset>TESTF</dataset>
+      <dataset>DS04a0d2c3-0703-4142-ae5a-f90586d336d4</dataset>
     </edu.thu.keg.mdap__impl.datafeature.DataViewImpl>
   </views>
 </edu.thu.keg.mdap__impl.DataSetManagerImpl_-Storage>

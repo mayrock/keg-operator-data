@@ -49,7 +49,7 @@ public class QueryImpl implements Query {
 			List<OrderClause> orders, JoinOnClause join, DataProvider provider,
 			Query innerQuery) {
 		if (innerQuery == null) {
-			this.fields = fields;
+			this.fields = fields.clone();
 			this.wheres = wheres;
 			this.orders = orders;
 			this.join = join;
@@ -121,7 +121,7 @@ public class QueryImpl implements Query {
 	public Query select(DataField... fields) {
 		Query q = null;
 
-		q = new QueryImpl(fields, new ArrayList<WhereClause>(),
+		q = new QueryImpl(fields.clone(), new ArrayList<WhereClause>(),
 				new ArrayList<OrderClause>(), null, this.provider, this);
 		transformFieldsSelect(q);
 		return q;
@@ -185,7 +185,7 @@ public class QueryImpl implements Query {
 		orders.addAll(this.orders);
 		orders.add(new OrderClause(field, order));
 		return new QueryImpl(this.fields, this.wheres, orders, this.join,
-				this.provider, null);
+				this.provider, this.getInnerQuery());
 	}
 
 	@Override
@@ -220,18 +220,20 @@ public class QueryImpl implements Query {
 			DataField df = q.getFields()[i];
 			if (df instanceof AggregatedDataField) {
 				// df = (AggregatedDataField) df;
-				df_all[i] = df;
-//						new AggregatedDataField(
-//						((AggregatedDataField) df).getField(),
-//						((AggregatedDataField) df).getFunc(), df.getName(),
-//						q.getInnerQuery());
+				df_all[i] = new AggregatedDataField(
+						((AggregatedDataField) df).getField(),
+						((AggregatedDataField) df).getFunc(), df.getName(),
+						q.getInnerQuery());
 
 			} else {
 				df_all[i] = new GeneralDataField(df.getName(),
 						df.getFieldType(), df.getDescription(), df.isKey(),
 						df.allowNull(), df.isDim(), df.getFunction(),
 						q.getInnerQuery());
-				df_all[i].setDataSet(df.getDataSet());
+				// df_all[i].setDataSet(df.getDataSet());
+			}
+			if (q.getInnerQuery() == null) {
+				df.setDataSet(df.getDataSet());
 			}
 		}
 		q.setFields(df_all);
@@ -245,17 +247,23 @@ public class QueryImpl implements Query {
 			df_all[i] = new GeneralDataField(df.getName(), df.getFieldType(),
 					df.getDescription(), df.isKey(), df.allowNull(),
 					df.isDim(), df.getFunction(), q.getInnerQuery());
-			df_all[i].setDataSet(df.getDataSet());
-
+			// df_all[i].setDataSet(df.getDataSet());
+			if (q.getInnerQuery() == null) {
+				df.setDataSet(df.getDataSet());
+			}
 		}
 		for (int i = 0; i < joinClauseLen; i++) {
-			DataField df = q.getJoinOnClause().getQuery().getFields()[i];
+			Query q2 = q.getJoinOnClause().getQuery();
+			DataField df = q2.getFields()[i];
 
 			df_all[i + q.getFields().length] = new GeneralDataField(
 					df.getName(), df.getFieldType(), df.getDescription(),
-					df.isKey(), df.allowNull(), df.isDim(), df.getFunction(), q
-							.getJoinOnClause().getQuery());
+					df.isKey(), df.allowNull(), df.isDim(), df.getFunction(),
+					q2);
 			df_all[i + q.getFields().length].setDataSet(df.getDataSet());
+			if (q2.getInnerQuery() == null) {
+				df.setDataSet(df.getDataSet());
+			}
 		}
 		q.setFields(df_all);
 
@@ -264,13 +272,13 @@ public class QueryImpl implements Query {
 		for (DataField fs : q.getJoinOnClause().getOns().keySet()) {
 			DataField nk = new GeneralDataField(fs.getName(),
 					fs.getFieldType(), fs.getDescription(), fs.isKey(),
-					fs.allowNull(), fs.isDim(), fs.getFunction(), q
-							.getJoinOnClause().getQuery());
+					fs.allowNull(), fs.isDim(), fs.getFunction(),
+					q.getInnerQuery());
 			DataField df = q.getJoinOnClause().getOns().get(fs);
 			DataField nv = new GeneralDataField(df.getName(),
 					df.getFieldType(), df.getDescription(), df.isKey(),
-					df.allowNull(), df.isDim(), df.getFunction(),
-					q.getInnerQuery());
+					df.allowNull(), df.isDim(), df.getFunction(), q
+							.getJoinOnClause().getQuery());
 
 			nfs.put(nk, nv);
 		}

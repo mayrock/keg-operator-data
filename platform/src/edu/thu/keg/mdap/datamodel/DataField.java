@@ -103,7 +103,7 @@ public interface DataField {
 	 * @return Reference of the dataset
 	 */
 	public DataSet getDataSet();
-	
+
 	public Query getQuery();
 
 	/**
@@ -154,4 +154,6 @@ public interface DataField {
 	 *            the DataSet instance
 	 */
 	public void setDataSet(DataSet ds);
+
+	public DataField clone();
 }

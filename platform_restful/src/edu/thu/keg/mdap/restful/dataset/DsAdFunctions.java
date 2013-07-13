@@ -370,7 +370,7 @@ public class DsAdFunctions {
 							.getString(i)),
 							AggregatedDataField.AggrFunction.valueOf(funcs
 									.getString(i)), fields.getString(i) + " "
-									+ funcs.getString(i));
+									+ funcs.getString(i),null);
 			}
 			q = ds.getQuery().select(fs);
 			dv = p.getDataSetManager().defineView(dataview,
@@ -435,7 +435,7 @@ public class DsAdFunctions {
 							.getString(i)),
 							AggregatedDataField.AggrFunction.valueOf(funcs
 									.getString(i)), fields.getString(i) + " "
-									+ funcs.getString(i));
+									+ funcs.getString(i),null);
 			}
 			q = ds.getQuery().select(fs);
 			p.getDataSetManager().redefineView(olddv, dataview, description, q);

@@ -13,9 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import edu.thu.keg.mdap.datamodel.AggregatedDataField;
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
+import edu.thu.keg.mdap.datamodel.GeneralDataField;
 import edu.thu.keg.mdap.datamodel.Query;
 import edu.thu.keg.mdap.datamodel.DataField.FieldType;
 import edu.thu.keg.mdap.datamodel.Query.OrderClause;
@@ -156,10 +158,15 @@ public class JdbcProvider extends AbstractDataProvider {
 
 	private String getFieldAliasName(DataField f, Map<Query, String> aliasMap) {
 		if (f.getQuery() == null) {
-			return f.getName();
+			return f.getQueryName();
 		} else {
-			return aliasMap.get(f.getQuery()) + "." + f.getName();
+			if (f instanceof GeneralDataField)
+				return aliasMap.get(f.getQuery()) + "." + f.getQueryName();
+			else if (f instanceof AggregatedDataField)
+				return ((AggregatedDataField) f).getQueryName(aliasMap.get(f
+						.getQuery()));
 		}
+		return null;
 	}
 
 	private StringBuilder whereToSB(WhereClause where,

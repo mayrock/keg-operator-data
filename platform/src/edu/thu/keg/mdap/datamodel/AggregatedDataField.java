@@ -54,7 +54,8 @@ public class AggregatedDataField implements DataField {
 		this.name = name;
 
 		this.desps = new LocalizedMessage();
-		this.dataset = field.getDataSet();
+		if (query == null)
+			this.dataset = field.getDataSet();
 		this.query = query;
 		desps.setMessage(Locale.ENGLISH, func.toString() + " of the field "
 				+ field.getDescription(Locale.ENGLISH) + " in "
@@ -69,6 +70,11 @@ public class AggregatedDataField implements DataField {
 	@Override
 	public String getQueryName() {
 		return func.toString() + " ( " + field.getQueryName() + " ) ";
+	}
+
+	public String getQueryName(String alis) {
+		return func.toString() + " ( " + alis + "." + field.getQueryName()
+				+ " ) ";
 	}
 
 	/*
@@ -167,14 +173,25 @@ public class AggregatedDataField implements DataField {
 
 	@Override
 	public Query getQuery() {
-		return null;
+		return this.query;
 	}
 
-	// public DataField getField() {
-	// return this.field;
-	// }
-	//
-	// public AggrFunction getFunc() {
-	// return this.func;
-	// }
+	public DataField getField() {
+		return this.field;
+	}
+
+	public AggrFunction getFunc() {
+		return this.func;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	public DataField clone() {
+		return new AggregatedDataField(this.getField().clone(), this.getFunc(),
+				this.getName(), this.getQuery());
+	}
+
 }
