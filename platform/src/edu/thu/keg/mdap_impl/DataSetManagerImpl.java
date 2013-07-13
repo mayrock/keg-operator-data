@@ -121,10 +121,10 @@ public class DataSetManagerImpl implements DataSetManager {
 		limitedMap = new HashMap<String, Set<DataSet>>();
 		publicMap = new HashSet<DataSet>();
 		try {
-//			loadDataSets();
+			 loadDataSets();
 		} catch (Exception ex) {
 			log.warn(ex.getMessage());
-			
+
 		}
 	}
 
@@ -315,8 +315,8 @@ public class DataSetManagerImpl implements DataSetManager {
 	@Override
 	public DataSet createDataSet(String name, String owner, String description,
 			DataProvider provider, boolean loadable, DataField... fields) {
-		DataSet ds = new DataSetImpl("DS" + getUUID(), name, owner, provider,
-				loadable, fields);
+		DataSet ds = new DataSetImpl("DS" + getUUID(name, owner), name, owner,
+				provider, loadable, fields);
 		ds.setDescription(description);
 		ds.setPermission(DataSetImpl.PERMISSION_PRIVATE);
 		addDataSet(ds);
@@ -335,8 +335,8 @@ public class DataSetManagerImpl implements DataSetManager {
 		// if (this.views.containsKey(id))
 		// throw new IllegalArgumentException("Dataview name: " + id
 		// + " exists!");
-		DataView v = new DataViewImpl("DV" + getUUID(), name, owner, dataset,
-				type, q);
+		DataView v = new DataViewImpl("DV" + getUUID(name, owner), name, owner,
+				dataset, type, q);
 
 		v.setDescription(description);
 		addDataView(v);
@@ -355,8 +355,8 @@ public class DataSetManagerImpl implements DataSetManager {
 		// if (this.views.containsKey(id))
 		// throw new IllegalArgumentException("Dataview name: " + id
 		// + " exists!");
-		DataView v = new DataViewImpl("DV" + getUUID(), name, owner, dataset,
-				type, q, keys, values);
+		DataView v = new DataViewImpl("DV" + getUUID(name, owner), name, owner,
+				dataset, type, q, keys, values);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
@@ -451,7 +451,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		return ds;
 	}
 
-	private String getUUID() {
-		return UUID.randomUUID().toString();
+	private String getUUID(String name, String owner) {
+		return name + "_" + owner;
 	}
 }
