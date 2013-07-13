@@ -145,8 +145,8 @@ public class PlatformImpl implements Platform {
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true,
 				FieldFunctionality.Identifier);
-		fields[1] = new GeneralDataField("URL", FieldType.ShortString, "", false,
-				FieldFunctionality.Other);
+		fields[1] = new GeneralDataField("URL", FieldType.ShortString, "",
+				false, FieldFunctionality.Other);
 		dsSite = getDataSetManager().createDataSet("WebsiteId_URL", "myc",
 				"网站信息", provider, true, fields);
 		List<String> users = new ArrayList<>();
@@ -194,20 +194,26 @@ public class PlatformImpl implements Platform {
 			dv.setDescription(Locale.ENGLISH, "Cell tower count within regions");
 			// ----------------------------------------测试查询
 			System.out.println("select1: "
-					+ q.where(q.getFields()[0].getName(), Operator.EQ, 1)
+					+ q.whereOr(q.getFields()[0].getName(), Operator.EQ, 1)
 							.toString());
 			Map<DataField, DataField> fm1 = new HashMap<DataField, DataField>();
 			Map<DataField, DataField> fm2 = new HashMap<DataField, DataField>();
 			Query q2 = dsSite.getQuery();
-			System.out.println("select2: "
-					+ q2.where(q2.getFields()[0].getName(), Operator.EQ, 3439)
-							.where(q2.getFields()[0].getName(), Operator.EQ,
-									3435).toString());
+			System.out
+					.println("select2: "
+							+ q2.whereOr(q2.getFields()[0].getName(),
+									Operator.EQ, 3439)
+									.whereAnd(q2.getFields()[0].getName(),
+											Operator.EQ, 3435)
+									.whereAnd(q2.getFields()[0].getName(),
+											Operator.EQ, 3436)
+									.whereOr(q2.getFields()[0].getName(),
+											Operator.GT, 1000).toString());
 			fm1.put(q2.getFields()[0].clone(), q.getFields()[0].clone());
 			fm2.put(q.getFields()[0].clone(), q2.getFields()[0].clone());
 
 			System.out.println("JOIN1: "
-					+ q2.join(q, fm1).where("SiteId", Operator.EQ, 193)
+					+ q2.join(q, fm1).whereOr("SiteId", Operator.EQ, 193)
 							.toString());
 			System.out.println("JOIN2: " + q.join(q2, fm2).toString());
 

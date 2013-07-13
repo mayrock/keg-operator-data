@@ -128,7 +128,7 @@ public class QueryImpl implements Query {
 	}
 
 	@Override
-	public Query where(String fieldName, Operator op, Object value) {
+	public Query whereOr(String fieldName, Operator op, Object value) {
 		DataField field = null;
 		for (DataField tdf : this.fields) {
 			if (tdf.getName().equals(fieldName)) {
@@ -142,6 +142,28 @@ public class QueryImpl implements Query {
 		List<WhereClause> wheres = new ArrayList<WhereClause>();
 		wheres.addAll(this.wheres);
 		wheres.add(new WhereClause(field, op, value));
+		Query q = new QueryImpl(this.fields, wheres, this.orders, this.join,
+				this.provider, this.getInnerQuery());
+		// transformFields(q);
+		return q;
+
+	}
+
+	@Override
+	public Query whereAnd(String fieldName, Operator op, Object value) {
+		DataField field = null;
+		for (DataField tdf : this.fields) {
+			if (tdf.getName().equals(fieldName)) {
+				field = tdf;
+			}
+		}
+		if (field == null) {
+			throw new IllegalArgumentException("The field " + fieldName
+					+ " does not exist in the field list of this query");
+		}
+		List<WhereClause> wheres = new ArrayList<WhereClause>();
+		wheres.add(new WhereClause(field, op, value));
+		wheres.get(0).setInnerWhereClauses(this.wheres);
 		Query q = new QueryImpl(this.fields, wheres, this.orders, this.join,
 				this.provider, this.getInnerQuery());
 		// transformFields(q);

@@ -519,7 +519,7 @@ public class HiveProvider extends JdbcProvider
 
 		q1 = q1.orderBy("LAC", Query.Order.ASC);
 		q1 = q1.orderBy("EN_NAME", Query.Order.ASC);
-		q1 = q1.where("LAC", Query.Operator.GEQ, 5000);
+		q1 = q1.whereOr("LAC", Query.Operator.GEQ, 5000);
 
 		
 		

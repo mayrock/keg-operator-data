@@ -117,12 +117,7 @@ public class JdbcProvider extends AbstractDataProvider {
 		List<WhereClause> wheres = q.getWhereClauses();
 		if (wheres != null && wheres.size() > 0) {
 			sb.append(" WHERE ");
-			for (int i = 0; i < wheres.size() - 1; i++) {
-				WhereClause where = wheres.get(i);
-				sb.append(whereToSB(where, aliasMap));
-				sb.append(" AND ");
-			}
-			sb.append(whereToSB(wheres.get(wheres.size() - 1), aliasMap));
+			sb.append(whereToSB(wheres, aliasMap));
 		}
 
 		List<DataField> gb = q.getGroupByFields();
@@ -179,6 +174,29 @@ public class JdbcProvider extends AbstractDataProvider {
 		else
 			sb.append("'").append(where.getValue().toString()).append("'");
 		return sb;
+	}
+
+	private String whereToSB(List<WhereClause> wheres,
+			Map<Query, String> aliasMap) {
+		String sb = "";
+
+		for (int i = 0; i < wheres.size(); i++) {
+			WhereClause where = wheres.get(i);
+			String sb_temp = "";
+			sb_temp = sb_temp + (getFieldAliasName(where.getField(), aliasMap))
+					+ (where.getOperator().toString());
+			if (where.getField().getFieldType().isNumber())
+				sb_temp = sb_temp + (where.getValue().toString());
+			else
+				sb_temp = sb_temp + "'" + where.getValue().toString() + "'";
+			if (where.getInnerWhereClauses() != null)
+				sb_temp = "(" + sb_temp + " and ( "
+						+ whereToSB(where.getInnerWhereClauses(), aliasMap)
+						+ " ) )";
+			sb = sb + sb_temp + " or ";
+		}
+		return sb.substring(0, sb.lastIndexOf("or"));
+
 	}
 
 	protected ResultSet executeQuery(String queryStr)
