@@ -119,20 +119,23 @@ Mgt.subTab = function(tabIndex,type,subType){
 	
 	$.getJSON(url,$.parseJSON(msg),function(data){
 		var len = data.length;
+		if(len == 0){
+			return;
+		}
 		for(var i = 0; i < len; i++){
+			var id = data[i].id;
 			var name = "";
 			if(type == "dv"){
 				name = data[i].dataviewName;
 			}else{
 				name = data[i].datasetName;
 			}
-			var des = data[i].descriptionZh;
 			
 			var li = document.createElement("li");
 			li.setAttribute("id",type + "-" + subType + "-tabs-li-" + tabIndex + "-" + i);
 			li.setAttribute("class","mgt-tabs-li");
 			$(li).appendTo("#" + type + "-" + subType + "-tabs-ul-" + tabIndex);
-			li.innerHTML = "<a href = '#" + type + "-" + subType + "-tab-" + tabIndex + "-" + i + "'>" + des + "</a>";
+			li.innerHTML = "<a href = '#" + type + "-" + subType + "-tab-" + tabIndex + "-" + i + "'>" + name + "</a>";
 			$("#" + type + "-" + subType + "-tabs-li-" + tabIndex + "-" + i + " a").css({
 				"padding-top": "4px",
 				"padding-bottom": "4px"
@@ -174,11 +177,11 @@ Mgt.subTab = function(tabIndex,type,subType){
 			if(type == "dv"){
 				$("<span>data view information</span>").appendTo(infoTitle);
 				$("<span>column information</span>").appendTo(fieldTitle);
-				Mgt.loadDv(tabIndex,i,name,subType);
+				Mgt.loadDv(tabIndex,i,id,subType);
 			}else{
 				$("<span>data set information</span>").appendTo(infoTitle);
 				$("<span>column information</span>").appendTo(fieldTitle);
-				Mgt.loadDs(tabIndex,i,name,subType);
+				Mgt.loadDs(tabIndex,i,id,name,subType);
 			}
 		}
 		
@@ -199,9 +202,9 @@ Mgt.subTab = function(tabIndex,type,subType){
 	});
 };
 
-Mgt.loadDv = function(tabIndex,dsIndex,dvName,subType){
+Mgt.loadDv = function(tabIndex,dsIndex,id,subType){
 	$.getJSON(Common.dvInfoUrl(),{
-		dataset: dvName
+		id: id
 	},function(data){
 		var tableData = new google.visualization.DataTable();
 		tableData.addColumn('string','Data Feature');
@@ -233,9 +236,12 @@ Mgt.loadDv = function(tabIndex,dsIndex,dvName,subType){
 	});
 	
 	$.getJSON(Common.dvFieldUrl(),{
-		dataset: dvName
+		id: id
 	},function(data){
 		var len = data.length;
+		if(len == 0){
+			return;
+		}
 		var tableData = new google.visualization.DataTable();
 		tableData.addColumn('string','Data Set Name');
 		tableData.addColumn('string','Data Set Owner');
@@ -265,13 +271,13 @@ Mgt.loadDv = function(tabIndex,dsIndex,dvName,subType){
 	});
 };
 
-Mgt.loadDs = function(tabIndex,dsIndex,dsName,subType){
+Mgt.loadDs = function(tabIndex,dsIndex,id,dsName,subType){
 	var dataTitle = document.createElement("div");
 	dataTitle.setAttribute("id","ds-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
 	dataTitle.setAttribute("class","mgt-detail-data-title");
 	$(dataTitle).appendTo("#ds-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
 	$("<a herf = 'javascript:void(0);' " +
-		"onClick = \"Mgt.showTable(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "');\" style = 'cursor: pointer;'>" +
+		"onClick = \"Mgt.showTable(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + id + "','" + dsName + "');\" style = 'cursor: pointer;'>" +
 		"show detail data of " + dsName + "</a>").appendTo(dataTitle);
 	$(dataTitle).css({
 		"margin-bottom": "5px",
@@ -279,7 +285,7 @@ Mgt.loadDs = function(tabIndex,dsIndex,dsName,subType){
 	});
 	
 	$.getJSON(Common.dsInfoUrl(),{
-		dataset: dsName
+		id: id
 	},function(data){
 		var tableData = new google.visualization.DataTable();
 		tableData.addColumn('string','Data Feature');
@@ -320,7 +326,7 @@ Mgt.loadDs = function(tabIndex,dsIndex,dsName,subType){
 	});
 	
 	$.getJSON(Common.dsFieldUrl(),{
-		dataset: dsName
+		id: id
 	},function(data){
 		var len = data.length;
 		var tableData = new google.visualization.DataTable();

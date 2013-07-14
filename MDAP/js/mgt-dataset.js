@@ -1,11 +1,11 @@
-Mgt.showTable = function(tabIndex,subType,dsIndex,dsName){
+Mgt.showTable = function(tabIndex,subType,dsIndex,dsID,dsName){
 	var type = "ds";
 	
 	$("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex).empty();
 	$("<span>show detail data of " + dsName + "</span>").appendTo("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
 	
 	$.getJSON(Common.dsFieldUrl(),{
-		dataset: dsName
+		id: dsID
 	},function(data){
 		var len = data.length;
 		var tableData = new google.visualization.DataTable();
@@ -14,7 +14,7 @@ Mgt.showTable = function(tabIndex,subType,dsIndex,dsName){
 		}
 		
 		$.getJSON(Common.dsDataUrl(),{
-			dataset: dsName
+			id: dsID
 		},function(data){
 			var l = data.length;
 			$("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex).empty();
@@ -23,7 +23,7 @@ Mgt.showTable = function(tabIndex,subType,dsIndex,dsName){
 				Mgt.adjustHeight();
 				return;
 			}
-			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showTable('" + dsName + "');\">detail data</a>")
+			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showTable('" + dsID + "');\">detail data</a>")
 				.appendTo("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
 			
 			var detailData = document.createElement("div");
@@ -67,7 +67,7 @@ Mgt.showTable = function(tabIndex,subType,dsIndex,dsName){
 			selectTitle.setAttribute("id",type + "-" + subType + "-mgt-select-column-title-" + tabIndex + "-" + dsIndex);
 			selectTitle.setAttribute("class","mgt-select-column-title");
 			$(selectTitle).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
-			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showColumn(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "');\" " +
+			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showColumn(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "');\" " +
 				"style = 'cursor: pointer;'>create/show data view from " + dsName + "</a>").appendTo(selectTitle);
 			
 			Mgt.adjustHeight();
@@ -81,11 +81,11 @@ Mgt.showTable = function(tabIndex,subType,dsIndex,dsName){
 	});
 };
 
-Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
+Mgt.showColumn = function(tabIndex,subType,dsIndex,dsID){
 	var type = "ds";
 	
 	$.getJSON(Common.dsInfoUrl(),{
-		dataset: dsName
+		id: dsID
 	},function(data){
 		var feature = data.datafeature;
 		var sta = 0;
@@ -106,10 +106,10 @@ Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
 		$("#" + type + "-" + subType + "-mgt-select-column-title-" + tabIndex + "-" + dsIndex).remove();
 		
 		$.getJSON(Common.dsFieldUrl(),{
-			dataset: dsName
+			id: dsID
 		},function(data){
 			if(sta == 1){
-				Mgt.selector(tabIndex,subType,dsIndex,"sta",dsName);
+				Mgt.selector(tabIndex,subType,dsIndex,"sta",dsID);
 				$("<span>create/show a stat data view</span>")
 					.appendTo("#" + type + "-" + subType + "-mgt-sta-selector-title-" + tabIndex + "-" + dsIndex);
 				$("<span>choose a key: </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex);
@@ -117,17 +117,17 @@ Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
 				for(var i = 0; i < data.length; i++){
 					if(data[i].functionality == "Identifier"){
 						$("<input type = 'radio' name = 'key' value = '" + i + "' " +
-							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "','sta');\"/><span>" +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','sta');\"/><span>" +
 							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex);
 					}else{
 						$("<input type = 'checkbox' value = '" + i + "' " +
-							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "','sta');\"/><span>" +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','sta');\"/><span>" +
 							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-value-" + tabIndex + "-" + dsIndex);
 					}
 				}
 			}
 			if(geo == 1){
-				Mgt.selector(tabIndex,subType,dsIndex,"geo",dsName);
+				Mgt.selector(tabIndex,subType,dsIndex,"geo",dsID);
 				$("<span>create/show a geo data view</span>")
 					.appendTo("#" + type + "-" + subType + "-mgt-geo-selector-title-" + tabIndex + "-" + dsIndex);
 				$("<span>keys:&nbsp;&nbsp;&nbsp;&nbsp;</span>")
@@ -140,7 +140,7 @@ Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
 					}
 					if((data[i].functionality != "Latitude") && (data[i].functionality != "Longitude")){
 						$("<input type = 'checkbox' value = '" + i + "' " +
-							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsName + "','geo');\"/><span>" +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','geo');\"/><span>" +
 							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-geo-options-value-" + tabIndex + "-" + dsIndex);
 					}
 				}
@@ -163,7 +163,7 @@ Mgt.showColumn = function(tabIndex,subType,dsIndex,dsName){
 	});
 };
 
-Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsName){
+Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsID){
 	var type = "ds";
 	
 	var selector = document.createElement("div");
@@ -202,7 +202,7 @@ Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsName){
 	button.setAttribute("class","mgt-options-button");
 	$(button).appendTo(options);
 	$("<input type = 'button' value = 'show this data view' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;' " +
-		"onclick = \"Mgt.showDataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dsName + "');\"/>").appendTo(button);
+		"onclick = \"Mgt.showDataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dsID + "');\"/>").appendTo(button);
 	
 	var dataview = document.createElement("div");
 	dataview.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
@@ -246,10 +246,10 @@ Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsName){
 	$(input).val("save");
 	$(input).appendTo(button);
 	
-	Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
+	Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsID);
 };
 
-Mgt.showDvList = function(tabIndex,subType,dsIndex,dvType,dsName){
+Mgt.showDvList = function(tabIndex,subType,dsIndex,dvType,dsID){
 	var type = "ds";
 	
 	var dvList = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-list-" + tabIndex + "-" + dsIndex);
@@ -319,11 +319,12 @@ Mgt.showDvList = function(tabIndex,subType,dsIndex,dvType,dsName){
 	
 	$.getJSON(Common.dataviewUrl(),{
 		featuretype: dfType,
-		dataset: dsName
+		dataset: dsID
 	}).done(function(data,textStatus,jqXHR){
 		var len = data.length;
 		var list = $("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex);
 		for(var i = 0; i < len; i++){
+			var dvID = data[i].id;
 			var des = data[i].descriptionZh;
 			var dvName = data[i].dataviewName;
 			
@@ -332,8 +333,8 @@ Mgt.showDvList = function(tabIndex,subType,dsIndex,dvType,dsName){
 			nameCtnr.setAttribute("class","mgt-dv-list-name");
 			$(nameCtnr).appendTo(list);
 			$("<a href = 'javascript:void(0);' onClick = \"Mgt.drawOptions(" +
-				tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dvName + "','" + des + "','" + dsName + "');\">" +
-				des + "</a>").appendTo(nameCtnr);
+				tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dvID + "','" + dvName + "','" + des + "','" + dsID + "');\">" +
+				dvName + "</a>").appendTo(nameCtnr);
 		}
 		var listWidth = list.width() + 20;
 		var listHeight = 21 * len;
