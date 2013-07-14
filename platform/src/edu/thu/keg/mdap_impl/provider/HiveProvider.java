@@ -85,7 +85,13 @@ public class HiveProvider extends JdbcProvider
 			return f.getName();
 		} else
 		{
-			return aliasMap.get(f.getQuery()) + "." + f.getName();
+
+			String tableAlias = aliasMap.get(f.getQuery());
+			if (tableAlias == null || tableAlias.equals(""))
+			{
+				return f.getName();
+			}
+			return tableAlias + "." + f.getName();
 		}
 	}
 
@@ -98,7 +104,8 @@ public class HiveProvider extends JdbcProvider
 
 		// unsupported query inner
 		if (query.getInnerQuery() != null
-				||( query.getJoinOnClause() != null&&query.getJoinOnClause().getQuery().getInnerQuery()!=null))
+				|| (query.getJoinOnClause() != null && query.getJoinOnClause()
+						.getQuery().getInnerQuery() != null))
 		{
 			new UnsupportedOperationException("unsupported query:inner query !");
 
@@ -108,58 +115,57 @@ public class HiveProvider extends JdbcProvider
 
 		if (query.getJoinOnClause() != null)
 		{
-			String alias = "tj_" + level;
-			aliasMap.put(query.getJoinOnClause().getQuery(), alias);
+			aliasMap.put(query.getJoinOnClause().getQuery(), "tj_");
 			aliasMap.put(query, "t_");
+
+		} else
+		{
+			String alias = "";
+			aliasMap.put(query, alias);
 		}
 
-
 		String selectStr = getSelectStr(query, aliasMap);
-		String fromStr = getFromStr(query,aliasMap);
-		String joinStr=getJoinStr(query, aliasMap);
-		String whereStr = getWhereStr(query,aliasMap);
-		String orderbyStr = getOrderByStr(query,aliasMap);
-		String groupbyStr = getGroupByStr(query,aliasMap);
-		
-		String[] strs=new String[6];
-		
-		strs[0]=selectStr;
-		strs[1]=fromStr;
-		strs[2]=joinStr;
-		strs[3]=whereStr;
-		strs[4]=orderbyStr;
-		strs[5]=groupbyStr;
+		String fromStr = getFromStr(query, aliasMap);
+		String joinStr = getJoinStr(query, aliasMap);
+		String whereStr = getWhereStr(query, aliasMap);
+		String orderbyStr = getOrderByStr(query, aliasMap);
+		String groupbyStr = getGroupByStr(query, aliasMap);
 
-		
-		for(String tmp:strs)
+		String[] strs = new String[6];
+
+		strs[0] = selectStr;
+		strs[1] = fromStr;
+		strs[2] = joinStr;
+		strs[3] = whereStr;
+		strs[4] = orderbyStr;
+		strs[5] = groupbyStr;
+
+		for (String tmp : strs)
 		{
 			System.out.println(tmp);
 		}
-		
+
 		StringBuilder strBuil = new StringBuilder();
-		
-		
-		int[] orderNumbers=null;
-		
-		if(!joinStr.equals(""))
+
+		int[] orderNumbers = null;
+
+		if (!joinStr.equals(""))
 		{
-			orderNumbers=new int[]{1,2,0,3,4,5};
-		}else
+			orderNumbers = new int[] { 1, 2, 0, 3, 4, 5 };
+		} else
 		{
-			orderNumbers=new int[]{0,1,2,3,4,5};
+			orderNumbers = new int[] { 0, 1, 2, 3, 4, 5 };
 		}
-		
-		for(int i=0;i<orderNumbers.length;i++)
+
+		for (int i = 0; i < orderNumbers.length; i++)
 		{
-			if(!strs[orderNumbers[i]].equals(""))
+			if (!strs[orderNumbers[i]].equals(""))
 			{
-				
+
 				strBuil.append(strs[orderNumbers[i]]);
 			}
-			
+
 		}
-		
-		
 
 		return strBuil.toString();
 
@@ -287,27 +293,23 @@ public class HiveProvider extends JdbcProvider
 	{
 
 		StringBuilder strBuil = new StringBuilder();
-		
+
 		if (query.getJoinOnClause() != null)
 		{
 			strBuil.append(" JOIN ")
-					.append(query.getJoinOnClause().getQuery().getFields()[0].getDataSet().getName()
-							).append(" ")
+					.append(query.getJoinOnClause().getQuery().getFields()[0]
+							.getDataSet().getName()).append(" ")
 					.append(aliasMap.get(query.getJoinOnClause().getQuery()))
-					.append(" ")
-					.append(" ON ");
-			
+					.append(" ").append(" ON ");
+
 			for (Entry<DataField, DataField> fs : query.getJoinOnClause()
 					.getOns().entrySet())
 			{
-				strBuil.append(aliasMap.get(fs.getKey()))
-				.append(".")
-				.append(fs.getKey())
-				.append("=")
-				.append(aliasMap.get(fs.getValue()))
-				.append(".")
-				.append(fs.getValue())
-				.append(" AND ");
+
+				strBuil.append(getFieldAliasName(fs.getKey(), aliasMap))
+
+				.append("=").append(getFieldAliasName(fs.getValue(), aliasMap))
+						.append(" AND ");
 			}
 			strBuil.delete(strBuil.length() - 4, strBuil.length());
 			return strBuil.toString();
@@ -316,7 +318,7 @@ public class HiveProvider extends JdbcProvider
 		return "";
 	}
 
-	private String getGroupByStr(Query query,HashMap<Query,String> aliasMap)
+	private String getGroupByStr(Query query, HashMap<Query, String> aliasMap)
 	{
 
 		List<DataField> list_group = query.getGroupByFields();
@@ -331,25 +333,53 @@ public class HiveProvider extends JdbcProvider
 		strBuil.append(" GROUP BY ");
 		int size = list_group.size();
 
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
+		{
+			
+			for (int i = 0; i < size - 1; i++)
+			{
+				
+				strBuil.append(list_group.get(i).getName());
+				strBuil.append(",");
+
+			}
+			
+			strBuil.append(list_group.get(size-1).getName() + " ");
+			return strBuil.toString();
+			
+		}
+		
+		
+		
+		
+		
+		
+		String tmp = null;
+
 		for (int i = 0; i < size - 1; i++)
 		{
-			strBuil.append(getFieldAliasName(list_group.get(i),aliasMap));
+			tmp = getFieldAliasName(list_group.get(i), aliasMap);
+			if (tmp.equals(""))
+			{
+				tmp = list_group.get(i).getName();
+			}
+			strBuil.append(tmp);
 			strBuil.append(",");
 		}
 
-		strBuil.append(getFieldAliasName(list_group.get(list_group.size() - 1),aliasMap) + " ");
+		strBuil.append(getFieldAliasName(list_group.get(list_group.size() - 1),
+				aliasMap) + " ");
 		return strBuil.toString();
 
 	}
 
-	private String getOrderByStr(Query query,HashMap<Query,String>aliasMap)
+	private String getOrderByStr(Query query, HashMap<Query, String> aliasMap)
 	{
 		// the key "order by"
 
 		List<OrderClause> orders = query.getOrderClauses();
 		if (orders == null || orders.size() == 0)
 		{
-			System.out.println("ok");
 			return "";
 
 		}
@@ -359,11 +389,51 @@ public class HiveProvider extends JdbcProvider
 		strBuil.append(" ORDER BY ");
 		OrderClause order = null;
 
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
+		{
+			
+			for (int i = 0; i < orders.size() - 1; i++)
+			{
+				order = orders.get(i);
+
+				strBuil.append(order.getField().getName());
+				strBuil.append(" ");
+				strBuil.append(order.getOrder().toString());
+				strBuil.append(", ");
+			}
+
+			order = orders.get(orders.size() - 1);
+
+			strBuil.append(order.getField().getName());
+			strBuil.append(" ");
+			strBuil.append(order.getOrder().toString());
+			strBuil.append(" ");
+			
+			
+			return strBuil.toString();
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		String tmp = null;
 		for (int i = 0; i < orders.size() - 1; i++)
 		{
 			order = orders.get(i);
 
-			strBuil.append(getFieldAliasName(order.getField(),aliasMap));
+			tmp = getFieldAliasName(order.getField(), aliasMap);
+
+			if (tmp.equals(""))
+			{
+				tmp = order.getField().getName();
+			}
+
+			strBuil.append(tmp);
 			strBuil.append(" ");
 			strBuil.append(order.getOrder().toString());
 			strBuil.append(", ");
@@ -371,7 +441,7 @@ public class HiveProvider extends JdbcProvider
 
 		order = orders.get(orders.size() - 1);
 
-		strBuil.append(getFieldAliasName(order.getField(),aliasMap));
+		strBuil.append(getFieldAliasName(order.getField(), aliasMap));
 		strBuil.append(" ");
 		strBuil.append(order.getOrder().toString());
 		strBuil.append(" ");
@@ -380,7 +450,7 @@ public class HiveProvider extends JdbcProvider
 
 	}
 
-	private String getWhereStr(Query query,HashMap<Query,String> aliasMap)
+	private String getWhereStr(Query query, HashMap<Query, String> aliasMap)
 	{
 		StringBuilder strBuil = new StringBuilder();
 		// add key "where"
@@ -394,9 +464,40 @@ public class HiveProvider extends JdbcProvider
 		int size = list_where.size();
 		strBuil.append(" where ");
 
+		
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
+		{
+			WhereClause where=null;
+			for (int i = 0; i < size; i++)
+			{
+				where=list_where.get(i);
+				strBuil.append(where.getField().getName());
+				strBuil.append(where.getOperator().toString());
+
+				if (where.getField().getFieldType().isNumber())
+					strBuil.append(where.getValue().toString());
+				else
+					strBuil.append("'").append(where.getValue().toString()).append("'");
+				if (i != size - 1)
+				{
+					strBuil.append(" and ");
+
+				}
+			}
+			
+			return strBuil.toString();
+			
+		}
+		
+		
+		
+		
+		
 		for (int i = 0; i < size; i++)
 		{
-			strBuil.append(whereConditionToStr(list_where.get(i),aliasMap));
+
+			strBuil.append(whereConditionToStr(list_where.get(i), aliasMap));
+
 			if (i != size - 1)
 			{
 				strBuil.append(" and ");
@@ -409,22 +510,30 @@ public class HiveProvider extends JdbcProvider
 
 	}
 
-	private String getFromStr(Query query,HashMap<Query,String> map)
+	private String getFromStr(Query query, HashMap<Query, String> aliasMap)
 	{
+
+		/*
+		 * if(query.getInnerQuery()!=null) { throw new
+		 * UnsupportedOperationException("unsupport InnerQuery!"); }
+		 */
+		// once, join was called, the query must contain a inner query
 
 		StringBuilder strBuil = new StringBuilder();
 
 		DataField[] fields = query.getFields();
 
-		if (query.getJoinOnClause() == null && query.getInnerQuery() == null)
-			strBuil.append(" FROM ").append(fields[0].getDataSet().getName());
-		else
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
 		{
-
-			strBuil.append(" FROM ( ")
-					.append(fields[0].getDataSet().getName())
-					.append(" ").append(getFieldAliasName(fields[0],map));
+			strBuil.append(" FROM ");
+			strBuil.append(fields[0].getDataSet().getName());
+			strBuil.append(" ");
+			return strBuil.toString();
 		}
+
+		strBuil.append(" FROM ").append(fields[0].getDataSet().getName())
+				.append(" ").append(aliasMap.get(query));
+
 		/*
 		 * // add key from StringBuilder strBuil = new StringBuilder();
 		 * DataField[] fields = query.getFields(); strBuil.append(" from ");
@@ -437,50 +546,86 @@ public class HiveProvider extends JdbcProvider
 	private String getSelectStr(Query query, HashMap<Query, String> aliasMap)
 	{
 
+		// if(query.getInnerQuery()!=null)
+		// {
+		// throw new UnsupportedOperationException("unsupport InnerQuery!");
+		// }
 		DataField[] fields = query.getFields();
+		// add key select
+		StringBuilder strBuil = new StringBuilder();
+		strBuil.append("SELECT ");
 
+		DataField df = null;
+		
+		
 		if (fields == null || fields.length == 0)
 		{
 
 			return null;
 		}
-		// add key select
-		StringBuilder strBuil = new StringBuilder();
-		strBuil.append("SELECT ");
 
 		int len = fields.length;
-		DataField df = null;
+
+		// no innerQuery and joinquery 
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
+		{
+			
+			for(int i = 0; i < len; i++)
+			{
+				df = fields[i];
+
+				strBuil.append(df.getQueryName());
+				
+				if (i != len - 1)
+				{
+					strBuil.append(",");
+
+				}
+			}
+			
+			strBuil.append(" ");
+			
+			return strBuil.toString();
+		}
+
+		if (query.getInnerQuery() != null && query.getJoinOnClause() == null)
+		{
+			
+			throw new UnsupportedOperationException("unsupport innerQuery");
+		}
+
+		
+		
+		
 		for (int i = 0; i < len; i++)
 		{
 
 			df = fields[i];
 
-			if (df.getQuery() == null&&query.getInnerQuery()==null&&query.getJoinOnClause()==null)
-			{
-				strBuil.append(df.getQueryName()).append(" ")
-						.append(df.getName());
-			} else
-			{
-				strBuil.append(getFieldAliasName(df, aliasMap)).append(" ")
-						.append(df.getName());
-			}
+			strBuil.append(df.getQueryName());
+			strBuil.append(" ");
+			strBuil.append(getFieldAliasName(df, aliasMap));
 
-			if (i != len - 1)
-			{
-				strBuil.append(",");
-
-			}
+			
 		}
 		strBuil.append(" ");
 		return strBuil.toString();
 	}
 
-	private String whereConditionToStr(WhereClause where,HashMap<Query,String> aliasMap)
+	private String whereConditionToStr(WhereClause where,
+			HashMap<Query, String> aliasMap)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(getFieldAliasName(where.getField(), aliasMap))
-			.append(where.getOperator().toString());
-		
+		String tmp = getFieldAliasName(where.getField(), aliasMap);
+
+		if (tmp.equals(""))
+		{
+			tmp = where.getField().getName();
+
+		}
+
+		sb.append(tmp).append(where.getOperator().toString());
+
 		if (where.getField().getFieldType().isNumber())
 			sb.append(where.getValue().toString());
 		else
@@ -510,21 +655,20 @@ public class HiveProvider extends JdbcProvider
 
 		dsSite = DataSetManagerImpl.getInstance().createDataSet("TESTF",
 				"liqi", "小区地理位置信息", hiveProvider, true, fields);
-		DataSetManagerImpl.getInstance().setDataSetPermission("TESTF", "liqi",
-				DataSetImpl.PERMISSION_PUBLIC, null);
+		DataSetManagerImpl.getInstance().setDataSetPermission(dsSite.getId(),
+				"liqi", DataSetImpl.PERMISSION_PUBLIC, null);
 
 		Query q1;
-		DataSet ds = DataSetManagerImpl.getInstance().getDataSet("TESTF");
+		DataSet ds = DataSetManagerImpl.getInstance()
+				.getDataSet(dsSite.getId());
 		q1 = ds.getQuery();
 
 		q1 = q1.orderBy("LAC", Query.Order.ASC);
 		q1 = q1.orderBy("EN_NAME", Query.Order.ASC);
 		q1 = q1.whereOr("LAC", Query.Operator.GEQ, 5000);
 
-		
-		
-		//-------------------------------
-		DataField[] fieldsA = null;
+		// -------------------------------
+		/*DataField[] fieldsA = null;
 		DataSet dsSiteA = null;
 
 		fieldsA = new DataField[2];
@@ -532,32 +676,29 @@ public class HiveProvider extends JdbcProvider
 				true, FieldFunctionality.Identifier);
 		fieldsA[1] = new GeneralDataField("age", FieldType.Int, "", false,
 				FieldFunctionality.Value);
-		
 
 		dsSiteA = DataSetManagerImpl.getInstance().createDataSet("TESTa",
 				"liqi", "小区地理位置信息", hiveProvider, true, fieldsA);
-		DataSetManagerImpl.getInstance().setDataSetPermission("TESTa", "liqi",
-				DataSetImpl.PERMISSION_PUBLIC, null);
-		
-		
+		DataSetManagerImpl.getInstance().setDataSetPermission(dsSiteA.getId(),
+				"liqi", DataSetImpl.PERMISSION_PUBLIC, null);
 
 		Query q2;
-		DataSet ds2 = DataSetManagerImpl.getInstance().getDataSet("TESTa");
-		q2 = ds.getQuery();
-		
-		HashMap<DataField,DataField> map=new HashMap<DataField,DataField>();
+		DataSet ds2 = DataSetManagerImpl.getInstance().getDataSet(
+				dsSiteA.getId());
+		q2 = ds2.getQuery();
+
+		HashMap<DataField, DataField> map = new HashMap<DataField, DataField>();
 		map.put(fields[1], fieldsA[1]);
-		
-		
-		q1.join(q2, map);
-		
-		//------------------------------------------
+
+		q1 = q1.join(q2, map);
+*/
+		// ------------------------------------------
 		q1.open();
 		int i = 0;
 		while (q1.next() && i++ < 3)
 		{
 			System.out.println(q1.getValue(ds.getField("LAC")) + " "
-					+ q1.getValue(ds.getField("CI"))+"  ");
+					+ q1.getValue(ds.getField("CI")) + "  ");
 		}
 		q1.close();
 	}
