@@ -1,7 +1,7 @@
 Sta = {};
 
 /*****initialize chartType and yAxis of a chart*****/
-Sta.guide = function(tabIndex,dvIndex,dvName){
+Sta.guide = function(tabIndex,dvIndex){
 	/*****Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation.*****/
 	$.getJSON(Common.dataviewUrl(),{
 		featuretype: "DistributionFeature"
@@ -233,7 +233,7 @@ Sta.showChart = function(tabIndex,dvIndex,chartIndex,ccName){
 	$.getJSON(Common.dataviewUrl(),{
 		featuretype: "DistributionFeature"
 	},function(data){
-		var des = data[dvIndex].descriptionZh;
+		var id = data[dvIndex].id;
 		var dvName = data[dvIndex].dataviewName;
 		var keys = data[dvIndex].identifiers;
 		var values = data[dvIndex].values;
@@ -242,7 +242,7 @@ Sta.showChart = function(tabIndex,dvIndex,chartIndex,ccName){
 		var value = new Array();
 		
 		$.getJSON(Common.dvDataUrl(),{
-			dataset: dvName
+			id: id
 		},function(data){
 			var l = data.length;
 			for(var i = 0; i < l; i++){
@@ -314,7 +314,7 @@ Sta.showChart = function(tabIndex,dvIndex,chartIndex,ccName){
 				options = {};
 			}else{
 				options = {
-					title: des
+					title: dvName
 				};
 			}
 			var chart = new Object;
