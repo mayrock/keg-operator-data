@@ -208,7 +208,11 @@ public class PlatformImpl implements Platform {
 									.whereAnd(q2.getFields()[0].getName(),
 											Operator.EQ, 3436)
 									.whereOr(q2.getFields()[0].getName(),
-											Operator.GT, 1000).toString());
+											Operator.GT, 1000)
+									.whereOr(q2.getFields()[0].getName(),
+											Operator.GT, 1001)
+									.whereAnd(q2.getFields()[0].getName(),
+											Operator.EQ, 1002).toString());
 			fm1.put(q2.getFields()[0].clone(), q.getFields()[0].clone());
 			fm2.put(q.getFields()[0].clone(), q2.getFields()[0].clone());
 

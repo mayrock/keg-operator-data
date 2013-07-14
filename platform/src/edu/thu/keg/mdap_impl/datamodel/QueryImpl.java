@@ -266,7 +266,7 @@ public class QueryImpl implements Query {
 					df.getDescription(), df.isKey(), df.allowNull(),
 					df.isDim(), df.getFunction(), q.getInnerQuery());
 			if (q.getInnerQuery() == null) {
-				df.setDataSet(df.getDataSet());
+				df_all[i].setDataSet(df.getDataSet());
 			}
 		}
 		for (int i = 0; i < joinClauseLen; i++) {
@@ -278,7 +278,7 @@ public class QueryImpl implements Query {
 					q2);
 			df_all[i + q.getFields().length].setDataSet(df.getDataSet());
 			if (q2.getInnerQuery() == null) {
-				df.setDataSet(df.getDataSet());
+				df_all[i].setDataSet(df.getDataSet());
 			}
 		}
 		q.setFields(df_all);
