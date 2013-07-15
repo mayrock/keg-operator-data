@@ -80,7 +80,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	private HashMap<String, DataSet> datasets = null;
 	private HashMap<DataFeatureType, Set<DataSet>> features = null;
 	private HashMap<String, DataView> views = null;
-	private HashMap<DataFeatureType, Set<DataView>> viewsMap = null;
+	private HashMap<String, Set<DataView>> viewsMap = null;
 
 	private HashMap<String, Set<DataView>> datasetMapViews = null;
 
@@ -115,7 +115,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		datasets = new HashMap<String, DataSet>();
 		features = new HashMap<DataFeatureType, Set<DataSet>>();
 		views = new HashMap<String, DataView>();
-		viewsMap = new HashMap<DataFeatureType, Set<DataView>>();
+		viewsMap = new HashMap<String, Set<DataView>>();
 		datasetMapViews = new HashMap<String, Set<DataView>>();
 		ownerMap = new HashMap<String, Set<DataSet>>();
 		limitedMap = new HashMap<String, Set<DataSet>>();
@@ -315,8 +315,13 @@ public class DataSetManagerImpl implements DataSetManager {
 	@Override
 	public DataSet createDataSet(String name, String owner, String description,
 			DataProvider provider, boolean loadable, DataField... fields) {
-		DataSet ds = new DataSetImpl("DS" + getUUID(name, owner), name, owner,
-				provider, loadable, fields);
+		String id = "DS" + getUUID(name, owner);
+		if (this.datasets.containsKey(id))
+			throw new IllegalArgumentException("Dataset name: " + id
+					+ " exists!");
+
+		DataSet ds = new DataSetImpl(id, name, owner, provider, loadable,
+				fields);
 		ds.setDescription(description);
 		ds.setPermission(DataSetImpl.PERMISSION_PRIVATE);
 		addDataSet(ds);
@@ -335,8 +340,8 @@ public class DataSetManagerImpl implements DataSetManager {
 					"Dataview name & owner can't be empty!");
 		String id = "DV" + getUUID(name, owner);
 		if (this.views.containsKey(id))
-			throw new IllegalArgumentException("Dataview name: " + id
-					+ " exists!");
+			throw new IllegalArgumentException("Dataview name: " + type.name()
+					+ " " + id + " exists!");
 		DataView v = new DataViewImpl(id, name, owner, dataset, type, q);
 
 		v.setDescription(description);
@@ -355,8 +360,8 @@ public class DataSetManagerImpl implements DataSetManager {
 					"Dataview name & owner can't be empty!");
 		String id = "DV" + getUUID(name, owner);
 		if (this.views.containsKey(id))
-			throw new IllegalArgumentException("Dataview id: " + id
-					+ " exists!");
+			throw new IllegalArgumentException("Dataview name: " + type.name()
+					+ " " + id + " exists!");
 		DataView v = new DataViewImpl(id, name, owner, dataset, type, q, keys,
 				values);
 		v.setDescription(description);
@@ -407,10 +412,10 @@ public class DataSetManagerImpl implements DataSetManager {
 		datasetMapViews.get(v.getDataSet()).add(v);
 
 		DataFeatureType type = v.getFeatureType();
-		if (!viewsMap.containsKey(v.getFeatureType())) {
-			viewsMap.put(type, new HashSet<DataView>());
+		if (!viewsMap.containsKey(v.getFeatureType().name())) {
+			viewsMap.put(type.name(), new HashSet<DataView>());
 		}
-		viewsMap.get(type).add(v);
+		viewsMap.get(type.name()).add(v);
 	}
 
 	@Override
@@ -422,7 +427,7 @@ public class DataSetManagerImpl implements DataSetManager {
 	public Collection<DataView> getDataViewList(DataFeatureType type) {
 		if (type == null)
 			return views.values();
-		return viewsMap.get(type);
+		return viewsMap.get(type.name());
 	}
 
 	/*

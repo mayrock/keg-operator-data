@@ -33,7 +33,7 @@ Fav.saveSta = function(tabIndex){
 		var len = data.length;
 		var dataviewData = JSON.parse("[]");
 		for(var i = 0; i < len; i++){
-			var name = data[i].dataviewName;
+			var id = data[i].id;
 			var l = Common.chartIndex[tabIndex][i].length;
 			if(l == 1){
 				continue;
@@ -56,7 +56,7 @@ Fav.saveSta = function(tabIndex){
 			}
 			/*****dataset name and chart array make up a dataset*****/
 			var dvData = JSON.parse("{}");
-			dvData.name = name;
+			dvData.id = id;
 			dvData.chart = chartData;
 			/*****dataset array*****/
 			var dvLen = dataviewData.length;
@@ -155,11 +155,11 @@ Fav.revertSta = function(favid){
 			function drawChart(){
 				for(var i = 0; i < dvLen; i++){
 					var dvData = dataviewData[i];
-					var dvName = dvData.name;
+					var dvID = dvData.id;
 					var dvIndex = -1;
 					for(var j = 0; j < len; j++){
-						var name = data[j].dataviewName;
-						if(dvName == name){
+						var id = data[j].id;
+						if(dvID == id){
 							dvIndex = j;
 							break;
 						}

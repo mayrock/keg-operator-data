@@ -67,6 +67,7 @@ Common.dvFieldUrl = function(){return Common.ip() + "dvg/getdvfds?jsoncallback=?
 
 /*****dv post*****/
 Common.addDvUrl = function(){return Common.ip() + "dsa/adddv";};
+Common.dvSQLUrl = function(){return Common.ip() + "dsa/adddvagg";};
 Common.modifyDvUrl = function(){return Common.ip() + "dsa/setdv";};
 Common.delDvUrl = function(){return Common.ip() + "dsa/rmdv";};
 

@@ -62,25 +62,15 @@ public class GeneralDataField implements DataField {
 	 *            Whether the field is key
 	 * @param allowNull
 	 *            Whether the field allows null value
+	 * @param isDim
+	 *            Whether the field is dim
+	 * @param func
+	 *            what is the field function is
+	 * @param query
+	 *            whether the field is belonged to any query table
+	 * @param dataset
+	 *            which dataset the field belongs to
 	 */
-	// public GeneralDataField(String name, FieldType type, String description,
-	// boolean isKey, boolean allowNull, boolean isDim,
-	// FieldFunctionality func, Query query) {
-	// if (isKey == true && allowNull == true)
-	// throw new IllegalArgumentException();
-	// this.name = name;
-	// this.queryName = name;
-	// this.type = type;
-	// this.dataset = null;
-	// this.query = query;
-	//
-	// this.desps = new LocalizedMessage();
-	// this.desps.setMessage(description);
-	// this.isKey = isKey;
-	// this.allowNull = allowNull;
-	// this.func = func;
-	// }
-
 	public GeneralDataField(String name, FieldType type, String description,
 			boolean isKey, boolean allowNull, boolean isDim,
 			FieldFunctionality func, Query query, DataSet dataset) {

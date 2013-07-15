@@ -24,28 +24,6 @@ public class DataViewImpl implements DataView {
 	private List<DataField> valueFields;
 	private String dataset;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DataViewImpl other = (DataViewImpl) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
 	/**
 	 * @param q
 	 * @param name

@@ -95,11 +95,12 @@ public class PlatformImpl implements Platform {
 				false, false, true, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("LATITUDE", FieldType.Double, "",
 				false, false, true, FieldFunctionality.Latitude);
-		dsSite = getDataSetManager().createDataSet("TESTF", "liqi",
-				"小区地理位置信息hadoop", hiveProvider, true, fields);
-		getDataSetManager().setDataSetPermission(dsSite.getId(), "liqi",
-				DataSetImpl.PERMISSION_PUBLIC, null);
 		try {
+			dsSite = getDataSetManager().createDataSet("TESTF", "liqi",
+					"小区地理位置信息hadoop", hiveProvider, true, fields);
+			getDataSetManager().setDataSetPermission(dsSite.getId(), "liqi",
+					DataSetImpl.PERMISSION_PUBLIC, null);
+
 			q = dsSite.getQuery().select(dsSite.getField("EN_NAME"),
 					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
 			dv = getDataSetManager().defineView("Lac_Ci_Map_hadoop",
@@ -124,11 +125,12 @@ public class PlatformImpl implements Platform {
 				false, false, true, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("LATITUDE", FieldType.Double, "",
 				false, false, true, FieldFunctionality.Latitude);
-		dsSite = getDataSetManager().createDataSet("Lac_Ci_Map", "ybz",
-				"小区地理位置信息orcl", orclProvider, true, fields);
-		getDataSetManager().setDataSetPermission(dsSite.getId(), "ybz",
-				DataSetImpl.PERMISSION_PUBLIC, null);
 		try {
+			dsSite = getDataSetManager().createDataSet("Lac_Ci_Map", "ybz",
+					"小区地理位置信息orcl", orclProvider, true, fields);
+			getDataSetManager().setDataSetPermission(dsSite.getId(), "ybz",
+					DataSetImpl.PERMISSION_PUBLIC, null);
+
 			q = dsSite.getQuery().select(dsSite.getField("AREANAME_EN"),
 					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
 			dv = getDataSetManager().defineView("Lac_Ci_Map_orcl",
@@ -142,30 +144,32 @@ public class PlatformImpl implements Platform {
 		}
 
 		// 1st DataSet
-		fields = new DataField[2];
-		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true,
-				false, true, FieldFunctionality.Identifier);
-		fields[1] = new GeneralDataField("URL", FieldType.ShortString, "",
-				false, false, true, FieldFunctionality.Other);
-		dsSite = getDataSetManager().createDataSet("WebsiteId_URL", "myc",
-				"网站信息", provider, true, fields);
-		List<String> users = new ArrayList<>();
-		users.add("wc");
-		users.add("xm");
-		getDataSetManager().setDataSetPermission(dsSite.getId(), "myc",
-				DataSetImpl.PERMISSION_LIMITED, users);
+		// fields = new DataField[2];
+		// fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "",
+		// true,
+		// false, true, FieldFunctionality.Identifier);
+		// fields[1] = new GeneralDataField("URL", FieldType.ShortString, "",
+		// false, false, true, FieldFunctionality.Other);
+		// dsSite = getDataSetManager().createDataSet("WebsiteId_URL", "myc",
+		// "网站信息", provider, true, fields);
+		// List<String> users = new ArrayList<>();
+		// users.add("wc");
+		// users.add("xm");
+		// getDataSetManager().setDataSetPermission(dsSite.getId(), "myc",
+		// DataSetImpl.PERMISSION_LIMITED, users);
 		// 2nd DataSet
-		fields = new DataField[4];
-		fields[0] = new GeneralDataField("Region", FieldType.Int, "", true,
-				false, true, FieldFunctionality.Other);
-		fields[1] = new GeneralDataField("Name", FieldType.ShortString, "",
-				false, false, true, FieldFunctionality.Other);
-		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "",
-				false, false, true, FieldFunctionality.Latitude);
-		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "",
-				false, false, true, FieldFunctionality.Longitude);
-		dsSite = getDataSetManager().createDataSet("RegionInfo3", "xm", "地理区域",
-				provider, true, fields);
+		// fields = new DataField[4];
+		// fields[0] = new GeneralDataField("Region", FieldType.Int, "", true,
+		// false, true, FieldFunctionality.Other);
+		// fields[1] = new GeneralDataField("Name", FieldType.ShortString, "",
+		// false, false, true, FieldFunctionality.Other);
+		// fields[2] = new GeneralDataField("Latitude", FieldType.Double, "",
+		// false, false, true, FieldFunctionality.Latitude);
+		// fields[3] = new GeneralDataField("Longitude", FieldType.Double, "",
+		// false, false, true, FieldFunctionality.Longitude);
+		// dsSite = getDataSetManager().createDataSet("RegionInfo3", "xm",
+		// "地理区域",
+		// provider, true, fields);
 		// 3rd DataSet
 		fields = new DataField[5];
 		fields[0] = new GeneralDataField("SiteId", FieldType.Int, "", true,
@@ -178,10 +182,11 @@ public class PlatformImpl implements Platform {
 				false, false, true, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false,
 				false, true, FieldFunctionality.Other);
-		dsSite = getDataSetManager().createDataSet("RegionInfo2", "xm", "基站信息",
-				provider, true, fields);
-		// 3rd DataView
 		try {
+			dsSite = getDataSetManager().createDataSet("RegionInfo2", "xm",
+					"基站信息", provider, true, fields);
+			// 3rd DataView
+
 			q = dsSite
 					.getQuery()
 					.select(dsSite.getField("Region"),
@@ -228,26 +233,26 @@ public class PlatformImpl implements Platform {
 		}
 
 		// 4th DataSet
-		fields = new DataField[6];
-		fields[0] = new GeneralDataField("Domain", FieldType.LongString,
-				"Domain", true, false, true, FieldFunctionality.Identifier);
-		fields[1] = new GeneralDataField("DayCount", FieldType.Int,
-				"appear days of this domain", false, false, true,
-				FieldFunctionality.Value);
-		fields[2] = new GeneralDataField("HourCount", FieldType.Int,
-				"appear hours of this domain", false, false, true,
-				FieldFunctionality.Value);
-		fields[3] = new GeneralDataField("LocCount", FieldType.Int,
-				"appear locations of this domain", false, false, true,
-				FieldFunctionality.Value);
-		fields[4] = new GeneralDataField("UserCount", FieldType.Int,
-				"number of users visiting this domain", false, false, true,
-				FieldFunctionality.Value);
-		fields[5] = new GeneralDataField("TotalCount", FieldType.Int,
-				"total visits of this domain", false, false, true,
-				FieldFunctionality.Value);
-		getDataSetManager().createDataSet("FilteredByCT_Domain", "wc",
-				"Domain statistics", provider, false, fields);
+		// fields = new DataField[6];
+		// fields[0] = new GeneralDataField("Domain", FieldType.LongString,
+		// "Domain", true, false, true, FieldFunctionality.Identifier);
+		// fields[1] = new GeneralDataField("DayCount", FieldType.Int,
+		// "appear days of this domain", false, false, true,
+		// FieldFunctionality.Value);
+		// fields[2] = new GeneralDataField("HourCount", FieldType.Int,
+		// "appear hours of this domain", false, false, true,
+		// FieldFunctionality.Value);
+		// fields[3] = new GeneralDataField("LocCount", FieldType.Int,
+		// "appear locations of this domain", false, false, true,
+		// FieldFunctionality.Value);
+		// fields[4] = new GeneralDataField("UserCount", FieldType.Int,
+		// "number of users visiting this domain", false, false, true,
+		// FieldFunctionality.Value);
+		// fields[5] = new GeneralDataField("TotalCount", FieldType.Int,
+		// "total visits of this domain", false, false, true,
+		// FieldFunctionality.Value);
+		// getDataSetManager().createDataSet("FilteredByCT_Domain", "wc",
+		// "Domain statistics", provider, false, fields);
 		// 5th DataSet
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("ContentType", FieldType.LongString,
@@ -256,11 +261,12 @@ public class PlatformImpl implements Platform {
 		fields[1] = new GeneralDataField("times", FieldType.Int,
 				"appear times of the ContentType", false, false, true,
 				FieldFunctionality.Value);
-		dsSite = getDataSetManager().createDataSet(
-				"DataAggr_ContentTypes_Up90", "wc", "ContentType分布集", provider,
-				true, fields);
-		// 5th DataView
 		try {
+			dsSite = getDataSetManager().createDataSet(
+					"DataAggr_ContentTypes_Up90", "wc", "ContentType分布集",
+					provider, true, fields);
+			// 5th DataView
+
 			q = dsSite.getQuery().orderBy("times", Order.DESC);
 			dv = getDataSetManager().defineView("ContentTypeView",
 					dsSite.getOwner(), dsSite.getId(), "ContentType分布",
@@ -286,10 +292,11 @@ public class PlatformImpl implements Platform {
 				"Total count of requests", false, false, true,
 				FieldFunctionality.Value);
 
-		dsSite = getDataSetManager().createDataSet("slot_Imsi_All", "myc",
-				"User statistics by time slot", provider, true, fields);
-		// 6th DataView
 		try {
+			dsSite = getDataSetManager().createDataSet("slot_Imsi_All", "myc",
+					"User statistics by time slot", provider, true, fields);
+			// 6th DataView
+
 			DataField va = new AggregatedDataField(dsSite.getField("Imsi"),
 					AggrFunction.COUNT, "UserCount", null);
 			q = dsSite.getQuery().select(dsSite.getField("WebsiteCount"), va)
@@ -297,7 +304,7 @@ public class PlatformImpl implements Platform {
 			DataField[] vas = { va };
 			dv = getDataSetManager().defineView("UserWebsiteCountView",
 					dsSite.getOwner(), dsSite.getId(), "用户网站访问数分布",
-					DataFeatureType.ValueFeature, q,
+					DataFeatureType.DistributionFeature, q,
 					new DataField[] { dsSite.getField("WebsiteCount") }, vas);
 			dv.setDescription(Locale.ENGLISH, "User website count distribution");
 		} catch (OperationNotSupportedException | IllegalArgumentException
@@ -313,10 +320,11 @@ public class PlatformImpl implements Platform {
 		fields[2] = new GeneralDataField("TotalCount", FieldType.Int, "连接数",
 				false, false, true, FieldFunctionality.Value);
 
-		dsSite = getDataSetManager().createDataSet("SiteId_ConnHour", "myc",
-				"每小时每基站连接数", provider, true, fields);
-		// 7th DataView
 		try {
+			dsSite = getDataSetManager().createDataSet("SiteId_ConnHour",
+					"myc", "每小时每基站连接数", provider, true, fields);
+			// 7th DataView
+
 			q = dsSite
 					.getQuery()
 					.select(dsSite.getField("ConnHour"),
@@ -342,8 +350,24 @@ public class PlatformImpl implements Platform {
 				false, false, true, FieldFunctionality.Latitude);
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "纬度",
 				false, false, true, FieldFunctionality.Longitude);
-		dsSite = getDataSetManager().createDataSet("group_data", "ybz",
-				"分组数据_时间经纬度", provider, true, fields);
+
+		try {
+			dsSite = getDataSetManager().createDataSet("group_data", "ybz",
+					"分组数据_时间经纬度", provider, true, fields);
+
+			q = dsSite.getQuery();
+			getDataSetManager().defineView("Timeseries_Connect_info_data",
+					dsSite.getOwner(), dsSite.getId(), "时间_连接地理位置",
+					DataFeatureType.TimeSeries, q);
+			getDataSetManager().defineView("Location_Connect_info_data",
+					dsSite.getOwner(), dsSite.getId(), "位置_连接时间",
+					DataFeatureType.GeoFeature, q);
+		} catch (OperationNotSupportedException | DataProviderException
+				| IllegalArgumentException e1) {
+
+			// TODO Auto-generated catch block
+			System.out.println(e1.getMessage());
+		}
 		// fields = new DataField[2];
 		// fields[0] = new GeneralDataField("ContentType", FieldType.LongString,
 		// "Content Type of websites", true);
@@ -352,7 +376,7 @@ public class PlatformImpl implements Platform {
 		// DataSet tds2 = p.getDataSetManager().createDataSet("New_Test",
 		// "Top 90% Content Type distribution", provider, fields, true,
 		// new StatisticsFeature(fields[0], fields[1]));
-		//
+
 		// try {
 		// tds2.writeData(tds.getQuery());
 		// } catch (OperationNotSupportedException e) {
@@ -390,13 +414,13 @@ public class PlatformImpl implements Platform {
 			System.out.println(ds.getId() + " " + ds.getOwner() + " "
 					+ ds.getName() + " " + ds.getDescription());
 		}
-		System.out.println("LIMITED----------------------------- "
-				+ getDataSetManager().getLimitedDataSetList("wc").size());
-		for (DataSet ds : getDataSetManager().getLimitedDataSetList("wc")) {
-			System.out.println(ds.getId() + " " + ds.getOwner() + " "
-					+ ds.getName() + " " + ds.getLimitedUsers() + " "
-					+ ds.getDescription());
-		}
+		// System.out.println("LIMITED----------------------------- "
+		// + getDataSetManager().getLimitedDataSetList("wc").size());
+		// for (DataSet ds : getDataSetManager().getLimitedDataSetList("wc")) {
+		// System.out.println(ds.getId() + " " + ds.getOwner() + " "
+		// + ds.getName() + " " + ds.getLimitedUsers() + " "
+		// + ds.getDescription());
+		// }
 
 		System.out.println("END-----------------------------");
 		// System.out.println("myc-----------------------------"
