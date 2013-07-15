@@ -214,16 +214,16 @@ Tab.loadGeo = function(tabIndex){
 		
 		Common.mapInfoArr[tabIndex] = new Array();
 		for(var i = 0; i < len; i++){
-			var des = data[i].descriptionZh;
+			var id = data[i].id;
 			var dvName = data[i].dataviewName;
 			var keys = data[i].identifiers;
 			var type = "points";
 			if(keys[0] == "Region"){
 				type = "regions";
 			}
-			Geo.loadData(tabIndex,i,dvName,type);
+			Geo.loadData(tabIndex,i,id,type);
 			$("<input type = 'checkbox' id = 'geo-checkbox-" + tabIndex + "-" + i + "' " +
-				"onclick = \"Geo.clickEvent(" + tabIndex + "," + i + ",'" + type + "');\"/>" + des + "<br/>").appendTo(checkbox);
+				"onclick = \"Geo.clickEvent(" + tabIndex + "," + i + ",'" + type + "');\"/>" + dvName + "<br/>").appendTo(checkbox);
 		}
 		$("<input type = 'button' style = 'font-family: Times New Roman;font-size: 16px' value = 'selectAll' " +
 			"onclick = \"Geo.selectAll(" + tabIndex + "," + len + ")\"/>").appendTo(select);
@@ -265,15 +265,14 @@ Tab.loadSta = function(tabIndex){
 			Common.chartType[tabIndex][i] = new Array();
 			Common.yAxis[tabIndex][i] = new Array();
 			
-			var des = data[i].descriptionZh;
 			var dvName = data[i].dataviewName;
 			
 			var nameCtnr = document.createElement("div");
 			nameCtnr.setAttribute("id","sta-dvName-" + tabIndex + "-" + i);
 			nameCtnr.setAttribute("class","sta-dvName");
 			$(nameCtnr).appendTo("#sta-dv-list-" + tabIndex);
-			$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ",'" + dvName + "');\">" +
-				des + "</a>").appendTo(nameCtnr);
+			$("<a href = 'javascript:void(0);' onClick = \"Sta.guide(" + tabIndex + "," + i + ");\">" +
+				dvName + "</a>").appendTo(nameCtnr);
 			
 			var view_dv = document.createElement("div");
 			view_dv.setAttribute("id","sta-view-dv-" + tabIndex + "-" + i);
@@ -292,7 +291,7 @@ Tab.loadSta = function(tabIndex){
 			titleContent.setAttribute("id","titleContent-" + tabIndex + "-" + i);
 			titleContent.setAttribute("class","titleContent");
 			$(titleContent).appendTo(dvTitle);
-			$(titleContent).html(des);
+			$(titleContent).html(dvName);
 			
 			$("<img src = 'css/images/close_256x256.png' onclick = \"Sta.closeAllChart(" + tabIndex + "," + i + ");\"/>")
 				.appendTo(dvTitle)

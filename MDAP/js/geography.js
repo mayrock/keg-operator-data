@@ -19,10 +19,10 @@ Geo.initMap = function(tabIndex){
 };
 
 /*****load data of one dataset*****/
-Geo.loadData = function(tabIndex,dsIndex,dvName,type){
+Geo.loadData = function(tabIndex,dsIndex,dvID,type){
 	Common.mapInfoArr[tabIndex][dsIndex] = new Array();
 	$.getJSON(Common.dvDataUrl(),{
-		dataset: dvName
+		id: dvID
 	},function(data){
 		for(var i = 0; i < data.length; i++){
 			if(type == "points"){

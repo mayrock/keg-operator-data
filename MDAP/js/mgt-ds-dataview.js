@@ -1,8 +1,8 @@
-Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
+Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvID,dvName,dvDes,dsID){
 	var type = "ds";
 	
 	$.getJSON(Common.dvFieldUrl(),{
-		dataset: dvName
+		id: dvID
 	},function(data){
 		var title = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
 		title.empty();
@@ -10,9 +10,9 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
 		
 		var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex);
 		text.empty();
-		$("<span>Old Name:&nbsp;&nbsp;</span><span>" + dvName + "</span><br/>").appendTo(text);
+		$("<span id = '" + dvID + "'>Old Name:&nbsp;&nbsp;&nbsp;</span><span>" + dvName + "</span><br/>").appendTo(text);
 		$("<span>New Name:</span><input type = 'text' value = '" + dvName + "' maxlength = '16'/><br/>").appendTo(text);
-		$("<span>Description:</span><input type = 'text' value = '" + dvDes + "'/>").appendTo(text);
+		$("<span>Description: </span><input type = 'text' value = '" + dvDes + "'/>").appendTo(text);
 		
 		var button = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
 		button.empty();
@@ -27,7 +27,7 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
 		input.attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
 		input.val("delete");
 		input.attr("onclick","Mgt.deleteDataview(" + tabIndex + ",'" + subType + "'," +
-			dsIndex + ",'" + dvType + "','" + dvName + "','" + dsName + "')");
+			dsIndex + ",'" + dvType + "','" + dvID + "','" + dsID + "')");
 		input.appendTo(button);
 		
 		var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
@@ -74,16 +74,18 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvName,dvDes,dsName){
 				}
 			}
 		}
-		Mgt.dataview(tabIndex,subType,dsIndex,dsName,dvType);
+		Mgt.dataview(tabIndex,subType,dsIndex,dsID,dvType);
 	}).error(function(){
 		alert("Oops, we got an error...");
 		return;
 	});
 };
 
-Mgt.dataview = function(tabIndex,subType,dsIndex,dsName,dvType){
+Mgt.dataview = function(tabIndex,subType,dsIndex,dsID,dvType){
 	var type = "ds";
 	
+	var accordion = $("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-accordion-" + tabIndex + "-" + dsIndex);
+	var active = accordion.accordion("option","active");
 	var key = -1;
 	if(dvType == "sta"){
 		var radio = $("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex).find("input");
@@ -94,6 +96,11 @@ Mgt.dataview = function(tabIndex,subType,dsIndex,dsName,dvType){
 			}
 		}
 		if(key == -1){
+			if(typeof(active) == "number"){
+				accordion.accordion("option","active",false);
+				accordion.accordion("option","active",0);
+			}
+			Mgt.revertFrame(tabIndex,subType,dsIndex,dvType);
 			alert("Choose one key!");
 			return;
 		}
@@ -106,22 +113,17 @@ Mgt.dataview = function(tabIndex,subType,dsIndex,dsName,dvType){
 			value = 0;
 		}
 	}
-	var dataview = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
-	var accordion = $("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-accordion-" + tabIndex + "-" + dsIndex);
-	var active = accordion.accordion("option","active");
 	if(value == -1){
-		if(dataview.css("display") == "block"){
-			dataview.css("display","none");
-		}
 		if(typeof(active) == "number"){
 			accordion.accordion("option","active",false);
 			accordion.accordion("option","active",0);
 		}
-		Mgt.adjustHeight();
+		Mgt.revertFrame(tabIndex,subType,dsIndex,dvType);
 		alert("Choose at least one value!");
 		return;
 	}
 	
+	var dataview = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
 	if(dataview.css("display") == "none"){
 		dataview.css("display","block");
 	}
@@ -133,13 +135,13 @@ Mgt.dataview = function(tabIndex,subType,dsIndex,dsName,dvType){
 	Mgt.adjustHeight();
 	
 	if(dvType == "sta"){
-		Mgt.loadChart(tabIndex,subType,dsIndex,dsName);
+		Mgt.loadChart(tabIndex,subType,dsIndex,dsID);
 	}else{
-		Mgt.loadMap(tabIndex,subType,dsIndex,dsName);
+		Mgt.loadMap(tabIndex,subType,dsIndex,dsID);
 	}
 };
 
-Mgt.showDataview = function(tabIndex,subType,dsIndex,dvType,dsName){
+Mgt.showDataview = function(tabIndex,subType,dsIndex,dvType,dsID){
 	var type = "ds";
 	
 	var title = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
@@ -159,10 +161,10 @@ Mgt.showDataview = function(tabIndex,subType,dsIndex,dvType,dsName){
 	input.val("save");
 	input.appendTo(button);
 	
-	Mgt.dataview(tabIndex,subType,dsIndex,dsName,dvType);
+	Mgt.dataview(tabIndex,subType,dsIndex,dsID,dvType);
 };
 
-Mgt.loadChart = function(tabIndex,subType,dsIndex,dsName){
+Mgt.loadChart = function(tabIndex,subType,dsIndex,dsID){
 	var type = "ds";
 	
 	var key = -1;
@@ -182,7 +184,7 @@ Mgt.loadChart = function(tabIndex,subType,dsIndex,dsName){
 	}
 	
 	$.getJSON(Common.dsFieldUrl(),{
-		dataset: dsName
+		id: dsID
 	},function(data){
 		var len = data.length;
 		var arr = "[";
@@ -199,10 +201,10 @@ Mgt.loadChart = function(tabIndex,subType,dsIndex,dsName){
 		var input = $("#" + type + "-" + subType + "-mgt-sta-save-data-view-button-" + tabIndex + "-" + dsIndex).find("input").eq(0);
 		var dvOperate = input.val();
 		input.attr("onclick","Mgt.opDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'sta','" +
-			dsName + "','" + jsonArr + "');");
+			dsID + "','" + jsonArr + "');");
 		
 		$.getJSON(Common.dsDataUrl(),{
-			dataset: dsName
+			id: dsID
 		},function(data){
 			var l = data.length;
 			for(var i = 0; i < l; i++){
@@ -237,7 +239,7 @@ Mgt.loadChart = function(tabIndex,subType,dsIndex,dsName){
 	});
 };
 
-Mgt.loadMap = function(tabIndex,subType,dsIndex,dsName){
+Mgt.loadMap = function(tabIndex,subType,dsIndex,dsID){
 	var type = "ds";
 	
 	var key = new Array();
@@ -255,7 +257,7 @@ Mgt.loadMap = function(tabIndex,subType,dsIndex,dsName){
 	}
 	
 	$.getJSON(Common.dsFieldUrl(),{
-		dataset: dsName
+		id: dsID
 	},function(fieldData){
 		var len = fieldData.length;
 		var mapOptions = {
@@ -280,10 +282,10 @@ Mgt.loadMap = function(tabIndex,subType,dsIndex,dsName){
 		var input = $("#" + type + "-" + subType + "-mgt-geo-save-data-view-button-" + tabIndex + "-" + dsIndex).find("input").eq(0);
 		var dvOperate = input.val();
 		input.attr("onclick","Mgt.opDataview('" + dvOperate + "'," + tabIndex + ",'" + subType + "'," + dsIndex + ",'geo','" +
-			dsName + "','" + jsonArr + "');");
+			dsID + "','" + jsonArr + "');");
 		
 		$.getJSON(Common.dsDataUrl(),{
-			dataset: dsName
+			id: dsID
 		},function(data){
 			var l = data.length;
 			var mrkrArr = new Array();
@@ -310,7 +312,7 @@ Mgt.loadMap = function(tabIndex,subType,dsIndex,dsName){
 	});
 };
 
-Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
+Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsID,arr){
 	var type = "ds";
 	
 	var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex).find("input");
@@ -354,7 +356,7 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 	var newDvDes = "";
 	if(dvOperate == "save"){
 		url = Common.addDvUrl();
-		msg.dataset = dsName;
+		msg.dataset = dsID;
 		msg.dataview = text.eq(0).val();
 		msg.description = text.eq(1).val();
 		msg.datafeaturetype = dfType;
@@ -362,8 +364,8 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 		msg.values = value;
 	}else{
 		url = Common.modifyDvUrl();
-		msg.olddataview = span.eq(1).text();
-		msg.dataset = dsName;
+		msg.olddataview = span.eq(0).attr("id");
+		msg.dataset = dsID;
 		newDvName = text.eq(0).val();
 		msg.dataview = newDvName;
 		newDvDes = text.eq(1).val();
@@ -391,10 +393,10 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 			$(tabs_ul).appendTo(tabs);
 			
 			Mgt.subTab(tabIndex,"dv",dvType);
-			Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
+			Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsID);
 			
 			if(dvOperate == "modify"){
-				Mgt.drawOptions(tabIndex,subType,dsIndex,dvType,newDvName,newDvDes,dsName);
+				Mgt.drawOptions(tabIndex,subType,dsIndex,dvType,newDvName,newDvDes,dsID);
 			}
 			return;
 		}
@@ -412,51 +414,18 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsName,arr){
 	});
 };
 
-Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvName,dsName){
+Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvID,dsID){
 	var type = "ds";
 	
 	$.post(Common.delDvUrl(),{
-		dataset: dvName
+		id: dvID
 	}).done(function(data,textStatus,jqXHR){
 		console.log(data);
 		console.log(textStatus);
 		console.log(jqXHR);
 		console.log(data == "");
 		if(data == ""){
-			if(dvType == "sta"){
-				var radio = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-key-" + tabIndex + "-" + dsIndex).find("input");
-				for(var i = 0; i < radio.length; i++){
-					if(radio.eq(i).prop("checked") == true){
-						radio.eq(i).prop("checked",false);
-						break;
-					}
-				}
-			}
-			var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
-			for(var i = 0; i < checkbox.length; i++){
-				if(checkbox.eq(i).prop("checked") == true){
-					checkbox.eq(i).prop("checked",false);
-				}
-			}
-			
-			$("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex).css("display","none");
-			Mgt.adjustHeight();
-			var title = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
-			title.empty();
-			$("<span>save this data view</span><span>").appendTo(title);
-			
-			var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex);
-			text.empty();
-			$("<span>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type = 'text' maxlength = '16'/><br/>").appendTo(text);
-			$("<span>Description:</span><input type = 'text'/>").appendTo(text);
-			
-			var button = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
-			button.empty();
-			var input = $("<input/>");
-			input.attr("type","button");
-			input.attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
-			input.val("save");
-			input.appendTo(button);
+			Mgt.revertFrame(tabIndex,subType,dsIndex,dvType);
 			
 			var content = $("#dv-" + dvType + "-content-" + tabIndex);
 			content.empty();
@@ -472,7 +441,7 @@ Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvName,dsName){
 			$(tabs_ul).appendTo(tabs);
 			
 			Mgt.subTab(tabIndex,"dv",dvType);
-			Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsName);
+			Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsID);
 			return;
 		}
 		data = $.parseJSON(data);
@@ -487,4 +456,47 @@ Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvName,dsName){
 		alert("Oops, we got an error...");
 		return;
 	});
+};
+
+Mgt.revertFrame = function(tabIndex,subType,dsIndex,dvType){
+	var type = "ds";
+	
+	if(dvType == "sta"){
+		var radio = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-key-" + tabIndex + "-" + dsIndex).find("input");
+		for(var i = 0; i < radio.length; i++){
+			if(radio.eq(i).prop("checked") == true){
+				radio.eq(i).prop("checked",false);
+				break;
+			}
+		}
+	}
+	var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
+	for(var i = 0; i < checkbox.length; i++){
+		if(checkbox.eq(i).prop("checked") == true){
+			checkbox.eq(i).prop("checked",false);
+		}
+	}
+	
+	var dataview = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
+	if(dataview.css("display") == "block"){
+		dataview.css("display","none");
+	}
+	Mgt.adjustHeight();
+	
+	var title = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
+	title.empty();
+	$("<span>save this data view</span><span>").appendTo(title);
+	
+	var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex);
+	text.empty();
+	$("<span>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type = 'text' maxlength = '16'/><br/>").appendTo(text);
+	$("<span>Description:</span><input type = 'text'/>").appendTo(text);
+	
+	var button = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
+	button.empty();
+	var input = $("<input/>");
+	input.attr("type","button");
+	input.attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
+	input.val("save");
+	input.appendTo(button);
 };
