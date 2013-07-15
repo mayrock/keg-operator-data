@@ -71,7 +71,7 @@ public class JdbcProvider extends AbstractDataProvider {
 		}
 
 		DataField[] fields = q.getFields();
-		StringBuffer sb = new StringBuffer("SELECT ");
+		StringBuffer sb = new StringBuffer("SELECT top 1000 ");
 
 		for (int i = 0; i < fields.length - 1; i++) {
 			DataField df = fields[i];
@@ -151,7 +151,7 @@ public class JdbcProvider extends AbstractDataProvider {
 		return sb.toString();
 	}
 
-	private String getFieldAliasName(DataField f, Map<Query, String> aliasMap) {
+	protected String getFieldAliasName(DataField f, Map<Query, String> aliasMap) {
 		if (f.getQuery() == null) {
 			return f.getQueryName();
 		} else {
@@ -176,7 +176,7 @@ public class JdbcProvider extends AbstractDataProvider {
 		return sb;
 	}
 
-	private String whereToSB(List<WhereClause> wheres,
+	protected String whereToSB(List<WhereClause> wheres,
 			Map<Query, String> aliasMap) {
 		String sb = "";
 
@@ -315,7 +315,6 @@ public class JdbcProvider extends AbstractDataProvider {
 	public void openQuery(Query query) throws DataProviderException {
 		if (!results.containsKey(query)) {
 			String sql = getQueryString(query, 0);
-			System.out.println(sql);
 			ResultSet rs = executeQuery(sql);
 			results.put(query, rs);
 		}
@@ -346,7 +345,7 @@ public class JdbcProvider extends AbstractDataProvider {
 			case Int:
 				return rs.getInt(field.getName());
 			case DateTime:
-				return rs.getDate(field.getName());
+				return rs.getTimestamp(field.getName());
 			}
 		} catch (SQLException e) {
 			throw new DataProviderException(e.getMessage());

@@ -10,6 +10,7 @@ import edu.thu.keg.mdap.DataProviderManager;
 import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap_impl.provider.HiveProvider;
 import edu.thu.keg.mdap_impl.provider.JdbcProvider;
+import edu.thu.keg.mdap_impl.provider.OracleProvider;
 
 /**
  * @author Yuanchao Ma, Bozhi Yuan
@@ -42,7 +43,11 @@ public class DataProviderManagerImpl implements DataProviderManager {
 		if (providers.containsKey(connString)) {
 			return providers.get(connString);
 		} else {
-			DataProvider p = new JdbcProvider(connString);
+			DataProvider p;
+			if (connString.startsWith("jdbc:oracle:thin:"))
+				p = new OracleProvider(connString);
+			else
+				p = new JdbcProvider(connString);
 			providers.put(connString, p);
 			return p;
 		}

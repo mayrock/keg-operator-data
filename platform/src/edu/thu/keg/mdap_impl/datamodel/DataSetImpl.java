@@ -177,6 +177,12 @@ public class DataSetImpl implements DataSet {
 				keys.addAll(fieldsMap.get(FieldFunctionality.Identifier));
 				if (fieldsMap.get(FieldFunctionality.Value) != null)
 					values.addAll(fieldsMap.get(FieldFunctionality.Value));
+			} else if (type.equals(DataFeatureType.TimeSeries)) {
+				keys.addAll(fieldsMap.get(FieldFunctionality.TimeStamp));
+				if (fieldsMap.get(FieldFunctionality.Identifier) != null)
+					values.addAll(fieldsMap.get(FieldFunctionality.Identifier));
+				if (fieldsMap.get(FieldFunctionality.Value) != null)
+					values.addAll(fieldsMap.get(FieldFunctionality.Value));
 			} else {
 				keys = this.getPrimaryKeyFields();
 				values = this.getOtherFields();

@@ -327,7 +327,18 @@ public class PlatformImpl implements Platform {
 				| DataProviderException e1) {
 			System.out.println(e1.getMessage());
 		}
-
+		// 8th DataSet
+		fields = new DataField[4];
+		fields[0] = new GeneralDataField("SiteId", FieldType.ShortString,
+				"基站ID", true, FieldFunctionality.Identifier);
+		fields[1] = new GeneralDataField("ConnectTime", FieldType.DateTime,
+				"连接时间", false, FieldFunctionality.TimeStamp);
+		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "经度",
+				false, FieldFunctionality.Latitude);
+		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "纬度",
+				false, FieldFunctionality.Longitude);
+		dsSite = getDataSetManager().createDataSet("group_data", "ybz",
+				"分组数据_时间经纬度", provider, true, fields);
 		// fields = new DataField[2];
 		// fields[0] = new GeneralDataField("ContentType", FieldType.LongString,
 		// "Content Type of websites", true);

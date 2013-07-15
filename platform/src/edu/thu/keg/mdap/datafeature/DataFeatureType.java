@@ -11,7 +11,8 @@ import edu.thu.keg.mdap.datamodel.DataField.FieldFunctionality;
  */
 public enum DataFeatureType {
 	GeoFeature(FieldFunctionality.Latitude, FieldFunctionality.Longitude), DistributionFeature(
-			FieldFunctionality.Identifier, FieldFunctionality.Value), ValueFeature(
+			FieldFunctionality.Identifier, FieldFunctionality.Value), TimeSeries(
+			FieldFunctionality.TimeStamp), ValueFeature(
 			FieldFunctionality.Value);
 
 	private FieldFunctionality[] funcs;

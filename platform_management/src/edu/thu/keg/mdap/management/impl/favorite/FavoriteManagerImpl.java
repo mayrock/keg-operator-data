@@ -17,7 +17,6 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 	public static FavoriteManagerImpl instance;
 
 	public static FavoriteManagerImpl getInstance() {
-		System.out.print("instance ");
 		// TODO multi-thread
 		if (instance == null)
 			instance = new FavoriteManagerImpl();
@@ -85,7 +84,7 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		pstmt.setInt(2, Integer.parseInt(favid));
 		ResultSet rs = pstmt.executeQuery();
 		rs.next();
-		Favorite fav= new Favorite(userid, favid, rs.getString("favstring"));
+		Favorite fav = new Favorite(userid, favid, rs.getString("favstring"));
 		pstmt.getConnection().close();
 		return fav;
 	}

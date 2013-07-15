@@ -78,7 +78,7 @@ public class HiveProvider extends JdbcProvider
 		}
 	}
 
-	private String getFieldAliasName(DataField f, Map<Query, String> aliasMap)
+	private String getFieldAliasNameHive(DataField f, Map<Query, String> aliasMap)
 	{
 		if (f.getQuery() == null)
 		{
