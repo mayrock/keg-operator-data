@@ -335,7 +335,7 @@ body{
 	border-bottom: 1px solid #282828;
 }
 
-.mgt-select-column-title{
+.mgt-sql-title,.mgt-select-column-title{
 	margin-bottom: 5px;
 	padding-top: 5px;
 	padding-bottom: 5px;
