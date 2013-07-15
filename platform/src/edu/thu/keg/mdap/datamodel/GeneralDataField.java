@@ -34,6 +34,10 @@ public class GeneralDataField implements DataField {
 		return dataset;
 	}
 
+	public void setDataSet(DataSet dataset) {
+		this.dataset = dataset;
+	}
+
 	@Override
 	public String getDescription() {
 		return this.desps.getMessage();
@@ -59,23 +63,23 @@ public class GeneralDataField implements DataField {
 	 * @param allowNull
 	 *            Whether the field allows null value
 	 */
-	public GeneralDataField(String name, FieldType type, String description,
-			boolean isKey, boolean allowNull, boolean isDim,
-			FieldFunctionality func, Query query) {
-		if (isKey == true && allowNull == true)
-			throw new IllegalArgumentException();
-		this.name = name;
-		this.queryName = name;
-		this.type = type;
-		this.dataset = null;
-		this.query = query;
-
-		this.desps = new LocalizedMessage();
-		this.desps.setMessage(description);
-		this.isKey = isKey;
-		this.allowNull = allowNull;
-		this.func = func;
-	}
+	// public GeneralDataField(String name, FieldType type, String description,
+	// boolean isKey, boolean allowNull, boolean isDim,
+	// FieldFunctionality func, Query query) {
+	// if (isKey == true && allowNull == true)
+	// throw new IllegalArgumentException();
+	// this.name = name;
+	// this.queryName = name;
+	// this.type = type;
+	// this.dataset = null;
+	// this.query = query;
+	//
+	// this.desps = new LocalizedMessage();
+	// this.desps.setMessage(description);
+	// this.isKey = isKey;
+	// this.allowNull = allowNull;
+	// this.func = func;
+	// }
 
 	public GeneralDataField(String name, FieldType type, String description,
 			boolean isKey, boolean allowNull, boolean isDim,
@@ -109,7 +113,8 @@ public class GeneralDataField implements DataField {
 	 *            Functionality of the field
 	 */
 	public GeneralDataField(String name, FieldType type, String description,
-			boolean isKey, FieldFunctionality func) {
+			boolean isKey, boolean allowNull, boolean isDim,
+			FieldFunctionality func) {
 		this.name = name;
 		this.queryName = name;
 		this.type = type;
@@ -119,19 +124,14 @@ public class GeneralDataField implements DataField {
 
 		this.desps.setMessage(description);
 		this.isKey = isKey;
-		this.allowNull = !isKey;
+		this.allowNull = allowNull;
 		this.func = func;
-		this.isDim = !func.equals(FieldFunctionality.Value);
+		this.isDim = isDim;
 	}
 
 	@Override
 	public FieldType getFieldType() {
 		return this.type;
-	}
-
-	@Override
-	public void setDataSet(DataSet ds) {
-		this.dataset = ds;
 	}
 
 	@Override
@@ -204,6 +204,7 @@ public class GeneralDataField implements DataField {
 	public Query getQuery() {
 		return this.query;
 	}
+
 	@Override
 	public void setQuery(Query query) {
 		this.query = query;

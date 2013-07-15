@@ -86,15 +86,15 @@ public class PlatformImpl implements Platform {
 
 		fields = new DataField[5];
 		fields[0] = new GeneralDataField("EN_NAME", FieldType.ShortString, "",
-				true, FieldFunctionality.Identifier);
+				true, false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("LAC", FieldType.Int, "", false,
-				FieldFunctionality.Value);
-		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false,
-				FieldFunctionality.Value);
+				false, true, FieldFunctionality.Value);
+		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false, false,
+				true, FieldFunctionality.Value);
 		fields[3] = new GeneralDataField("LONGITUDE", FieldType.Double, "",
-				false, FieldFunctionality.Longitude);
+				false, false, true, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("LATITUDE", FieldType.Double, "",
-				false, FieldFunctionality.Latitude);
+				false, false, true, FieldFunctionality.Latitude);
 		dsSite = getDataSetManager().createDataSet("TESTF", "liqi",
 				"小区地理位置信息hadoop", hiveProvider, true, fields);
 		getDataSetManager().setDataSetPermission(dsSite.getId(), "liqi",
@@ -115,15 +115,15 @@ public class PlatformImpl implements Platform {
 		// 1st oracle
 		fields = new DataField[5];
 		fields[0] = new GeneralDataField("AREANAME_EN", FieldType.ShortString,
-				"", true, FieldFunctionality.Identifier);
+				"", true, false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("LAC", FieldType.Int, "", false,
-				FieldFunctionality.Value);
-		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false,
-				FieldFunctionality.Value);
+				false, true, FieldFunctionality.Value);
+		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false, false,
+				true, FieldFunctionality.Value);
 		fields[3] = new GeneralDataField("LONGITUDE", FieldType.Double, "",
-				false, FieldFunctionality.Longitude);
+				false, false, true, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("LATITUDE", FieldType.Double, "",
-				false, FieldFunctionality.Latitude);
+				false, false, true, FieldFunctionality.Latitude);
 		dsSite = getDataSetManager().createDataSet("Lac_Ci_Map", "ybz",
 				"小区地理位置信息orcl", orclProvider, true, fields);
 		getDataSetManager().setDataSetPermission(dsSite.getId(), "ybz",
@@ -144,9 +144,9 @@ public class PlatformImpl implements Platform {
 		// 1st DataSet
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "", true,
-				FieldFunctionality.Identifier);
+				false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("URL", FieldType.ShortString, "",
-				false, FieldFunctionality.Other);
+				false, false, true, FieldFunctionality.Other);
 		dsSite = getDataSetManager().createDataSet("WebsiteId_URL", "myc",
 				"网站信息", provider, true, fields);
 		List<String> users = new ArrayList<>();
@@ -157,27 +157,27 @@ public class PlatformImpl implements Platform {
 		// 2nd DataSet
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("Region", FieldType.Int, "", true,
-				FieldFunctionality.Other);
+				false, true, FieldFunctionality.Other);
 		fields[1] = new GeneralDataField("Name", FieldType.ShortString, "",
-				false, FieldFunctionality.Other);
+				false, false, true, FieldFunctionality.Other);
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "",
-				false, FieldFunctionality.Latitude);
+				false, false, true, FieldFunctionality.Latitude);
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "",
-				false, FieldFunctionality.Longitude);
+				false, false, true, FieldFunctionality.Longitude);
 		dsSite = getDataSetManager().createDataSet("RegionInfo3", "xm", "地理区域",
 				provider, true, fields);
 		// 3rd DataSet
 		fields = new DataField[5];
 		fields[0] = new GeneralDataField("SiteId", FieldType.Int, "", true,
-				FieldFunctionality.Identifier);
+				false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("SiteName", FieldType.ShortString, "",
-				false, FieldFunctionality.Identifier);
+				false, false, true, FieldFunctionality.Identifier);
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "",
-				false, FieldFunctionality.Latitude);
+				false, false, true, FieldFunctionality.Latitude);
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "",
-				false, FieldFunctionality.Longitude);
+				false, false, true, FieldFunctionality.Longitude);
 		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false,
-				false, true, FieldFunctionality.Other, null);
+				false, true, FieldFunctionality.Other);
 		dsSite = getDataSetManager().createDataSet("RegionInfo2", "xm", "基站信息",
 				provider, true, fields);
 		// 3rd DataView
@@ -230,27 +230,31 @@ public class PlatformImpl implements Platform {
 		// 4th DataSet
 		fields = new DataField[6];
 		fields[0] = new GeneralDataField("Domain", FieldType.LongString,
-				"Domain", true, FieldFunctionality.Identifier);
+				"Domain", true, false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("DayCount", FieldType.Int,
-				"appear days of this domain", false, FieldFunctionality.Value);
+				"appear days of this domain", false, false, true,
+				FieldFunctionality.Value);
 		fields[2] = new GeneralDataField("HourCount", FieldType.Int,
-				"appear hours of this domain", false, FieldFunctionality.Value);
+				"appear hours of this domain", false, false, true,
+				FieldFunctionality.Value);
 		fields[3] = new GeneralDataField("LocCount", FieldType.Int,
-				"appear locations of this domain", false,
+				"appear locations of this domain", false, false, true,
 				FieldFunctionality.Value);
 		fields[4] = new GeneralDataField("UserCount", FieldType.Int,
-				"number of users visiting this domain", false,
+				"number of users visiting this domain", false, false, true,
 				FieldFunctionality.Value);
 		fields[5] = new GeneralDataField("TotalCount", FieldType.Int,
-				"total visits of this domain", false, FieldFunctionality.Value);
+				"total visits of this domain", false, false, true,
+				FieldFunctionality.Value);
 		getDataSetManager().createDataSet("FilteredByCT_Domain", "wc",
 				"Domain statistics", provider, false, fields);
 		// 5th DataSet
 		fields = new DataField[2];
 		fields[0] = new GeneralDataField("ContentType", FieldType.LongString,
-				"Content Type of websites", true, FieldFunctionality.Identifier);
+				"Content Type of websites", true, false, true,
+				FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("times", FieldType.Int,
-				"appear times of the ContentType", false,
+				"appear times of the ContentType", false, false, true,
 				FieldFunctionality.Value);
 		dsSite = getDataSetManager().createDataSet(
 				"DataAggr_ContentTypes_Up90", "wc", "ContentType分布集", provider,
@@ -271,15 +275,16 @@ public class PlatformImpl implements Platform {
 		// 6th DataSet
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("Imsi", FieldType.ShortString,
-				"User IMSI", true, FieldFunctionality.Identifier);
+				"User IMSI", true, false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("WebsiteCount", FieldType.Int,
-				"Total count of visited websites", false,
+				"Total count of visited websites", false, false, true,
 				FieldFunctionality.Value);
 		fields[2] = new GeneralDataField("RegionCount", FieldType.Int,
-				"Total count of appeared regions", false,
+				"Total count of appeared regions", false, false, true,
 				FieldFunctionality.Value);
 		fields[3] = new GeneralDataField("TotalCount", FieldType.Int,
-				"Total count of requests", false, FieldFunctionality.Value);
+				"Total count of requests", false, false, true,
+				FieldFunctionality.Value);
 
 		dsSite = getDataSetManager().createDataSet("slot_Imsi_All", "myc",
 				"User statistics by time slot", provider, true, fields);
@@ -302,11 +307,11 @@ public class PlatformImpl implements Platform {
 		// 7th DataSet
 		fields = new DataField[3];
 		fields[0] = new GeneralDataField("SiteId", FieldType.ShortString,
-				"基站ID", true, FieldFunctionality.Identifier);
+				"基站ID", true, false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("ConnHour", FieldType.Int, "时间段(小时)",
-				false, FieldFunctionality.Identifier);
+				false, false, true, FieldFunctionality.Identifier);
 		fields[2] = new GeneralDataField("TotalCount", FieldType.Int, "连接数",
-				false, FieldFunctionality.Value);
+				false, false, true, FieldFunctionality.Value);
 
 		dsSite = getDataSetManager().createDataSet("SiteId_ConnHour", "myc",
 				"每小时每基站连接数", provider, true, fields);
@@ -330,13 +335,13 @@ public class PlatformImpl implements Platform {
 		// 8th DataSet
 		fields = new DataField[4];
 		fields[0] = new GeneralDataField("SiteId", FieldType.ShortString,
-				"基站ID", true, FieldFunctionality.Identifier);
+				"基站ID", true, false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("ConnectTime", FieldType.DateTime,
-				"连接时间", false, FieldFunctionality.TimeStamp);
+				"连接时间", false, false, true, FieldFunctionality.TimeStamp);
 		fields[2] = new GeneralDataField("Latitude", FieldType.Double, "经度",
-				false, FieldFunctionality.Latitude);
+				false, false, true, FieldFunctionality.Latitude);
 		fields[3] = new GeneralDataField("Longitude", FieldType.Double, "纬度",
-				false, FieldFunctionality.Longitude);
+				false, false, true, FieldFunctionality.Longitude);
 		dsSite = getDataSetManager().createDataSet("group_data", "ybz",
 				"分组数据_时间经纬度", provider, true, fields);
 		// fields = new DataField[2];

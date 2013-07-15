@@ -104,6 +104,8 @@ public interface DataField {
 	 */
 	public DataSet getDataSet();
 
+	public void setDataSet(DataSet dataset);
+
 	/**
 	 * Get the description of the field, containing information about the column
 	 * for human
@@ -151,7 +153,6 @@ public interface DataField {
 	 * @param ds
 	 *            the DataSet instance
 	 */
-	public void setDataSet(DataSet ds);
 
 	public Query getQuery();
 

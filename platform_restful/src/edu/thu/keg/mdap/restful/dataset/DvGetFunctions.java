@@ -230,7 +230,8 @@ public class DvGetFunctions {
 			}
 
 		} catch (Exception e) {
-			log.warn(e.getStackTrace());
+			log.warn(e.getMessage());
+			e.printStackTrace();
 		} finally {
 
 		}

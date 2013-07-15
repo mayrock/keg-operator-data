@@ -44,7 +44,6 @@ public class AggregatedDataField implements DataField {
 	private AggrFunction func;
 	private String name;
 	private LocalizedMessage desps;
-	private DataSet dataset;
 	private Query query;
 
 	public AggregatedDataField(DataField field, AggrFunction func, String name,
@@ -54,8 +53,6 @@ public class AggregatedDataField implements DataField {
 		this.name = name;
 
 		this.desps = new LocalizedMessage();
-		if (query == null)
-			this.dataset = field.getDataSet();
 		this.query = query;
 		desps.setMessage(Locale.ENGLISH, func.toString() + " of the field "
 				+ field.getDescription(Locale.ENGLISH) + " in "
@@ -84,7 +81,21 @@ public class AggregatedDataField implements DataField {
 	 */
 	@Override
 	public DataSet getDataSet() {
-		return this.dataset;
+		return this.field.getDataSet();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.thu.keg.mdap.datamodel.DataField#setDataSet(edu.thu.keg.mdap.datamodel
+	 * .DataSet)
+	 */
+	@Override
+	public void setDataSet(DataSet dataset) {
+		throw new UnsupportedOperationException("Cannot setDataSet of"
+				+ " a AggreatedDataField");
+
 	}
 
 	/*
@@ -136,19 +147,6 @@ public class AggregatedDataField implements DataField {
 		default:
 			return FieldType.Double;
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * edu.thu.keg.mdap.datamodel.DataField#setDataSet(edu.thu.keg.mdap.datamodel
-	 * .DataSet)
-	 */
-	@Override
-	public void setDataSet(DataSet ds) {
-		throw new UnsupportedOperationException("Cannot setDataSet of"
-				+ " a AggreatedDataField");
 	}
 
 	@Override

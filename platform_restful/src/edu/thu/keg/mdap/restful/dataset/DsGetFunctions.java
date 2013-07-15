@@ -432,7 +432,8 @@ public class DsGetFunctions {
 				all_fn.add(jfn);
 			}
 		} catch (Exception e) {
-			log.warn(e.getStackTrace());
+			log.warn(e.getMessage());
+			e.printStackTrace();
 		}
 		return new JSONWithPadding(new GenericEntity<List<JFieldName>>(all_fn) {
 		}, jsoncallback);

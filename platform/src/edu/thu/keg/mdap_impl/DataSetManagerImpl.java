@@ -320,6 +320,8 @@ public class DataSetManagerImpl implements DataSetManager {
 		ds.setDescription(description);
 		ds.setPermission(DataSetImpl.PERMISSION_PRIVATE);
 		addDataSet(ds);
+		for (DataField df : fields)
+			df.setDataSet(ds);
 		return ds;
 	}
 
