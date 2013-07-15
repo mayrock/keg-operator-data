@@ -374,6 +374,79 @@ Mgt.loadDs = function(tabIndex,dsIndex,dsID,dsName,subType){
 	});
 };
 
+Mgt.showDvTable = function(tabIndex,subType,dsIndex,dvID,dvName){
+	var type = "dv";
+	
+	$("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex).empty();
+	$("<span>show detail data of " + dvName + "</span>").appendTo("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
+	
+	$.getJSON(Common.dvInfoUrl(),{
+		id: dvID
+	},function(data){
+		var keyLen = data.identifiers.length;
+		var valueLen = data.values.length;
+		var tableData = new google.visualization.DataTable();
+		for(var i = 0; i < keyLen; i++){
+			tableData.addColumn("string",data.identifiers[i]);
+		}
+		for(var i = 0; i < valueLen; i++){
+			tableData.addColumn("string",data.values[i]);
+		}
+		
+		$.getJSON(Common.dvDataUrl(),{
+			id: dvID
+		},function(data){
+			var l = data.length;
+			$("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex).empty();
+			if(l == 0){
+				$("<span>this data view is empty</span>").appendTo("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
+				Mgt.adjustHeight();
+				return;
+			}
+			$("<span>detail data</span>").appendTo("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
+			
+			var detailData = document.createElement("div");
+			detailData.setAttribute("id",type + "-" + subType + "-mgt-detail-data-" + tabIndex + "-" + dsIndex);
+			detailData.setAttribute("class","mgt-detail-data");
+			$(detailData).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			
+			var arr = $.parseJSON("[]");
+			for(var i = 0; i < l; i++){
+				var subArr = $.parseJSON("[]");
+				arr[i] = subArr;
+				for(var j = 0; j < keyLen; j++){
+					subArr[j] = data[i].identifiers[j].value;
+				}
+				for(var j = 0; j < valueLen; j++){
+					subArr[j + keyLen] = data[i].values[j].value;
+				}
+			}
+			
+			tableData.addRows(arr);
+			var table = new google.visualization.Table(document.getElementById(type + "-" + subType + "-mgt-detail-data-" + tabIndex + "-" + dsIndex));
+			table.draw(tableData,{showRowNumber: true});
+			
+			var dataWidth = $("#" + type + "-" + subType + "-mgt-detail-data-" + tabIndex + "-" + dsIndex + " .google-visualization-table-table").width();
+			$("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex).css({
+				"width": dataWidth,
+				"margin-bottom": 0,
+				"border-bottom-width": 0
+			});
+			$("#" + type + "-" + subType + "-mgt-detail-data-" + tabIndex + "-" + dsIndex).css({
+				"width": dataWidth
+			});
+			
+			Mgt.adjustHeight();
+		}).error(function(){
+			alert("Oops, we got an error...");
+			return;
+		});
+	}).error(function(){
+		alert("Oops, we got an error...");
+		return;
+	});
+};
+
 Mgt.showDsTable = function(tabIndex,subType,dsIndex,dsID,dsName){
 	var type = "ds";
 	
