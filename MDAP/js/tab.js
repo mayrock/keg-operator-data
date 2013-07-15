@@ -149,6 +149,7 @@ Tab.createFrame = function(tabType){
 		function drawTable(){
 			Mgt.subTab(tabIndex,"dv","sta");
 			Mgt.subTab(tabIndex,"dv","geo");
+			Mgt.subTab(tabIndex,"dv","other");
 			Mgt.subTab(tabIndex,"ds","pub");
 			Mgt.subTab(tabIndex,"ds","lim");
 			Mgt.subTab(tabIndex,"ds","own");

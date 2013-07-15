@@ -31,6 +31,7 @@ Mgt.accordion = function(tabIndex,type){
 		$(head).html("data view");
 		Mgt.subAcc(tabIndex,type,"sta");
 		Mgt.subAcc(tabIndex,type,"geo");
+		Mgt.subAcc(tabIndex,type,"other");
 	}else{
 		$(head).html("data set");
 		Mgt.subAcc(tabIndex,type,"pub");
@@ -61,8 +62,10 @@ Mgt.subAcc = function(tabIndex,type,subType){
 	if(type == "dv"){
 		if(subType == "sta"){
 			$(head).html("statistics data");
-		}else{
+		}else if(subType == "geo"){
 			$(head).html("geography data");
+		}else{
+			$(head).html("other data");
 		}
 	}else{
 		if(subType == "pub"){
@@ -102,8 +105,10 @@ Mgt.subTab = function(tabIndex,type,subType){
 		url = Common.dataviewUrl();
 		if(subType == "sta"){
 			msg = "{\"featuretype\":\"DistributionFeature\"}";
-		}else{
+		}else if(subType == "geo"){
 			msg = "{\"featuretype\":\"GeoFeature\"}";
+		}else{
+			msg = "{\"featuretype\":\"ValueFeature\"}";
 		}
 	}else{
 		if(subType == "pub"){
@@ -174,7 +179,7 @@ Mgt.subTab = function(tabIndex,type,subType){
 			if(type == "dv"){
 				$("<span>data view information</span>").appendTo(infoTitle);
 				$("<span>column information</span>").appendTo(fieldTitle);
-				Mgt.loadDv(tabIndex,i,id,subType);
+				Mgt.loadDv(tabIndex,i,id,name,subType);
 			}else{
 				$("<span>data set information</span>").appendTo(infoTitle);
 				$("<span>column information</span>").appendTo(fieldTitle);
@@ -199,7 +204,19 @@ Mgt.subTab = function(tabIndex,type,subType){
 	});
 };
 
-Mgt.loadDv = function(tabIndex,dsIndex,dvID,subType){
+Mgt.loadDv = function(tabIndex,dsIndex,dvID,dvName,subType){
+	var dataTitle = document.createElement("div");
+	dataTitle.setAttribute("id","dv-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
+	dataTitle.setAttribute("class","mgt-detail-data-title");
+	$(dataTitle).appendTo("#dv-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+	$("<a herf = 'javascript:void(0);' " +
+		"onClick = \"Mgt.showDvTable(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvID + "','" + dvName + "');\" " +
+		"style = 'cursor: pointer;'>show detail data of " + dvName + "</a>").appendTo(dataTitle);
+	$(dataTitle).css({
+		"margin-bottom": "5px",
+		"border-bottom": "1px solid #282828"
+	});
+	
 	$.getJSON(Common.dvInfoUrl(),{
 		id: dvID
 	},function(data){
@@ -250,7 +267,11 @@ Mgt.loadDv = function(tabIndex,dsIndex,dvID,subType){
 		
 		var arr = "[";
 		for(var i = 0; i < len; i++){
-			arr += "[\"" + data[i].datasetName + "\",\"" + data[i].datasetOwner + "\",\"" + data[i].description + "\",\"" +
+			var des = "";
+			if(data[i].hasOwnProperty("description")){
+				des = data[i].description;
+			}
+			arr += "[\"" + data[i].datasetName + "\",\"" + data[i].datasetOwner + "\",\"" + des + "\",\"" +
 				data[i].fieldName + "\",\"" + data[i].functionality + "\"," + data[i].isKey + ",\"" + data[i].type + "\"]";
 			if(i == len - 1){
 				arr += "]";
@@ -274,7 +295,7 @@ Mgt.loadDs = function(tabIndex,dsIndex,dsID,dsName,subType){
 	dataTitle.setAttribute("class","mgt-detail-data-title");
 	$(dataTitle).appendTo("#ds-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
 	$("<a herf = 'javascript:void(0);' " +
-		"onClick = \"Mgt.showTable(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','" + dsName + "');\" " +
+		"onClick = \"Mgt.showDsTable(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','" + dsName + "');\" " +
 		"style = 'cursor: pointer;'>show detail data of " + dsName + "</a>").appendTo(dataTitle);
 	$(dataTitle).css({
 		"margin-bottom": "5px",
@@ -353,6 +374,98 @@ Mgt.loadDs = function(tabIndex,dsIndex,dsID,dsName,subType){
 	});
 };
 
+Mgt.showDsTable = function(tabIndex,subType,dsIndex,dsID,dsName){
+	var type = "ds";
+	
+	$("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex).empty();
+	$("<span>show detail data of " + dsName + "</span>").appendTo("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
+	
+	$.getJSON(Common.dsFieldUrl(),{
+		id: dsID
+	},function(data){
+		if(type == "dv"){
+			
+		}
+		var len = data.length;
+		var tableData = new google.visualization.DataTable();
+		for(var i = 0; i < len; i++){
+			tableData.addColumn("string",data[i].fieldName);
+		}
+		
+		$.getJSON(Common.dsDataUrl(),{
+			id: dsID
+		},function(data){
+			var l = data.length;
+			$("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex).empty();
+			if(l == 0){
+				$("<span>this data set is empty</span>").appendTo("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
+				Mgt.adjustHeight();
+				return;
+			}
+			$("<span>detail data</span>").appendTo("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
+			
+			var detailData = document.createElement("div");
+			detailData.setAttribute("id",type + "-" + subType + "-mgt-detail-data-" + tabIndex + "-" + dsIndex);
+			detailData.setAttribute("class","mgt-detail-data");
+			$(detailData).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			
+			var arr = "[";
+			for(var i = 0; i < l; i++){
+				arr += "[";
+				for(var j = 0; j < len; j++){
+					arr += "\"" + data[i].field[j].value + "\"";
+					if(j == len - 1){
+						arr += "]";
+					}else{
+						arr += ",";
+					}
+				}
+				if(i == l - 1){
+					arr += "]";
+				}else{
+					arr += ",";
+				}
+			}
+			
+			tableData.addRows($.parseJSON(arr));
+			var table = new google.visualization.Table(document.getElementById(type + "-" + subType + "-mgt-detail-data-" + tabIndex + "-" + dsIndex));
+			table.draw(tableData,{showRowNumber: true});
+			
+			var dataWidth = $("#" + type + "-" + subType + "-mgt-detail-data-" + tabIndex + "-" + dsIndex + " .google-visualization-table-table").width();
+			$("#" + type + "-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex).css({
+				"width": dataWidth,
+				"margin-bottom": 0,
+				"border-bottom-width": 0
+			});
+			$("#" + type + "-" + subType + "-mgt-detail-data-" + tabIndex + "-" + dsIndex).css({
+				"width": dataWidth
+			});
+			
+			var sqlTitle = document.createElement("div");
+			sqlTitle.setAttribute("id",type + "-" + subType + "-mgt-sql-title-" + tabIndex + "-" + dsIndex);
+			sqlTitle.setAttribute("class","mgt-sql-title");
+			$(sqlTitle).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showSQL(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "');\" " +
+				"style = 'cursor: pointer;'>do some sql operations on " + dsName + "</a>").appendTo(sqlTitle);
+			
+			var selectTitle = document.createElement("div");
+			selectTitle.setAttribute("id",type + "-" + subType + "-mgt-select-column-title-" + tabIndex + "-" + dsIndex);
+			selectTitle.setAttribute("class","mgt-select-column-title");
+			$(selectTitle).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showColumn(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "');\" " +
+				"style = 'cursor: pointer;'>create/show data view from " + dsName + "</a>").appendTo(selectTitle);
+			
+			Mgt.adjustHeight();
+		}).error(function(){
+			alert("Oops, we got an error...");
+			return;
+		});
+	}).error(function(){
+		alert("Oops, we got an error...");
+		return;
+	});
+};
+
 Mgt.adjustHeight = function(){
 	console.log("Manage Tab Adjust Height Information:");
 	var activeTab = $("#tabs").tabs("option","active");
@@ -386,8 +499,10 @@ Mgt.adjustHeight = function(){
 		if(activeAcc == 0){
 			if(subAcc == 0){
 				subType = "sta";
-			}else{
+			}else if(subAcc == 1){
 				subType = "geo";
+			}else{
+				subType = "other";
 			}
 		}else{
 			if(subAcc == 0){

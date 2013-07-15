@@ -345,7 +345,7 @@ body{
 	border: 1px solid #282828;
 }
 
-.mgt-selector{
+.mgt-sql-container,.mgt-selector{
 	position: relative;
 	margin-bottom: 5px;
 	font-family: Times New Roman,'楷体';
@@ -360,7 +360,7 @@ body{
 	border-bottom: 1px solid #282828;
 }
 
-.mgt-options{
+.mgt-sql-options,.mgt-options{
 	padding: 5px;
 }
 
@@ -369,7 +369,7 @@ body{
 	padding-left: 20px;
 }
 
-.mgt-options-button,.mgt-save-data-view-button{
+.mgt-sql-button,.mgt-options-button,.mgt-save-data-view-button{
 	padding-left: 40px;
 }
 
