@@ -353,6 +353,7 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsID,arr){
 	
 	var url = "";
 	var msg = JSON.parse("{}");
+	var dvID = "";
 	var newDvName = "";
 	var newDvDes = "";
 	if(dvOperate == "save"){
@@ -365,7 +366,8 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsID,arr){
 		msg.values = value;
 	}else{
 		url = Common.modifyDvUrl();
-		msg.id = span.eq(0).attr("id");
+		dvID = span.eq(0).attr("id");
+		msg.id = dvID;
 		newDvName = text.eq(0).val();
 		msg.name = newDvName;
 		newDvDes = text.eq(1).val();
@@ -396,7 +398,7 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsID,arr){
 			Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsID);
 			
 			if(dvOperate == "modify"){
-				Mgt.drawOptions(tabIndex,subType,dsIndex,dvType,newDvName,newDvDes,dsID);
+				Mgt.drawOptions(tabIndex,subType,dsIndex,dvType,dvID,newDvName,newDvDes,dsID);
 			}
 			return;
 		}
