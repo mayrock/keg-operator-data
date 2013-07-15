@@ -74,6 +74,7 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvID,dvName,dvDes,dsI
 				}
 			}
 		}
+		
 		Mgt.dataview(tabIndex,subType,dsIndex,dsID,dvType);
 	}).error(function(){
 		alert("Oops, we got an error...");
@@ -356,18 +357,17 @@ Mgt.opDataview = function(dvOperate,tabIndex,subType,dsIndex,dvType,dsID,arr){
 	var newDvDes = "";
 	if(dvOperate == "save"){
 		url = Common.addDvUrl();
-		msg.dataset = dsID;
-		msg.dataview = text.eq(0).val();
+		msg.datasetid = dsID;
+		msg.name = text.eq(0).val();
 		msg.description = text.eq(1).val();
 		msg.datafeaturetype = dfType;
 		msg.keys = key;
 		msg.values = value;
 	}else{
 		url = Common.modifyDvUrl();
-		msg.olddataview = span.eq(0).attr("id");
-		msg.dataset = dsID;
+		msg.id = span.eq(0).attr("id");
 		newDvName = text.eq(0).val();
-		msg.dataview = newDvName;
+		msg.name = newDvName;
 		newDvDes = text.eq(1).val();
 		msg.description = newDvDes;
 		msg.keys = key;
@@ -425,6 +425,21 @@ Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvID,dsID){
 		console.log(jqXHR);
 		console.log(data == "");
 		if(data == ""){
+			if(dvType == "sta"){
+				var radio = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-key-" + tabIndex + "-" + dsIndex).find("input");
+				for(var i = 0; i < radio.length; i++){
+					if(radio.eq(i).prop("checked") == true){
+						radio.eq(i).prop("checked",false);
+						break;
+					}
+				}
+			}
+			var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
+			for(var i = 0; i < checkbox.length; i++){
+				if(checkbox.eq(i).prop("checked") == true){
+					checkbox.eq(i).prop("checked",false);
+				}
+			}
 			Mgt.revertFrame(tabIndex,subType,dsIndex,dvType);
 			
 			var content = $("#dv-" + dvType + "-content-" + tabIndex);
@@ -460,22 +475,6 @@ Mgt.deleteDataview = function(tabIndex,subType,dsIndex,dvType,dvID,dsID){
 
 Mgt.revertFrame = function(tabIndex,subType,dsIndex,dvType){
 	var type = "ds";
-	
-	if(dvType == "sta"){
-		var radio = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-key-" + tabIndex + "-" + dsIndex).find("input");
-		for(var i = 0; i < radio.length; i++){
-			if(radio.eq(i).prop("checked") == true){
-				radio.eq(i).prop("checked",false);
-				break;
-			}
-		}
-	}
-	var checkbox = $("#" + type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex).find("input");
-	for(var i = 0; i < checkbox.length; i++){
-		if(checkbox.eq(i).prop("checked") == true){
-			checkbox.eq(i).prop("checked",false);
-		}
-	}
 	
 	var dataview = $("#" + type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
 	if(dataview.css("display") == "block"){

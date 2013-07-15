@@ -319,7 +319,7 @@ Mgt.showDvList = function(tabIndex,subType,dsIndex,dvType,dsID){
 	
 	$.getJSON(Common.dataviewUrl(),{
 		featuretype: dfType,
-		dataset: dsID
+		id: dsID
 	}).done(function(data,textStatus,jqXHR){
 		var len = data.length;
 		var list = $("#" + type + "-" + subType + "-mgt-" + dvType + "-dv-list-" + tabIndex + "-" + dsIndex);

@@ -119,9 +119,6 @@ Mgt.subTab = function(tabIndex,type,subType){
 	
 	$.getJSON(url,$.parseJSON(msg),function(data){
 		var len = data.length;
-		if(len == 0){
-			return;
-		}
 		for(var i = 0; i < len; i++){
 			var id = data[i].id;
 			var name = "";
@@ -202,9 +199,9 @@ Mgt.subTab = function(tabIndex,type,subType){
 	});
 };
 
-Mgt.loadDv = function(tabIndex,dsIndex,id,subType){
+Mgt.loadDv = function(tabIndex,dsIndex,dvID,subType){
 	$.getJSON(Common.dvInfoUrl(),{
-		id: id
+		id: dvID
 	},function(data){
 		var tableData = new google.visualization.DataTable();
 		tableData.addColumn('string','Data Feature');
@@ -236,7 +233,7 @@ Mgt.loadDv = function(tabIndex,dsIndex,id,subType){
 	});
 	
 	$.getJSON(Common.dvFieldUrl(),{
-		id: id
+		id: dvID
 	},function(data){
 		var len = data.length;
 		if(len == 0){
@@ -271,21 +268,21 @@ Mgt.loadDv = function(tabIndex,dsIndex,id,subType){
 	});
 };
 
-Mgt.loadDs = function(tabIndex,dsIndex,id,dsName,subType){
+Mgt.loadDs = function(tabIndex,dsIndex,dsID,dsName,subType){
 	var dataTitle = document.createElement("div");
 	dataTitle.setAttribute("id","ds-" + subType + "-mgt-detail-data-title-" + tabIndex + "-" + dsIndex);
 	dataTitle.setAttribute("class","mgt-detail-data-title");
 	$(dataTitle).appendTo("#ds-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
 	$("<a herf = 'javascript:void(0);' " +
-		"onClick = \"Mgt.showTable(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + id + "','" + dsName + "');\" style = 'cursor: pointer;'>" +
-		"show detail data of " + dsName + "</a>").appendTo(dataTitle);
+		"onClick = \"Mgt.showTable(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','" + dsName + "');\" " +
+		"style = 'cursor: pointer;'>show detail data of " + dsName + "</a>").appendTo(dataTitle);
 	$(dataTitle).css({
 		"margin-bottom": "5px",
 		"border-bottom": "1px solid #282828"
 	});
 	
 	$.getJSON(Common.dsInfoUrl(),{
-		id: id
+		id: dsID
 	},function(data){
 		var tableData = new google.visualization.DataTable();
 		tableData.addColumn('string','Data Feature');
@@ -326,7 +323,7 @@ Mgt.loadDs = function(tabIndex,dsIndex,id,dsName,subType){
 	});
 	
 	$.getJSON(Common.dsFieldUrl(),{
-		id: id
+		id: dsID
 	},function(data){
 		var len = data.length;
 		var tableData = new google.visualization.DataTable();
