@@ -82,11 +82,12 @@ public class FavoriteManagerImpl implements IFavoriteManager {
 		ssp = SqlServerProviderImpl.getInstance();
 		PreparedStatement pstmt = ssp.getConnection().prepareStatement(sql);
 		pstmt.setString(1, userid);
-		pstmt.setString(2, favid);
+		pstmt.setInt(2, Integer.parseInt(favid));
 		ResultSet rs = pstmt.executeQuery();
 		rs.next();
+		Favorite fav= new Favorite(userid, favid, rs.getString("favstring"));
 		pstmt.getConnection().close();
-		return new Favorite(userid, favid, rs.getString("favstring"));
+		return fav;
 	}
 
 	@Override

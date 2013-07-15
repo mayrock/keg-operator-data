@@ -97,7 +97,7 @@ public class JdbcProvider extends AbstractDataProvider {
 
 			sb.append(" FROM ( ")
 					.append(getQueryString(q.getInnerQuery(), level + 1))
-					.append(" ) as ").append(aliasMap.get(q.getInnerQuery()));
+					.append(" ) ").append(aliasMap.get(q.getInnerQuery()));
 		}
 		if (q.getJoinOnClause() != null) {
 			sb.append(" INNER JOIN (")
@@ -315,7 +315,7 @@ public class JdbcProvider extends AbstractDataProvider {
 	public void openQuery(Query query) throws DataProviderException {
 		if (!results.containsKey(query)) {
 			String sql = getQueryString(query, 0);
-
+			System.out.println(sql);
 			ResultSet rs = executeQuery(sql);
 			results.put(query, rs);
 		}
