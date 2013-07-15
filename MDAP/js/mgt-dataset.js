@@ -63,6 +63,13 @@ Mgt.showTable = function(tabIndex,subType,dsIndex,dsID,dsName){
 				"width": dataWidth
 			});
 			
+			var sqlTitle = document.createElement("div");
+			sqlTitle.setAttribute("id",type + "-" + subType + "-mgt-sql-title-" + tabIndex + "-" + dsIndex);
+			sqlTitle.setAttribute("class","mgt-sql-title");
+			$(sqlTitle).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showSQL(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "');\" " +
+				"style = 'cursor: pointer;'>do some sql operations on " + dsName + "</a>").appendTo(sqlTitle);
+			
 			var selectTitle = document.createElement("div");
 			selectTitle.setAttribute("id",type + "-" + subType + "-mgt-select-column-title-" + tabIndex + "-" + dsIndex);
 			selectTitle.setAttribute("class","mgt-select-column-title");
