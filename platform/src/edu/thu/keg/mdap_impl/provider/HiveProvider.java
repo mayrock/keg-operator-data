@@ -36,12 +36,10 @@ import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
  * @author Qi Li, Bozhi Yuan
  */
 
-public class HiveProvider extends JdbcProvider
-{
+public class HiveProvider extends JdbcProvider {
 	private static String tableLocation = "/hiveTable";
 
-	public HiveProvider(String connString) throws SQLException
-	{
+	public HiveProvider(String connString) throws SQLException {
 		super(connString);
 		// TODO Auto-generated constructor stub
 	}
@@ -54,8 +52,7 @@ public class HiveProvider extends JdbcProvider
 	 * .mdap.datamodel.Query)
 	 */
 	@Override
-	public String getQueryString(Query q)
-	{
+	public String getQueryString(Query q) {
 		return this.getQueryString(q, 0);
 	}
 
@@ -67,10 +64,8 @@ public class HiveProvider extends JdbcProvider
 	 * .datamodel.Query)
 	 */
 	@Override
-	public void openQuery(Query query) throws DataProviderException
-	{
-		if (!super.results.containsKey(query))
-		{
+	public void openQuery(Query query) throws DataProviderException {
+		if (!super.results.containsKey(query)) {
 			String sql = getQueryString(query, 0);
 			System.out.println(sql);
 			ResultSet rs = super.executeQuery(sql);
@@ -78,17 +73,14 @@ public class HiveProvider extends JdbcProvider
 		}
 	}
 
-	private String getFieldAliasNameHive(DataField f, Map<Query, String> aliasMap)
-	{
-		if (f.getQuery() == null)
-		{
+	private String getFieldAliasNameHive(DataField f,
+			Map<Query, String> aliasMap) {
+		if (f.getQuery() == null) {
 			return f.getName();
-		} else
-		{
+		} else {
 
 			String tableAlias = aliasMap.get(f.getQuery());
-			if (tableAlias == null || tableAlias.equals(""))
-			{
+			if (tableAlias == null || tableAlias.equals("")) {
 				return f.getName();
 			}
 			return tableAlias + "." + f.getName();
@@ -99,27 +91,23 @@ public class HiveProvider extends JdbcProvider
 	 * absolutely hive don't support nested query so level=0
 	 * 
 	 * */
-	private String getQueryString(Query query, int level)
-	{
+	private String getQueryString(Query query, int level) {
 
 		// unsupported query inner
 		if (query.getInnerQuery() != null
 				|| (query.getJoinOnClause() != null && query.getJoinOnClause()
-						.getQuery().getInnerQuery() != null))
-		{
+						.getQuery().getInnerQuery() != null)) {
 			new UnsupportedOperationException("unsupported query:inner query !");
 
 		}
 
 		HashMap<Query, String> aliasMap = new HashMap<Query, String>();
 
-		if (query.getJoinOnClause() != null)
-		{
+		if (query.getJoinOnClause() != null) {
 			aliasMap.put(query.getJoinOnClause().getQuery(), "tj_");
 			aliasMap.put(query, "t_");
 
-		} else
-		{
+		} else {
 			String alias = "";
 			aliasMap.put(query, alias);
 		}
@@ -140,8 +128,7 @@ public class HiveProvider extends JdbcProvider
 		strs[4] = orderbyStr;
 		strs[5] = groupbyStr;
 
-		for (String tmp : strs)
-		{
+		for (String tmp : strs) {
 			System.out.println(tmp);
 		}
 
@@ -149,18 +136,14 @@ public class HiveProvider extends JdbcProvider
 
 		int[] orderNumbers = null;
 
-		if (!joinStr.equals(""))
-		{
+		if (!joinStr.equals("")) {
 			orderNumbers = new int[] { 1, 2, 0, 3, 4, 5 };
-		} else
-		{
+		} else {
 			orderNumbers = new int[] { 0, 1, 2, 3, 4, 5 };
 		}
 
-		for (int i = 0; i < orderNumbers.length; i++)
-		{
-			if (!strs[orderNumbers[i]].equals(""))
-			{
+		for (int i = 0; i < orderNumbers.length; i++) {
+			if (!strs[orderNumbers[i]].equals("")) {
 
 				strBuil.append(strs[orderNumbers[i]]);
 			}
@@ -178,8 +161,7 @@ public class HiveProvider extends JdbcProvider
 	// eg. create table tableName as select colName1 ,colName2 from dataTable;
 	// the "dataTable" is the basic table of data
 	public void writeDataSetContent(DataSet ds, DataContent data)
-			throws DataProviderException
-	{
+			throws DataProviderException {
 
 		removeContent(ds);
 
@@ -187,17 +169,14 @@ public class HiveProvider extends JdbcProvider
 		// execute(ddl);
 		// 将data里面的字段复制到ds中，复制ds中拥有的所有字段
 
-		if (data instanceof Query)
-		{
+		if (data instanceof Query) {
 			Query q = (Query) data;
-			if (q.getProvider() == ds.getProvider())
-			{
+			if (q.getProvider() == ds.getProvider()) {
 				StringBuilder strBuil = new StringBuilder();
 
 				List<DataField> dataFieldList = ds.getDataFields();
 
-				if (dataFieldList == null || dataFieldList.size() == 0)
-				{
+				if (dataFieldList == null || dataFieldList.size() == 0) {
 					// TODO
 
 				}
@@ -208,8 +187,7 @@ public class HiveProvider extends JdbcProvider
 
 				int size = dataFieldList.size();
 				String str = null;
-				for (int i = 0; i < size - 1; i++)
-				{
+				for (int i = 0; i < size - 1; i++) {
 					str = dataFieldList.get(i).getName();
 					strBuil.append(str);
 					strBuil.append(" ");
@@ -238,12 +216,10 @@ public class HiveProvider extends JdbcProvider
 	// so don't use the key word null when create table in hive
 	// actually , hive yet don't support varchar ...etc ,
 	// About String type,hive only have the type "string"
-	private String getDDL(DataField df)
-	{
+	private String getDDL(DataField df) {
 		FieldType type = df.getFieldType();
 		String typeStr = "";
-		switch (type)
-		{
+		switch (type) {
 		case ShortString:
 			typeStr = " STRING ";
 			break;
@@ -270,14 +246,12 @@ public class HiveProvider extends JdbcProvider
 	// generate create table DDL
 	// create table ........as select
 	// the command will create a inner table in /user/hive/warehouse
-	private String getDDL(DataSet ds)
-	{
+	private String getDDL(DataSet ds) {
 		StringBuilder sb = new StringBuilder("create table ");
 		sb.append(ds.getName());
 		sb.append(" ( ");
 		List<DataField> fields = ds.getDataFields();
-		for (int i = 0; i < fields.size() - 1; i++)
-		{
+		for (int i = 0; i < fields.size() - 1; i++) {
 			sb.append(getDDL(fields.get(i))).append(",");
 		}
 		sb.append(getDDL(fields.get(fields.size() - 1))).append(" ) ");
@@ -289,13 +263,11 @@ public class HiveProvider extends JdbcProvider
 		return sb.toString();
 	}
 
-	private String getJoinStr(Query query, HashMap<Query, String> aliasMap)
-	{
+	private String getJoinStr(Query query, HashMap<Query, String> aliasMap) {
 
 		StringBuilder strBuil = new StringBuilder();
 
-		if (query.getJoinOnClause() != null)
-		{
+		if (query.getJoinOnClause() != null) {
 			strBuil.append(" JOIN ")
 					.append(query.getJoinOnClause().getQuery().getFields()[0]
 							.getDataSet().getName()).append(" ")
@@ -303,8 +275,7 @@ public class HiveProvider extends JdbcProvider
 					.append(" ").append(" ON ");
 
 			for (Entry<DataField, DataField> fs : query.getJoinOnClause()
-					.getOns().entrySet())
-			{
+					.getOns().entrySet()) {
 
 				strBuil.append(getFieldAliasName(fs.getKey(), aliasMap))
 
@@ -318,12 +289,10 @@ public class HiveProvider extends JdbcProvider
 		return "";
 	}
 
-	private String getGroupByStr(Query query, HashMap<Query, String> aliasMap)
-	{
+	private String getGroupByStr(Query query, HashMap<Query, String> aliasMap) {
 
 		List<DataField> list_group = query.getGroupByFields();
-		if (list_group == null || list_group.size() == 0)
-		{
+		if (list_group == null || list_group.size() == 0) {
 			return "";
 
 		}
@@ -333,34 +302,25 @@ public class HiveProvider extends JdbcProvider
 		strBuil.append(" GROUP BY ");
 		int size = list_group.size();
 
-		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
-		{
-			
-			for (int i = 0; i < size - 1; i++)
-			{
-				
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null) {
+
+			for (int i = 0; i < size - 1; i++) {
+
 				strBuil.append(list_group.get(i).getName());
 				strBuil.append(",");
 
 			}
-			
-			strBuil.append(list_group.get(size-1).getName() + " ");
+
+			strBuil.append(list_group.get(size - 1).getName() + " ");
 			return strBuil.toString();
-			
+
 		}
-		
-		
-		
-		
-		
-		
+
 		String tmp = null;
 
-		for (int i = 0; i < size - 1; i++)
-		{
+		for (int i = 0; i < size - 1; i++) {
 			tmp = getFieldAliasName(list_group.get(i), aliasMap);
-			if (tmp.equals(""))
-			{
+			if (tmp.equals("")) {
 				tmp = list_group.get(i).getName();
 			}
 			strBuil.append(tmp);
@@ -373,13 +333,11 @@ public class HiveProvider extends JdbcProvider
 
 	}
 
-	private String getOrderByStr(Query query, HashMap<Query, String> aliasMap)
-	{
+	private String getOrderByStr(Query query, HashMap<Query, String> aliasMap) {
 		// the key "order by"
 
 		List<OrderClause> orders = query.getOrderClauses();
-		if (orders == null || orders.size() == 0)
-		{
+		if (orders == null || orders.size() == 0) {
 			return "";
 
 		}
@@ -389,11 +347,9 @@ public class HiveProvider extends JdbcProvider
 		strBuil.append(" ORDER BY ");
 		OrderClause order = null;
 
-		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
-		{
-			
-			for (int i = 0; i < orders.size() - 1; i++)
-			{
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null) {
+
+			for (int i = 0; i < orders.size() - 1; i++) {
 				order = orders.get(i);
 
 				strBuil.append(order.getField().getName());
@@ -408,28 +364,18 @@ public class HiveProvider extends JdbcProvider
 			strBuil.append(" ");
 			strBuil.append(order.getOrder().toString());
 			strBuil.append(" ");
-			
-			
+
 			return strBuil.toString();
-			
-			
+
 		}
-		
-		
-		
-		
-		
-		
-		
+
 		String tmp = null;
-		for (int i = 0; i < orders.size() - 1; i++)
-		{
+		for (int i = 0; i < orders.size() - 1; i++) {
 			order = orders.get(i);
 
 			tmp = getFieldAliasName(order.getField(), aliasMap);
 
-			if (tmp.equals(""))
-			{
+			if (tmp.equals("")) {
 				tmp = order.getField().getName();
 			}
 
@@ -450,13 +396,11 @@ public class HiveProvider extends JdbcProvider
 
 	}
 
-	private String getWhereStr(Query query, HashMap<Query, String> aliasMap)
-	{
+	private String getWhereStr(Query query, HashMap<Query, String> aliasMap) {
 		StringBuilder strBuil = new StringBuilder();
 		// add key "where"
 		List<WhereClause> list_where = query.getWhereClauses();
-		if (list_where == null || list_where.size() == 0)
-		{
+		if (list_where == null || list_where.size() == 0) {
 
 			return "";
 		}
@@ -464,42 +408,33 @@ public class HiveProvider extends JdbcProvider
 		int size = list_where.size();
 		strBuil.append(" where ");
 
-		
-		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
-		{
-			WhereClause where=null;
-			for (int i = 0; i < size; i++)
-			{
-				where=list_where.get(i);
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null) {
+			WhereClause where = null;
+			for (int i = 0; i < size; i++) {
+				where = list_where.get(i);
 				strBuil.append(where.getField().getName());
 				strBuil.append(where.getOperator().toString());
 
 				if (where.getField().getFieldType().isNumber())
 					strBuil.append(where.getValue().toString());
 				else
-					strBuil.append("'").append(where.getValue().toString()).append("'");
-				if (i != size - 1)
-				{
+					strBuil.append("'").append(where.getValue().toString())
+							.append("'");
+				if (i != size - 1) {
 					strBuil.append(" and ");
 
 				}
 			}
-			
+
 			return strBuil.toString();
-			
+
 		}
-		
-		
-		
-		
-		
-		for (int i = 0; i < size; i++)
-		{
+
+		for (int i = 0; i < size; i++) {
 
 			strBuil.append(whereConditionToStr(list_where.get(i), aliasMap));
 
-			if (i != size - 1)
-			{
+			if (i != size - 1) {
 				strBuil.append(" and ");
 
 			}
@@ -510,8 +445,7 @@ public class HiveProvider extends JdbcProvider
 
 	}
 
-	private String getFromStr(Query query, HashMap<Query, String> aliasMap)
-	{
+	private String getFromStr(Query query, HashMap<Query, String> aliasMap) {
 
 		/*
 		 * if(query.getInnerQuery()!=null) { throw new
@@ -523,8 +457,7 @@ public class HiveProvider extends JdbcProvider
 
 		DataField[] fields = query.getFields();
 
-		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
-		{
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null) {
 			strBuil.append(" FROM ");
 			strBuil.append(fields[0].getDataSet().getName());
 			strBuil.append(" ");
@@ -543,8 +476,7 @@ public class HiveProvider extends JdbcProvider
 		return strBuil.toString();
 	}
 
-	private String getSelectStr(Query query, HashMap<Query, String> aliasMap)
-	{
+	private String getSelectStr(Query query, HashMap<Query, String> aliasMap) {
 
 		// if(query.getInnerQuery()!=null)
 		// {
@@ -556,49 +488,39 @@ public class HiveProvider extends JdbcProvider
 		strBuil.append("SELECT ");
 
 		DataField df = null;
-		
-		
-		if (fields == null || fields.length == 0)
-		{
+
+		if (fields == null || fields.length == 0) {
 
 			return null;
 		}
 
 		int len = fields.length;
 
-		// no innerQuery and joinquery 
-		if (query.getInnerQuery() == null && query.getJoinOnClause() == null)
-		{
-			
-			for(int i = 0; i < len; i++)
-			{
+		// no innerQuery and joinquery
+		if (query.getInnerQuery() == null && query.getJoinOnClause() == null) {
+
+			for (int i = 0; i < len; i++) {
 				df = fields[i];
 
 				strBuil.append(df.getQueryName());
-				
-				if (i != len - 1)
-				{
+
+				if (i != len - 1) {
 					strBuil.append(",");
 
 				}
 			}
-			
+
 			strBuil.append(" ");
-			
+
 			return strBuil.toString();
 		}
 
-		if (query.getInnerQuery() != null && query.getJoinOnClause() == null)
-		{
-			
+		if (query.getInnerQuery() != null && query.getJoinOnClause() == null) {
+
 			throw new UnsupportedOperationException("unsupport innerQuery");
 		}
 
-		
-		
-		
-		for (int i = 0; i < len; i++)
-		{
+		for (int i = 0; i < len; i++) {
 
 			df = fields[i];
 
@@ -606,20 +528,17 @@ public class HiveProvider extends JdbcProvider
 			strBuil.append(" ");
 			strBuil.append(getFieldAliasName(df, aliasMap));
 
-			
 		}
 		strBuil.append(" ");
 		return strBuil.toString();
 	}
 
 	private String whereConditionToStr(WhereClause where,
-			HashMap<Query, String> aliasMap)
-	{
+			HashMap<Query, String> aliasMap) {
 		StringBuilder sb = new StringBuilder();
 		String tmp = getFieldAliasName(where.getField(), aliasMap);
 
-		if (tmp.equals(""))
-		{
+		if (tmp.equals("")) {
 			tmp = where.getField().getName();
 
 		}
@@ -633,8 +552,7 @@ public class HiveProvider extends JdbcProvider
 		return sb.toString();
 	}
 
-	public static void main(String[] args) throws Exception
-	{
+	public static void main(String[] args) throws Exception {
 		PlatformImpl p = new PlatformImpl("config.xml");
 		Class.forName("org.apache.hadoop.hive.jdbc.HiveDriver");
 		// Config.init("./config.xml");
@@ -647,11 +565,11 @@ public class HiveProvider extends JdbcProvider
 
 		fields = new DataField[3];
 		fields[0] = new GeneralDataField("EN_NAME", FieldType.ShortString, "",
-				true, FieldFunctionality.Identifier);
+				true, false, true, FieldFunctionality.Identifier);
 		fields[1] = new GeneralDataField("LAC", FieldType.Int, "", false,
-				FieldFunctionality.Value);
-		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false,
-				FieldFunctionality.Value);
+				false, true, FieldFunctionality.Value);
+		fields[2] = new GeneralDataField("CI", FieldType.Int, "", false, false,
+				true, FieldFunctionality.Value);
 
 		dsSite = DataSetManagerImpl.getInstance().createDataSet("TESTF",
 				"liqi", "小区地理位置信息", hiveProvider, true, fields);
@@ -668,35 +586,32 @@ public class HiveProvider extends JdbcProvider
 		q1 = q1.whereOr("LAC", Query.Operator.GEQ, 5000);
 
 		// -------------------------------
-		/*DataField[] fieldsA = null;
-		DataSet dsSiteA = null;
-
-		fieldsA = new DataField[2];
-		fieldsA[0] = new GeneralDataField("name", FieldType.ShortString, "",
-				true, FieldFunctionality.Identifier);
-		fieldsA[1] = new GeneralDataField("age", FieldType.Int, "", false,
-				FieldFunctionality.Value);
-
-		dsSiteA = DataSetManagerImpl.getInstance().createDataSet("TESTa",
-				"liqi", "小区地理位置信息", hiveProvider, true, fieldsA);
-		DataSetManagerImpl.getInstance().setDataSetPermission(dsSiteA.getId(),
-				"liqi", DataSetImpl.PERMISSION_PUBLIC, null);
-
-		Query q2;
-		DataSet ds2 = DataSetManagerImpl.getInstance().getDataSet(
-				dsSiteA.getId());
-		q2 = ds2.getQuery();
-
-		HashMap<DataField, DataField> map = new HashMap<DataField, DataField>();
-		map.put(fields[1], fieldsA[1]);
-
-		q1 = q1.join(q2, map);
-*/
+		/*
+		 * DataField[] fieldsA = null; DataSet dsSiteA = null;
+		 * 
+		 * fieldsA = new DataField[2]; fieldsA[0] = new GeneralDataField("name",
+		 * FieldType.ShortString, "", true, FieldFunctionality.Identifier);
+		 * fieldsA[1] = new GeneralDataField("age", FieldType.Int, "", false,
+		 * FieldFunctionality.Value);
+		 * 
+		 * dsSiteA = DataSetManagerImpl.getInstance().createDataSet("TESTa",
+		 * "liqi", "小区地理位置信息", hiveProvider, true, fieldsA);
+		 * DataSetManagerImpl.getInstance
+		 * ().setDataSetPermission(dsSiteA.getId(), "liqi",
+		 * DataSetImpl.PERMISSION_PUBLIC, null);
+		 * 
+		 * Query q2; DataSet ds2 = DataSetManagerImpl.getInstance().getDataSet(
+		 * dsSiteA.getId()); q2 = ds2.getQuery();
+		 * 
+		 * HashMap<DataField, DataField> map = new HashMap<DataField,
+		 * DataField>(); map.put(fields[1], fieldsA[1]);
+		 * 
+		 * q1 = q1.join(q2, map);
+		 */
 		// ------------------------------------------
 		q1.open();
 		int i = 0;
-		while (q1.next() && i++ < 3)
-		{
+		while (q1.next() && i++ < 3) {
 			System.out.println(q1.getValue(ds.getField("LAC")) + " "
 					+ q1.getValue(ds.getField("CI")) + "  ");
 		}
@@ -705,15 +620,12 @@ public class HiveProvider extends JdbcProvider
 
 	@Override
 	public Object getValue(Query q, DataField field)
-			throws DataProviderException
-	{
-		try
-		{
+			throws DataProviderException {
+		try {
 			ResultSet rs = results.get(q);
 			FieldType type = field.getFieldType();
 			String fieldName = field.getName().toLowerCase();
-			switch (type)
-			{
+			switch (type) {
 			case ShortString:
 			case LongString:
 			case Text:
@@ -725,8 +637,7 @@ public class HiveProvider extends JdbcProvider
 			case DateTime:
 				return rs.getDate(fieldName);
 			}
-		} catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			throw new DataProviderException(e.getMessage());
 		}
 		throw new IllegalArgumentException(

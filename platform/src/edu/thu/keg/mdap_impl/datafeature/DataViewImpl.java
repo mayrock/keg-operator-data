@@ -103,6 +103,8 @@ public class DataViewImpl implements DataView {
 					|| f.getFunction().equals(FieldFunctionality.Longitude);
 		} else if (this.type.equals(DataFeatureType.DistributionFeature)) {
 			return f.getFunction().equals(FieldFunctionality.Identifier);
+		} else if (this.type.equals(DataFeatureType.TimeSeries)) {
+			return f.getFunction().equals(FieldFunctionality.TimeStamp);
 		} else {
 			return !f.getFunction().equals(FieldFunctionality.Value);
 		}

@@ -73,7 +73,7 @@ public class JdbcProvider extends AbstractDataProvider {
 		DataField[] fields = q.getFields();
 		StringBuffer sb = new StringBuffer("SELECT top 1000 ");
 
-		for (int i = 0; i < fields.length - 1; i++) {
+		for (int i = 0; i < fields.length; i++) {
 			DataField df = fields[i];
 			if (q.getInnerQuery() == null) {
 				sb.append(df.getQueryName()).append(" AS ")
@@ -83,13 +83,7 @@ public class JdbcProvider extends AbstractDataProvider {
 						.append(df.getName()).append(",");
 			}
 		}
-		DataField df = fields[fields.length - 1];
-		if (q.getInnerQuery() == null) {
-			sb.append(df.getQueryName()).append(" AS ").append(df.getName());
-		} else {
-			sb.append(getFieldAliasName(df, aliasMap)).append(" AS ")
-					.append(df.getName());
-		}
+		sb.delete(sb.length() - 1, sb.length());
 
 		if (q.getInnerQuery() == null)
 			sb.append(" FROM ").append(fields[0].getDataSet().getName());

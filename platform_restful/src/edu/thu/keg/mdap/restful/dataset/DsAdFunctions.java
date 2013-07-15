@@ -175,7 +175,8 @@ public class DsAdFunctions {
 				isDim = field.getBoolean("isdim");
 				func = field.getString("func");
 				fields[i] = new GeneralDataField(fieldname, fieldtype,
-						df_description, isKey, FieldFunctionality.valueOf(func));
+						df_description, isKey, allowNull, isDim,
+						FieldFunctionality.valueOf(func));
 
 			}
 			p.getDataSetManager().createDataSet(name, owner, description,
