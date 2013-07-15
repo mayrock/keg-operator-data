@@ -12,22 +12,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class JDataviewLine {
-	private List<JField> indentifiers;
+	private List<JField> identifiers;
 	private List<JField> values;
 
 	/**
 	 * @return the keys
 	 */
-	public List<JField> getIndentifiers() {
-		return indentifiers;
+	public List<JField> getIdentifiers() {
+		return identifiers;
 	}
 
 	/**
 	 * @param keys
 	 *            the keys to set
 	 */
-	public void setIndentifiers(List<JField> indentifiers) {
-		this.indentifiers = indentifiers;
+	public void setIdentifiers(List<JField> identifiers) {
+		this.identifiers = identifiers;
 	}
 
 	/**

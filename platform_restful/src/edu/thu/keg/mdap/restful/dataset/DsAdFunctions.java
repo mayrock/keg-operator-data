@@ -227,6 +227,8 @@ public class DsAdFunctions {
 			if (session.getAttribute("userid") == null)
 				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
 			Platform p = (Platform) servletcontext.getAttribute("platform");
+			System.out.println(p.getDataSetManager().getDataViewList(
+					DataFeatureType.DistributionFeature));
 			ManagementPlatform mp = (ManagementPlatform) servletcontext
 					.getAttribute("managementplatform");
 			System.out
@@ -248,16 +250,20 @@ public class DsAdFunctions {
 			}
 			kv = Arrays.copyOf(ks, ks.length + vs.length);
 			System.arraycopy(vs, 0, kv, ks.length, vs.length);
+
+			System.out.println(p.getDataSetManager().getDataViewList(
+					DataFeatureType.DistributionFeature));
+
 			q = ds.getQuery().select(kv);
 			dv = p.getDataSetManager().defineView(name,
 					(String) session.getAttribute("userid"), datasetid,
 					description, DataFeatureType.valueOf(datafuturetype), q,
 					ks, vs);
 
-			p.getDataSetManager().saveChanges();
-		} catch (IOException | UserNotInPoolException
-				| OperationNotSupportedException | DataProviderException
-				| JSONException | IllegalArgumentException e) {
+			// p.getDataSetManager().saveChanges();
+		} catch (UserNotInPoolException | OperationNotSupportedException
+				| DataProviderException | JSONException
+				| IllegalArgumentException e) {
 
 			try {
 				return Response

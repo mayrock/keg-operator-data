@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebListener;
 import org.apache.log4j.Logger;
 
 import edu.thu.keg.mdap.Platform;
+import edu.thu.keg.mdap.datafeature.DataFeatureType;
 import edu.thu.keg.mdap.management.ManagementPlatform;
 import edu.thu.keg.mdap.restful.jaxbcr.MyJAXBContextResolver;
 import edu.thu.keg.mdap_impl.PlatformImpl;
@@ -44,11 +45,14 @@ public class ServerInitial implements ServletContextListener {
 				.getString("PlatformImpl_CONFIG");
 		PlatformImpl p = new PlatformImpl(arg0.getServletContext().getRealPath(
 				"/WEB-INF/" + P_Config));
-		p.crud();
+
 		sc.setAttribute("platform", p);
 		ManagementPlatform mp = new ManagementPlatform();
 		sc.setAttribute("managementplatform", mp);
 		System.out.println("启动MDAP服务器");
 		log.info("启动MDAP服务器");
+		p.crud();
+		System.out.println(p.getDataSetManager().getDataViewList(
+				DataFeatureType.DistributionFeature));
 	}
 }

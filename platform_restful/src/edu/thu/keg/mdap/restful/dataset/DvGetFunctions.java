@@ -3,6 +3,7 @@ package edu.thu.keg.mdap.restful.dataset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -75,6 +76,9 @@ public class DvGetFunctions {
 		List<JDataviewName> dataviewList = new ArrayList<JDataviewName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
+			System.out.println("1"
+					+ p.getDataSetManager().getDataViewList(
+							DataFeatureType.DistributionFeature));
 			DataSetManager datasetManager = p.getDataSetManager();
 			System.out.println(id + " " + featureType);
 			Collection<DataView> dataviews = null;
@@ -83,15 +87,28 @@ public class DvGetFunctions {
 			else if (id == null && featureType != null)
 				dataviews = datasetManager.getDataViewList(DataFeatureType
 						.valueOf(featureType));
-			else if (id != null && featureType == null)
+			else if (id != null && featureType == null) {
+				System.out.println("1.1"
+						+ p.getDataSetManager().getDataViewList(
+								DataFeatureType.DistributionFeature));
 				dataviews = datasetManager.getDataViewList(id);
-			else {
+				System.out.println("1.2"
+						+ p.getDataSetManager().getDataViewList(
+								DataFeatureType.DistributionFeature));
+			} else {
+				Collection<DataView> mix1 = new HashSet<>();
+				Collection<DataView> mix2 = new HashSet<>();
 				dataviews = datasetManager.getDataViewList(DataFeatureType
 						.valueOf(featureType));
-				Collection<DataView> dataviews1 = datasetManager
-						.getDataViewList(id);
-				dataviews.retainAll(dataviews1);
+				mix1.addAll(dataviews);
+				dataviews = datasetManager.getDataViewList(id);
+				mix2.addAll(dataviews);
+				mix1.retainAll(mix2);
+				dataviews = mix1;
 			}
+			System.out.println("1.5"
+					+ p.getDataSetManager().getDataViewList(
+							DataFeatureType.DistributionFeature));
 			if (dataviews != null)
 				for (DataView dataview : dataviews) {
 					JDataviewName dname = new JDataviewName();
@@ -110,11 +127,17 @@ public class DvGetFunctions {
 					for (DataField df : dataview.getValueFields()) {
 						values.add(df.getName());
 					}
+					System.out.println("1.6"
+							+ p.getDataSetManager().getDataViewList(
+									DataFeatureType.DistributionFeature));
 					dname.setValues(values);
 					dname.setDatafeature(dataview.getFeatureType().name());
 					dname.setDataset(dataview.getDataSet());
 					dataviewList.add(dname);
 				}
+			System.out.println("2"
+					+ p.getDataSetManager().getDataViewList(
+							DataFeatureType.DistributionFeature));
 		} catch (Exception e) {
 			log.warn(e.getMessage());
 		}
@@ -133,6 +156,8 @@ public class DvGetFunctions {
 		List<JDataviewLine> dataviewList = new ArrayList<>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
+			System.out.println(p.getDataSetManager().getDataViewList(
+					DataFeatureType.DistributionFeature));
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataView dv = datasetManager.getDataView(id);
 			DataContent rs = dv.getQuery();
@@ -140,14 +165,14 @@ public class DvGetFunctions {
 			int i = 0;
 			while (rs.next() && i++ < 20) {
 				JDataviewLine jdataview = new JDataviewLine();
-				List<JField> indentifiers = new ArrayList<>();
+				List<JField> identifiers = new ArrayList<>();
 				DataField[] dfs = dv.getKeyFields().toArray(new DataField[0]);
 				for (DataField df : dfs) {
 					JField indentifier = new JField();
 					indentifier.setValue(rs.getValue(df).toString());
 					indentifier.setType(rs.getValue(df).getClass()
 							.getSimpleName());
-					indentifiers.add(indentifier);
+					identifiers.add(indentifier);
 				}
 				List<JField> values = new ArrayList<>();
 				dfs = dv.getValueFields().toArray(new DataField[0]);
@@ -157,7 +182,7 @@ public class DvGetFunctions {
 					value.setType(rs.getValue(df).getClass().getSimpleName());
 					values.add(value);
 				}
-				jdataview.setIndentifiers(indentifiers);
+				jdataview.setIdentifiers(identifiers);
 				jdataview.setValues(values);
 				dataviewList.add(jdataview);
 			}
@@ -177,6 +202,8 @@ public class DvGetFunctions {
 			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
 		log.info(uriInfo.getAbsolutePath());
 		Platform p = (Platform) servletcontext.getAttribute("platform");
+		System.out.println(p.getDataSetManager().getDataViewList(
+				DataFeatureType.DistributionFeature));
 		DataSetManager datasetManager = p.getDataSetManager();
 		DataView dv = datasetManager.getDataView(id);
 		JDataviewName dname = new JDataviewName();
@@ -213,6 +240,8 @@ public class DvGetFunctions {
 		List<JFieldName> all_fn = new ArrayList<JFieldName>();
 		try {
 			Platform p = (Platform) servletcontext.getAttribute("platform");
+			System.out.println(p.getDataSetManager().getDataViewList(
+					DataFeatureType.DistributionFeature));
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataView dv = datasetManager.getDataView(id);
 			DataField[] dfs = dv.getAllFields().toArray(new DataField[0]);
