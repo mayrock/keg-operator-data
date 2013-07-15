@@ -132,7 +132,7 @@ public class DsAdFunctions {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	// @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public Response createDataset(@FormParam("connstr") String connstr,
-			@FormParam("dataset") String dataset,
+			@FormParam("name") String name,
 			@FormParam("description") String description,
 			@FormParam("loadable") boolean loadable,
 			@FormParam("owner") String owner,
@@ -178,14 +178,14 @@ public class DsAdFunctions {
 						df_description, isKey, FieldFunctionality.valueOf(func));
 
 			}
-			p.getDataSetManager().createDataSet(dataset, owner, description,
+			p.getDataSetManager().createDataSet(name, owner, description,
 					provider, loadable, fields);
 			List<String> users_list = new ArrayList<>();
 			for (int i = 0; i < limitedusers.length(); i++) {
 				JSONObject user = limitedusers.getJSONObject(i);
 				users_list.add(user.getString("limiteduser"));
 			}
-			p.getDataSetManager().setDataSetPermission(dataset, owner,
+			p.getDataSetManager().setDataSetPermission(name, owner,
 					DataSetImpl.parsePermission(permission), users_list);
 			p.getDataSetManager().saveChanges();
 		} catch (JSONException | IOException e) {
@@ -211,15 +211,15 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/adddv")
-	public Response createDataview(@FormParam("dataset") String dataset,
-			@FormParam("dataview") String dataview,
+	public Response createDataview(@FormParam("datasetid") String datasetid,
+			@FormParam("name") String name,
 			@FormParam("description") String description,
 			@FormParam("datafeaturetype") String datafuturetype,
 			@FormParam("keys") JSONArray keys,
 			@FormParam("values") JSONArray values) {
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
-		System.out.println("POST create dataview:\n" + dataset + " " + dataview
+		System.out.println("POST create dataview:\n" + datasetid + " " + name
 				+ "\n " + keys.toString() + "\n" + values.toString());
 
 		try {
@@ -236,7 +236,7 @@ public class DsAdFunctions {
 			DataField[] ks = null, vs = null, kv = null;
 			Query q = null;
 
-			ds = p.getDataSetManager().getDataSet(dataset);
+			ds = p.getDataSetManager().getDataSet(datasetid);
 			ks = new DataField[keys.length()];
 			for (int i = 0; i < ks.length; i++) {
 				ks[i] = ds.getField(keys.getString(i));
@@ -248,8 +248,8 @@ public class DsAdFunctions {
 			kv = Arrays.copyOf(ks, ks.length + vs.length);
 			System.arraycopy(vs, 0, kv, ks.length, vs.length);
 			q = ds.getQuery().select(kv);
-			dv = p.getDataSetManager().defineView(dataview,
-					(String) session.getAttribute("userid"), dataset,
+			dv = p.getDataSetManager().defineView(name,
+					(String) session.getAttribute("userid"), datasetid,
 					description, DataFeatureType.valueOf(datafuturetype), q,
 					ks, vs);
 
@@ -273,14 +273,14 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/setdv")
-	public Response setDataview(@FormParam("oldid") String olddv,
-			@FormParam("dataview") String dataview,
+	public Response setDataview(@FormParam("id") String id,
+			@FormParam("name") String name,
 			@FormParam("description") String description,
 			@FormParam("keys") JSONArray keys,
 			@FormParam("values") JSONArray values) {
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
-		System.out.println("POST create dataview:\n" + " " + dataview + "\n "
+		System.out.println("POST create dataview:\n" + " " + name + "\n "
 				+ keys.toString() + "\n" + values.toString());
 
 		try {
@@ -297,8 +297,7 @@ public class DsAdFunctions {
 			DataField[] ks = null, vs = null, kv = null;
 			Query q = null;
 
-			String ds_name = p.getDataSetManager().getDataView(olddv)
-					.getDataSet();
+			String ds_name = p.getDataSetManager().getDataView(id).getDataSet();
 			ds = p.getDataSetManager().getDataSet(ds_name);
 			ks = new DataField[keys.length()];
 			for (int i = 0; i < ks.length; i++) {
@@ -311,8 +310,8 @@ public class DsAdFunctions {
 			kv = Arrays.copyOf(ks, ks.length + vs.length);
 			System.arraycopy(vs, 0, kv, ks.length, vs.length);
 			q = ds.getQuery().select(kv);
-			p.getDataSetManager().redefineView(olddv, dataview, description, q,
-					ks, vs);
+			p.getDataSetManager()
+					.redefineView(id, name, description, q, ks, vs);
 
 			p.getDataSetManager().saveChanges();
 		} catch (IOException | UserNotInPoolException
@@ -335,14 +334,14 @@ public class DsAdFunctions {
 	@POST
 	@Path("/adddvagg")
 	public Response createDataviewAggregated(
-			@FormParam("dataset") String dataset,
-			@FormParam("dataview") String dataview,
+			@FormParam("datasetid") String datasetid,
+			@FormParam("name") String name,
 			@FormParam("description") String description,
 			@FormParam("fields") JSONArray fields,
 			@FormParam("funcs") JSONArray funcs) {
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
-		System.out.println("POST create dataview:\n" + dataset + " " + dataview
+		System.out.println("POST create dataview:\n" + datasetid + " " + name
 				+ "\n " + fields.toString() + "\n" + funcs.toString());
 
 		try {
@@ -359,7 +358,7 @@ public class DsAdFunctions {
 			DataField[] fs = null;
 			Query q = null;
 
-			ds = p.getDataSetManager().getDataSet(dataset);
+			ds = p.getDataSetManager().getDataSet(datasetid);
 			fs = new DataField[fields.length()];
 			for (int i = 0; i < fs.length; i++) {
 				String fun = funcs.getString(i);
@@ -370,11 +369,11 @@ public class DsAdFunctions {
 							.getString(i)),
 							AggregatedDataField.AggrFunction.valueOf(funcs
 									.getString(i)), fields.getString(i) + " "
-									+ funcs.getString(i),null);
+									+ funcs.getString(i), null);
 			}
 			q = ds.getQuery().select(fs);
-			dv = p.getDataSetManager().defineView(dataview,
-					(String) session.getAttribute("userid"), dataset,
+			dv = p.getDataSetManager().defineView(name,
+					(String) session.getAttribute("userid"), datasetid,
 					description, DataFeatureType.ValueFeature, q);
 
 			p.getDataSetManager().saveChanges();
@@ -397,16 +396,15 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/setdvagg")
-	public Response setDataviewAggregated(@FormParam("oldid") String olddv,
-			@FormParam("dataset") String dataset,
-			@FormParam("dataview") String dataview,
+	public Response setDataviewAggregated(@FormParam("id") String id,
+			@FormParam("name") String name,
 			@FormParam("description") String description,
 			@FormParam("fields") JSONArray fields,
 			@FormParam("funcs") JSONArray funcs) {
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
-		System.out.println("POST create dataview:\n" + dataset + " " + dataview
-				+ "\n " + fields.toString() + "\n" + funcs.toString());
+		System.out.println("POST create dataview:\n" + id + "\n "
+				+ fields.toString() + "\n" + funcs.toString());
 
 		try {
 			if (session.getAttribute("userid") == null)
@@ -422,8 +420,7 @@ public class DsAdFunctions {
 			DataField[] fs = null;
 			Query q = null;
 
-			String ds_name = p.getDataSetManager().getDataView(olddv)
-					.getDataSet();
+			String ds_name = p.getDataSetManager().getDataView(id).getDataSet();
 			ds = p.getDataSetManager().getDataSet(ds_name);
 			fs = new DataField[fields.length()];
 			for (int i = 0; i < fs.length; i++) {
@@ -435,10 +432,10 @@ public class DsAdFunctions {
 							.getString(i)),
 							AggregatedDataField.AggrFunction.valueOf(funcs
 									.getString(i)), fields.getString(i) + " "
-									+ funcs.getString(i),null);
+									+ funcs.getString(i), null);
 			}
 			q = ds.getQuery().select(fs);
-			p.getDataSetManager().redefineView(olddv, dataview, description, q);
+			p.getDataSetManager().redefineView(id, name, description, q);
 			p.getDataSetManager().saveChanges();
 		} catch (IOException | UserNotInPoolException
 				| OperationNotSupportedException | DataProviderException
@@ -462,7 +459,6 @@ public class DsAdFunctions {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	// // @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public Response setDatasetPermission(@FormParam("id") String id,
-			@FormParam("dataview") String dataview,
 			@FormParam("owner") String owner,
 			@FormParam("permisson") String permission,
 			@FormParam("limitedusers") JSONArray limitedusers) {
@@ -500,14 +496,14 @@ public class DsAdFunctions {
 
 	@DELETE
 	@Path("/rmds")
-	public void removeDataset(@FormParam("dataset") String dataset) {
+	public void removeDataset(@FormParam("id") String id) {
 		session = httpServletRequest.getSession();
 		try {
 			if (session.getAttribute("userid") == null)
 				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			datasetManager.removeDataSet(datasetManager.getDataSet(dataset));
+			datasetManager.removeDataSet(datasetManager.getDataSet(id));
 			datasetManager.saveChanges();
 		} catch (UserNotInPoolException | DataProviderException | IOException e) {
 			log.warn(e.getMessage());
@@ -516,7 +512,7 @@ public class DsAdFunctions {
 
 	@POST
 	@Path("/rmdv")
-	public Response removeDataview(@FormParam("dataset") String dataview) {
+	public Response removeDataview(@FormParam("id") String id) {
 		log.info(uriInfo.getAbsolutePath());
 		session = httpServletRequest.getSession();
 		try {
@@ -524,7 +520,7 @@ public class DsAdFunctions {
 				throw new UserNotInPoolException(MessageInfo.COOKIES_TIMEOUT);
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataSetManager datasetManager = p.getDataSetManager();
-			datasetManager.removeDataView(datasetManager.getDataView(dataview));
+			datasetManager.removeDataView(datasetManager.getDataView(id));
 			datasetManager.saveChanges();
 		} catch (UserNotInPoolException | DataProviderException | IOException e) {
 			try {

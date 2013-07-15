@@ -121,7 +121,7 @@ public class DataSetManagerImpl implements DataSetManager {
 		limitedMap = new HashMap<String, Set<DataSet>>();
 		publicMap = new HashSet<DataSet>();
 		try {
-			 loadDataSets();
+			loadDataSets();
 		} catch (Exception ex) {
 			log.warn(ex.getMessage());
 
@@ -331,12 +331,11 @@ public class DataSetManagerImpl implements DataSetManager {
 				|| owner.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-
-		// if (this.views.containsKey(id))
-		// throw new IllegalArgumentException("Dataview name: " + id
-		// + " exists!");
-		DataView v = new DataViewImpl("DV" + getUUID(name, owner), name, owner,
-				dataset, type, q);
+		String id = "DV" + getUUID(name, owner);
+		if (this.views.containsKey(id))
+			throw new IllegalArgumentException("Dataview name: " + id
+					+ " exists!");
+		DataView v = new DataViewImpl(id, name, owner, dataset, type, q);
 
 		v.setDescription(description);
 		addDataView(v);
@@ -352,11 +351,12 @@ public class DataSetManagerImpl implements DataSetManager {
 				|| owner.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		// if (this.views.containsKey(id))
-		// throw new IllegalArgumentException("Dataview name: " + id
-		// + " exists!");
-		DataView v = new DataViewImpl("DV" + getUUID(name, owner), name, owner,
-				dataset, type, q, keys, values);
+		String id = "DV" + getUUID(name, owner);
+		if (this.views.containsKey(id))
+			throw new IllegalArgumentException("Dataview id: " + id
+					+ " exists!");
+		DataView v = new DataViewImpl(id, name, owner, dataset, type, q, keys,
+				values);
 		v.setDescription(description);
 		addDataView(v);
 		return v;
@@ -371,36 +371,30 @@ public class DataSetManagerImpl implements DataSetManager {
 	 * edu.thu.keg.mdap.datamodel.Query)
 	 */
 	@Override
-	public void redefineView(String oldId, String name, String description,
+	public void redefineView(String id, String name, String description,
 			Query q, DataField[] key, DataField[] values)
 			throws IllegalArgumentException {
 		if (name == null || name.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		if (this.views.containsKey(name))
-			throw new IllegalArgumentException("new dataview name: " + name
-					+ " exists!");
-		if (!this.views.containsKey(oldId))
-			throw new IllegalArgumentException("old dataview name: " + oldId
+		if (!this.views.containsKey(id))
+			throw new IllegalArgumentException("old dataview name: " + id
 					+ " not exists!");
-		DataView v = this.views.get(oldId);
+		DataView v = this.views.get(id);
 		v.resetView(description, name, q, Arrays.asList(key),
 				Arrays.asList(values));
 	}
 
 	@Override
-	public void redefineView(String oldId, String name, String description,
-			Query q) throws IllegalArgumentException {
+	public void redefineView(String id, String name, String description, Query q)
+			throws IllegalArgumentException {
 		if (name == null || name.equals(""))
 			throw new IllegalArgumentException(
 					"Dataview name & owner can't be empty!");
-		if (this.views.containsKey(name))
-			throw new IllegalArgumentException("new dataview name: " + name
-					+ " exists!");
-		if (!this.views.containsKey(oldId))
-			throw new IllegalArgumentException("Dataview name: " + oldId
+		if (!this.views.containsKey(id))
+			throw new IllegalArgumentException("Dataview id: " + id
 					+ " not exists!");
-		DataView v = this.views.get(oldId);
+		DataView v = this.views.get(id);
 		v.resetView(description, name, q);
 	}
 

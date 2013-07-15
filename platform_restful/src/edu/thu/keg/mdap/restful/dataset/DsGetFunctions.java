@@ -266,7 +266,6 @@ public class DsGetFunctions {
 			DataSetManager datasetManager = p.getDataSetManager();
 			DataSet ds = datasetManager.getDataSet(id);
 			Query rs = ds.getQuery();
-			System.out.println(rs.toString());
 			rs.open();
 			int i = 0;
 			while (rs.next() && i++ < 20) {
