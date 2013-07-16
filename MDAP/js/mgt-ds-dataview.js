@@ -1,3 +1,172 @@
+Mgt.showColumn = function(tabIndex,subType,dsIndex,dsID){
+	var type = "ds";
+	
+	$.getJSON(Common.dsInfoUrl(),{
+		id: dsID
+	},function(data){
+		var feature = data.datafeature;
+		var sta = 0;
+		var geo = 0;
+		for(var i = 0; i < feature.length; i++){
+			if(feature[i] == "GeoFeature"){
+				geo = 1;
+			}else if(feature[i] == "DistributionFeature"){
+				sta = 1;
+			}
+		}
+		
+		if((sta == 0) && (geo == 0)){
+			$("#" + type + "-" + subType + "-mgt-select-column-title-" + tabIndex + "-" + dsIndex).empty();
+			$("<span>this data set can't create any data view</span>").appendTo(selectTitle);
+			return;
+		}
+		$("#" + type + "-" + subType + "-mgt-select-column-title-" + tabIndex + "-" + dsIndex).remove();
+		
+		$.getJSON(Common.dsFieldUrl(),{
+			id: dsID
+		},function(data){
+			if(sta == 1){
+				Mgt.selector(tabIndex,subType,dsIndex,"sta",dsID);
+				$("<span>create/show a stat data view</span>")
+					.appendTo("#" + type + "-" + subType + "-mgt-sta-selector-title-" + tabIndex + "-" + dsIndex);
+				$("<span>choose a key: </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex);
+				
+				for(var i = 0; i < data.length; i++){
+					if(data[i].functionality == "Identifier"){
+						$("<input type = 'radio' name = 'key' value = '" + i + "' " +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','sta');\"/><span>" +
+							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-key-" + tabIndex + "-" + dsIndex);
+					}else{
+						$("<input type = 'checkbox' value = '" + i + "' " +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','sta');\"/><span>" +
+							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-sta-options-value-" + tabIndex + "-" + dsIndex);
+					}
+				}
+			}
+			if(geo == 1){
+				Mgt.selector(tabIndex,subType,dsIndex,"geo",dsID);
+				$("<span>create/show a geo data view</span>")
+					.appendTo("#" + type + "-" + subType + "-mgt-geo-selector-title-" + tabIndex + "-" + dsIndex);
+				$("<span>keys:&nbsp;&nbsp;&nbsp;&nbsp;</span>")
+					.appendTo("#" + type + "-" + subType + "-mgt-geo-options-key-" + tabIndex + "-" + dsIndex);
+				
+				for(var i = 0; i < data.length; i++){
+					if(data[i].functionality == "Latitude"){
+						$("<span class = '" + i + "'>" + data[i].fieldName + "&nbsp;&nbsp;&nbsp;&nbsp;</span>")
+							.appendTo("#" + type + "-" + subType + "-mgt-geo-options-key-" + tabIndex + "-" + dsIndex);
+					}
+					if((data[i].functionality != "Latitude") && (data[i].functionality != "Longitude")){
+						$("<input type = 'checkbox' value = '" + i + "' " +
+							"onclick = \"Mgt.dataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "','geo');\"/><span>" +
+							data[i].fieldName + " </span>").appendTo("#" + type + "-" + subType + "-mgt-geo-options-value-" + tabIndex + "-" + dsIndex);
+					}
+				}
+				for(var i = 0; i < data.length; i++){
+					if(data[i].functionality == "Longitude"){
+						$("<span class = '" + i + "'>" + data[i].fieldName + "&nbsp;&nbsp;&nbsp;&nbsp;</span>")
+							.appendTo("#" + type + "-" + subType + "-mgt-geo-options-key-" + tabIndex + "-" + dsIndex);
+					}
+				}
+			}
+			
+			Mgt.adjustHeight();
+		}).error(function(){
+			alert("Oops, we got an error...");
+			return;
+		});
+	}).error(function(){
+		alert("Oops, we got an error...");
+		return;
+	});
+};
+
+Mgt.selector = function(tabIndex,subType,dsIndex,dvType,dsID){
+	var type = "ds";
+	
+	var selector = document.createElement("div");
+	selector.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-selector-" + tabIndex + "-" + dsIndex);
+	selector.setAttribute("class","mgt-selector");
+	$(selector).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+	
+	var title = document.createElement("div");
+	title.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-selector-title-" + tabIndex + "-" + dsIndex);
+	title.setAttribute("class","mgt-selector-title");
+	$(title).appendTo(selector);
+	
+	var dvList = document.createElement("div");
+	dvList.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-data-view-list-" + tabIndex + "-" + dsIndex);
+	dvList.setAttribute("class","mgt-dv-list");
+	$(dvList).appendTo(selector);
+	
+	var options = document.createElement("div");
+	options.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-options-" + tabIndex + "-" + dsIndex);
+	options.setAttribute("class","mgt-options");
+	$(options).appendTo(selector);
+	
+	var key = document.createElement("div");
+	key.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-options-key-" + tabIndex + "-" + dsIndex);
+	key.setAttribute("class","mgt-options-key");
+	$(key).appendTo(options);
+	
+	var value = document.createElement("div");
+	value.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-options-value-" + tabIndex + "-" + dsIndex);
+	value.setAttribute("class","mgt-options-value");
+	$(value).appendTo(options);
+	$("<span>choose some values: </span>").appendTo(value);
+	
+	var button = document.createElement("div");
+	button.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-options-button-" + tabIndex + "-" + dsIndex);
+	button.setAttribute("class","mgt-options-button");
+	$(button).appendTo(options);
+	$("<input type = 'button' value = 'show this data view' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;' " +
+		"onclick = \"Mgt.showDataview(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dvType + "','" + dsID + "');\"/>").appendTo(button);
+	
+	var dataview = document.createElement("div");
+	dataview.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-data-view-" + tabIndex + "-" + dsIndex);
+	dataview.setAttribute("class","mgt-data-view");
+	$(dataview).appendTo(selector);
+	$(dataview).css({
+		"display": "none"
+	});
+	
+	var dvContainer = document.createElement("div");
+	dvContainer.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-data-view-container-" + tabIndex + "-" + dsIndex);
+	dvContainer.setAttribute("class","mgt-data-view-container");
+	$(dvContainer).appendTo(dataview);
+	
+	var saveDv = document.createElement("div");
+	saveDv.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-save-data-view-" + tabIndex + "-" + dsIndex);
+	saveDv.setAttribute("class","mgt-save-data-view");
+	$(saveDv).appendTo(dataview);
+	
+	title = document.createElement("div");
+	title.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
+	title.setAttribute("class","mgt-save-data-view-title");
+	$(title).appendTo(saveDv);
+	$("<span>save this data view</span><span>").appendTo(title);
+	
+	var text = document.createElement("div");
+	text.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex);
+	text.setAttribute("class","mgt-save-data-view-text");
+	$(text).appendTo(saveDv);
+	$("<span>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type = 'text' maxlength = '16' id = 'dvName' " +
+		"style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;'/><br/>").appendTo(text);
+	$("<span>Description:</span><input type = 'text' id = 'dvDes' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;'/>").appendTo(text);
+	
+	button = document.createElement("div");
+	button.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
+	button.setAttribute("class","mgt-save-data-view-button");
+	$(button).appendTo(saveDv);
+	
+	var input = document.createElement("input");
+	$(input).attr("type","button");
+	$(input).attr("style","font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;");
+	$(input).val("save");
+	$(input).appendTo(button);
+	
+	Mgt.showDvList(tabIndex,subType,dsIndex,dvType,dsID);
+};
+
 Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvID,dvName,dvDes,dsID){
 	var type = "ds";
 	
@@ -11,8 +180,10 @@ Mgt.drawOptions = function(tabIndex,subType,dsIndex,dvType,dvID,dvName,dvDes,dsI
 		var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex);
 		text.empty();
 		$("<span id = '" + dvID + "'>Old Name:&nbsp;&nbsp;&nbsp;</span><span>" + dvName + "</span><br/>").appendTo(text);
-		$("<span>New Name:</span><input type = 'text' value = '" + dvName + "' maxlength = '16'/><br/>").appendTo(text);
-		$("<span>Description: </span><input type = 'text' value = '" + dvDes + "'/>").appendTo(text);
+		$("<span>New Name:</span><input type = 'text' value = '" + dvName + "' maxlength = '16' " +
+			"style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;'/><br/>").appendTo(text);
+		$("<span>Description: </span><input type = 'text' value = '" + dvDes + "' " +
+			"style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;'/>").appendTo(text);
 		
 		var button = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
 		button.empty();
@@ -490,8 +661,9 @@ Mgt.revertFrame = function(tabIndex,subType,dsIndex,dvType){
 	
 	var text = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-text-" + tabIndex + "-" + dsIndex);
 	text.empty();
-	$("<span>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type = 'text' maxlength = '16'/><br/>").appendTo(text);
-	$("<span>Description:</span><input type = 'text'/>").appendTo(text);
+	$("<span>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type = 'text' maxlength = '16' " +
+		"style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;'/><br/>").appendTo(text);
+	$("<span>Description:</span><input type = 'text' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;'/>").appendTo(text);
 	
 	var button = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-button-" + tabIndex + "-" + dsIndex);
 	button.empty();

@@ -33,9 +33,9 @@ Common.favWidth = function(){return 200;};
 
 Common.ip = function(){
 	/*****aplha*****/
-//	return "http://10.1.1.55:8080/keg2/rest/";
+	return "http://10.1.1.55:8080/keg2/rest/";
 	/*****release*****/
-	return "http://10.1.1.55:8080/keg1/rest/";
+//	return "http://10.1.1.55:8080/keg1/rest/";
 };
 
 /*****post*****/

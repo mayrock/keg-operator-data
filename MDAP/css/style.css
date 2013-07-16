@@ -335,7 +335,7 @@ body{
 	border-bottom: 1px solid #282828;
 }
 
-.mgt-sql-title,.mgt-select-column-title{
+.mgt-sql-operation-title,.mgt-select-column-title{
 	margin-bottom: 5px;
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -345,7 +345,7 @@ body{
 	border: 1px solid #282828;
 }
 
-.mgt-sql-container,.mgt-selector{
+.mgt-sql,.mgt-selector{
 	position: relative;
 	margin-bottom: 5px;
 	font-family: Times New Roman,'楷体';
@@ -353,15 +353,30 @@ body{
 	border: 1px solid #282828;
 }
 
-.mgt-selector-title{
+.mgt-sql-title,.mgt-selector-title{
 	padding-top: 5px;
 	padding-bottom: 5px;
 	text-align: center;
 	border-bottom: 1px solid #282828;
 }
 
-.mgt-sql-options,.mgt-options{
+.mgt-sql-options{
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+.mgt-options{
 	padding: 5px;
+}
+
+.mgt-sql-text{
+	padding-left: 5px;
+}
+
+.mgt-sql-button{
+	padding-bottom: 5px;
+	padding-left: 40px;
 }
 
 .mgt-options-key,.mgt-options-value,.mgt-save-data-view-text{
@@ -369,7 +384,7 @@ body{
 	padding-left: 20px;
 }
 
-.mgt-sql-button,.mgt-options-button,.mgt-save-data-view-button{
+.mgt-options-button,.mgt-save-data-view-button{
 	padding-left: 40px;
 }
 
