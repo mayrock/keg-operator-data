@@ -448,7 +448,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdscs")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetField(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@QueryParam("fields") JSONArray jsonFileds,
@@ -513,13 +513,15 @@ public class DsGetFunctions {
 	 * @param value
 	 * @return
 	 */
-	@POST
+	@GET
 	@Path("/getdsres")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetValueOfOpr(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@QueryParam("jsonoper") JSONArray jsonOper) {
 		log.info(uriInfo.getAbsolutePath());
+		System.out.println(id + " " + jsonOper);
+		String func = null;
 		String fieldname = null;
 		String opr = null;
 		String value = null;
@@ -537,16 +539,21 @@ public class DsGetFunctions {
 			DataSet ds = datasetManager.getDataSet(id);
 			Query q = ds.getQuery();
 			for (int i = 0; i < jsonOper.length(); i++) {
-				JSONObject job = (JSONObject) jsonOper.get(i);
-				fieldname = job.getString("fieldname");
-				opr = job.getString("opr");
-				value = job.getString("value");
-				System.out.println("getDatasetValueOfOpr " + id + " "
-						+ fieldname + " " + opr + " " + value + " "
-						+ uriInfo.getAbsolutePath());
-				list_df = new ArrayList<JField>();
-				DataField df = ds.getField(fieldname);
-				q = q.whereOr(fieldname, Operator.parse(opr), value);
+				JSONArray ja = (JSONArray) jsonOper.get(i);
+
+				if (ja.getString(0).equals("or")) {
+					q = q.whereOr(ja.getString(1),
+							Operator.valueOf(ja.getString(2)), ja.get(3));
+				} else if (ja.getString(0).equals("and")) {
+					q = q.whereAnd(ja.getString(1),
+							Operator.valueOf(ja.getString(2)), ja.get(3));
+				}
+
+//				System.out.println("getDatasetValueOfOpr " + id + " "
+//						+ fieldname + " " + opr + " " + value + " "
+//						+ uriInfo.getAbsolutePath());
+//				list_df = new ArrayList<JField>();
+//				DataField df = ds.getField(fieldname);
 			}
 			q.open();
 			int ii = 0;
