@@ -22,7 +22,8 @@ public class OracleProvider extends JdbcProvider {
 	public String getQueryString(Query q) {
 		return this.getQueryString(q, 0);
 	}
-//
+
+	//
 	@Override
 	public void openQuery(Query query) throws DataProviderException {
 		if (!results.containsKey(query)) {
@@ -91,8 +92,9 @@ public class OracleProvider extends JdbcProvider {
 
 		List<WhereClause> wheres = q.getWhereClauses();
 		if (wheres != null && wheres.size() > 0) {
-			sb.append(" WHERE rownum < 1000 ");
+			sb.append(" WHERE ");
 			sb.append(super.whereToSB(wheres, aliasMap));
+			sb.append("and rownum < 1000 ");
 		} else
 			sb.append(" WHERE rownum < 1000 ");
 

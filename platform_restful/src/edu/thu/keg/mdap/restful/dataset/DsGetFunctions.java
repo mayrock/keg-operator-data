@@ -545,21 +545,18 @@ public class DsGetFunctions {
 					q = q.whereOr(ja.getString(1),
 							Operator.valueOf(ja.getString(2)), ja.get(3));
 				} else if (ja.getString(0).equals("and")) {
+					if (i == 0)
+						throw new IllegalArgumentException(
+								"the first func must be 'or'!");
 					q = q.whereAnd(ja.getString(1),
 							Operator.valueOf(ja.getString(2)), ja.get(3));
 				}
-
-//				System.out.println("getDatasetValueOfOpr " + id + " "
-//						+ fieldname + " " + opr + " " + value + " "
-//						+ uriInfo.getAbsolutePath());
-//				list_df = new ArrayList<JField>();
-//				DataField df = ds.getField(fieldname);
 			}
 			q.open();
 			int ii = 0;
 			List<JField> line_dfs = new ArrayList<>();
 			JField line_df = null;
-			while (q.next() && ii++ < 2) {
+			while (q.next() && ii++ < 20) {
 				for (DataField df : q.getFields()) {
 					line_df = new JField();
 					line_df.setValue(q.getValue(df).toString());
@@ -571,7 +568,7 @@ public class DsGetFunctions {
 				all_dfs.add(jdsl);
 			}
 		} catch (OperationNotSupportedException | DataProviderException
-				| JSONException e) {
+				| JSONException | IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			log.warn(e.getMessage());
 		}
