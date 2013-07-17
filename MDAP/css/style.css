@@ -357,16 +357,9 @@ body{
 	padding-top: 5px;
 	padding-bottom: 5px;
 	text-align: center;
-	border-bottom: 1px solid #282828;
 }
 
-.mgt-sql-options{
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-left: 5px;
-}
-
-.mgt-options{
+.mgt-sql-options,.mgt-options{
 	padding: 5px;
 }
 

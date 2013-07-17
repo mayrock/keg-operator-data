@@ -1,3 +1,172 @@
+Mgt.selectSQL = function(tabIndex,subType,dsIndex,dsID){
+	var type = "ds";
+	
+	$.getJSON(Common.dsFieldUrl(),{
+		id: dsID
+	},function(data){
+		var selectSQL = $("#" + type + "-" + subType + "-mgt-sql-select-" + tabIndex + "-" + dsIndex);
+		var title = document.createElement("div");
+		title.setAttribute("id",type + "-" + subType + "-mgt-sql-select-title-" + tabIndex + "-" + dsIndex);
+		title.setAttribute("class","mgt-sql-title");
+		$(title).appendTo(selectSQL);
+		$("<span>select operation</span>").appendTo(title);
+		
+		var options = document.createElement("div");
+		options.setAttribute("id",type + "-" + subType + "-mgt-sql-select-options-" + tabIndex + "-" + dsIndex);
+		options.setAttribute("class","mgt-sql-options");
+		$(options).appendTo(selectSQL);
+		
+		var table = $("<table></table>");
+		table.appendTo(options);
+		
+		var nameArr = $.parseJSON("[]");
+		for(var i = 0; i < data.length; i++){
+			nameArr[i] = data[i].fieldName;
+		}
+		Mgt.addSelectRow(0,tabIndex,subType,dsIndex,JSON.stringify(nameArr));
+		
+		var button = document.createElement("div");
+		button.setAttribute("id",type + "-" + subType + "-mgt-sql-select-button-" + tabIndex + "-" + dsIndex);
+		button.setAttribute("class","mgt-sql-button");
+		$(button).appendTo(selectSQL);
+		$("<input type = 'button' value = 'select' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;cursor: pointer;' " +
+			"onclick = \"Mgt.selectOp(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "');\"/>").appendTo(button);
+		
+		Mgt.adjustHeight();
+	}).error(function(){
+		alert("Oops, we got an error...");
+		return;
+	});
+};
+
+Mgt.addSelectRow = function(flag,tabIndex,subType,dsIndex,nameArr){
+	var type = "ds";
+	var options = $("#" + type + "-" + subType + "-mgt-sql-select-options-" + tabIndex + "-" + dsIndex);
+	var table = options.find("table").eq(0);
+	var tr = $("<tr></tr>");
+	tr.appendTo(table);
+	
+	var td = $("<td></td>");
+	td.appendTo(tr);
+	td.css({
+		"padding-left": "10px"
+	});
+	var select = new Object;
+	if(flag == 1){
+		select = $("<select></select>");
+		select.appendTo(td);
+		select.css({
+			"font-family": "Times New Roman,\"楷体\"",
+			"font-size": "16px"
+		});
+		$("<option value = 'and'>&nbsp;and&nbsp;&nbsp;</option>").appendTo(select);
+		$("<option value = 'or'>&nbsp;&nbsp;or&nbsp;&nbsp;</option>").appendTo(select);
+	}
+	
+	td = $("<td></td>");
+	td.appendTo(tr);
+	td.css({
+		"padding-left": "10px"
+	});
+	var select = $("<select></select>");
+	select.appendTo(td);
+	select.css({
+		"font-family": "Times New Roman,\"楷体\"",
+		"font-size": "16px"
+	});
+	var jsonArr = $.parseJSON(nameArr);
+	for(var i = 0; i < jsonArr.length; i++){
+		$("<option value = '" + jsonArr[i] + "'>" + jsonArr[i] + "</option>").appendTo(select);
+	}
+	
+	td = $("<td></td>");
+	td.appendTo(tr);
+	td.css({
+		"padding-left": "10px"
+	});
+	select = $("<select></select>");
+	select.appendTo(td);
+	select.css({
+		"font-family": "Times New Roman,\"楷体\"",
+		"font-size": "16px"
+	});
+	$("<option value = 'EQ'>&nbsp;&nbsp;=&nbsp;&nbsp;</option>").appendTo(select);
+	$("<option value = 'GT'>&nbsp;&nbsp;>&nbsp;&nbsp;</option>").appendTo(select);
+	$("<option value = 'LT'>&nbsp;&nbsp;<&nbsp;&nbsp;</option>").appendTo(select);
+	$("<option value = 'GEQ'>&nbsp;>=&nbsp;&nbsp;</option>").appendTo(select);
+	$("<option value = 'LEQ'>&nbsp;<=&nbsp;&nbsp;</option>").appendTo(select);
+	
+	td = $("<td></td>");
+	td.appendTo(tr);
+	td.css({
+		"padding-left": "10px"
+	});
+	$("<input type = 'text' maxlength = '16' style = 'font-family: Times New Roman,\"楷体\";font-size: 16px;'/><br/>").appendTo(td);
+	
+	nameArr = "[";
+	for(var i = 0; i < jsonArr.length; i++){
+		nameArr += "\\\"" + jsonArr[i] + "\\\"";
+		if(i == jsonArr.length - 1){
+			nameArr += "]";
+		}else{
+			nameArr += ",";
+		}
+	}
+	td = $("<td></td>");
+	td.appendTo(tr);
+	td.css({
+		"padding-left": "10px"
+	});
+	var img = new Object;
+	if(flag == 0){
+		img = $("<img/>");
+		img.appendTo(td);
+		img.attr("src","css/images/add_256x256.png");
+		img.attr("onclick","Mgt.addSelectRow(1," + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + nameArr + "');");
+		img.css({
+			"width": "16px",
+			"margin-top": "6px"
+		});
+	}
+	
+	Mgt.adjustHeight();
+};
+
+Mgt.selectOp = function(tabIndex,subType,dsIndex,dsID){
+	var type = "ds";
+	
+	var tr = $("#" + type + "-" + subType + "-mgt-sql-select-options-" + tabIndex + "-" + dsIndex).find("tr");
+	var jsonOper = $.parseJSON("[]");
+	for(var i = 0; i < tr.length; i++){
+		var td = tr.eq(i).find("td");
+		jsonOper[i] = $.parseJSON("[]");
+		if(i == 0){
+			jsonOper[i][0] = "and";
+		}else{
+			jsonOper[i][0] = td.eq(0).find("select").val();
+		}
+		jsonOper[i][1] = td.eq(1).find("select").val();
+		jsonOper[i][2] = td.eq(2).find("select").val();
+		jsonOper[i][3] = td.eq(3).find("input").val();
+	}
+	console.log(JSON.stringify(jsonOper));
+	
+	$.getJSON(Common.whereSQLUrl(),{
+		id: dsID,
+		jsonoper: JSON.stringify(jsonOper)
+	}).done(function(data,textStatus,jqXHR){
+		console.log(data);
+		console.log(textStatus);
+		console.log(jqXHR);
+	}).fail(function(jqXHR,textStatus,errorThrown){
+		console.log(jqXHR);
+		console.log(textStatus);
+		console.log(errorThrown);
+		alert("Oops, we got an error...");
+		return;
+	});
+};
+
 Mgt.showSQL = function(tabIndex,subType,dsIndex,dsID){
 	var type = "ds";
 	
@@ -16,12 +185,7 @@ Mgt.showSQL = function(tabIndex,subType,dsIndex,dsID){
 		title.setAttribute("class","mgt-sql-title");
 		$(title).appendTo(groupBy);
 		$("<span>group by operation</span>").appendTo(title);
-		/*
-		var dvList = document.createElement("div");
-	dvList.setAttribute("id",type + "-" + subType + "-mgt-" + dvType + "-data-view-list-" + tabIndex + "-" + dsIndex);
-	dvList.setAttribute("class","mgt-dv-list");
-	$(dvList).appendTo(selector);
-		*/
+		
 		var options = document.createElement("div");
 		options.setAttribute("id",type + "-" + subType + "-mgt-sql-options-" + tabIndex + "-" + dsIndex);
 		options.setAttribute("class","mgt-sql-options");
@@ -29,20 +193,38 @@ Mgt.showSQL = function(tabIndex,subType,dsIndex,dsID){
 		
 		var table = $("<table></table>");
 		table.appendTo(options);
+		table.css({
+			"border-collapse": "collapse"
+		});
+		var tr = $("<tr></tr>");
+		tr.appendTo(table);
 		for(var i = 0; i < data.length; i++){
-			var tr = $("<tr></tr>");
-			tr.appendTo(table);
 			var td = $("<td></td>");
 			td.appendTo(tr);
 			td.css({
-				"padding-left": "20px"
+				"padding-top": "5px",
+				"padding-right": "20px",
+				"padding-bottom": "5px",
+				"padding-left": "20px",
+				"text-align": "center",
+				"border": "1px solid #282828"
 			});
 			$("<span id = '" + data[i].fieldName + "'>" + data[i].fieldName + "</span>").appendTo(td);
-			td = $("<td></td>");
-			td.css({
-				"padding-left": "5px"
-			});
+		}
+		
+		tr = $("<tr></tr>");
+		tr.appendTo(table);
+		for(var i = 0; i < data.length; i++){
+			var td = $("<td></td>");
 			td.appendTo(tr);
+			td.css({
+				"padding-top": "5px",
+				"padding-right": "20px",
+				"padding-bottom": "5px",
+				"padding-left": "20px",
+				"border": "1px solid #282828"
+			});
+			
 			var select = $("<select></select>");
 			select.appendTo(td);
 			select.css({
@@ -52,7 +234,10 @@ Mgt.showSQL = function(tabIndex,subType,dsIndex,dsID){
 			if((data[i].type == "Int") || (data[i].type == "Double")){
 				$("<option value = 'GB'>group by</option>").appendTo(select);
 				$("<option value = 'COUNT'>count</option>").appendTo(select);
+				$("<option value = 'MIN'>minimum</option>").appendTo(select);
+				$("<option value = 'MAX'>maximum</option>").appendTo(select);
 				$("<option value = 'SUM'>sum</option>").appendTo(select);
+				$("<option value = 'AVG'>average</option>").appendTo(select);
 			}else{
 				$("<option value = 'GB'>group by</option>").appendTo(select);
 				$("<option value = 'COUNT'>count</option>").appendTo(select);

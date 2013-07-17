@@ -531,6 +531,12 @@ Mgt.showDsTable = function(tabIndex,subType,dsIndex,dsID,dsName){
 				"width": dataWidth
 			});
 			
+			var selectSQL = document.createElement("div");
+			selectSQL.setAttribute("id",type + "-" + subType + "-mgt-sql-select-" + tabIndex + "-" + dsIndex);
+			selectSQL.setAttribute("class","mgt-sql");
+			$(selectSQL).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			Mgt.selectSQL(tabIndex,subType,dsIndex,dsID);
+			
 			var sqlTitle = document.createElement("div");
 			sqlTitle.setAttribute("id",type + "-" + subType + "-mgt-sql-operation-title-" + tabIndex + "-" + dsIndex);
 			sqlTitle.setAttribute("class","mgt-sql-operation-title");
