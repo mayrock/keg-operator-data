@@ -515,7 +515,7 @@ public class DsGetFunctions {
 	 */
 	@GET
 	@Path("/getdsres")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public JSONWithPadding getDatasetValueOfOpr(@QueryParam("id") String id,
 			@QueryParam("jsoncallback") @DefaultValue("fn") String callback,
 			@QueryParam("jsonoper") JSONArray jsonOper) {
@@ -540,7 +540,8 @@ public class DsGetFunctions {
 			Query q = ds.getQuery();
 			for (int i = 0; i < jsonOper.length(); i++) {
 				JSONArray ja = (JSONArray) jsonOper.get(i);
-
+				if (ja.get(3) == null)
+					continue;
 				if (ja.getString(0).equals("or")) {
 					q = q.whereOr(ja.getString(1),
 							Operator.valueOf(ja.getString(2)), ja.get(3));
