@@ -473,9 +473,6 @@ Mgt.showDsTable = function(tabIndex,subType,dsIndex,dsID,dsName){
 	$.getJSON(Common.dsFieldUrl(),{
 		id: dsID
 	},function(data){
-		if(type == "dv"){
-			
-		}
 		var len = data.length;
 		var tableData = new google.visualization.DataTable();
 		for(var i = 0; i < len; i++){
@@ -536,6 +533,24 @@ Mgt.showDsTable = function(tabIndex,subType,dsIndex,dsID,dsName){
 			selectSQL.setAttribute("class","mgt-sql");
 			$(selectSQL).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
 			Mgt.selectSQL(tabIndex,subType,dsIndex,dsID);
+			
+			var sDataTitle = document.createElement("div");
+			sDataTitle.setAttribute("id",type + "-" + subType + "-mgt-sql-select-detail-data-title-" + tabIndex + "-" + dsIndex);
+			sDataTitle.setAttribute("class","mgt-detail-data-title");
+			$(sDataTitle).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			$(sDataTitle).css({
+				"display": "none",
+				"margin-bottom": 0,
+				"border-bottom-width": 0
+			});
+			
+			var sDetailData = document.createElement("div");
+			sDetailData.setAttribute("id",type + "-" + subType + "-mgt-sql-select-detail-data-" + tabIndex + "-" + dsIndex);
+			sDetailData.setAttribute("class","mgt-detail-data");
+			$(sDetailData).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			$(sDetailData).css({
+				"display": "none"
+			});
 			
 			var sqlTitle = document.createElement("div");
 			sqlTitle.setAttribute("id",type + "-" + subType + "-mgt-sql-operation-title-" + tabIndex + "-" + dsIndex);

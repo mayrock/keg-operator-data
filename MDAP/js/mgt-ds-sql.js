@@ -127,8 +127,27 @@ Mgt.addSelectRow = function(flag,tabIndex,subType,dsIndex,nameArr){
 			"width": "16px",
 			"margin-top": "6px"
 		});
+	}else{
+		img = $("<img/>");
+		img.appendTo(td);
+		img.attr("src","css/images/close_256x256.png");
+		var len = table.find("tr").length;
+		img.attr("onclick","Mgt.delSelectRow(" + (len - 1) + "," + tabIndex + ",'" + subType + "'," + dsIndex + ");");
+		img.css({
+			"width": "16px",
+			"margin-top": "6px"
+		});
 	}
 	
+	Mgt.adjustHeight();
+};
+
+Mgt.delSelectRow = function(index,tabIndex,subType,dsIndex){
+	var type = "ds";
+	var options = $("#" + type + "-" + subType + "-mgt-sql-select-options-" + tabIndex + "-" + dsIndex);
+	var table = options.find("table").eq(0);
+	var tr = table.find("tr");
+	tr.eq(index).remove();
 	Mgt.adjustHeight();
 };
 
@@ -155,9 +174,80 @@ Mgt.selectOp = function(tabIndex,subType,dsIndex,dsID){
 		id: dsID,
 		jsonoper: JSON.stringify(jsonOper)
 	}).done(function(data,textStatus,jqXHR){
-		console.log(data);
-		console.log(textStatus);
-		console.log(jqXHR);
+		var l = data.length;
+		
+		var detailData = $("#" + type + "-" + subType + "-mgt-sql-select-detail-data-" + tabIndex + "-" + dsIndex);
+		detailData.empty();
+		detailData.css({
+			"display": "block",
+			"width": "auto"
+		});
+		
+		var title = $("#" + type + "-" + subType + "-mgt-sql-select-detail-data-title-" + tabIndex + "-" + dsIndex);
+		title.empty();
+		title.css({
+			"display": "block",
+			"width": "auto"
+		});
+		
+		if(l == 0){
+			$("<span>no data found of this select-where operation</span>").appendTo(title);
+			Mgt.adjustHeight();
+			return;
+		}else{
+			$("<span>detail data of this select-where operation</span>").appendTo(title);
+		}
+		
+		$.getJSON(Common.dsFieldUrl(),{
+			id: dsID
+		}).done(function(fieldData,textStatus,jqXHR){
+			var len = fieldData.length;
+			var tableData = new google.visualization.DataTable();
+			for(var i = 0; i < len; i++){
+				tableData.addColumn("string",fieldData[i].fieldName);
+			}
+			
+			var arr = "[";
+			for(var i = 0; i < l; i++){
+				arr += "[";
+				for(var j = 0; j < len; j++){
+					arr += "\"" + data[i].field[j].value + "\"";
+					if(j == len - 1){
+						arr += "]";
+					}else{
+						arr += ",";
+					}
+				}
+				if(i == l - 1){
+					arr += "]";
+				}else{
+					arr += ",";
+				}
+			}
+			
+			tableData.addRows($.parseJSON(arr));
+			var table = new google.visualization.Table(
+				document.getElementById(type + "-" + subType + "-mgt-sql-select-detail-data-" + tabIndex + "-" + dsIndex));
+			table.draw(tableData,{showRowNumber: true});
+			
+			var dataWidth =
+				$("#" + type + "-" + subType + "-mgt-sql-select-detail-data-" + tabIndex + "-" + dsIndex + " .google-visualization-table-table")
+					.width();
+			title.css({
+				"width": dataWidth
+			});
+			detailData.css({
+				"width": dataWidth
+			});
+			
+			Mgt.adjustHeight();
+		}).fail(function(jqXHR,textStatus,errorThrown){
+			console.log(jqXHR);
+			console.log(textStatus);
+			console.log(errorThrown);
+			alert("Oops, we got an error...");
+			return;
+		});
 	}).fail(function(jqXHR,textStatus,errorThrown){
 		console.log(jqXHR);
 		console.log(textStatus);
