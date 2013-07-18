@@ -555,13 +555,15 @@ public class DsGetFunctions {
 			}
 			q.open();
 			int ii = 0;
-			List<JField> line_dfs = new ArrayList<>();
+			List<JField> line_dfs;
 			JField line_df = null;
 			while (q.next() && ii++ < 20) {
+				line_dfs = new ArrayList<>();
 				for (DataField df : q.getFields()) {
 					line_df = new JField();
 					line_df.setValue(q.getValue(df).toString());
-					line_df.setType(df.getClass().getSimpleName());
+					line_df.setType(df.getFieldType().getJavaClass()
+							.getSimpleName());
 					line_dfs.add(line_df);
 				}
 				JDatasetLine jdsl = new JDatasetLine();
