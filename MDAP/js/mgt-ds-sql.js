@@ -141,7 +141,7 @@ Mgt.selectOp = function(tabIndex,subType,dsIndex,dsID){
 		var td = tr.eq(i).find("td");
 		jsonOper[i] = $.parseJSON("[]");
 		if(i == 0){
-			jsonOper[i][0] = "and";
+			jsonOper[i][0] = "or";
 		}else{
 			jsonOper[i][0] = td.eq(0).find("select").val();
 		}
