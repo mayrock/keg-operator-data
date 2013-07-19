@@ -31,7 +31,7 @@ Geo.loadData = function(tabIndex,dsIndex,dvID,type){
 					arr += data[i].values[j].value + "\n";
 				}
 				Common.mapInfoArr[tabIndex][dsIndex][i] = new google.maps.Marker({
-					position : new google.maps.LatLng(data[i].indentifiers[0].value,data[i].indentifiers[1].value),
+					position : new google.maps.LatLng(data[i].identifiers[0].value,data[i].identifiers[1].value),
 					title : arr,
 					/*****get a good icon image*****/
 //					icon : "css/images/.png"
@@ -44,7 +44,7 @@ Geo.loadData = function(tabIndex,dsIndex,dvID,type){
 					strokeWeight: 2,
 					fillColor: "gray",
 					fillOpacity: 1.0,
-					center: new google.maps.LatLng(data[i].indentifiers[0].value,data[i].indentifiers[1].value),
+					center: new google.maps.LatLng(data[i].identifiers[0].value,data[i].identifiers[1].value),
 					radius: 250
 				});
 			}

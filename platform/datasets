@@ -1113,8 +1113,8 @@
           <edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>Identifier</edu.thu.keg.mdap.datamodel.DataField_-FieldFunctionality>
           <list>
             <edu.thu.keg.mdap.datamodel.GeneralDataField>
-              <name>EN_NAME</name>
-              <queryName>EN_NAME</queryName>
+              <name>CN_NAME</name>
+              <queryName>CN_NAME</queryName>
               <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../.."/>
               <desps>
                 <messages>
@@ -1459,8 +1459,8 @@
         <state>Ready</state>
         <fields>
           <edu.thu.keg.mdap.datamodel.GeneralDataField>
-            <name>EN_NAME</name>
-            <queryName>EN_NAME</queryName>
+            <name>CN_NAME</name>
+            <queryName>CN_NAME</queryName>
             <dataset class="edu.thu.keg.mdap_impl.datamodel.DataSetImpl" reference="../../../../../../datasets/edu.thu.keg.mdap__impl.datamodel.DataSetImpl[10]"/>
             <desps>
               <messages>

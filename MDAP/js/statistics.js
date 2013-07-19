@@ -246,7 +246,7 @@ Sta.showChart = function(tabIndex,dvIndex,chartIndex,ccName){
 		},function(data){
 			var l = data.length;
 			for(var i = 0; i < l; i++){
-				key[i] = data[i].indentifiers[0].value;
+				key[i] = data[i].identifiers[0].value;
 				value[i] = new Array();
 				for(var j = 0; j < len; j++){
 					value[i][j] = data[i].values[j].value;
