@@ -83,6 +83,8 @@ public class DsAdFunctions {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	// @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
 	public Response runSQL(@FormParam("dbname") String dbname,
+			@FormParam("user") String user,
+			@FormParam("password") String pssword,
 			@FormParam("sql") String sql, @FormParam("database") String db,
 			@FormParam("username") String username,
 			@FormParam("password") String password) {
@@ -94,7 +96,7 @@ public class DsAdFunctions {
 			switch (db) {
 			case "sqlserver":
 				provider = p.getDataProviderManager().getDefaultSQLProvider(
-						dbname);
+						dbname, user, password);
 				jdbc = (JdbcProvider) provider;
 				jdbc.execute(sql);
 				break;
@@ -131,7 +133,9 @@ public class DsAdFunctions {
 	@Path("/addds")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	// @Produces({ "application/javascript", MediaType.APPLICATION_JSON })
-	public Response createDataset(@FormParam("connstr") String connstr,
+	public Response createDataset(@FormParam("dbname") String dbname,
+			@FormParam("user") String user,
+			@FormParam("password") String password,
 			@FormParam("name") String name,
 			@FormParam("description") String description,
 			@FormParam("loadable") boolean loadable,
@@ -151,7 +155,7 @@ public class DsAdFunctions {
 				throw new UserNotInPoolException("the cookies is timeout!");
 			Platform p = (Platform) servletcontext.getAttribute("platform");
 			DataProvider provider = p.getDataProviderManager()
-					.getDefaultSQLProvider(connstr);
+					.getDefaultSQLProvider(dbname, user, password);
 			if ((provider == null)) {
 				return Response.status(409).entity("provider not found!\n")
 						.build();
@@ -183,8 +187,8 @@ public class DsAdFunctions {
 					provider, loadable, fields);
 			List<String> users_list = new ArrayList<>();
 			for (int i = 0; i < limitedusers.length(); i++) {
-				JSONObject user = limitedusers.getJSONObject(i);
-				users_list.add(user.getString("limiteduser"));
+				JSONObject users = limitedusers.getJSONObject(i);
+				users_list.add(users.getString("limiteduser"));
 			}
 			p.getDataSetManager().setDataSetPermission(name, owner,
 					DataSetImpl.parsePermission(permission), users_list);

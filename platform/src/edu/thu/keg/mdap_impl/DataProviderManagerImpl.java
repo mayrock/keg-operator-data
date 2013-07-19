@@ -43,10 +43,10 @@ public class DataProviderManagerImpl implements DataProviderManager {
 		if (providers.containsKey(connString)) {
 			return providers.get(connString);
 		} else {
-			DataProvider p;
+			DataProvider p = null;
 			if (connString.startsWith("jdbc:oracle:thin:"))
 				p = new OracleProvider(connString);
-			else
+			else if (connString.startsWith("jdbc:microsoft:"))
 				p = new JdbcProvider(connString);
 			providers.put(connString, p);
 			return p;
@@ -54,9 +54,11 @@ public class DataProviderManagerImpl implements DataProviderManager {
 	}
 
 	@Override
-	public DataProvider getDefaultSQLProvider(String dbName) {
+	public DataProvider getDefaultSQLProvider(String dbName, String user,
+			String password) {
 		String address = Config.getProperty(Config.SqlAddress);
-		String conn = "jdbc:" + address + ";databaseName=" + dbName
+		String conn = "jdbc:microsoft:sqlserver:" + address + ";databaseName="
+				+ dbName + ";user=" + user + ";password=" + password
 				+ ";integratedSecurity=true;";
 		return getProvider(conn);
 	}

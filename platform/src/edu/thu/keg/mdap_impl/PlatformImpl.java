@@ -73,7 +73,7 @@ public class PlatformImpl implements Platform {
 		// "C:\\Users\\ybz\\GitHub\\keg-operator-data\\platform\\config.xml");
 		// Construct a new dataset
 		DataProvider provider = getDataProviderManager().getDefaultSQLProvider(
-				"BeijingData");
+				"BeijingData", "ybz_sql", "root");
 		DataProvider orclProvider = getDataProviderManager()
 				.getDefaultOracleProvider("orcl", "bj_tuoming", "root");
 		DataProvider hiveProvider = getDataProviderManager()

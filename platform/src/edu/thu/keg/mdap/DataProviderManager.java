@@ -34,7 +34,8 @@ public interface DataProviderManager {
 	 *            Name of the database
 	 * @return a provider instance for the database
 	 */
-	public DataProvider getDefaultSQLProvider(String dbName);
+	public DataProvider getDefaultSQLProvider(String dbName, String user,
+			String password);
 
 	/**
 	 * @return the instance for the default hive provider.
