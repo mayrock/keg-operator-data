@@ -183,8 +183,10 @@ public class PlatformImpl implements Platform {
 		fields[4] = new GeneralDataField("Region", FieldType.Int, "", false,
 				false, true, FieldFunctionality.Other);
 		try {
-			dsSite = getDataSetManager().createDataSet("RegionInfo2", "xm",
+			dsSite = getDataSetManager().createDataSet("RegionInfo2", "ybz",
 					"基站信息", provider, true, fields);
+			getDataSetManager().setDataSetPermission(dsSite.getId(), "ybz",
+					DataSetImpl.PERMISSION_PUBLIC, null);
 			// 3rd DataView
 
 			q = dsSite
@@ -263,8 +265,10 @@ public class PlatformImpl implements Platform {
 				FieldFunctionality.Value);
 		try {
 			dsSite = getDataSetManager().createDataSet(
-					"DataAggr_ContentTypes_Up90", "wc", "ContentType分布集",
+					"DataAggr_ContentTypes_Up90", "ybz", "ContentType分布集",
 					provider, true, fields);
+			getDataSetManager().setDataSetPermission(dsSite.getId(), "ybz",
+					DataSetImpl.PERMISSION_PUBLIC, null);
 			// 5th DataView
 
 			q = dsSite.getQuery().orderBy("times", Order.DESC);

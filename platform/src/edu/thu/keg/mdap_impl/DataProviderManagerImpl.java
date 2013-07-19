@@ -46,7 +46,7 @@ public class DataProviderManagerImpl implements DataProviderManager {
 			DataProvider p = null;
 			if (connString.startsWith("jdbc:oracle:thin:"))
 				p = new OracleProvider(connString);
-			else if (connString.startsWith("jdbc:microsoft:"))
+			else
 				p = new JdbcProvider(connString);
 			providers.put(connString, p);
 			return p;
@@ -57,9 +57,10 @@ public class DataProviderManagerImpl implements DataProviderManager {
 	public DataProvider getDefaultSQLProvider(String dbName, String user,
 			String password) {
 		String address = Config.getProperty(Config.SqlAddress);
-		String conn = "jdbc:microsoft:sqlserver:" + address + ";databaseName="
-				+ dbName + ";user=" + user + ";password=" + password
-				+ ";integratedSecurity=true;";
+		String conn = "jdbc:" + address + ";databaseName=" + dbName + ";user="
+				+ user + ";password=" + password
+				// + ";integratedSecurity=true"
+				+ ";";
 		return getProvider(conn);
 	}
 

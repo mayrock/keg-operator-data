@@ -6,4 +6,5 @@ platform/bin
 platform_restful/bin
 platform_management/bin
 platform_restful/WebContent
+platform_restful/js
 Test_Connect/bin
