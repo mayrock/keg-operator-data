@@ -636,7 +636,11 @@ Mgt.adjustHeight = function(){
 	
 	var dsIndex = $("#" + type + "-" + subType + "-tabs-" + tabIndex).tabs("option","active");
 	console.log("dsIndex:" + dsIndex);
+	
 	var height = 0;
+	var cntWidth = $("#" + type + "-" + subType + "-content-" + tabIndex).width();
+	var tabsWidth = cntWidth - 40;
+	
 	if(typeof(dsIndex) == "number"){
 		var infoWidth = $("#" + type + "-" + subType + "-info-" + tabIndex + "-" + dsIndex + " .google-visualization-table-table").width();
 		var fieldWidth = $("#" + type + "-" + subType + "-field-" + tabIndex + "-" + dsIndex + " .google-visualization-table-table").width();
@@ -652,10 +656,12 @@ Mgt.adjustHeight = function(){
 		$("#" + type + "-" + subType + "-field-" + tabIndex + "-" + dsIndex).css({
 			"width": fieldWidth
 		});
-		var width = Common.width() - $("#" + type + "-" + subType + "-tabs-ul-" + tabIndex).width();
+		
+		var mgtCntWidth = tabsWidth - $("#" + type + "-" + subType + "-tabs-ul-" + tabIndex).width() - 50;
 		$("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex).css({
-			"width": width - 150
+			"width": mgtCntWidth
 		});
+		
 		var tabHeight = $("#" + type + "-" + subType + "-tab-" + tabIndex + "-" + dsIndex).height();
 		var ulHeight = $("#" + type + "-" + subType + "-tabs-ul-" + tabIndex).height();
 		if(tabHeight >= ulHeight){
@@ -664,8 +670,12 @@ Mgt.adjustHeight = function(){
 			height = ulHeight;
 		}
 	}
+	
 	$("#" + type + "-" + subType + "-content-" + tabIndex).css({
 		"height": height + 20
+	});
+	$("#" + type + "-" + subType + "-tabs-" + tabIndex).css({
+		"width": tabsWidth
 	});
 	$("#" + type + "-content-" + tabIndex).css({
 		"height": $("#" + type + "-accordion-" + tabIndex).height() + 10

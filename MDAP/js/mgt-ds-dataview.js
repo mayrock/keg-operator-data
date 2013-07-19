@@ -299,6 +299,11 @@ Mgt.dataview = function(tabIndex,subType,dsIndex,dsID,dvType){
 	if(dataview.css("display") == "none"){
 		dataview.css("display","block");
 	}
+	if(dataview.width() < 820){
+		$("#" + type + "-" + subType + "-mgt-" + dvType + "-selector-" + tabIndex + "-" + dsIndex).css({
+			"width": "820px"
+		});
+	}
 	if(typeof(active) == "number"){
 		accordion.accordion("option","active",false);
 		accordion.accordion("option","active",0);
@@ -653,6 +658,9 @@ Mgt.revertFrame = function(tabIndex,subType,dsIndex,dvType){
 	if(dataview.css("display") == "block"){
 		dataview.css("display","none");
 	}
+	$("#" + type + "-" + subType + "-mgt-" + dvType + "-selector-" + tabIndex + "-" + dsIndex).css({
+		"width": "auto"
+	});
 	Mgt.adjustHeight();
 	
 	var title = $("#" + type + "-" + subType + "-mgt-" + dvType + "-save-data-view-title-" + tabIndex + "-" + dsIndex);
