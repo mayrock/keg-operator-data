@@ -401,7 +401,6 @@ Mgt.groupBy = function(tabIndex,subType,dsIndex,dsID){
 		alert("A column must be selected for group by!");
 		return;
 	}
-	if(text.eq(0).val() == 0)
 	
 	$.post(Common.dvSQLUrl(),{
 		datasetid: dsID,
