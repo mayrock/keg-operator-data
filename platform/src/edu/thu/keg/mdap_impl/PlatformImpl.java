@@ -84,6 +84,29 @@ public class PlatformImpl implements Platform {
 		DataSet dsSite = null;
 		DataView dv = null;
 
+		fields = new DataField[2];
+		fields[0] = new GeneralDataField("UserCount", FieldType.Int, "",
+				false, false, true, FieldFunctionality.Value);
+		fields[1] = new GeneralDataField("WebsiteCount", FieldType.Int, "", true,
+				false, true, FieldFunctionality.Identifier);
+		try {
+			dsSite = getDataSetManager().createDataSet("UserCount_WebsiteCount", "wc",
+					"上了多少个网站的用户数有多少个", provider, true, fields);
+			getDataSetManager().setDataSetPermission(dsSite.getId(), "wc",
+					DataSetImpl.PERMISSION_PUBLIC, null);
+
+			q = dsSite.getQuery().select(dsSite.getField("UserCount"),
+					dsSite.getField("WebsiteCount"));
+			dv = getDataSetManager().defineView("UserCount_WebsiteCount_dv",
+					dsSite.getOwner(), dsSite.getId(), "上了多少个网站的用户数有多少个_视图",
+					DataFeatureType.DistributionFeature, q);
+//			dv.setDescription(Locale.ENGLISH, "Area distribution hadoop");
+		} catch (OperationNotSupportedException | IllegalArgumentException
+				| DataProviderException e1) {
+			// TODO Auto-generated catch block
+			System.out.println(e1.getMessage());
+		}
+		
 		fields = new DataField[5];
 		fields[0] = new GeneralDataField("EN_NAME", FieldType.ShortString, "",
 				true, false, true, FieldFunctionality.Identifier);

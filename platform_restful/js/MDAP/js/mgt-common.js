@@ -227,21 +227,31 @@ Mgt.loadDv = function(tabIndex,dsIndex,dvID,dvName,subType){
 		tableData.addColumn('string','Identifier');
 		tableData.addColumn('string','Value');
 		
-		var arr = "[[\"" + data.datafeature + "\",\"" + data.dataviewName + "\",\"" + data.descriptionZh + "\",\"";
-		var temp = data.identifiers;
-		var i = 0;
-		for(; i < temp.length - 1; i++){
-			arr += temp[i] + ",";
+		var arr = $.parseJSON("[]");
+		arr[0] = $.parseJSON("[]");
+		arr[0][0] = data.datafeature;
+		arr[0][1] = data.dataviewName;
+		arr[0][2] = data.descriptionZh;
+		var identifiers = "";
+		if(data.hasOwnProperty("identifiers")){
+			var i = 0;
+			for(; i < data.identifiers.length - 1; i++){
+				identifiers += data.identifiers[i] + ",";
+			}
+			identifiers += data.identifiers[i];
 		}
-		arr += temp[i] + "\",\"";
-		var temp = data.values;
-		i = 0;
-		for(; i < temp.length - 1; i++){
-			arr += temp[i] + ",";
+		arr[0][3] = identifiers;
+		var values = "";
+		if(data.hasOwnProperty("values")){
+			var i = 0;
+			for(; i < data.values.length - 1; i++){
+				values += data.values[i] + ",";
+			}
+			values += data.values[i];
 		}
-		arr += temp[i] + "\"]]";
+		arr[0][4] = values;
 		
-		tableData.addRows($.parseJSON(arr));
+		tableData.addRows(arr);
 		var table = new google.visualization.Table(document.getElementById("dv-" + subType + "-info-" + tabIndex + "-" + dsIndex));
 		table.draw(tableData,{showRowNumber: false});
 	}).error(function(){
@@ -383,8 +393,15 @@ Mgt.showDvTable = function(tabIndex,subType,dsIndex,dvID,dvName){
 	$.getJSON(Common.dvInfoUrl(),{
 		id: dvID
 	},function(data){
-		var keyLen = data.identifiers.length;
-		var valueLen = data.values.length;
+		var keyLen = 0;
+		if(data.hasOwnProperty("identifiers")){
+			keyLen = data.identifiers.length;
+		}
+		var valueLen = 0;
+		if(data.hasOwnProperty("values")){
+			valueLen = data.values.length;
+		}
+		
 		var tableData = new google.visualization.DataTable();
 		for(var i = 0; i < keyLen; i++){
 			tableData.addColumn("string",data.identifiers[i]);
@@ -514,12 +531,26 @@ Mgt.showDsTable = function(tabIndex,subType,dsIndex,dsID,dsName){
 				"width": dataWidth
 			});
 			
+			var selectSQL = document.createElement("div");
+			selectSQL.setAttribute("id",type + "-" + subType + "-mgt-sql-select-" + tabIndex + "-" + dsIndex);
+			selectSQL.setAttribute("class","mgt-sql");
+			$(selectSQL).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			Mgt.selectSQL(tabIndex,subType,dsIndex,dsID);
+			
 			var sqlTitle = document.createElement("div");
-			sqlTitle.setAttribute("id",type + "-" + subType + "-mgt-sql-title-" + tabIndex + "-" + dsIndex);
-			sqlTitle.setAttribute("class","mgt-sql-title");
+			sqlTitle.setAttribute("id",type + "-" + subType + "-mgt-sql-operation-title-" + tabIndex + "-" + dsIndex);
+			sqlTitle.setAttribute("class","mgt-sql-operation-title");
 			$(sqlTitle).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
 			$("<a herf = 'javascript:void(0);' onClick = \"Mgt.showSQL(" + tabIndex + ",'" + subType + "'," + dsIndex + ",'" + dsID + "');\" " +
 				"style = 'cursor: pointer;'>do some sql operations on " + dsName + "</a>").appendTo(sqlTitle);
+			
+			var groupBy = document.createElement("div");
+			groupBy.setAttribute("id",type + "-" + subType + "-mgt-group-by-" + tabIndex + "-" + dsIndex);
+			groupBy.setAttribute("class","mgt-sql");
+			$(groupBy).appendTo("#" + type + "-" + subType + "-mgt-content-" + tabIndex + "-" + dsIndex);
+			$(groupBy).css({
+				"display": "none"
+			});
 			
 			var selectTitle = document.createElement("div");
 			selectTitle.setAttribute("id",type + "-" + subType + "-mgt-select-column-title-" + tabIndex + "-" + dsIndex);

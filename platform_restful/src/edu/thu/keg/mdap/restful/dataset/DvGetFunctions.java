@@ -144,7 +144,7 @@ public class DvGetFunctions {
 			DataContent rs = dv.getQuery();
 			rs.open();
 			int i = 0;
-			while (rs.next() && i++ < 20) {
+			while (rs.next() && i++ < 100) {
 				JDataviewLine jdataview = new JDataviewLine();
 				List<JField> identifiers = new ArrayList<>();
 				DataField[] dfs = dv.getKeyFields().toArray(new DataField[0]);

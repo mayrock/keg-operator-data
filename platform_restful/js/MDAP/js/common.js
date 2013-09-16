@@ -33,9 +33,9 @@ Common.favWidth = function(){return 200;};
 
 Common.ip = function(){
 	/*****aplha*****/
-//	return "http://10.1.1.55:8080/keg2/rest/";
-	/*****release*****/
 	return "http://10.1.1.55:8082/mdap/rest/";
+	/*****release*****/
+//	return "http://10.1.1.55:8080/keg1/rest/";
 };
 
 /*****post*****/
@@ -64,6 +64,8 @@ Common.dataviewUrl = function(){return Common.ip() + "dvg/getdvs?jsoncallback=?"
 Common.dvDataUrl = function(){return Common.ip() + "dvg/getdv?jsoncallback=?";};
 Common.dvInfoUrl = function(){return Common.ip() + "dvg/getdvinfo?jsoncallback=?";};
 Common.dvFieldUrl = function(){return Common.ip() + "dvg/getdvfds?jsoncallback=?";};
+
+Common.whereSQLUrl = function(){return Common.ip() + "dsg/getdsres?jsoncallback=?";};
 
 /*****dv post*****/
 Common.addDvUrl = function(){return Common.ip() + "dsa/adddv";};
