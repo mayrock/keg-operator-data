@@ -1,5 +1,5 @@
 *.class
-*.txt
+
 *.dat
 platform_restful/build
 platform/bin
