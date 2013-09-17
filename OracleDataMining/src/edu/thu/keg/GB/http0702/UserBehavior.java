@@ -34,4 +34,15 @@ public class UserBehavior {
 		// pstmt.setString(2, favstr);
 
 	}
+
+	int change() {
+		return 0;
+	}
+}
+
+class Child extends UserBehavior {
+
+	public int change() {
+		return 0;
+	}
 }
