@@ -3,6 +3,8 @@
  */
 package edu.thu.keg.mdap.provider;
 
+import java.sql.ResultSet;
+
 import edu.thu.keg.mdap.datamodel.DataContent;
 import edu.thu.keg.mdap.datamodel.DataField;
 import edu.thu.keg.mdap.datamodel.DataSet;
@@ -67,6 +69,12 @@ public interface DataProvider {
 	 *             when data provider gives an error
 	 */
 	public void closeQuery(Query q) throws DataProviderException;
+	/**
+	 * 提供直接sql语句的接口
+	 * @param rs
+	 * @throws DataProviderException
+	 */
+	public void closeResultSet(ResultSet rs) throws DataProviderException;
 
 	/**
 	 * Get a string representation of a Query on this provider
@@ -105,4 +113,11 @@ public interface DataProvider {
 	public String getUserName();
 
 	public String getPassword();
+/**
+ * 提供直接关闭connection的语句
+ * @param queryStr
+ * @return
+ * @throws IllegalQueryException
+ */
+	public ResultSet executeQuery(String queryStr) throws IllegalQueryException;
 }

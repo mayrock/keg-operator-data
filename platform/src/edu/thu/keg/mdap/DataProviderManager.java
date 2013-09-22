@@ -27,6 +27,9 @@ public interface DataProviderManager {
 	 */
 	public DataProvider getProvider(String connString);
 
+	public DataProvider getProvider(String dbM, String dbName, String user,
+			String password);
+
 	/**
 	 * Get a data provider for a database stored in the default DBMS
 	 * 

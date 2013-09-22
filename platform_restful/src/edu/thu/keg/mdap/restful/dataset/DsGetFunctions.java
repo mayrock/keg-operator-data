@@ -2,6 +2,9 @@ package edu.thu.keg.mdap.restful.dataset;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,6 +57,7 @@ import edu.thu.keg.mdap.datamodel.Query.Operator;
 import edu.thu.keg.mdap.datamodel.Query.Order;
 import edu.thu.keg.mdap.init.MessageInfo;
 
+import edu.thu.keg.mdap.provider.DataProvider;
 import edu.thu.keg.mdap.provider.DataProviderException;
 import edu.thu.keg.mdap.restful.exceptions.UserNotInPoolException;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JDatasetLine;
@@ -64,6 +68,7 @@ import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JGeograph;
 import edu.thu.keg.mdap.restful.jerseyclasses.dataset.JStatistic;
 import edu.thu.keg.mdap_impl.PlatformImpl;
 import edu.thu.keg.mdap_impl.datamodel.DataSetImpl;
+import edu.thu.keg.mdap_impl.provider.JdbcProvider;
 
 /**
  * the functions of dataset's get operations
@@ -90,6 +95,62 @@ public class DsGetFunctions {
 	HttpSession session = null;
 	private static Logger log = Logger.getLogger(DsGetFunctions.class
 			.getSimpleName());
+
+	// rest/dsg/sql?db=?&user=?&password=?&sql=?
+	/**
+	 * run sql query
+	 */
+	@GET
+	@Path("/runsql")
+	@Produces({ "application/javascript", MediaType.APPLICATION_JSON })
+	public JSONWithPadding runSQL(@QueryParam("db") String db,
+			@QueryParam("dbname") String dbName,
+			@QueryParam("user") String user,
+			@QueryParam("password") String password,
+			@QueryParam("sql") String sql,
+			@QueryParam("jsoncallback") @DefaultValue("fn") String jsoncallback) {
+		 log.info("getDataset " + dbName + " " +sql+" "+ uriInfo.getAbsolutePath());
+
+		List<JDatasetLine> datasetList = new ArrayList<>();
+		try {
+			Platform p = (Platform) servletcontext.getAttribute("platform");
+			DataProvider dataProvider = p.getDataProviderManager().getProvider(
+					db, dbName, user, password);
+			ResultSet rs = dataProvider.executeQuery(sql);
+
+			int i = 0;
+			while (rs.next() && i++ < 200) {
+				JDatasetLine jdataset = new JDatasetLine();
+				List<JField> fields = new ArrayList<>();
+
+				ResultSetMetaData rsMeta = rs.getMetaData();
+				for (int j = 1; j < rsMeta.getColumnCount() + 1; j++) {
+					JField field = new JField();
+					if (rs.getObject(j) == null) {
+						field.setValue("null");
+					} else {
+						field.setValue(rs.getObject(j).toString());
+						field.setType(rs.getObject(j).getClass().getSimpleName());
+					}
+					
+					fields.add(field);
+				}
+				jdataset.setField(fields);
+				datasetList.add(jdataset);
+			}
+			dataProvider.closeResultSet(rs);
+		} catch (DataProviderException e) {
+
+			log.warn(e.getMessage());
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new JSONWithPadding(new GenericEntity<List<JDatasetLine>>(
+				datasetList) {
+		}, jsoncallback);
+	}
 
 	/**
 	 * get all dataset names list

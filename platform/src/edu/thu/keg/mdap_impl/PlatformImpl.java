@@ -76,6 +76,8 @@ public class PlatformImpl implements Platform {
 				"BeijingData", "ybz_sql", "root");
 		DataProvider orclProvider = getDataProviderManager()
 				.getDefaultOracleProvider("orcl", "bj_tuoming", "root");
+		DataProvider orclProvider_GB_0702 = getDataProviderManager()
+				.getDefaultOracleProvider("orcl", "bj_gb", "root");
 		DataProvider hiveProvider = getDataProviderManager()
 				.getDefaultHiveProvider("default", null, null);
 
@@ -85,13 +87,14 @@ public class PlatformImpl implements Platform {
 		DataView dv = null;
 
 		fields = new DataField[2];
-		fields[0] = new GeneralDataField("UserCount", FieldType.Int, "",
-				false, false, true, FieldFunctionality.Value);
-		fields[1] = new GeneralDataField("WebsiteCount", FieldType.Int, "", true,
-				false, true, FieldFunctionality.Identifier);
+		fields[0] = new GeneralDataField("UserCount", FieldType.Int, "", false,
+				false, true, FieldFunctionality.Value);
+		fields[1] = new GeneralDataField("WebsiteCount", FieldType.Int, "",
+				true, false, true, FieldFunctionality.Identifier);
 		try {
-			dsSite = getDataSetManager().createDataSet("UserCount_WebsiteCount", "wc",
-					"上了多少个网站的用户数有多少个", provider, true, fields);
+			dsSite = getDataSetManager().createDataSet(
+					"UserCount_WebsiteCount", "wc", "上了多少个网站的用户数有多少个",
+					provider, true, fields);
 			getDataSetManager().setDataSetPermission(dsSite.getId(), "wc",
 					DataSetImpl.PERMISSION_PUBLIC, null);
 
@@ -100,13 +103,13 @@ public class PlatformImpl implements Platform {
 			dv = getDataSetManager().defineView("UserCount_WebsiteCount_dv",
 					dsSite.getOwner(), dsSite.getId(), "上了多少个网站的用户数有多少个_视图",
 					DataFeatureType.DistributionFeature, q);
-//			dv.setDescription(Locale.ENGLISH, "Area distribution hadoop");
+			// dv.setDescription(Locale.ENGLISH, "Area distribution hadoop");
 		} catch (OperationNotSupportedException | IllegalArgumentException
 				| DataProviderException e1) {
 			// TODO Auto-generated catch block
 			System.out.println(e1.getMessage());
 		}
-		
+
 		fields = new DataField[5];
 		fields[0] = new GeneralDataField("EN_NAME", FieldType.ShortString, "",
 				true, false, true, FieldFunctionality.Identifier);
@@ -165,7 +168,29 @@ public class PlatformImpl implements Platform {
 			// TODO Auto-generated catch block
 			System.out.println(e1.getMessage());
 		}
+		// 2ed oracle
 
+		fields = new DataField[2];
+		fields[0] = new GeneralDataField("BEHAVIOR", FieldType.ShortString, "",
+				true, false, true, FieldFunctionality.Identifier);
+		fields[1] = new GeneralDataField("SUMCNT", FieldType.Int, "", false,
+				false, true, FieldFunctionality.Value);
+		try {
+			dsSite = getDataSetManager().createDataSet("User_Behavior_GB_HTTP_0702", "ybz",
+					"0702用户行为分布", orclProvider_GB_0702, true, fields);
+			getDataSetManager().setDataSetPermission(dsSite.getId(), "ybz",
+					DataSetImpl.PERMISSION_PUBLIC, null);
+
+//			q = dsSite.getQuery().select(dsSite.getField("AREANAME_EN"),
+//					dsSite.getField("LATITUDE"), dsSite.getField("LONGITUDE"));
+//			dv = getDataSetManager().defineView("Lac_Ci_Map_orcl",
+//					dsSite.getOwner(), dsSite.getId(), "小区分布图",
+//					DataFeatureType.GeoFeature, q);
+//			dv.setDescription(Locale.ENGLISH, "Area distribution orcl");
+		} catch ( IllegalArgumentException e1) {
+			// TODO Auto-generated catch block
+			System.out.println(e1.getMessage());
+		}
 		// 1st DataSet
 		// fields = new DataField[2];
 		// fields[0] = new GeneralDataField("WebsiteId", FieldType.Int, "",

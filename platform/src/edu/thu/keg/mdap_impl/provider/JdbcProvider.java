@@ -193,8 +193,7 @@ public class JdbcProvider extends AbstractDataProvider {
 
 	}
 
-	protected ResultSet executeQuery(String queryStr)
-			throws IllegalQueryException {
+	public ResultSet executeQuery(String queryStr) throws IllegalQueryException {
 		Connection conn = null;
 		try {
 			System.out.println(connString + " : " + queryStr);
@@ -355,9 +354,20 @@ public class JdbcProvider extends AbstractDataProvider {
 			rs.close();
 			results.remove(q);
 			super.rsMapConn.get(rs).close();
+			super.rsMapConn.remove(rs);
 		} catch (SQLException e) {
 			throw new DataProviderException(e.getMessage());
 		}
 	}
 
+	@Override
+	public void closeResultSet(ResultSet rs) throws DataProviderException {
+		try {
+			rs.close();
+			super.rsMapConn.get(rs).close();
+			super.rsMapConn.remove(rs);
+		} catch (SQLException e) {
+			throw new DataProviderException(e.getMessage());
+		}
+	}
 }

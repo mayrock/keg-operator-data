@@ -53,6 +53,19 @@ public class DataProviderManagerImpl implements DataProviderManager {
 		}
 	}
 
+	public DataProvider getProvider(String dbM, String dbName, String user,
+			String password) {
+
+		DataProvider p = null;
+		if (dbM.equals("oracle"))
+			p = getDefaultOracleProvider(dbName, user, password);
+		else
+			p = getDefaultSQLProvider(dbName, user, password);
+		providers.put(p.getConnectionString(), p);
+		return p;
+
+	}
+
 	@Override
 	public DataProvider getDefaultSQLProvider(String dbName, String user,
 			String password) {
