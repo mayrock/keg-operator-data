@@ -500,12 +500,12 @@ Tab.info.lv2Tab1 = function(){
 	window.attr("id","info_control_window_" + tabIndex);
 	window.attr("class","info_control_window");
 	
-	$("<span>choose a date:</span>").appendTo(window);
+	$("<span>choose a imsi:</span>").appendTo(window);
 	var select = $("<select></select>");
 	select.appendTo(window);
 	select.change(function(){
 		var tabIndex = Tab.getIndex();
-		var processingInstance = Processing.getInstanceById("detail_canvas_" + tabIndex);
+		var processingInstance = Processing.getInstanceById("detail_canvas2_" + tabIndex);
 		processingInstance.exit();
 		
 		var img = $("#info_control_window_" + tabIndex).find("img").eq(0);
@@ -521,12 +521,47 @@ Tab.info.lv2Tab1 = function(){
 		"font-size": "16px"
 	});
 	
-	var day = new Array(9,10,11,12,13,19,20,23,24,25,26,27);
+	var imsi = new Array(460001135025089,460022103546573,460020396144920,460020395918872,460078054396264,
+		460000723133699,460028301619839,460029106716686,460009267060647,460078114334875,
+		460001038039210,460001620825313,460077111211440,460009131947019,460022109801143,
+		460007990833250,460023104669881,460028104214450,460078010938671,460001083112198,
+		460000990240496,460025011309548,460004293530958,460009121947998,460001420206391,
+		460028105839536,460001391829605,460026109544454,460005520676696,460023104568567,
+		460022108404086);
+	for(var i = 0; i < imsi.length; i++){
+		var option = $("<option></option>");
+		option.appendTo(select);
+		option.attr("value",imsi[i]);
+		option.text(imsi[i]);
+	}
+	
+	$("<span>choose a date:</span>").appendTo(window);
+	var select = $("<select></select>");
+	select.appendTo(window);
+	select.change(function(){
+		var tabIndex = Tab.getIndex();
+		var processingInstance = Processing.getInstanceById("detail_canvas2_" + tabIndex);
+		processingInstance.exit();
+		
+		var img = $("#info_control_window_" + tabIndex).find("img").eq(0);
+		var value = img.attr("value");
+		if(value == 1){
+			img.attr("src","css/images/pause_256x256.png");
+			img.attr("value",1 - value);
+		}
+		Info.loadMap();
+	});
+	select.css({
+		"font-family": "Times New Roman,\"楷体\"",
+		"font-size": "16px"
+	});
+	
+	var day = new Array(8,9,10,11,12,13,14,19,20,21,22,23,24,25,26,27,28);
 	for(var i = 0; i < day.length; i++){
 		var option = $("<option></option>");
 		option.appendTo(select);
 		option.attr("value",day[i]);
-		option.text("\xa0\xa0" + day[i] + "\xa0\xa0");
+		option.text("\xa0" + day[i] + "\xa0");
 	}
 	
 	$("<span>frame rate:</span>").appendTo(window);
@@ -541,7 +576,7 @@ Tab.info.lv2Tab1 = function(){
 		var option = $("<option></option>");
 		option.appendTo(select);
 		option.attr("value",1 << i);
-		option.text("\xa0\xa0" + (1 << i) + "\xa0\xa0");
+		option.text("\xa0" + (1 << i) + "\xa0");
 	}
 	
 	var imgCntr = $("<div></div>");
@@ -549,7 +584,8 @@ Tab.info.lv2Tab1 = function(){
 	imgCntr.css({
 		"float": "right",
 		"margin-top": "5px",
-		"margin-right": "20px"
+		"margin-right": "20px",
+		"margin-left": "10px"
 	});
 	
 	$("<img src = 'css/images/pause_256x256.png' onclick = \"Info.ctrlMap();\">")

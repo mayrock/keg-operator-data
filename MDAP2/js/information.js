@@ -299,7 +299,7 @@ Info.loadMap = function(){
 Info.ctrlMap = function(){
 	var tabIndex = Tab.getIndex();
 	var img = $("#info_control_window_" + tabIndex).find("img").eq(0);
-	var processingInstance = Processing.getInstanceById("detail_canvas_" + tabIndex);
+	var processingInstance = Processing.getInstanceById("detail_canvas2_" + tabIndex);
 	
 	var value = img.attr("value");
 	img.attr("value",1 - value);
@@ -315,33 +315,68 @@ Info.ctrlMap = function(){
 
 Info.loadMap = function(){
 	var tabIndex = Tab.getIndex();
-	var day = $("#info_control_window_" + tabIndex).find("select").eq(0).val();
+	var imsi = $("#info_control_window_" + tabIndex).find("select").eq(0).val();
+	var day = $("#info_control_window_" + tabIndex).find("select").eq(1).val();
 	
 	var canvasCntr = $("#detail_canvasCntr_" + tabIndex);
 	canvasCntr.empty();
+	
 	var canvas = $("<canvas></canvas>");
 	canvas.appendTo(canvasCntr);
 	canvas.attr("id","detail_canvas_" + tabIndex);
 	canvas.attr("class","info_detail_canvas");
 	
-	var worldCoor = GMap.getWorldCoor(39.942,116.34);
-	var pixelCoor = GMap.getPixelCoor(worldCoor,13);
-	var center = new Object;
-	center.x = Math.floor(pixelCoor.x);
-	center.y = Math.floor(pixelCoor.y);
+	canvas = $("<canvas></canvas>");
+	canvas.appendTo(canvasCntr);
+	canvas.attr("id","detail_canvas2_" + tabIndex);
+	canvas.attr("class","info_detail_canvas");
 	
 	function sketchProc(processing){
-		var map = new Object;
 		var index = new Object;
 		var length = new Object;
 		var point = new Array();
 		
 		processing.setup = function(){
-			processing.size(600,640);
+			processing.size(640,640);
 			
-			map = processing.loadImage("css/images/staticmap_600x640.png");
-			var trace = processing.loadStrings("trace_" + day + ".txt");
+			var trace = processing.loadStrings(imsi + "_" + day + ".txt");
 			length = trace.length;
+			
+			var lat_sum = 0;
+			var lng_sum = 0;
+			for(var i = 0; i < length; i++){
+				var record = trace[i];
+				var temp = record.split(" ");
+				
+				var lat = processing.parseFloat(temp[1]);
+				var lng = processing.parseFloat(temp[2]);
+				lat_sum += lat;
+				lng_sum += lng;
+			}
+			
+			var center = new Object;
+			center.lat = lat_sum / length;
+			center.lng = lng_sum / length;
+			
+			var img = new Image;
+			var myCanvas = document.getElementById("detail_canvas_" + tabIndex);
+			var ctx = myCanvas.getContext('2d');
+			img.onload = function(){
+				myCanvas.height = img.height;
+				myCanvas.width = img.width;
+				ctx.drawImage(img,0,0);
+			}
+			if(length == 0){
+				img.src = "http://maps.googleapis.com/maps/api/staticmap?center=39.9073,116.3911&zoom=13&size=640x640&sensor=false";
+				processing.noLoop();
+			}else{
+				img.src = "http://maps.googleapis.com/maps/api/staticmap?center=" + center.lat + "," + center.lng + "&zoom=13&size=640x640&sensor=false";
+			}
+			
+			var worldCoor = GMap.getWorldCoor(center.lat,center.lng);
+			var pixelCoor = GMap.getPixelCoor(worldCoor,13);
+			center.x = Math.floor(pixelCoor.x);
+			center.y = Math.floor(pixelCoor.y);
 			
 			for(var i = 0; i < length; i++){
 				var record = trace[i];
@@ -354,7 +389,7 @@ Info.loadMap = function(){
 				
 				point[i] = new Object;
 				
-				point[i].x = Math.floor(pixelCoor.x) - center.x + 300;
+				point[i].x = Math.floor(pixelCoor.x) - center.x + 320;
 				point[i].y = Math.floor(pixelCoor.y) - center.y + 320;
 				point[i].traffic = temp[0];
 				point[i].time = temp[3] + "~" + temp[4];
@@ -364,13 +399,17 @@ Info.loadMap = function(){
 		}
 		
 		processing.draw = function(){
-			rate = $("#info_control_window_" + tabIndex).find("select").eq(1).val();
-			processing.frameRate(rate);
-			
-			processing.showTrace(index);
-			index ++;
-			if(index == length){
-				index = 0;
+			if(point.length != 0){
+				rate = $("#info_control_window_" + tabIndex).find("select").eq(2).val();
+				processing.frameRate(rate);
+				
+				processing.showTrace(index);
+				index ++;
+				if(index == length){
+					index = 0;
+				}
+			}else{
+				processing.background(255,255,255,0);
 			}
 		}
 		
@@ -379,14 +418,14 @@ Info.loadMap = function(){
 			if(ctrl == 1){
 				processing.showTrace(index);
 				index++;
-			}
-			if(index == length){
-				index = 0;
+				if(index == length){
+					index = 0;
+				}
 			}
 		}
 		
 		processing.showTrace = function(i){
-			processing.image(map,0,0);
+			processing.background(255,255,255,0);
 			
 			for(var j = 0; j <= i; j++){
 				if(j == i){
@@ -426,9 +465,16 @@ Info.loadMap = function(){
 			processing.text(point[i].time,point[i].x - 55,point[i].y - 35);
 		}
 	}
-	
-	var canvas = document.getElementById("detail_canvas_" + tabIndex);
+	canvas = document.getElementById("detail_canvas2_" + tabIndex);
 	var p = new Processing(canvas,sketchProc);
+	if(canvasCntr.width() < canvas.width){
+		canvasCntr.css({
+			"width": canvas.width
+		});
+	}
+	canvasCntr.css({
+		"height": canvas.height
+	});
 	
 	Info.adjustHeight();
 }

@@ -80,5 +80,13 @@
 .info_control_window span{
 	font-family: Times New Roman,'楷体';
 	font-size: 16px;
-	padding: 0 25px 0 50px;
+	padding: 0 10px 0 20px;
+}
+
+.info_detail_canvasCntr{
+	position: relative;
+}
+
+.info_detail_canvas{
+	position: absolute;
 }
