@@ -1,0 +1,102 @@
+.info_imsiCntr{
+	float: left;
+	border: 1px solid green;
+}
+
+.info_imsi_titleCntr,.info_detail_titleCntr{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+	font-family: Times New Roman,"楷体";
+	font-size: 18px;
+}
+
+.info_imsi_tableCntr{
+	width: 250px;
+}
+
+.info_imsi_pageCntr,.info_detail_pageCntr{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+}
+
+.info_imsi_page,.info_detail_page{
+	font-family: Times New Roman,"楷体" !important;
+	font-size: 16px !important;
+	cursor: pointer;
+}
+
+.info_detailImsi{
+	float: left;
+	margin-left: 20px;
+	border: 1px solid green;
+}
+
+.info_lv2_tabs{
+	padding: 0;
+	background-image: none;
+	background-color: transparent;
+	border-width: 0;
+}
+
+.info_lv2_tabs_ul{
+	padding-top: 0 !important;
+	background-image: none;
+	background-color: transparent;
+	border-width: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-bottom: 1px solid green;
+}
+
+.info_lv2_tabs_ul a{
+	height: 20px;
+	padding-top: 4px !important;
+	padding-bottom: 4px !important;
+	text-align: center;
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
+}
+
+.info_lv2_tab{
+	padding: 10px 0 0 0 !important;
+}
+
+.info_float_window{
+	position: absolute;
+	top: 120px;
+	left: 480px;
+	z-index: 10;
+	border: 1px solid green;
+}
+
+.info_control_window{
+	padding-bottom: 10px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid green;
+}
+
+.info_control_window span{
+	font-family: Times New Roman,'楷体';
+	font-size: 16px;
+	padding: 0 10px 0 20px;
+}
+
+.info_detail_canvasCntr{
+	position: relative;
+}
+
+.info_detail_canvas{
+	position: absolute;
+}
+
+.labels {
+     color: white;
+     background-color: red;
+     font-family: "Lucida Grande", "Arial", sans-serif;
+     font-size: 10px;
+     text-align: center;
+     width: 10px;     
+     white-space: nowrap;
+   }
